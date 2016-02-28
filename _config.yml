@@ -18,11 +18,11 @@ viewsourceroot: https://github.com/leocook/leocook.github.io/blob/master/
 newsourceroot: https://github.com/leocook/leocook.github.io/new/master
 #########################################
 # for duoshuo.com commenting system, uncomment following line if you do not want to include duoshuo.com. 
-#duoshuo_shortname: leocook
-#duoshuo_url: "http://leocook.github.io"
+duoshuo_shortname: leocook
+duoshuo_url: "http://leocook.github.io"
 # disqus.com commenting system. please note that it is exclusive with duoshuo.com
-disqus_shortname: leocook
-disqus_url: "http://leocook.github.io"
+#disqus_shortname: leocook
+#idisqus_url: "http://leocook.github.io"
 #########################################
 
 # Build settings
