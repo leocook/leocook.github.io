@@ -25,10 +25,12 @@ icon: heart
 如果你喜欢我的文章，并且愿意赏我一杯咖啡，请扫下面的二维码.
 
 - 微信
+
 ![微信二维码](http://7xriy2.com1.z0.glb.clouddn.com/pay_weixin.JPG "微信二维码")
 
 
 - 支付宝
+
 ![支付宝二维码](http://7xriy2.com1.z0.glb.clouddn.com/pay_alipay.jpg "支付宝二维码")
 
 
