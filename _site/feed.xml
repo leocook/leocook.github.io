@@ -5,9 +5,103 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 May 2016 23:25:02 +0800</pubDate>
-    <lastBuildDate>Mon, 16 May 2016 23:25:02 +0800</lastBuildDate>
+    <pubDate>Tue, 17 May 2016 00:09:21 +0800</pubDate>
+    <lastBuildDate>Tue, 17 May 2016 00:09:21 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Tez系列第三篇 Tez和oozie整合</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.完成上一篇的基础的相关配置&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#tezjarooziehdfs&quot; id=&quot;markdown-toc-tezjarooziehdfs&quot;&gt;2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#jar&quot; id=&quot;markdown-toc-jar&quot;&gt;3.修改Jar的权限&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;4.是配置生效&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#workflowtez&quot; id=&quot;markdown-toc-workflowtez&quot;&gt;5.在workflow里使用Tez&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#workflowhivetez&quot; id=&quot;markdown-toc-workflowhivetez&quot;&gt;5.1.使单个workflow里的hive都用tez&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#workflowhivetez-1&quot; id=&quot;markdown-toc-workflowhivetez-1&quot;&gt;5.2.使单个workflow里的单个hive都用tez&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.完成上一篇的基础的相关配置&lt;/h2&gt;
+
+&lt;h2 id=&quot;tezjarooziehdfs&quot;&gt;2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
+hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;jar&quot;&gt;3.修改Jar的权限&lt;/h2&gt;
+&lt;p&gt;保证oozie有权限读取、使用Jar包:&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;4.是配置生效&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oozie admin -sharelibupdate
+oozie admin -shareliblist hive
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;或者重启oozie也可以&lt;/p&gt;
+
+&lt;h2 id=&quot;workflowtez&quot;&gt;5.在workflow里使用Tez&lt;/h2&gt;
+&lt;p&gt;这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.&lt;/p&gt;
+
+&lt;h3 id=&quot;workflowhivetez&quot;&gt;5.1.使单个workflow里的hive都用tez&lt;/h3&gt;
+&lt;p&gt;在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;hive.execution.engine&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;tez&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;tez.lib.uris&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;tez.use.cluster.hadoop-libs&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;workflowhivetez-1&quot;&gt;5.2.使单个workflow里的单个hive都用tez&lt;/h3&gt;
+&lt;p&gt;上面的配置不用加，在workflow.xml里的hive节点添加如下配置:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;hive.execution.engine&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;tez&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;tez.lib.uris&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&amp;lt;property&amp;gt;
+	&amp;lt;name&amp;gt;tez.use.cluster.hadoop-libs&amp;lt;/name&amp;gt;
+	&amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+set hive.execution.engine=tez;
+&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 17 May 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/</guid>
+        
+        <category>hadoop</category>
+        
+        <category>Tez</category>
+        
+        <category>oozie</category>
+        
+        
+        <category>Tez</category>
+        
+      </item>
     
       <item>
         <title>Tez系列第二篇 Hive_on_tez</title>

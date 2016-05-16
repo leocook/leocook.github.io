@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第一篇 基础常识</title>
-    <meta name="description" content="  1.Tez是什么          1.1.介绍      1.2.两大优势        2.为什么要有Tez          2.1.YARN的AM      2.2.YARN的资源无法重用      2.3.YARN的DAG中间计算结果读写效率低下        3.Tez能解决什么问题       ...">
+    <title>Tez系列第三篇 Tez和oozie整合</title>
+    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下  3.修改Jar的权限  4.是配置生效  5.在workflow里使用Tez          5.1.使单个workflow里的hive都用tez      5.2.使单个workflow里的单个hive都用t...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">
+    <link rel="canonical" href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -114,11 +114,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第一篇 基础常识</h1>
+        <h1>Tez系列第三篇 Tez和oozie整合</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-04-01
+                <i class="fa fa-calendar"></i>2016-05-17
             </div>
 
             <div class="label-card">
@@ -159,7 +159,10 @@
         <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
     
         <!--a href="/tag/#Tez" title="Tag: Tez" rel="tag">Tez</a-->
-        <a href="/tag/#Tez" title="Tag: Tez" rel="tag">Tez</a>
+        <a href="/tag/#Tez" title="Tag: Tez" rel="tag">Tez</a>&nbsp;
+    
+        <!--a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a-->
+        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>
     
   
 
@@ -171,79 +174,81 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#tez" id="markdown-toc-tez">1.Tez是什么</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">1.1.介绍</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.两大优势</a></li>
-    </ul>
-  </li>
-  <li><a href="#tez-1" id="markdown-toc-tez-1">2.为什么要有Tez</a>    <ul>
-      <li><a href="#yarnam" id="markdown-toc-yarnam">2.1.YARN的AM</a></li>
-      <li><a href="#yarn" id="markdown-toc-yarn">2.2.YARN的资源无法重用</a></li>
-      <li><a href="#yarndag" id="markdown-toc-yarndag">2.3.YARN的DAG中间计算结果读写效率低下</a></li>
-    </ul>
-  </li>
-  <li><a href="#tez-2" id="markdown-toc-tez-2">3.Tez能解决什么问题</a>    <ul>
-      <li><a href="#amamampoolserver" id="markdown-toc-amamampoolserver">3.1.使用AM缓冲池实现AM的复用，AMPoolServer</a></li>
-      <li><a href="#container" id="markdown-toc-container">3.2.Container预启动</a></li>
-      <li><a href="#container-1" id="markdown-toc-container-1">3.3.Container重用</a></li>
+  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
+  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
+  <li><a href="#jar" id="markdown-toc-jar">3.修改Jar的权限</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">4.是配置生效</a></li>
+  <li><a href="#workflowtez" id="markdown-toc-workflowtez">5.在workflow里使用Tez</a>    <ul>
+      <li><a href="#workflowhivetez" id="markdown-toc-workflowhivetez">5.1.使单个workflow里的hive都用tez</a></li>
+      <li><a href="#workflowhivetez-1" id="markdown-toc-workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</a></li>
     </ul>
   </li>
 </ul>
 
-<p>本文主要围绕着这么几个问题来展开：Tez是什么？为什么要有Tez？Tez能解决什么问题？</p>
+<h2 id="section">1.完成上一篇的基础的相关配置</h2>
 
-<h2 id="tez">1.Tez是什么</h2>
+<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
+hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+</code></pre>
+</div>
 
-<h3 id="section">1.1.介绍</h3>
-<p>Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez.apache.org/</p>
+<h2 id="jar">3.修改Jar的权限</h2>
+<p>保证oozie有权限读取、使用Jar包:<br />
+<code class="highlighter-rouge">
+hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
+</code></p>
 
-<h3 id="section-1">1.2.两大优势</h3>
-<p><strong>用户体验</strong>    <br />
-- 使用API来自定义数据流    <br />
-- 灵活的Input-Processor-Output运行模式    <br />
-- 与计算的数据类型无关    <br />
-- 简单的部署流程</p>
+<h2 id="section-1">4.是配置生效</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>oozie admin -sharelibupdate
+oozie admin -shareliblist hive
+</code></pre>
+</div>
+<p>或者重启oozie也可以</p>
 
-<p><strong>计算性能</strong>    <br />
-- 性能高于MapReduce    <br />
-- 资源管理更加优化    <br />
-- 运行时配置预加载    <br />
-- 物理数据流动态运行</p>
+<h2 id="workflowtez">5.在workflow里使用Tez</h2>
+<p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
 
-<p><strong>举例</strong>    <br />
-下图是一个基于MR的Hive/Pig的DAG数据流处理过程:    <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/tez01-PigHiveQueryOnMR.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
+<h3 id="workflowhivetez">5.1.使单个workflow里的hive都用tez</h3>
+<p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
 
-<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:    <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/tez02-PigHiveQueryOnTez.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
+	&lt;name&gt;hive.execution.engine&lt;/name&gt;
+	&lt;value&gt;tez&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+	&lt;name&gt;tez.lib.uris&lt;/name&gt;
+	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
+	&lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+</div>
 
-<h2 id="tez-1">2.为什么要有Tez</h2>
+<h3 id="workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</h3>
+<p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
 
-<h3 id="yarnam">2.1.YARN的AM</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
+	&lt;name&gt;hive.execution.engine&lt;/name&gt;
+	&lt;value&gt;tez&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+	&lt;name&gt;tez.lib.uris&lt;/name&gt;
+	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
+	&lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+</div>
 
-<p>YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。</p>
-
-<h3 id="yarn">2.2.YARN的资源无法重用</h3>
-<p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。<br />
-但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。</p>
-
-<h3 id="yarndag">2.3.YARN的DAG中间计算结果读写效率低下</h3>
-<p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。    <br />
-如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。</p>
-
-<h2 id="tez-2">3.Tez能解决什么问题</h2>
-
-<h3 id="amamampoolserver">3.1.使用AM缓冲池实现AM的复用，AMPoolServer</h3>
-
-<p>使用Tez后，yarn的作业不是先提交给RM了，而是提交给AMPS。AMPS在启动后，会预先创建若干个AM，作为AM资源池，当作业被提交到AMPS的时候，AMPS会把该作业直接提交到AM上，这样就避免每个作业都创建独立的AM，大大的提高了效率。</p>
-
-<h3 id="container">3.2.Container预启动</h3>
-<p>AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。</p>
-
-<h3 id="container-1">3.3.Container重用</h3>
-<p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。    <br />
-看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。</p>
-
+<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:<br />
+<code class="highlighter-rouge">
+set hive.execution.engine=tez;
+</code></p>
 
         </article>
         <hr>
@@ -258,7 +263,7 @@
                         <ul>
                         
                         <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合
+                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
                             
                             </a>
                         </li>
@@ -268,13 +273,19 @@
                 
                     
                 
+                    
+                
             
                 
                     
                 
                     
                 
+                    
+                
             
+                
+                    
                 
                     
                 
@@ -288,7 +299,7 @@
                     
                         
                         <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
+                            <a href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识
                             
                             </a>
                         </li>
@@ -298,13 +309,11 @@
                 
                     
                 
-            
-                
-                    
-                
                     
                 
             
+                
+                    
                 
                     
                 
@@ -328,7 +337,11 @@
                 
                     
                 
+                    
+                
             
+                
+                    
                 
                     
                 
@@ -338,6 +351,8 @@
         
             
             
+                
+                    
                 
                     
                 
@@ -353,7 +368,7 @@
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/" data-title="Tez系列第一篇 基础常识" data-url="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/" data-title="Tez系列第三篇 Tez和oozie整合" data-url="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
