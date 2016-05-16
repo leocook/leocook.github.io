@@ -198,23 +198,23 @@
 <p>Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez.apache.org/</p>
 
 <h3 id="section-1">1.2.两大优势</h3>
-<p><strong>用户体验</strong>  <br />
-- 使用API来自定义数据流  <br />
-- 灵活的Input-Processor-Output运行模式  <br />
-- 与计算的数据类型无关  <br />
+<p><strong>用户体验</strong>    <br />
+- 使用API来自定义数据流    <br />
+- 灵活的Input-Processor-Output运行模式    <br />
+- 与计算的数据类型无关    <br />
 - 简单的部署流程</p>
 
-<p><strong>计算性能</strong>  <br />
-- 性能高于MapReduce  <br />
-- 资源管理更加优化  <br />
-- 运行时配置预加载  <br />
+<p><strong>计算性能</strong>    <br />
+- 性能高于MapReduce    <br />
+- 资源管理更加优化    <br />
+- 运行时配置预加载    <br />
 - 物理数据流动态运行</p>
 
-<p><strong>举例</strong>  <br />
-下图是一个基于MR的Hive/Pig的DAG数据流处理过程:  <br />
+<p><strong>举例</strong>    <br />
+下图是一个基于MR的Hive/Pig的DAG数据流处理过程:    <br />
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/tez01-PigHiveQueryOnMR.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
 
-<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:  <br />
+<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:    <br />
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/tez02-PigHiveQueryOnTez.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
 
 <h2 id="tez-1">2.为什么要有Tez</h2>
@@ -224,11 +224,11 @@
 <p>YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。</p>
 
 <h3 id="yarn">2.2.YARN的资源无法重用</h3>
-<p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。
+<p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。<br />
 但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。</p>
 
 <h3 id="yarndag">2.3.YARN的DAG中间计算结果读写效率低下</h3>
-<p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。  <br />
+<p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。    <br />
 如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。</p>
 
 <h2 id="tez-2">3.Tez能解决什么问题</h2>
@@ -241,7 +241,7 @@
 <p>AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。</p>
 
 <h3 id="container-1">3.3.Container重用</h3>
-<p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。  <br />
+<p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。    <br />
 看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。</p>
 
 

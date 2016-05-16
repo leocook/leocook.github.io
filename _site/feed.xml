@@ -5,9 +5,9 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 May 2016 14:00:23 +0800</pubDate>
-    <lastBuildDate>Mon, 16 May 2016 14:00:23 +0800</lastBuildDate>
-    <generator>Jekyll v3.1.3</generator>
+    <pubDate>Mon, 16 May 2016 23:20:36 +0800</pubDate>
+    <lastBuildDate>Mon, 16 May 2016 23:20:36 +0800</lastBuildDate>
+    <generator>Jekyll v3.0.1</generator>
     
       <item>
         <title>Tez系列第二篇 Hive_on_tez</title>
@@ -61,24 +61,24 @@
 &lt;p&gt;以及安装完成的cdh5.4.4集群。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;1.3. 编译环境准备&lt;/h3&gt;
-&lt;p&gt;安装gcc, gcc-c++, make, build  &lt;br /&gt;
+&lt;p&gt;安装gcc, gcc-c++, make, build    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 yum install gcc gcc-c++ libstdc++-devel make build
 &lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;nodejsnpm&quot;&gt;1.4. Nodejs、npm&lt;/h3&gt;
-&lt;p&gt;下载源码:  &lt;br /&gt;
+&lt;p&gt;下载源码:    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
 &lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;解压后编译:  &lt;br /&gt;
+&lt;p&gt;解压后编译:    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 ./configure
 make &amp;amp;&amp;amp; make install
 &lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;查看nodejs和npm的版本:  &lt;br /&gt;
+&lt;p&gt;查看nodejs和npm的版本:    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 node --version
 npm --version
@@ -87,13 +87,13 @@ npm --version
 &lt;p&gt;笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9&lt;/p&gt;
 
 &lt;h3 id=&quot;git&quot;&gt;1.5.安装GIT&lt;/h3&gt;
-&lt;p&gt;下载git:  &lt;br /&gt;
+&lt;p&gt;下载git:    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 https://git-scm.com/download    
 笔者选择的是1.7.3版本
 &lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;解压后编译:  &lt;br /&gt;
+&lt;p&gt;解压后编译:    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 ./configure
 make
@@ -102,32 +102,32 @@ make install
 
 &lt;h3 id=&quot;protocolbuffer250&quot;&gt;1.6. ProtocolBuffer2.5.0&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;下载pb源码  &lt;br /&gt;
+  &lt;li&gt;下载pb源码    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 https://github.com/google/protobuf/releases/tag/v2.5.0
 &lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;编译安装pb  &lt;br /&gt;
+    &lt;p&gt;编译安装pb    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 ./configure -prefix=/opt/protoc/
 make &amp;amp;&amp;amp; make install
 &lt;/code&gt;&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;配置环境变量 &lt;br /&gt;
+  &lt;li&gt;配置环境变量   &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 export PROTOC_HOME=/opt/protoc
 export PATH=$PATH:$PROTOC_HOME/bin
 &lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;检验  &lt;br /&gt;
+  &lt;li&gt;检验    &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 protoc --version
-&lt;/code&gt;  &lt;br /&gt;
+&lt;/code&gt;    &lt;br /&gt;
 查看pb的版本是不是2.5.0，笔者这里显示为 &lt;strong&gt;libprotoc 2.5.0&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;tez-1&quot;&gt;1.7.编译&amp;amp;安装Tez&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;下载Tez &lt;br /&gt;
+  &lt;li&gt;下载Tez   &lt;br /&gt;
 Tez所有版本列表在者：&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -219,7 +219,7 @@ export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/*:${TEZ_JARS}/lib/*
 
 &lt;h3 id=&quot;hivetez-1&quot;&gt;2.5. 让Hive把Tez用起来&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;配置整合
+  &lt;li&gt;配置整合&lt;br /&gt;
 临时配置&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -283,7 +283,7 @@ Time taken: 22.211 seconds, Fetched: 1 row(s)
 hive&amp;gt; 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;如下图：
+&lt;p&gt;如下图：&lt;br /&gt;
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/tez-ok.png&quot; alt=&quot;Hive on Tez&quot; title=&quot;Hive on Tez&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;到此，hive on tez，整合完毕！&lt;/p&gt;
@@ -294,7 +294,7 @@ hive&amp;gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.3.2:exec (Bower install) on project tez-ui: Command execution failed. Process exited with an error: 1 (Exit value: 1) -&amp;gt; [Help 1]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;解决办法：
+&lt;p&gt;解决办法：&lt;br /&gt;
 不要使用root用户，也不要使用sudo来编译.&lt;/p&gt;
 
 &lt;h3 id=&quot;mavenfrontend-maven-plugintez&quot;&gt;2.maven插件frontend-maven-plugin的版本问题（编译tez时的错误）&lt;/h3&gt;
@@ -302,8 +302,8 @@ hive&amp;gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Execution install node and npm of goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm failed: A required class was missing while executing com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm: org/slf4j/helpers/MarkerIgnoringBase
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）
-如果maven的版本低于3.1，frontend-maven-plugin版本应该 &amp;lt;= 0.0.22；
+&lt;p&gt;解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）&lt;br /&gt;
+如果maven的版本低于3.1，frontend-maven-plugin版本应该 &amp;lt;= 0.0.22；&lt;br /&gt;
 如果maven的版本大于或等于3.1，frontend-maven-plugin版本应该 &amp;gt;= 0.0.23.&lt;/p&gt;
 
 &lt;h3 id=&quot;nodetez&quot;&gt;3.解压Node压缩包时错误（编译tez时的错误）&lt;/h3&gt;
@@ -320,9 +320,9 @@ hive&amp;gt;
 [ERROR] npm WARN engine cryptiles@2.0.5: wanted: {&quot;node&quot;:&quot;&amp;gt;=0.10.40&quot;} (current: {&quot;node&quot;:&quot;v0.10.18&quot;,&quot;npm&quot;:&quot;1.3.8&quot;})
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;解决办法：
-1. 安装正确版本的nodeJs；
-2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
+&lt;p&gt;解决办法：&lt;br /&gt;
+1. 安装正确版本的nodeJs；&lt;br /&gt;
+2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;
 node --version
 npm --version
@@ -362,8 +362,8 @@ DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1
 FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;这个错误是在配置完之后，运行hive时才会出现的。
-解决办法：
+&lt;p&gt;这个错误是在配置完之后，运行hive时才会出现的。&lt;br /&gt;
+解决办法：&lt;br /&gt;
 拷贝mr依赖包至tez的hdfs目录中。笔者的环境是CDH5.4.4，所以把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar拷贝到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录，就解决问题了。&lt;/p&gt;
 
 &lt;h3 id=&quot;tezhive-on-oozie-&quot;&gt;6.tez&amp;amp;hive on oozie 错误&lt;/h3&gt;
@@ -398,9 +398,9 @@ Failing Oozie Launcher, Main class [org.apache.oozie.action.hadoop.HiveMain], ex
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;参考链接：
-http://m.oschina.net/blog/421764  &lt;br /&gt;
-http://duguyiren3476.iteye.com/blog/2214549
+&lt;p&gt;参考链接：&lt;br /&gt;
+http://m.oschina.net/blog/421764    &lt;br /&gt;
+http://duguyiren3476.iteye.com/blog/2214549&lt;br /&gt;
 https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p&gt;
 
 </description>
@@ -449,23 +449,23 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
 &lt;p&gt;Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez.apache.org/&lt;/p&gt;
 
 &lt;h3 id=&quot;section-1&quot;&gt;1.2.两大优势&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;用户体验&lt;/strong&gt;  &lt;br /&gt;
-- 使用API来自定义数据流  &lt;br /&gt;
-- 灵活的Input-Processor-Output运行模式  &lt;br /&gt;
-- 与计算的数据类型无关  &lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;用户体验&lt;/strong&gt;    &lt;br /&gt;
+- 使用API来自定义数据流    &lt;br /&gt;
+- 灵活的Input-Processor-Output运行模式    &lt;br /&gt;
+- 与计算的数据类型无关    &lt;br /&gt;
 - 简单的部署流程&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;计算性能&lt;/strong&gt;  &lt;br /&gt;
-- 性能高于MapReduce  &lt;br /&gt;
-- 资源管理更加优化  &lt;br /&gt;
-- 运行时配置预加载  &lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;计算性能&lt;/strong&gt;    &lt;br /&gt;
+- 性能高于MapReduce    &lt;br /&gt;
+- 资源管理更加优化    &lt;br /&gt;
+- 运行时配置预加载    &lt;br /&gt;
 - 物理数据流动态运行&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;举例&lt;/strong&gt;  &lt;br /&gt;
-下图是一个基于MR的Hive/Pig的DAG数据流处理过程:  &lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;举例&lt;/strong&gt;    &lt;br /&gt;
+下图是一个基于MR的Hive/Pig的DAG数据流处理过程:    &lt;br /&gt;
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/tez01-PigHiveQueryOnMR.png&quot; alt=&quot;Hive/Pig&quot; title=&quot;Hive/Pig的DAG&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:  &lt;br /&gt;
+&lt;p&gt;下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:    &lt;br /&gt;
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/tez02-PigHiveQueryOnTez.png&quot; alt=&quot;Hive/Pig&quot; title=&quot;Hive/Pig的DAG&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;tez-1&quot;&gt;2.为什么要有Tez&lt;/h2&gt;
@@ -475,11 +475,11 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
 &lt;p&gt;YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。&lt;/p&gt;
 
 &lt;h3 id=&quot;yarn&quot;&gt;2.2.YARN的资源无法重用&lt;/h3&gt;
-&lt;p&gt;在MR1中，用户可以开启JVM重用，用来降低作业延迟。
+&lt;p&gt;在MR1中，用户可以开启JVM重用，用来降低作业延迟。&lt;br /&gt;
 但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。&lt;/p&gt;
 
 &lt;h3 id=&quot;yarndag&quot;&gt;2.3.YARN的DAG中间计算结果读写效率低下&lt;/h3&gt;
-&lt;p&gt;可以查看1.2中的图“&lt;strong&gt;基于MR的Hive/Pig的DAG数据流处理过程&lt;/strong&gt;”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。  &lt;br /&gt;
+&lt;p&gt;可以查看1.2中的图“&lt;strong&gt;基于MR的Hive/Pig的DAG数据流处理过程&lt;/strong&gt;”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。    &lt;br /&gt;
 如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。&lt;/p&gt;
 
 &lt;h2 id=&quot;tez-2&quot;&gt;3.Tez能解决什么问题&lt;/h2&gt;
@@ -492,7 +492,7 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
 &lt;p&gt;AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。&lt;/p&gt;
 
 &lt;h3 id=&quot;container-1&quot;&gt;3.3.Container重用&lt;/h3&gt;
-&lt;p&gt;每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。  &lt;br /&gt;
+&lt;p&gt;每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。    &lt;br /&gt;
 看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。&lt;/p&gt;
 
 </description>
@@ -541,32 +541,32 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
 
 &lt;h2 id=&quot;section-1&quot;&gt;1.1.问题一：作业的执行速率不同步&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;问题表现
+  &lt;li&gt;问题表现&lt;br /&gt;
 部分任务跑的慢，部分任务跑得快。&lt;/li&gt;
-  &lt;li&gt;问题的原因
+  &lt;li&gt;问题的原因&lt;br /&gt;
 集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。&lt;/li&gt;
-  &lt;li&gt;解决办法
+  &lt;li&gt;解决办法&lt;br /&gt;
 重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;section-2&quot;&gt;1.2.问题二：资源利用倾斜&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;问题表现
+  &lt;li&gt;问题表现&lt;br /&gt;
 部分机器资源利用率极高，部分机器资源利用率级低；&lt;/li&gt;
-  &lt;li&gt;问题的原因
+  &lt;li&gt;问题的原因&lt;br /&gt;
 &lt;strong&gt;同【问题一】&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;解决办法
+  &lt;li&gt;解决办法&lt;br /&gt;
 &lt;strong&gt;同【问题一】&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;section-3&quot;&gt;1.3.问题三：集群资源并没有真正的参与计算&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;问题表现
+  &lt;li&gt;问题表现&lt;br /&gt;
 作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。&lt;/li&gt;
-  &lt;li&gt;问题的原因
+  &lt;li&gt;问题的原因&lt;br /&gt;
 咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。&lt;/li&gt;
-  &lt;li&gt;解决办法
-a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。
+  &lt;li&gt;解决办法&lt;br /&gt;
+a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。&lt;br /&gt;
 b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -576,26 +576,26 @@ b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
 &lt;p&gt;感谢运维同学的帮助！&lt;/p&gt;
 
 &lt;h2 id=&quot;section-6&quot;&gt;2.2.根据集群资源，分组的大概情况如截图：&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png&quot; alt=&quot;服务器分组情况&quot; title=&quot;根据机器硬件资源情况，服务器分组情况&quot; /&gt;
-分组命名规则：
-&lt;strong&gt;&lt;em&gt;NM&lt;/em&gt;&lt;/strong&gt;: NodeManager；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;G01&lt;/em&gt;&lt;/strong&gt;: Group01；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;C08&lt;/em&gt;&lt;/strong&gt;: cpu是8核；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;M48&lt;/em&gt;&lt;/strong&gt;: 内存是48GB。  &lt;br /&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png&quot; alt=&quot;服务器分组情况&quot; title=&quot;根据机器硬件资源情况，服务器分组情况&quot; /&gt;&lt;br /&gt;
+分组命名规则：&lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;NM&lt;/em&gt;&lt;/strong&gt;: NodeManager；    &lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;G01&lt;/em&gt;&lt;/strong&gt;: Group01；    &lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;C08&lt;/em&gt;&lt;/strong&gt;: cpu是8核；    &lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;M48&lt;/em&gt;&lt;/strong&gt;: 内存是48GB。    &lt;br /&gt;
 &lt;strong&gt;&lt;em&gt;ZK&lt;/em&gt;&lt;/strong&gt;: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）&lt;/p&gt;
 
 &lt;h2 id=&quot;section-7&quot;&gt;2.3.资源划分的策略&lt;/h2&gt;
-&lt;p&gt;根据机器上安装的服务，大概给服务做了如下的划分：
-- 安装有重要服务的机器，可参与计算
+&lt;p&gt;根据机器上安装的服务，大概给服务做了如下的划分：&lt;br /&gt;
+- 安装有重要服务的机器，可参与计算&lt;br /&gt;
 例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;安装有重要服务的机器，不参与计算
+    &lt;p&gt;安装有重要服务的机器，不参与计算&lt;br /&gt;
 例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;只安装了存储和计算的机器
+    &lt;p&gt;只安装了存储和计算的机器&lt;br /&gt;
 例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -604,27 +604,27 @@ b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
 
 &lt;h3 id=&quot;section-9&quot;&gt;2.4.1.内存划分策略&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;yarn容器可直接管理的资源
+  &lt;li&gt;yarn容器可直接管理的资源&lt;br /&gt;
 主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。&lt;/li&gt;
-  &lt;li&gt;单个任务可使用的任务资源
-map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
+  &lt;li&gt;单个任务可使用的任务资源&lt;br /&gt;
+map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。&lt;br /&gt;
 ### 2.4.2.内存划分策略&lt;/li&gt;
-  &lt;li&gt;yarn容器可直接管理的资源
+  &lt;li&gt;yarn容器可直接管理的资源&lt;br /&gt;
 对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。&lt;/li&gt;
-  &lt;li&gt;单个任务可使用的任务资源
-1个vcore。
-# 3.mysql调优的过程
+  &lt;li&gt;单个任务可使用的任务资源&lt;br /&gt;
+1个vcore。&lt;br /&gt;
+# 3.mysql调优的过程&lt;br /&gt;
 不同的库，挂载在不同的磁盘上，减小单块盘的压力。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;section-10&quot;&gt;4.成果&lt;/h1&gt;
 
 &lt;h2 id=&quot;section-11&quot;&gt;4.1.集群表现情况&lt;/h2&gt;
-&lt;p&gt;到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
-## 4.2.mysql表现情况
-优化前的负载情况入下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png&quot; alt=&quot;优化前&quot; title=&quot;优化前负载情况&quot; /&gt;
-优化后的负载情况入下图：
+&lt;p&gt;到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。&lt;br /&gt;
+## 4.2.mysql表现情况&lt;br /&gt;
+优化前的负载情况入下图：&lt;br /&gt;
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png&quot; alt=&quot;优化前&quot; title=&quot;优化前负载情况&quot; /&gt;&lt;br /&gt;
+优化后的负载情况入下图：&lt;br /&gt;
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql.png&quot; alt=&quot;优化后&quot; title=&quot;优化后负载情况&quot; /&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -632,10 +632,10 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
 &lt;/blockquote&gt;
 
 &lt;h1 id=&quot;section-12&quot;&gt;5.总结&lt;/h1&gt;
-&lt;p&gt;在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：
-- Impala的资源管理未使用yarn，所以一直还没有开始使用；
-- OOZIE未做HA配置；
-- HDFS数据平衡效果不是很好；
+&lt;p&gt;在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：&lt;br /&gt;
+- Impala的资源管理未使用yarn，所以一直还没有开始使用；&lt;br /&gt;
+- OOZIE未做HA配置；&lt;br /&gt;
+- HDFS数据平衡效果不是很好；&lt;br /&gt;
 - CPU一个线程做两个vcore使用，压力还是比较大的。&lt;/p&gt;
 
 &lt;p&gt;在接下，将会按照优先级逐一解决。&lt;/p&gt;
@@ -741,7 +741,7 @@ public void map(...) {
 &lt;h2 id=&quot;linux&quot;&gt;2. Linux系统层面上的配置调优&lt;/h2&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;2.1. 文件系统的配置&lt;/h3&gt;
-&lt;p&gt;a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime &lt;br /&gt;
+&lt;p&gt;a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime   &lt;br /&gt;
 b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系统）&lt;/p&gt;
 
 &lt;h3 id=&quot;linux-1&quot;&gt;2.2. Linux文件系统预读缓冲区大小&lt;/h3&gt;
@@ -780,15 +780,15 @@ b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系�
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目 &lt;br /&gt;
-默认值：都是2 &lt;br /&gt;
-推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node) &lt;br /&gt;
+&lt;p&gt;参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目   &lt;br /&gt;
+默认值：都是2   &lt;br /&gt;
+推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node)   &lt;br /&gt;
 单位：无&lt;/p&gt;
 
 &lt;h3 id=&quot;section-5&quot;&gt;3.2. 节点间的通信优化&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;a) TaskTracker和JobTracker之间的心跳间隔&lt;/strong&gt; &lt;br /&gt;
-这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。 &lt;br /&gt;
-建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。 &lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;a) TaskTracker和JobTracker之间的心跳间隔&lt;/strong&gt;   &lt;br /&gt;
+这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。   &lt;br /&gt;
+建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。   &lt;br /&gt;
 &lt;strong&gt;b) 启用带外心跳(out-of-band heartbeat)&lt;/strong&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mapreduce.tasktracker.outofband.heartbeat
@@ -804,10 +804,10 @@ b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系�
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上 &lt;br /&gt;
-b) 存储相关的磁盘配置（HDFS数据存储） &lt;br /&gt;
-dfs.data.dir &lt;br /&gt;
-参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能 &lt;br /&gt;
+&lt;p&gt;参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上   &lt;br /&gt;
+b) 存储相关的磁盘配置（HDFS数据存储）   &lt;br /&gt;
+dfs.data.dir   &lt;br /&gt;
+参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能   &lt;br /&gt;
 例如：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;property&amp;gt;
@@ -823,7 +823,7 @@ dfs.data.dir &lt;br /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份 &lt;br /&gt;
+&lt;p&gt;参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份   &lt;br /&gt;
 注：要想提升hadoop整体IO性能，对于hadoop中用到的所有文件目录，都需要评估它磁盘IO的负载，对于IO负载可能会高的目录，最好都配置到多个磁盘上，以提示IO性能&lt;/p&gt;
 
 &lt;h3 id=&quot;rpc-handlerhttp&quot;&gt;3.4. RPC Handler个数和Http线程数优化&lt;/h3&gt;
@@ -833,16 +833,16 @@ dfs.data.dir &lt;br /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。 &lt;br /&gt;
-默认值：10 &lt;br /&gt;
-推荐值：60-70，最少要是TaskTracker个数的4% &lt;br /&gt;
-单位：无 &lt;br /&gt;
-b) Http线程数
-   &lt;br /&gt;
+&lt;p&gt;参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。   &lt;br /&gt;
+默认值：10   &lt;br /&gt;
+推荐值：60-70，最少要是TaskTracker个数的4%   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+b) Http线程数&lt;br /&gt;
+     &lt;br /&gt;
 tasktracker.http.threads&lt;/p&gt;
 
-&lt;p&gt;在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。 &lt;br /&gt;
-默认值：40 &lt;br /&gt;
+&lt;p&gt;在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。   &lt;br /&gt;
+默认值：40   &lt;br /&gt;
 推荐值：50-80+&lt;/p&gt;
 
 &lt;h3 id=&quot;section-7&quot;&gt;3.5. 选择合适的压缩算法&lt;/h3&gt;
@@ -862,7 +862,7 @@ tasktracker.http.threads&lt;/p&gt;
 &lt;p&gt;b) Capacity Scheduler&lt;/p&gt;
 
 &lt;h3 id=&quot;apache&quot;&gt;3.7. 启用预读机制(Apache暂时没有)&lt;/h3&gt;
-&lt;p&gt;Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。
+&lt;p&gt;Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。&lt;br /&gt;
 HDFS预读：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dfs.datanode.readahead ：true
@@ -878,55 +878,55 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
 &lt;/div&gt;
 
 &lt;h3 id=&quot;hdfs&quot;&gt;3.8.HDFS相关参数优化&lt;/h3&gt;
-&lt;p&gt;1) dfs.replication &lt;br /&gt;
-参数说明：hdfs文件副本数 &lt;br /&gt;
-默认值：3 &lt;br /&gt;
-推荐值：3-5（对于IO较为密集的场景可适量增大） &lt;br /&gt;
-单位：无 &lt;br /&gt;
-2) dfs.blocksize &lt;br /&gt;
-参数说明： &lt;br /&gt;
-默认值：67108864(64MB) &lt;br /&gt;
-推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456) &lt;br /&gt;
-单位：无 &lt;br /&gt;
-3) dfs.datanode.handler.count &lt;br /&gt;
-参数说明：DateNode上的服务线程数 &lt;br /&gt;
-默认值：10 &lt;br /&gt;
-推荐值： &lt;br /&gt;
-单位：无 &lt;br /&gt;
-4) fs.trash.interval &lt;br /&gt;
-参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间 &lt;br /&gt;
-默认值：0 &lt;br /&gt;
-推荐值：1440(1day) &lt;br /&gt;
-单位：无 &lt;br /&gt;
-5) io.sort.factor &lt;br /&gt;
-参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。 &lt;br /&gt;
-默认值：10 &lt;br /&gt;
-推荐值： &lt;br /&gt;
-单位：无 &lt;br /&gt;
-6) mapred.child.java.opts &lt;br /&gt;
-参数说明：JVM堆的最大可用内存 &lt;br /&gt;
-默认值：-Xmx200m &lt;br /&gt;
-推荐值：-Xmx1G | -Xmx4G | -Xmx8G &lt;br /&gt;
-单位：-Xmx8589934592也行，单位不固定 &lt;br /&gt;
-7) io.sort.mb &lt;br /&gt;
-参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件 &lt;br /&gt;
-默认值：100 &lt;br /&gt;
-推荐值：200 | 800 &lt;br /&gt;
-单位：兆 &lt;br /&gt;
-8) io.sort.spill.percent &lt;br /&gt;
-参数说明：即io.sort.mb中所说的阀值 &lt;br /&gt;
-默认值：0.8 &lt;br /&gt;
-推荐值：0.8 &lt;br /&gt;
-单位：无 &lt;br /&gt;
-9) io.sort.record &lt;br /&gt;
-参数说明：io.sort.mb中分类给元数据的空间占比 &lt;br /&gt;
-默认值：0.05 &lt;br /&gt;
-推荐值：0.05 &lt;br /&gt;
-单位：无 &lt;br /&gt;
-10) Mapred.reduce.parallel &lt;br /&gt;
-参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25 &lt;br /&gt;
-默认值：5 &lt;br /&gt;
-推荐值：16~25 &lt;br /&gt;
+&lt;p&gt;1) dfs.replication   &lt;br /&gt;
+参数说明：hdfs文件副本数   &lt;br /&gt;
+默认值：3   &lt;br /&gt;
+推荐值：3-5（对于IO较为密集的场景可适量增大）   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+2) dfs.blocksize   &lt;br /&gt;
+参数说明：   &lt;br /&gt;
+默认值：67108864(64MB)   &lt;br /&gt;
+推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456)   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+3) dfs.datanode.handler.count   &lt;br /&gt;
+参数说明：DateNode上的服务线程数   &lt;br /&gt;
+默认值：10   &lt;br /&gt;
+推荐值：   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+4) fs.trash.interval   &lt;br /&gt;
+参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间   &lt;br /&gt;
+默认值：0   &lt;br /&gt;
+推荐值：1440(1day)   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+5) io.sort.factor   &lt;br /&gt;
+参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。   &lt;br /&gt;
+默认值：10   &lt;br /&gt;
+推荐值：   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+6) mapred.child.java.opts   &lt;br /&gt;
+参数说明：JVM堆的最大可用内存   &lt;br /&gt;
+默认值：-Xmx200m   &lt;br /&gt;
+推荐值：-Xmx1G | -Xmx4G | -Xmx8G   &lt;br /&gt;
+单位：-Xmx8589934592也行，单位不固定   &lt;br /&gt;
+7) io.sort.mb   &lt;br /&gt;
+参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件   &lt;br /&gt;
+默认值：100   &lt;br /&gt;
+推荐值：200 | 800   &lt;br /&gt;
+单位：兆   &lt;br /&gt;
+8) io.sort.spill.percent   &lt;br /&gt;
+参数说明：即io.sort.mb中所说的阀值   &lt;br /&gt;
+默认值：0.8   &lt;br /&gt;
+推荐值：0.8   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+9) io.sort.record   &lt;br /&gt;
+参数说明：io.sort.mb中分类给元数据的空间占比   &lt;br /&gt;
+默认值：0.05   &lt;br /&gt;
+推荐值：0.05   &lt;br /&gt;
+单位：无   &lt;br /&gt;
+10) Mapred.reduce.parallel   &lt;br /&gt;
+参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25   &lt;br /&gt;
+默认值：5   &lt;br /&gt;
+推荐值：16~25   &lt;br /&gt;
 单位：无&lt;/p&gt;
 
 &lt;h2 id=&quot;section-9&quot;&gt;4.系统实现角度调优&lt;/h2&gt;
@@ -935,18 +935,18 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
 &lt;p&gt;主要针对HDFS进行优化，HDFS性能低下的两个原因：调度延迟和可移植性&lt;/p&gt;
 
 &lt;h3 id=&quot;section-10&quot;&gt;4.1. 调度延迟&lt;/h3&gt;
-&lt;p&gt;关于调度延迟主要是发生在两个阶段： &lt;br /&gt;
-a) tasktracker上出现空余的slot到该tasktracker接收到新的task； &lt;br /&gt;
-b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。 &lt;br /&gt;
-之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。 &lt;br /&gt;
-下面解释下会经历上边两个阶段发生的过程： &lt;br /&gt;
-a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 &lt;br /&gt;
-b) 这个过程中所发生的操作都是串行化的 &lt;br /&gt;
-tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 &lt;br /&gt;
+&lt;p&gt;关于调度延迟主要是发生在两个阶段：   &lt;br /&gt;
+a) tasktracker上出现空余的slot到该tasktracker接收到新的task；   &lt;br /&gt;
+b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。   &lt;br /&gt;
+之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。   &lt;br /&gt;
+下面解释下会经历上边两个阶段发生的过程：   &lt;br /&gt;
+a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。   &lt;br /&gt;
+b) 这个过程中所发生的操作都是串行化的   &lt;br /&gt;
+tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。   &lt;br /&gt;
 若能减短hdfs的等待时间;在执行task之前就开始把数据读到将要执行该task的tasktracker上，减少数据传输时间，那么将会显得高效很多。未解决此类问题，有这样几种解决方案：重叠I/O和CPU阶段（pipelining），task预取（task prefetching），数据预取（data prefetching）等。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-11&quot;&gt;4.2. 可移植性&lt;/h3&gt;
-&lt;p&gt;Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。
+&lt;p&gt;Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。&lt;br /&gt;
 对于上述问题，可以尝试使用下面的解决方案：&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -958,12 +958,12 @@ tasktracker会连接到namenode上获取到自己需要的数据在datanode上�
 &lt;h3 id=&quot;prefetchingpreshuffling&quot;&gt;4.3. 优化策略：Prefetching与preshuffling&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;a) Prefetching包括Block-intra prefetching和Block-inter prefetching &lt;br /&gt;
-&lt;strong&gt;Block-intra prefetching：&lt;/strong&gt;对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。 &lt;br /&gt;
+    &lt;p&gt;a) Prefetching包括Block-intra prefetching和Block-inter prefetching   &lt;br /&gt;
+&lt;strong&gt;Block-intra prefetching：&lt;/strong&gt;对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。   &lt;br /&gt;
 &lt;strong&gt;Block-inter prefetching：&lt;/strong&gt;在block层面上预读数据，在某个Task正在处理数据块A1的时候，预测器能预测接下来将要读取的数据块A2、A3、A4，然后把数据块A2、A3、A4预读到Task所在的rack上。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;b) preshuffling&lt;br /&gt;
+    &lt;p&gt;b) preshuffling  &lt;br /&gt;
 数据被map task处理之前，由预测器判断每条记录将要被哪个reduce task处理，将这些数据交给靠近reduce task的map task来处理。&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -971,14 +971,14 @@ tasktracker会连接到namenode上获取到自己需要的数据在datanode上�
 &lt;p&gt;&lt;strong&gt;参考资料：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;cloudera官方文档 &lt;br /&gt;
+  &lt;li&gt;cloudera官方文档   &lt;br /&gt;
 http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/&lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;AMD白皮书(较为实用) &lt;br /&gt;
+    &lt;p&gt;AMD白皮书(较为实用)   &lt;br /&gt;
 http://www.admin-magazine.com/HPC/content/download/9408/73372/file/Hadoop_Tuning_Guide-Version5.pdf&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;国内博客（大部分内容都是AMD白皮书上的翻译）： &lt;br /&gt;
-http://dongxicheng.org/mapreduce/hadoop-optimization-0/
+  &lt;li&gt;国内博客（大部分内容都是AMD白皮书上的翻译）：   &lt;br /&gt;
+http://dongxicheng.org/mapreduce/hadoop-optimization-0/&lt;br /&gt;
 http://dongxicheng.org/mapreduce/hadoop-optimization-1/&lt;/li&gt;
 &lt;/ul&gt;
 </description>

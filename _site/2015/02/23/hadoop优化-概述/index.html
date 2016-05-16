@@ -252,7 +252,7 @@ public void map(...) {
 <h2 id="linux">2. Linux系统层面上的配置调优</h2>
 
 <h3 id="section-2">2.1. 文件系统的配置</h3>
-<p>a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime <br />
+<p>a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime   <br />
 b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系统）</p>
 
 <h3 id="linux-1">2.2. Linux文件系统预读缓冲区大小</h3>
@@ -291,15 +291,15 @@ b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系�
 </code></pre>
 </div>
 
-<p>参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目 <br />
-默认值：都是2 <br />
-推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node) <br />
+<p>参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目   <br />
+默认值：都是2   <br />
+推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node)   <br />
 单位：无</p>
 
 <h3 id="section-5">3.2. 节点间的通信优化</h3>
-<p><strong>a) TaskTracker和JobTracker之间的心跳间隔</strong> <br />
-这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。 <br />
-建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。 <br />
+<p><strong>a) TaskTracker和JobTracker之间的心跳间隔</strong>   <br />
+这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。   <br />
+建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。   <br />
 <strong>b) 启用带外心跳(out-of-band heartbeat)</strong></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>mapreduce.tasktracker.outofband.heartbeat
@@ -315,10 +315,10 @@ b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系�
 </code></pre>
 </div>
 
-<p>参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上 <br />
-b) 存储相关的磁盘配置（HDFS数据存储） <br />
-dfs.data.dir <br />
-参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能 <br />
+<p>参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上   <br />
+b) 存储相关的磁盘配置（HDFS数据存储）   <br />
+dfs.data.dir   <br />
+参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能   <br />
 例如：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
@@ -334,7 +334,7 @@ dfs.data.dir <br />
 </code></pre>
 </div>
 
-<p>参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份 <br />
+<p>参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份   <br />
 注：要想提升hadoop整体IO性能，对于hadoop中用到的所有文件目录，都需要评估它磁盘IO的负载，对于IO负载可能会高的目录，最好都配置到多个磁盘上，以提示IO性能</p>
 
 <h3 id="rpc-handlerhttp">3.4. RPC Handler个数和Http线程数优化</h3>
@@ -344,16 +344,16 @@ dfs.data.dir <br />
 </code></pre>
 </div>
 
-<p>参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。 <br />
-默认值：10 <br />
-推荐值：60-70，最少要是TaskTracker个数的4% <br />
-单位：无 <br />
-b) Http线程数
-   <br />
+<p>参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。   <br />
+默认值：10   <br />
+推荐值：60-70，最少要是TaskTracker个数的4%   <br />
+单位：无   <br />
+b) Http线程数<br />
+     <br />
 tasktracker.http.threads</p>
 
-<p>在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。 <br />
-默认值：40 <br />
+<p>在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。   <br />
+默认值：40   <br />
 推荐值：50-80+</p>
 
 <h3 id="section-7">3.5. 选择合适的压缩算法</h3>
@@ -373,7 +373,7 @@ tasktracker.http.threads</p>
 <p>b) Capacity Scheduler</p>
 
 <h3 id="apache">3.7. 启用预读机制(Apache暂时没有)</h3>
-<p>Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。
+<p>Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。<br />
 HDFS预读：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>dfs.datanode.readahead ：true
@@ -389,55 +389,55 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
 </div>
 
 <h3 id="hdfs">3.8.HDFS相关参数优化</h3>
-<p>1) dfs.replication <br />
-参数说明：hdfs文件副本数 <br />
-默认值：3 <br />
-推荐值：3-5（对于IO较为密集的场景可适量增大） <br />
-单位：无 <br />
-2) dfs.blocksize <br />
-参数说明： <br />
-默认值：67108864(64MB) <br />
-推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456) <br />
-单位：无 <br />
-3) dfs.datanode.handler.count <br />
-参数说明：DateNode上的服务线程数 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-4) fs.trash.interval <br />
-参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间 <br />
-默认值：0 <br />
-推荐值：1440(1day) <br />
-单位：无 <br />
-5) io.sort.factor <br />
-参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-6) mapred.child.java.opts <br />
-参数说明：JVM堆的最大可用内存 <br />
-默认值：-Xmx200m <br />
-推荐值：-Xmx1G | -Xmx4G | -Xmx8G <br />
-单位：-Xmx8589934592也行，单位不固定 <br />
-7) io.sort.mb <br />
-参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件 <br />
-默认值：100 <br />
-推荐值：200 | 800 <br />
-单位：兆 <br />
-8) io.sort.spill.percent <br />
-参数说明：即io.sort.mb中所说的阀值 <br />
-默认值：0.8 <br />
-推荐值：0.8 <br />
-单位：无 <br />
-9) io.sort.record <br />
-参数说明：io.sort.mb中分类给元数据的空间占比 <br />
-默认值：0.05 <br />
-推荐值：0.05 <br />
-单位：无 <br />
-10) Mapred.reduce.parallel <br />
-参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25 <br />
-默认值：5 <br />
-推荐值：16~25 <br />
+<p>1) dfs.replication   <br />
+参数说明：hdfs文件副本数   <br />
+默认值：3   <br />
+推荐值：3-5（对于IO较为密集的场景可适量增大）   <br />
+单位：无   <br />
+2) dfs.blocksize   <br />
+参数说明：   <br />
+默认值：67108864(64MB)   <br />
+推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456)   <br />
+单位：无   <br />
+3) dfs.datanode.handler.count   <br />
+参数说明：DateNode上的服务线程数   <br />
+默认值：10   <br />
+推荐值：   <br />
+单位：无   <br />
+4) fs.trash.interval   <br />
+参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间   <br />
+默认值：0   <br />
+推荐值：1440(1day)   <br />
+单位：无   <br />
+5) io.sort.factor   <br />
+参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。   <br />
+默认值：10   <br />
+推荐值：   <br />
+单位：无   <br />
+6) mapred.child.java.opts   <br />
+参数说明：JVM堆的最大可用内存   <br />
+默认值：-Xmx200m   <br />
+推荐值：-Xmx1G | -Xmx4G | -Xmx8G   <br />
+单位：-Xmx8589934592也行，单位不固定   <br />
+7) io.sort.mb   <br />
+参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件   <br />
+默认值：100   <br />
+推荐值：200 | 800   <br />
+单位：兆   <br />
+8) io.sort.spill.percent   <br />
+参数说明：即io.sort.mb中所说的阀值   <br />
+默认值：0.8   <br />
+推荐值：0.8   <br />
+单位：无   <br />
+9) io.sort.record   <br />
+参数说明：io.sort.mb中分类给元数据的空间占比   <br />
+默认值：0.05   <br />
+推荐值：0.05   <br />
+单位：无   <br />
+10) Mapred.reduce.parallel   <br />
+参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25   <br />
+默认值：5   <br />
+推荐值：16~25   <br />
 单位：无</p>
 
 <h2 id="section-9">4.系统实现角度调优</h2>
@@ -446,18 +446,18 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
 <p>主要针对HDFS进行优化，HDFS性能低下的两个原因：调度延迟和可移植性</p>
 
 <h3 id="section-10">4.1. 调度延迟</h3>
-<p>关于调度延迟主要是发生在两个阶段： <br />
-a) tasktracker上出现空余的slot到该tasktracker接收到新的task； <br />
-b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。 <br />
-之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。 <br />
-下面解释下会经历上边两个阶段发生的过程： <br />
-a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
-b) 这个过程中所发生的操作都是串行化的 <br />
-tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
+<p>关于调度延迟主要是发生在两个阶段：   <br />
+a) tasktracker上出现空余的slot到该tasktracker接收到新的task；   <br />
+b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。   <br />
+之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。   <br />
+下面解释下会经历上边两个阶段发生的过程：   <br />
+a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。   <br />
+b) 这个过程中所发生的操作都是串行化的   <br />
+tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。   <br />
 若能减短hdfs的等待时间;在执行task之前就开始把数据读到将要执行该task的tasktracker上，减少数据传输时间，那么将会显得高效很多。未解决此类问题，有这样几种解决方案：重叠I/O和CPU阶段（pipelining），task预取（task prefetching），数据预取（data prefetching）等。</p>
 
 <h3 id="section-11">4.2. 可移植性</h3>
-<p>Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。
+<p>Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。<br />
 对于上述问题，可以尝试使用下面的解决方案：</p>
 
 <blockquote>
@@ -469,12 +469,12 @@ tasktracker会连接到namenode上获取到自己需要的数据在datanode上�
 <h3 id="prefetchingpreshuffling">4.3. 优化策略：Prefetching与preshuffling</h3>
 <ul>
   <li>
-    <p>a) Prefetching包括Block-intra prefetching和Block-inter prefetching <br />
-<strong>Block-intra prefetching：</strong>对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。 <br />
+    <p>a) Prefetching包括Block-intra prefetching和Block-inter prefetching   <br />
+<strong>Block-intra prefetching：</strong>对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。   <br />
 <strong>Block-inter prefetching：</strong>在block层面上预读数据，在某个Task正在处理数据块A1的时候，预测器能预测接下来将要读取的数据块A2、A3、A4，然后把数据块A2、A3、A4预读到Task所在的rack上。</p>
   </li>
   <li>
-    <p>b) preshuffling<br />
+    <p>b) preshuffling  <br />
 数据被map task处理之前，由预测器判断每条记录将要被哪个reduce task处理，将这些数据交给靠近reduce task的map task来处理。</p>
   </li>
 </ul>
@@ -482,14 +482,14 @@ tasktracker会连接到namenode上获取到自己需要的数据在datanode上�
 <p><strong>参考资料：</strong></p>
 
 <ul>
-  <li>cloudera官方文档 <br />
+  <li>cloudera官方文档   <br />
 http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/</li>
   <li>
-    <p>AMD白皮书(较为实用) <br />
+    <p>AMD白皮书(较为实用)   <br />
 http://www.admin-magazine.com/HPC/content/download/9408/73372/file/Hadoop_Tuning_Guide-Version5.pdf</p>
   </li>
-  <li>国内博客（大部分内容都是AMD白皮书上的翻译）： <br />
-http://dongxicheng.org/mapreduce/hadoop-optimization-0/
+  <li>国内博客（大部分内容都是AMD白皮书上的翻译）：   <br />
+http://dongxicheng.org/mapreduce/hadoop-optimization-0/<br />
 http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
 </ul>
 
