@@ -1,0 +1,37 @@
+---
+layout: page
+title: About
+permalink: /about/
+icon: heart
+---
+
+* content
+{:toc}
+
+## 关于我
+
+一名热爱生活的互联网从业者，目前任职魔秀科技大数据高级研发。热爱健身、阅读以及摄影，偶尔也玩一玩lol。从开始工作到现在，一直从事大数据方向的研发工作。个人对数据、算法一直都有着浓厚的兴。学习与进步是一件美好的事情,希望能多认识一些志同道合的朋友们，一起加油！
+
+## 关于本站
+本站的构建框架是jekyll，模板制作由HY(https://github.com/Gaohaoyang)提供，比较喜欢这种WIKI风格的模板。
+
+## 联系我
+
+* GitHub：[leocook](https://github.com/leocook)
+* email：leocook@163.com
+
+
+## 欢迎打赏
+如果你喜欢我的文章，或者愿意赏我一杯咖啡，请扫下面的二维码.
+
+- 微信
+![微信二维码](http://7xriy2.com1.z0.glb.clouddn.com/pay_weixin.JPG "微信二维码")
+
+
+- 支付宝
+![支付宝二维码](http://7xriy2.com1.z0.glb.clouddn.com/pay_alipay.jpg "支付宝二维码")
+
+
+## Comments
+
+{% include comments.html %}
