@@ -15,6 +15,9 @@ icon: heart
 ## 关于本站
 本站的构建框架是jekyll，模板制作由HY(https://github.com/Gaohaoyang)提供，比较喜欢这种WIKI风格的模板。
 
+## 友情链接
+[whoami](http://www.itweet.cn/) | [镜缘浮影](http://soft.dog/)
+
 ## 联系我
 
 * GitHub：[leocook](https://github.com/leocook)

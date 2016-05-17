@@ -223,24 +223,24 @@
 <p>以及安装完成的cdh5.4.4集群。</p>
 
 <h3 id="section-2">1.3. 编译环境准备</h3>
-<p>安装gcc, gcc-c++, make, build    <br />
+<p>安装gcc, gcc-c++, make, build  <br />
 <code class="highlighter-rouge">
 yum install gcc gcc-c++ libstdc++-devel make build
 </code></p>
 
 <h3 id="nodejsnpm">1.4. Nodejs、npm</h3>
-<p>下载源码:    <br />
+<p>下载源码:  <br />
 <code class="highlighter-rouge">
 wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
 </code></p>
 
-<p>解压后编译:    <br />
+<p>解压后编译:  <br />
 <code class="highlighter-rouge">
 ./configure
 make &amp;&amp; make install
 </code></p>
 
-<p>查看nodejs和npm的版本:    <br />
+<p>查看nodejs和npm的版本:  <br />
 <code class="highlighter-rouge">
 node --version
 npm --version
@@ -249,13 +249,13 @@ npm --version
 <p>笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9</p>
 
 <h3 id="git">1.5.安装GIT</h3>
-<p>下载git:    <br />
+<p>下载git:  <br />
 <code class="highlighter-rouge">
 https://git-scm.com/download    
 笔者选择的是1.7.3版本
 </code></p>
 
-<p>解压后编译:    <br />
+<p>解压后编译:  <br />
 <code class="highlighter-rouge">
 ./configure
 make
@@ -264,32 +264,32 @@ make install
 
 <h3 id="protocolbuffer250">1.6. ProtocolBuffer2.5.0</h3>
 <ul>
-  <li>下载pb源码    <br />
+  <li>下载pb源码  <br />
 <code class="highlighter-rouge">
 https://github.com/google/protobuf/releases/tag/v2.5.0
 </code></li>
   <li>
-    <p>编译安装pb    <br />
+    <p>编译安装pb  <br />
 <code class="highlighter-rouge">
 ./configure -prefix=/opt/protoc/
 make &amp;&amp; make install
 </code></p>
   </li>
-  <li>配置环境变量   <br />
+  <li>配置环境变量 <br />
 <code class="highlighter-rouge">
 export PROTOC_HOME=/opt/protoc
 export PATH=$PATH:$PROTOC_HOME/bin
 </code></li>
-  <li>检验    <br />
+  <li>检验  <br />
 <code class="highlighter-rouge">
 protoc --version
-</code>    <br />
+</code>  <br />
 查看pb的版本是不是2.5.0，笔者这里显示为 <strong>libprotoc 2.5.0</strong></li>
 </ul>
 
 <h3 id="tez-1">1.7.编译&amp;安装Tez</h3>
 <ul>
-  <li>下载Tez   <br />
+  <li>下载Tez <br />
 Tez所有版本列表在者：</li>
 </ul>
 
@@ -381,7 +381,7 @@ export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/*:${TEZ_JARS}/lib/*
 
 <h3 id="hivetez-1">2.5. 让Hive把Tez用起来</h3>
 <ul>
-  <li>配置整合<br />
+  <li>配置整合
 临时配置</li>
 </ul>
 
@@ -445,7 +445,7 @@ Time taken: 22.211 seconds, Fetched: 1 row(s)
 hive&gt; 
 </code></pre>
 </div>
-<p>如下图：<br />
+<p>如下图：
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/tez-ok.png" alt="Hive on Tez" title="Hive on Tez" /></p>
 
 <p>到此，hive on tez，整合完毕！</p>
@@ -456,7 +456,7 @@ hive&gt;
 <div class="highlighter-rouge"><pre class="highlight"><code>[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.3.2:exec (Bower install) on project tez-ui: Command execution failed. Process exited with an error: 1 (Exit value: 1) -&gt; [Help 1]
 </code></pre>
 </div>
-<p>解决办法：<br />
+<p>解决办法：
 不要使用root用户，也不要使用sudo来编译.</p>
 
 <h3 id="mavenfrontend-maven-plugintez">2.maven插件frontend-maven-plugin的版本问题（编译tez时的错误）</h3>
@@ -464,8 +464,8 @@ hive&gt;
 <div class="highlighter-rouge"><pre class="highlight"><code>[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Execution install node and npm of goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm failed: A required class was missing while executing com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm: org/slf4j/helpers/MarkerIgnoringBase
 </code></pre>
 </div>
-<p>解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）<br />
-如果maven的版本低于3.1，frontend-maven-plugin版本应该 &lt;= 0.0.22；<br />
+<p>解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）
+如果maven的版本低于3.1，frontend-maven-plugin版本应该 &lt;= 0.0.22；
 如果maven的版本大于或等于3.1，frontend-maven-plugin版本应该 &gt;= 0.0.23.</p>
 
 <h3 id="nodetez">3.解压Node压缩包时错误（编译tez时的错误）</h3>
@@ -482,9 +482,9 @@ hive&gt;
 [ERROR] npm WARN engine cryptiles@2.0.5: wanted: {"node":"&gt;=0.10.40"} (current: {"node":"v0.10.18","npm":"1.3.8"})
 </code></pre>
 </div>
-<p>解决办法：<br />
-1. 安装正确版本的nodeJs；<br />
-2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：<br />
+<p>解决办法：
+1. 安装正确版本的nodeJs；
+2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
 <code class="highlighter-rouge">
 node --version
 npm --version
@@ -524,8 +524,8 @@ DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1
 FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask
 </code></pre>
 </div>
-<p>这个错误是在配置完之后，运行hive时才会出现的。<br />
-解决办法：<br />
+<p>这个错误是在配置完之后，运行hive时才会出现的。
+解决办法：
 拷贝mr依赖包至tez的hdfs目录中。笔者的环境是CDH5.4.4，所以把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar拷贝到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录，就解决问题了。</p>
 
 <h3 id="tezhive-on-oozie-">6.tez&amp;hive on oozie 错误</h3>
@@ -560,9 +560,9 @@ Failing Oozie Launcher, Main class [org.apache.oozie.action.hadoop.HiveMain], ex
 </code></pre>
 </div>
 
-<p>参考链接：<br />
-http://m.oschina.net/blog/421764    <br />
-http://duguyiren3476.iteye.com/blog/2214549<br />
+<p>参考链接：
+http://m.oschina.net/blog/421764  <br />
+http://duguyiren3476.iteye.com/blog/2214549
 https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions</p>
 
 

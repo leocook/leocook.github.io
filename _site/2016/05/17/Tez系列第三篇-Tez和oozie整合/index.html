@@ -197,7 +197,7 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
 </div>
 
 <h2 id="jar">3.修改Jar的权限</h2>
-<p>保证oozie有权限读取、使用Jar包:<br />
+<p>保证oozie有权限读取、使用Jar包:
 <code class="highlighter-rouge">
 hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
 </code></p>
@@ -248,7 +248,7 @@ oozie admin -shareliblist hive
 </code></pre>
 </div>
 
-<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:<br />
+<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:
 <code class="highlighter-rouge">
 set hive.execution.engine=tez;
 </code></p>
