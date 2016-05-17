@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 17 May 2016 00:11:46 +0800</pubDate>
-    <lastBuildDate>Tue, 17 May 2016 00:11:46 +0800</lastBuildDate>
+    <pubDate>Tue, 17 May 2016 08:31:01 +0800</pubDate>
+    <lastBuildDate>Tue, 17 May 2016 08:31:01 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -94,12 +94,14 @@ set hive.execution.engine=tez;
         
         <category>hadoop</category>
         
-        <category>Tez</category>
+        <category>tez</category>
         
         <category>oozie</category>
         
+        <category>hive</category>
         
-        <category>Tez</category>
+        
+        <category>tez</category>
         
       </item>
     
@@ -504,12 +506,12 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
         
         <category>hadoop</category>
         
-        <category>Tez</category>
+        <category>tez</category>
         
-        <category>Hive</category>
+        <category>hive</category>
         
         
-        <category>Tez</category>
+        <category>tez</category>
         
       </item>
     
@@ -596,10 +598,10 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
         
         <category>hadoop</category>
         
-        <category>Tez</category>
+        <category>tez</category>
         
         
-        <category>Tez</category>
+        <category>tez</category>
         
       </item>
     

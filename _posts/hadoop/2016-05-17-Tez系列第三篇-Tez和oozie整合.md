@@ -2,8 +2,8 @@
 layout: post
 comments: true
 date: 2016-05-17
-categories: Tez
-tags: hadoop Tez oozie
+categories: tez
+tags: hadoop tez oozie hive
 ---
 
 * content
