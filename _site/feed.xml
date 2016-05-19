@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 17 May 2016 14:21:39 +0800</pubDate>
-    <lastBuildDate>Tue, 17 May 2016 14:21:39 +0800</lastBuildDate>
+    <pubDate>Thu, 19 May 2016 19:41:55 +0800</pubDate>
+    <lastBuildDate>Thu, 19 May 2016 19:41:55 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
@@ -1086,6 +1086,250 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/&lt;/li&gt;
         
         
         <category>hadoop</category>
+        
+      </item>
+    
+      <item>
+        <title>Tomcat6集群配置</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.概要&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#apache&quot; id=&quot;markdown-toc-apache&quot;&gt;2.Apache配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#httpconf&quot; id=&quot;markdown-toc-httpconf&quot;&gt;2.1.http.conf配置修改&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#modjkconf&quot; id=&quot;markdown-toc-modjkconf&quot;&gt;2.2.mod_jk.conf配置修改&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#workersproperties&quot; id=&quot;markdown-toc-workersproperties&quot;&gt;2.3.workers.properties配置修改&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#tomcat&quot; id=&quot;markdown-toc-tomcat&quot;&gt;3.Tomcat配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#tomcat-1&quot; id=&quot;markdown-toc-tomcat-1&quot;&gt;3.1 tomcat的关闭端口&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tomcat-2&quot; id=&quot;markdown-toc-tomcat-2&quot;&gt;3.2.tomcat的服务端口&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#ajp13&quot; id=&quot;markdown-toc-ajp13&quot;&gt;3.3.AJP13通信端口&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#session&quot; id=&quot;markdown-toc-session&quot;&gt;3.4.Session共享&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;1.概要&lt;/h1&gt;
+&lt;p&gt;web容器在做集群配置时，有3点需要注意
+- 负载均衡配置；
+- session共享；
+- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;环境&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;tomcat6&lt;/li&gt;
+  &lt;li&gt;apache&lt;/li&gt;
+  &lt;li&gt;mod_jk-1.2.28-httpd-2.2.3.so&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;apache&quot;&gt;2.Apache配置&lt;/h1&gt;
+&lt;p&gt;在本案例中是使用Apache来做的，下边用到的mod模块和Apache版本需要兼容才行。文中所使用的软件，会在文章底部附上下载链接。&lt;/p&gt;
+
+&lt;h2 id=&quot;httpconf&quot;&gt;2.1.http.conf配置修改&lt;/h2&gt;
+&lt;p&gt;在apache安装目录的conf目录下，修改http.conf配置文件，在任意某一行加入&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Include conf/mod_jk.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;修改Apache监听端口（在文件的第46行左右）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Listen 90
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;modjkconf&quot;&gt;2.2.mod_jk.conf配置修改&lt;/h2&gt;
+&lt;p&gt;在conf目录下新建文件mod_jk.conf，写入如下内容&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#加载mod_jk Module  把mod_jk-1.2.28-httpd-2.2.3.so放到相应的目录中
+LoadModule jk_module modules/mod_jk-1.2.28-httpd-2.2.3.so
+#指定 workers.properties文件路径
+JkWorkersFile conf/workers.properties
+#指定那些请求交给tomcat处理,&quot;controller&quot;为在workers.properties里指定的负载分配控制器
+JkMount /*.jsp  controller
+JkMount /*.action  controller
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其中，mod_jk-1.2.28-httpd-2.2.3.so文件更具自己实际添加的模块文件名来写。&lt;/p&gt;
+
+&lt;h2 id=&quot;workersproperties&quot;&gt;2.3.workers.properties配置修改&lt;/h2&gt;
+&lt;p&gt;在conf目录下新建文件workers.properties，写入如下内容&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;worker.list=controller,tomcat1,tomcat2
+
+#tomcat1
+worker.tomcat1.port=8109         #ajp13端口号在tomcat下server.xml配置,默认8009 默认与HTTP通信的协议
+worker.tomcat1.host=localhost     
+worker.tomcat1.type=ajp13          #tomcat的主机地址，如不为本机，请填写ip地址
+worker.tomcat1.lbfactor = 1       #server的加权比重，值越高，分得的请求越多
+
+#tomcat2
+worker.tomcat2.port=9109       
+worker.tomcat2.host=localhost 
+worker.tomcat2.type=ajp13
+worker.tomcat2.lbfactor = 1  
+
+#========controller,负载均衡控制器========
+worker.controller.type=lb    
+worker.controller.balanced_workers=tomcat1,tomcat2    #指定分担请求的tomcat
+worker.controller.sticky_session=1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;其中tomcat上ajp13协议通信端口需要根据具体的设置区修改（ajp13协议在这里就是Apache与tomcat之间的通信协议）。&lt;/p&gt;
+
+&lt;h1 id=&quot;tomcat&quot;&gt;3.Tomcat配置&lt;/h1&gt;
+
+&lt;h2 id=&quot;tomcat-1&quot;&gt;3.1 tomcat的关闭端口&lt;/h2&gt;
+&lt;p&gt;默认是8005，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;tomcat-2&quot;&gt;3.2.tomcat的服务端口&lt;/h2&gt;
+&lt;p&gt;默认是8080，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; 
+               connectionTimeout=&quot;20000&quot; 
+               redirectPort=&quot;8443&quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;ajp13&quot;&gt;3.3.AJP13通信端口&lt;/h2&gt;
+&lt;p&gt;tomcat上的AJP13协议通信端口：默认是8009，这里的端口配置需要和上边文件workers.properties中的AJP13协议端口配置相对应，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;session&quot;&gt;3.4.Session共享&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;在Tomcat中启用标签&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Cluster className=&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在web项目中的web.xml中加入&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;distributable/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;则这个项目就支持集群了。
+到此，配置完毕。
+下载链接： http://pan.baidu.com/s/1mgLq8Dq&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 28 May 2014 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</guid>
+        
+        <category>tomcat</category>
+        
+        
+        <category>WebService</category>
+        
+      </item>
+    
+      <item>
+        <title>Ubuntu常用配置</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#ubuntu-desktop&quot; id=&quot;markdown-toc-ubuntu-desktop&quot;&gt;1.ubuntu desktop接双显示器&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.1.环境&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.2.修改系统配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#arandr&quot; id=&quot;markdown-toc-arandr&quot;&gt;1.3.使用可视化软件Arandr&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.最好用的终端&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#smplay&quot; id=&quot;markdown-toc-smplay&quot;&gt;3.视频播放器SMPlay&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;ubuntu-desktop&quot;&gt;1.ubuntu desktop接双显示器&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.1.环境&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;ubuntu12.04&lt;/li&gt;
+  &lt;li&gt;Arandr&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;1.2.修改系统配置&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;编辑/etc/X11/xorg.conf文件  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+vi /etc/X11/xorg.conf
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在Section “Screen”内容之内增加以下内容  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+SubSection &quot;Display&quot;
+Virtual 4000 3000
+EndSubSection
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;重启xwindow&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).&lt;/p&gt;
+
+&lt;p&gt;方法二：
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+sudo init 6
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;arandr&quot;&gt;1.3.使用可视化软件Arandr&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;安装Arandr  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+sudo apt-get install arandr
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;打开查看各个主屏的名称  &lt;br /&gt;
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/arandr.png&quot; alt=&quot;Arandr&quot; title=&quot;Arandr&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;设置对应的显示设备为主屏  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+sudo xrandr --output CRT1 --primary
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！&lt;/p&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;2.最好用的终端&lt;/h1&gt;
+&lt;p&gt;Terminator  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+sudo apt-get install terminator
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;smplay&quot;&gt;3.视频播放器SMPlay&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install mplayer 
+sudo apt-get install ffmpeg
+sudo apt-get install smplayer
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Thu, 15 May 2014 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/</guid>
+        
+        <category>ubuntu</category>
+        
+        
+        <category>linux</category>
         
       </item>
     

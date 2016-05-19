@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第三篇 Tez和oozie整合</title>
-    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下  3.修改Jar的权限  4.是配置生效  5.在workflow里使用Tez          5.1.使单个workflow里的hive都用tez      5.2.使单个workflow里的单个hive都用t...">
+    <title>Tomcat6集群配置</title>
+    <meta name="description" content="  1.概要  2.Apache配置          2.1.http.conf配置修改      2.2.mod_jk.conf配置修改      2.3.workers.properties配置修改        3.Tomcat配置          3.1 tomcat的关闭端口      3.2.to...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">
+    <link rel="canonical" href="http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -116,11 +116,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第三篇 Tez和oozie整合</h1>
+        <h1>Tomcat6集群配置</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-05-17
+                <i class="fa fa-calendar"></i>2014-05-28
             </div>
 
             <div class="label-card">
@@ -140,7 +140,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
+        <a href="/category/#WebService" title="Category: WebService" rel="category">WebService</a>
     
   
 
@@ -157,17 +157,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <!--a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a-->
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <!--a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a-->
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
-    
-        <!--a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a-->
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
+        <!--a href="/tag/#tomcat" title="Tag: tomcat" rel="tag">tomcat</a-->
+        <a href="/tag/#tomcat" title="Tag: tomcat" rel="tag">tomcat</a>
     
   
 
@@ -179,81 +170,139 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-  <li><a href="#jar" id="markdown-toc-jar">3.修改Jar的权限</a></li>
-  <li><a href="#section-1" id="markdown-toc-section-1">4.是配置生效</a></li>
-  <li><a href="#workflowtez" id="markdown-toc-workflowtez">5.在workflow里使用Tez</a>    <ul>
-      <li><a href="#workflowhivetez" id="markdown-toc-workflowhivetez">5.1.使单个workflow里的hive都用tez</a></li>
-      <li><a href="#workflowhivetez-1" id="markdown-toc-workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</a></li>
+  <li><a href="#section" id="markdown-toc-section">1.概要</a></li>
+  <li><a href="#apache" id="markdown-toc-apache">2.Apache配置</a>    <ul>
+      <li><a href="#httpconf" id="markdown-toc-httpconf">2.1.http.conf配置修改</a></li>
+      <li><a href="#modjkconf" id="markdown-toc-modjkconf">2.2.mod_jk.conf配置修改</a></li>
+      <li><a href="#workersproperties" id="markdown-toc-workersproperties">2.3.workers.properties配置修改</a></li>
+    </ul>
+  </li>
+  <li><a href="#tomcat" id="markdown-toc-tomcat">3.Tomcat配置</a>    <ul>
+      <li><a href="#tomcat-1" id="markdown-toc-tomcat-1">3.1 tomcat的关闭端口</a></li>
+      <li><a href="#tomcat-2" id="markdown-toc-tomcat-2">3.2.tomcat的服务端口</a></li>
+      <li><a href="#ajp13" id="markdown-toc-ajp13">3.3.AJP13通信端口</a></li>
+      <li><a href="#session" id="markdown-toc-session">3.4.Session共享</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
+<h1 id="section">1.概要</h1>
+<p>web容器在做集群配置时，有3点需要注意
+- 负载均衡配置；
+- session共享；
+- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。</p>
 
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+<p><strong>环境</strong></p>
+
+<ul>
+  <li>tomcat6</li>
+  <li>apache</li>
+  <li>mod_jk-1.2.28-httpd-2.2.3.so</li>
+</ul>
+
+<h1 id="apache">2.Apache配置</h1>
+<p>在本案例中是使用Apache来做的，下边用到的mod模块和Apache版本需要兼容才行。文中所使用的软件，会在文章底部附上下载链接。</p>
+
+<h2 id="httpconf">2.1.http.conf配置修改</h2>
+<p>在apache安装目录的conf目录下，修改http.conf配置文件，在任意某一行加入</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Include conf/mod_jk.conf
 </code></pre>
 </div>
 
-<h2 id="jar">3.修改Jar的权限</h2>
-<p>保证oozie有权限读取、使用Jar包:
-<code class="highlighter-rouge">
-hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-</code></p>
+<p>修改Apache监听端口（在文件的第46行左右）</p>
 
-<h2 id="section-1">4.是配置生效</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>oozie admin -sharelibupdate
-oozie admin -shareliblist hive
-</code></pre>
-</div>
-<p>或者重启oozie也可以</p>
-
-<h2 id="workflowtez">5.在workflow里使用Tez</h2>
-<p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
-
-<h3 id="workflowhivetez">5.1.使单个workflow里的hive都用tez</h3>
-<p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>Listen 90
 </code></pre>
 </div>
 
-<h3 id="workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</h3>
-<p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
+<h2 id="modjkconf">2.2.mod_jk.conf配置修改</h2>
+<p>在conf目录下新建文件mod_jk.conf，写入如下内容</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>#加载mod_jk Module  把mod_jk-1.2.28-httpd-2.2.3.so放到相应的目录中
+LoadModule jk_module modules/mod_jk-1.2.28-httpd-2.2.3.so
+#指定 workers.properties文件路径
+JkWorkersFile conf/workers.properties
+#指定那些请求交给tomcat处理,"controller"为在workers.properties里指定的负载分配控制器
+JkMount /*.jsp  controller
+JkMount /*.action  controller
+
+</code></pre>
+</div>
+<p>其中，mod_jk-1.2.28-httpd-2.2.3.so文件更具自己实际添加的模块文件名来写。</p>
+
+<h2 id="workersproperties">2.3.workers.properties配置修改</h2>
+<p>在conf目录下新建文件workers.properties，写入如下内容</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>worker.list=controller,tomcat1,tomcat2
+
+#tomcat1
+worker.tomcat1.port=8109         #ajp13端口号在tomcat下server.xml配置,默认8009 默认与HTTP通信的协议
+worker.tomcat1.host=localhost     
+worker.tomcat1.type=ajp13          #tomcat的主机地址，如不为本机，请填写ip地址
+worker.tomcat1.lbfactor = 1       #server的加权比重，值越高，分得的请求越多
+
+#tomcat2
+worker.tomcat2.port=9109       
+worker.tomcat2.host=localhost 
+worker.tomcat2.type=ajp13
+worker.tomcat2.lbfactor = 1  
+
+#========controller,负载均衡控制器========
+worker.controller.type=lb    
+worker.controller.balanced_workers=tomcat1,tomcat2    #指定分担请求的tomcat
+worker.controller.sticky_session=1
 </code></pre>
 </div>
 
-<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:
-<code class="highlighter-rouge">
-set hive.execution.engine=tez;
-</code></p>
+<p>其中tomcat上ajp13协议通信端口需要根据具体的设置区修改（ajp13协议在这里就是Apache与tomcat之间的通信协议）。</p>
+
+<h1 id="tomcat">3.Tomcat配置</h1>
+
+<h2 id="tomcat-1">3.1 tomcat的关闭端口</h2>
+<p>默认是8005，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Server port="8005" shutdown="SHUTDOWN"&gt;
+</code></pre>
+</div>
+
+<h2 id="tomcat-2">3.2.tomcat的服务端口</h2>
+<p>默认是8080，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8080" protocol="HTTP/1.1" 
+               connectionTimeout="20000" 
+               redirectPort="8443" /&gt;
+</code></pre>
+</div>
+
+<h2 id="ajp13">3.3.AJP13通信端口</h2>
+<p>tomcat上的AJP13协议通信端口：默认是8009，这里的端口配置需要和上边文件workers.properties中的AJP13协议端口配置相对应，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8009" protocol="AJP/1.3" redirectPort="8443" /&gt;
+</code></pre>
+</div>
+
+<h2 id="session">3.4.Session共享</h2>
+<ul>
+  <li>在Tomcat中启用标签</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/&gt;
+</code></pre>
+</div>
+
+<ul>
+  <li>在web项目中的web.xml中加入</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;distributable/&gt;
+</code></pre>
+</div>
+
+<p>则这个项目就支持集群了。
+到此，配置完毕。
+下载链接： http://pan.baidu.com/s/1mgLq8Dq</p>
+
 
         </article>
         <hr>
@@ -263,22 +312,8 @@ set hive.execution.engine=tez;
             
                 
                     
-                        
-                        <h2 id="similar_posts">Similar Posts</h2>
-                        <ul>
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -286,83 +321,7 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
-                
-                    
-                
             
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
                 
                     
                 
@@ -373,9 +332,11 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
+            
                 
                     
+                
+            
                 
                     
                 
@@ -386,9 +347,7 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -399,23 +358,33 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
             
         
+            
+            
+                
+                    
+                
+            
         
-            </ul>
+            
+            
+                
+                    
+                
+            
+        
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/" data-title="Tez系列第三篇 Tez和oozie整合" data-url="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/" data-title="Tomcat6集群配置" data-url="http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

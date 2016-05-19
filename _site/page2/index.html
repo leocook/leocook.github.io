@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>leocook</title>
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href=" /css/main.css ">
+    <link rel="canonical" href="http://leocook.github.io/page2/">
+    <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f1ad6f37c7565a0fbaf172ac83132650";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="wrapper">
+        <a href="/" class="brand">leocook</a>
+        <small>Big-Data Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" index>
+    <div class="left">
+        <h2>跨界的IT博客 | hadoop | 大数据 | spark</h2>
+        <small>这里将会记录着我在互联网行业里走过的每一步。</small>
+        <hr>
+        <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">Tomcat6集群配置</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2014-05-28
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#WebService" title="Category: WebService" rel="category">WebService</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#tomcat" title="Tag: tomcat" rel="tag">tomcat</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">1.概要</a></li>
+  <li><a href="#apache" id="markdown-toc-apache">2.Apache配置</a>    <ul>
+      <li><a href="#httpconf" id="markdown-toc-httpconf">2.1.http.conf配置修改</a></li>
+      <li><a href="#modjkconf" id="markdown-toc-modjkconf">2.2.mod_jk.conf配置修改</a></li>
+      <li><a href="#workersproperties" id="markdown-toc-workersproperties">2.3.workers.properties配置修改</a></li>
+    </ul>
+  </li>
+  <li><a href="#tomcat" id="markdown-toc-tomcat">3.Tomcat配置</a>    <ul>
+      <li><a href="#tomcat-1" id="markdown-toc-tomcat-1">3.1 tomcat的关闭端口</a></li>
+      <li><a href="#tomcat-2" id="markdown-toc-tomcat-2">3.2.tomcat的服务端口</a></li>
+      <li><a href="#ajp13" id="markdown-toc-ajp13">3.3.AJP13通信端口</a></li>
+      <li><a href="#session" id="markdown-toc-session">3.4.Session共享</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="section">1.概要</h1>
+<p>web容器在做集群配置时，有3点需要注意
+- 负载均衡配置；
+- session共享；
+- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。</p>
+
+<p><strong>环境</strong></p>
+
+<ul>
+  <li>tomcat6</li>
+  <li>apache</li>
+  <li>mod_jk-1.2.28-httpd-2.2.3.so</li>
+</ul>
+
+<h1 id="apache">2.Apache配置</h1>
+<p>在本案例中是使用Apache来做的，下边用到的mod模块和Apache版本需要兼容才行。文中所使用的软件，会在文章底部附上下载链接。</p>
+
+<h2 id="httpconf">2.1.http.conf配置修改</h2>
+<p>在apache安装目录的conf目录下，修改http.conf配置文件，在任意某一行加入</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Include conf/mod_jk.conf
+</code></pre>
+</div>
+
+<p>修改Apache监听端口（在文件的第46行左右）</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Listen 90
+</code></pre>
+</div>
+
+<h2 id="modjkconf">2.2.mod_jk.conf配置修改</h2>
+<p>在conf目录下新建文件mod_jk.conf，写入如下内容</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#加载mod_jk Module  把mod_jk-1.2.28-httpd-2.2.3.so放到相应的目录中
+LoadModule jk_module modules/mod_jk-1.2.28-httpd-2.2.3.so
+#指定 workers.properties文件路径
+JkWorkersFile conf/workers.properties
+#指定那些请求交给tomcat处理,"controller"为在workers.properties里指定的负载分配控制器
+JkMount /*.jsp  controller
+JkMount /*.action  controller
+
+</code></pre>
+</div>
+<p>其中，mod_jk-1.2.28-httpd-2.2.3.so文件更具自己实际添加的模块文件名来写。</p>
+
+<h2 id="workersproperties">2.3.workers.properties配置修改</h2>
+<p>在conf目录下新建文件workers.properties，写入如下内容</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>worker.list=controller,tomcat1,tomcat2
+
+#tomcat1
+worker.tomcat1.port=8109         #ajp13端口号在tomcat下server.xml配置,默认8009 默认与HTTP通信的协议
+worker.tomcat1.host=localhost     
+worker.tomcat1.type=ajp13          #tomcat的主机地址，如不为本机，请填写ip地址
+worker.tomcat1.lbfactor = 1       #server的加权比重，值越高，分得的请求越多
+
+#tomcat2
+worker.tomcat2.port=9109       
+worker.tomcat2.host=localhost 
+worker.tomcat2.type=ajp13
+worker.tomcat2.lbfactor = 1  
+
+#========controller,负载均衡控制器========
+worker.controller.type=lb    
+worker.controller.balanced_workers=tomcat1,tomcat2    #指定分担请求的tomcat
+worker.controller.sticky_session=1
+</code></pre>
+</div>
+
+<p>其中tomcat上ajp13协议通信端口需要根据具体的设置区修改（ajp13协议在这里就是Apache与tomcat之间的通信协议）。</p>
+
+<h1 id="tomcat">3.Tomcat配置</h1>
+
+<h2 id="tomcat-1">3.1 tomcat的关闭端口</h2>
+<p>默认是8005，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Server port="8005" shutdown="SHUTDOWN"&gt;
+</code></pre>
+</div>
+
+<h2 id="tomcat-2">3.2.tomcat的服务端口</h2>
+<p>默认是8080，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8080" protocol="HTTP/1.1" 
+               connectionTimeout="20000" 
+               redirectPort="8443" /&gt;
+</code></pre>
+</div>
+
+<h2 id="ajp13">3.3.AJP13通信端口</h2>
+<p>tomcat上的AJP13协议通信端口：默认是8009，这里的端口配置需要和上边文件workers.properties中的AJP13协议端口配置相对应，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8009" protocol="AJP/1.3" redirectPort="8443" /&gt;
+</code></pre>
+</div>
+
+<h2 id="session">3.4.Session共享</h2>
+<ul>
+  <li>在Tomcat中启用标签</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/&gt;
+</code></pre>
+</div>
+
+<ul>
+  <li>在web项目中的web.xml中加入</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;distributable/&gt;
+</code></pre>
+</div>
+
+<p>则这个项目就支持集群了。
+到此，配置完毕。
+下载链接： http://pan.baidu.com/s/1mgLq8Dq</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/">Ubuntu常用配置</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2014-05-15
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#linux" title="Category: linux" rel="category">linux</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#ubuntu" title="Tag: ubuntu" rel="tag">ubuntu</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    <ul id="markdown-toc">
+  <li><a href="#ubuntu-desktop" id="markdown-toc-ubuntu-desktop">1.ubuntu desktop接双显示器</a>    <ul>
+      <li><a href="#section" id="markdown-toc-section">1.1.环境</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">1.2.修改系统配置</a></li>
+      <li><a href="#arandr" id="markdown-toc-arandr">1.3.使用可视化软件Arandr</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-2" id="markdown-toc-section-2">2.最好用的终端</a></li>
+  <li><a href="#smplay" id="markdown-toc-smplay">3.视频播放器SMPlay</a></li>
+</ul>
+
+<h1 id="ubuntu-desktop">1.ubuntu desktop接双显示器</h1>
+
+<h2 id="section">1.1.环境</h2>
+<ul>
+  <li>ubuntu12.04</li>
+  <li>Arandr</li>
+</ul>
+
+<h2 id="section-1">1.2.修改系统配置</h2>
+<ul>
+  <li>
+    <p>编辑/etc/X11/xorg.conf文件  <br />
+<code class="highlighter-rouge">
+vi /etc/X11/xorg.conf
+</code></p>
+  </li>
+  <li>
+    <p>在Section “Screen”内容之内增加以下内容  <br />
+<code class="highlighter-rouge">
+SubSection "Display"
+Virtual 4000 3000
+EndSubSection
+</code></p>
+  </li>
+  <li>
+    <p>重启xwindow</p>
+  </li>
+</ul>
+
+<p>方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).</p>
+
+<p>方法二：
+<code class="highlighter-rouge">
+sudo init 6
+</code></p>
+
+<h2 id="arandr">1.3.使用可视化软件Arandr</h2>
+<ul>
+  <li>
+    <p>安装Arandr  <br />
+<code class="highlighter-rouge">
+sudo apt-get install arandr
+</code></p>
+  </li>
+  <li>
+    <p>打开查看各个主屏的名称  <br />
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/arandr.png" alt="Arandr" title="Arandr" /></p>
+  </li>
+  <li>
+    <p>设置对应的显示设备为主屏  <br />
+<code class="highlighter-rouge">
+sudo xrandr --output CRT1 --primary
+</code></p>
+  </li>
+</ul>
+
+<p>聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！</p>
+
+<h1 id="section-2">2.最好用的终端</h1>
+<p>Terminator  <br />
+<code class="highlighter-rouge">
+sudo apt-get install terminator
+</code></p>
+
+<h1 id="smplay">3.视频播放器SMPlay</h1>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install mplayer 
+sudo apt-get install ffmpeg
+sudo apt-get install smplayer
+</code></pre>
+</div>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+        </ul>
+
+
+
+        <!-- Pagination links -->
+        <div class="pagination">
+          
+            <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
+            <a href="/" class="previous"><i class="fa fa-angle-left"></i></a>
+          
+          <span class="page_number ">2/2</span>
+          
+            <span class="next disable"><i class="fa fa-angle-right"></i></span>
+            <span class="next disable"><i class="fa fa-angle-double-right"></i></span>
+          
+        </div>
+    </div>
+    <!-- <button class="anchor"><i class="fa fa-anchor"></i></button> -->
+    <div class="right">
+        <div class="wrap">
+            <div class="side">
+                <div>
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    Recent Posts
+                </div>
+                <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a></li>
+                    
+                        <li><a href="/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez</a></li>
+                    
+                        <li><a href="/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识</a></li>
+                    
+                        <li><a href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn</a></li>
+                    
+                        <li><a href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/">Hadoop优化 概述</a></li>
+                    
+                        <li><a href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">Tomcat6集群配置</a></li>
+                    
+                        <li><a href="/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/">Ubuntu常用配置</a></li>
+                    
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div class="side ">
+                <div>
+                    <i class="fa fa-th-list"></i>
+                    Categories
+                </div>
+                <ul class="content-ul" cate>
+                    
+                    <li>
+                        <a href="/category/#linux" class="categories-list-item" cate="linux">
+                            <span class="name">
+                                linux
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#WebService" class="categories-list-item" cate="WebService">
+                            <span class="name">
+                                WebService
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#hadoop" class="categories-list-item" cate="hadoop">
+                            <span class="name">
+                                hadoop
+                            </span>
+                            <span class="badge">2</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#tez" class="categories-list-item" cate="tez">
+                            <span class="name">
+                                tez
+                            </span>
+                            <span class="badge">3</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <div class="side">
+                <div>
+                    <i class="fa fa-tags"></i>
+                    Tags
+                </div>
+                <div class="tags-cloud">
+                    
+                    
+                    
+                    
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#ubuntu" style="font-size: 9pt; color: #999;">ubuntu</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#tomcat" style="font-size: 9pt; color: #999;">tomcat</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#集群优化" style="font-size: 12pt; color: #666;">集群优化</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#hadoop" style="font-size: 18pt; color: #000;">hadoop</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#tez" style="font-size: 15pt; color: #333;">tez</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#hive" style="font-size: 12pt; color: #666;">hive</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#oozie" style="font-size: 9pt; color: #999;">oozie</a>
+                    
+                </div>
+            </div>
+
+            <!-- <div class="side">
+                <div>
+                    <i class="fa fa-external-link"></i>
+                    Links
+                </div>
+                <ul  class="content-ul">
+
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- <script src="/js/scroll.min.js " charset="utf-8"></script> -->
+<!-- <script src="/js/pageContent.js " charset="utf-8"></script> -->
+
+
+    <footer class="site-footer">
+
+
+  <div class="wrapper">
+      <p class="description">
+          
+          小鸟的成长记录.
+          
+      </p>
+        <p class="contact">
+            Contact me at:
+            
+            <a href="https://github.com/leocook"><i class="fa fa-github" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="mailto:leocook@163.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="http://weibo.com/wulinjq"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/Gaohaoyang">HyG</a>.
+            </span>
+        </p>
+
+  </div>
+</footer>
+<script src="/js/main.js " charset="utf-8"></script>
+
+
+  </body>
+
+</html>
