@@ -5,9 +5,265 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 May 2016 19:41:55 +0800</pubDate>
-    <lastBuildDate>Thu, 19 May 2016 19:41:55 +0800</lastBuildDate>
-    <generator>Jekyll v3.1.3</generator>
+    <pubDate>Wed, 20 Jul 2016 10:09:12 +0800</pubDate>
+    <lastBuildDate>Wed, 20 Jul 2016 10:09:12 +0800</lastBuildDate>
+    <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Elk安装配置介绍</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#logstash&quot; id=&quot;markdown-toc-logstash&quot;&gt;1.logstash配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#jdk&quot; id=&quot;markdown-toc-jdk&quot;&gt;1.1.Jdk安装&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#logstash-1&quot; id=&quot;markdown-toc-logstash-1&quot;&gt;1.2.下载logstash&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.4.验证&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#es&quot; id=&quot;markdown-toc-es&quot;&gt;2.ES&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.1.下载&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.2.配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;2.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;2.4.插件安装&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;2.5.验证&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#kibana&quot; id=&quot;markdown-toc-kibana&quot;&gt;3. Kibana&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;3.1.下载&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;3.2.配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;3.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;3.4.验证&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#elk&quot; id=&quot;markdown-toc-elk&quot;&gt;4.使ELK整体协作起来&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;4.1.原理&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#el&quot; id=&quot;markdown-toc-el&quot;&gt;4.2.E和L的连接&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#kibana-1&quot; id=&quot;markdown-toc-kibana-1&quot;&gt;4.3.Kibana的配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#es-1&quot; id=&quot;markdown-toc-es-1&quot;&gt;4.4.ES&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;5.小结&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。&lt;/p&gt;
+
+&lt;h2 id=&quot;logstash&quot;&gt;1.logstash配置&lt;/h2&gt;
+
+&lt;h3 id=&quot;jdk&quot;&gt;1.1.Jdk安装&lt;/h3&gt;
+&lt;p&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html&lt;/p&gt;
+
+&lt;h3 id=&quot;logstash-1&quot;&gt;1.2.下载logstash&lt;/h3&gt;
+&lt;p&gt;https://www.elastic.co/downloads/logstash&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;1.3.启动&lt;/h3&gt;
+
+&lt;p&gt;解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用-e指定启动的参数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./logstash -e &#39;input { stdin { } } output { stdout {} }&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这里设定stdin为输入，stdout为输出。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用配置文件启动&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat logstash-simple.conf
+input { stdin { } }
+output {
+   stdout { codec=&amp;gt; rubydebug }
+}
+
+./logstash agent -f logstash-simple.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;1.4.验证&lt;/h3&gt;
+
+&lt;p&gt;启动后才命令行输入”hello World”，如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf
+
+Settings: Default pipeline workers: 1
+Pipeline main started
+hello World
+{
+       &quot;message&quot; =&amp;gt; &quot;hello World&quot;,
+       &quot;@version&quot; =&amp;gt; &quot;1&quot;,
+       &quot;@timestamp&quot; =&amp;gt; &quot;2016-07-18T07:20:20.526Z&quot;,
+       &quot;host&quot; =&amp;gt; &quot;0.0.0.0&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;打印出来的message部分显示为输入内容。&lt;/p&gt;
+
+&lt;h2 id=&quot;es&quot;&gt;2.ES&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;2.1.下载&lt;/h3&gt;
+&lt;p&gt;https://www.elastic.co/downloads/elasticsearch&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;2.2.配置&lt;/h3&gt;
+&lt;p&gt;配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/elasticsearch.yml
+network.host: 0.0.0.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;2.3.启动&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;2.4.插件安装&lt;/h3&gt;
+
+&lt;p&gt;kopf插件安装：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;2.5.验证&lt;/h3&gt;
+
+&lt;p&gt;es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;netstat -anp |grep :9200
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;或者使用浏览器访问端口9200.&lt;/p&gt;
+
+&lt;h2 id=&quot;kibana&quot;&gt;3. Kibana&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;3.1.下载&lt;/h3&gt;
+&lt;p&gt;https://www.elastic.co/downloads/kibana&lt;/p&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;3.2.配置&lt;/h3&gt;
+
+&lt;p&gt;配置一下es的地址。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/kibana.yml
+
+elasticsearch.url: &quot;http://[hostname]:9200&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这里默认是使用ES的数据。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;3.3.启动&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;3.4.验证&lt;/h3&gt;
+
+&lt;p&gt;访问：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://[hostname]:5601/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;点击”create”创建索引名称。&lt;/p&gt;
+
+&lt;h2 id=&quot;elk&quot;&gt;4.使ELK整体协作起来&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;4.1.原理&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;logstash&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;elasticsearch&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;kibana&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。&lt;/p&gt;
+
+&lt;h3 id=&quot;el&quot;&gt;4.2.E和L的连接&lt;/h3&gt;
+&lt;p&gt;其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi logstash-indexer.conf
+
+input {
+  file {
+    type =&amp;gt;&quot;syslog&quot;
+    path =&amp;gt; [ &quot;/var/log/syslog&quot; ]
+  }
+  syslog {
+    type =&amp;gt;&quot;syslog&quot;
+    port =&amp;gt;&quot;5544&quot;
+  }
+}
+output {
+  stdout { codec=&amp;gt; rubydebug }
+  elasticsearch {hosts =&amp;gt; &quot;localhost&quot; }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置介绍&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;logstash的配置里，一定要有一个input和一个output。
+file: 这里配置输入的文件信息。
+syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。
+output里定义了两处输出，分别是&lt;strong&gt;stdout&lt;/strong&gt;命令行和&lt;strong&gt;elasticsearch&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nohup ./logstash agent -f logstash-indexer.conf &amp;gt; nohup &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;kibana-1&quot;&gt;4.3.Kibana的配置&lt;/h3&gt;
+&lt;p&gt;只需要修改kibana.yml中es的地址就可以了。&lt;/p&gt;
+
+&lt;h3 id=&quot;es-1&quot;&gt;4.4.ES&lt;/h3&gt;
+&lt;p&gt;ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-12&quot;&gt;5.小结&lt;/h3&gt;
+&lt;p&gt;ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。&lt;/p&gt;
+
+&lt;p&gt;参考地址：
+http://baidu.blog.51cto.com/71938/1676798
+https://www.gitbook.com/book/chenryn/kibana-guide-cn/details&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 20 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/</guid>
+        
+        <category>es</category>
+        
+        <category>logstash</category>
+        
+        <category>kibana</category>
+        
+        <category>ELK</category>
+        
+        
+        <category>ELK</category>
+        
+      </item>
     
       <item>
         <title>Tez系列第三篇 Tez和oozie整合</title>

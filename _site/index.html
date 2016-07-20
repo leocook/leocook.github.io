@@ -123,6 +123,306 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-07-20
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#ELK" title="Category: ELK" rel="category">ELK</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#es" title="Tag: es" rel="tag">es</a>&nbsp;
+    
+        <a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a>&nbsp;
+    
+        <a href="/tag/#kibana" title="Tag: kibana" rel="tag">kibana</a>&nbsp;
+    
+        <a href="/tag/#ELK" title="Tag: ELK" rel="tag">ELK</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    <ul id="markdown-toc">
+  <li><a href="#logstash" id="markdown-toc-logstash">1.logstash配置</a>    <ul>
+      <li><a href="#jdk" id="markdown-toc-jdk">1.1.Jdk安装</a></li>
+      <li><a href="#logstash-1" id="markdown-toc-logstash-1">1.2.下载logstash</a></li>
+      <li><a href="#section" id="markdown-toc-section">1.3.启动</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">1.4.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#es" id="markdown-toc-es">2.ES</a>    <ul>
+      <li><a href="#section-2" id="markdown-toc-section-2">2.1.下载</a></li>
+      <li><a href="#section-3" id="markdown-toc-section-3">2.2.配置</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">2.3.启动</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">2.4.插件安装</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">2.5.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#kibana" id="markdown-toc-kibana">3. Kibana</a>    <ul>
+      <li><a href="#section-7" id="markdown-toc-section-7">3.1.下载</a></li>
+      <li><a href="#section-8" id="markdown-toc-section-8">3.2.配置</a></li>
+      <li><a href="#section-9" id="markdown-toc-section-9">3.3.启动</a></li>
+      <li><a href="#section-10" id="markdown-toc-section-10">3.4.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#elk" id="markdown-toc-elk">4.使ELK整体协作起来</a>    <ul>
+      <li><a href="#section-11" id="markdown-toc-section-11">4.1.原理</a></li>
+      <li><a href="#el" id="markdown-toc-el">4.2.E和L的连接</a></li>
+      <li><a href="#kibana-1" id="markdown-toc-kibana-1">4.3.Kibana的配置</a></li>
+      <li><a href="#es-1" id="markdown-toc-es-1">4.4.ES</a></li>
+      <li><a href="#section-12" id="markdown-toc-section-12">5.小结</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
+
+<h2 id="logstash">1.logstash配置</h2>
+
+<h3 id="jdk">1.1.Jdk安装</h3>
+<p>http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</p>
+
+<h3 id="logstash-1">1.2.下载logstash</h3>
+<p>https://www.elastic.co/downloads/logstash</p>
+
+<h3 id="section">1.3.启动</h3>
+
+<p>解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。</p>
+
+<ul>
+  <li>使用-e指定启动的参数</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./logstash -e 'input { stdin { } } output { stdout {} }'
+</code></pre>
+</div>
+
+<p>这里设定stdin为输入，stdout为输出。</p>
+
+<ul>
+  <li>使用配置文件启动</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat logstash-simple.conf
+input { stdin { } }
+output {
+   stdout { codec=&gt; rubydebug }
+}
+
+./logstash agent -f logstash-simple.conf
+</code></pre>
+</div>
+
+<h3 id="section-1">1.4.验证</h3>
+
+<p>启动后才命令行输入”hello World”，如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf
+
+Settings: Default pipeline workers: 1
+Pipeline main started
+hello World
+{
+       "message" =&gt; "hello World",
+       "@version" =&gt; "1",
+       "@timestamp" =&gt; "2016-07-18T07:20:20.526Z",
+       "host" =&gt; "0.0.0.0"
+}
+</code></pre>
+</div>
+
+<p>打印出来的message部分显示为输入内容。</p>
+
+<h2 id="es">2.ES</h2>
+
+<h3 id="section-2">2.1.下载</h3>
+<p>https://www.elastic.co/downloads/elasticsearch</p>
+
+<h3 id="section-3">2.2.配置</h3>
+<p>配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi config/elasticsearch.yml
+network.host: 0.0.0.0
+</code></pre>
+</div>
+
+<h3 id="section-4">2.3.启动</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
+</code></pre>
+</div>
+
+<h3 id="section-5">2.4.插件安装</h3>
+
+<p>kopf插件安装：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf
+</code></pre>
+</div>
+
+<p>安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。</p>
+
+<h3 id="section-6">2.5.验证</h3>
+
+<p>es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>netstat -anp |grep :9200
+</code></pre>
+</div>
+
+<p>或者使用浏览器访问端口9200.</p>
+
+<h2 id="kibana">3. Kibana</h2>
+
+<h3 id="section-7">3.1.下载</h3>
+<p>https://www.elastic.co/downloads/kibana</p>
+
+<h3 id="section-8">3.2.配置</h3>
+
+<p>配置一下es的地址。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi config/kibana.yml
+
+elasticsearch.url: "http://[hostname]:9200"
+</code></pre>
+</div>
+
+<p>这里默认是使用ES的数据。</p>
+
+<h3 id="section-9">3.3.启动</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
+</code></pre>
+</div>
+
+<h3 id="section-10">3.4.验证</h3>
+
+<p>访问：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://[hostname]:5601/
+</code></pre>
+</div>
+<p>点击”create”创建索引名称。</p>
+
+<h2 id="elk">4.使ELK整体协作起来</h2>
+
+<h3 id="section-11">4.1.原理</h3>
+
+<ul>
+  <li>logstash</li>
+</ul>
+
+<p>logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。</p>
+
+<ul>
+  <li>elasticsearch</li>
+</ul>
+
+<p>es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。</p>
+
+<ul>
+  <li>kibana</li>
+</ul>
+
+<p>kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。</p>
+
+<h3 id="el">4.2.E和L的连接</h3>
+<p>其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi logstash-indexer.conf
+
+input {
+  file {
+    type =&gt;"syslog"
+    path =&gt; [ "/var/log/syslog" ]
+  }
+  syslog {
+    type =&gt;"syslog"
+    port =&gt;"5544"
+  }
+}
+output {
+  stdout { codec=&gt; rubydebug }
+  elasticsearch {hosts =&gt; "localhost" }
+}
+</code></pre>
+</div>
+
+<ul>
+  <li>配置介绍</li>
+</ul>
+
+<p>logstash的配置里，一定要有一个input和一个output。
+file: 这里配置输入的文件信息。
+syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。
+output里定义了两处输出，分别是<strong>stdout</strong>命令行和<strong>elasticsearch</strong>。</p>
+
+<ul>
+  <li>启动</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nohup ./logstash agent -f logstash-indexer.conf &gt; nohup &amp;
+</code></pre>
+</div>
+
+<h3 id="kibana-1">4.3.Kibana的配置</h3>
+<p>只需要修改kibana.yml中es的地址就可以了。</p>
+
+<h3 id="es-1">4.4.ES</h3>
+<p>ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。</p>
+
+<h3 id="section-12">5.小结</h3>
+<p>ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。</p>
+
+<p>参考地址：
+http://baidu.blog.51cto.com/71938/1676798
+https://www.gitbook.com/book/chenryn/kibana-guide-cn/details</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a>
                 </h2>
                 <div class="label">
@@ -1038,389 +1338,6 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/">Hadoop优化 概述</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2015-02-23
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#hadoop" title="Category: hadoop" rel="category">hadoop</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#集群优化" title="Tag: 集群优化" rel="tag">集群优化</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.应用程序角度进行优化</a>    <ul>
-      <li><a href="#reduce" id="markdown-toc-reduce">1.1.减少不必要的reduce任务</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.外部文件引用</a></li>
-      <li><a href="#combiner" id="markdown-toc-combiner">1.3.使用Combiner</a></li>
-      <li><a href="#writable" id="markdown-toc-writable">1.4.使用合适的Writable类型</a></li>
-      <li><a href="#java" id="markdown-toc-java">1.5.尽可能的少创建新的Java对象</a></li>
-    </ul>
-  </li>
-  <li><a href="#linux" id="markdown-toc-linux">2. Linux系统层面上的配置调优</a>    <ul>
-      <li><a href="#section-2" id="markdown-toc-section-2">2.1. 文件系统的配置</a></li>
-      <li><a href="#linux-1" id="markdown-toc-linux-1">2.2. Linux文件系统预读缓冲区大小</a></li>
-      <li><a href="#raidlvm" id="markdown-toc-raidlvm">2.3. 去除RAID和LVM</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">2.4. 增大同时打开的文件数和网络连接数</a></li>
-      <li><a href="#swap" id="markdown-toc-swap">2.5. 关闭swap分区</a></li>
-      <li><a href="#io" id="markdown-toc-io">2.6. I/O调度器选择</a></li>
-    </ul>
-  </li>
-  <li><a href="#hadoop" id="markdown-toc-hadoop">3. Hadoop平台内参数调优</a>    <ul>
-      <li><a href="#section-4" id="markdown-toc-section-4">3.1. 计算资源优化</a></li>
-      <li><a href="#section-5" id="markdown-toc-section-5">3.2. 节点间的通信优化</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">3.3. 磁盘块的配置优化</a></li>
-      <li><a href="#rpc-handlerhttp" id="markdown-toc-rpc-handlerhttp">3.4. RPC Handler个数和Http线程数优化</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">3.5. 选择合适的压缩算法</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">3.6. 启用批量任务调度(现在新版本都默认支持了)</a></li>
-      <li><a href="#apache" id="markdown-toc-apache">3.7. 启用预读机制(Apache暂时没有)</a></li>
-      <li><a href="#hdfs" id="markdown-toc-hdfs">3.8.HDFS相关参数优化</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-9" id="markdown-toc-section-9">4.系统实现角度调优</a>    <ul>
-      <li><a href="#section-10" id="markdown-toc-section-10">4.1. 调度延迟</a></li>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.2. 可移植性</a></li>
-      <li><a href="#prefetchingpreshuffling" id="markdown-toc-prefetchingpreshuffling">4.3. 优化策略：Prefetching与preshuffling</a></li>
-    </ul>
-  </li>
-</ul>
-
-<p>这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。</p>
-
-<h2 id="section">1.应用程序角度进行优化</h2>
-
-<h3 id="reduce">1.1.减少不必要的reduce任务</h3>
-<p>若对于同一份数据需要多次处理，可以尝试先排序、分区，然后自定义InputSplit将某一个分区作为一个Map的输入，在Map中处理数据，将Reduce的个数设置为空。</p>
-
-<h3 id="section-1">1.2.外部文件引用</h3>
-<p>如字典、配置文件等需要在Task之间共享的数据，可使用分布式缓存DistributedCache或者使用-files</p>
-
-<h3 id="combiner">1.3.使用Combiner</h3>
-<p>combiner是发生在map端的，作用是归并Map端输出的文件，这样Map端输出的数据量就小了，减少了Map端和reduce端间的数据传输。需要注意的是，Combiner不能影响作业的结果;不是每个MR都可以使用Combiner的，需要根据具体业务来定;Combiner是发生在Map端的，不能垮Map来执行（只有Reduce可以接收多个Map任务的输出数据）</p>
-
-<h3 id="writable">1.4.使用合适的Writable类型</h3>
-<p>尽可能使用二进制的Writable类型，例如：IntWritable， FloatWritable等，而不是Text。因为在一个批处理系统中将数值转换为文本时低效率的。使用二进制的Writable类型可以降低cpu资源的消耗，也可以减少Map端中间数据、结果数据占用的空间。</p>
-
-<h3 id="java">1.5.尽可能的少创建新的Java对象</h3>
-<p>a)需要注意的Writable对象，例如下面的写法：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>public void map(...) {
-…
-for (String word : words) {
-    output.collect(new Text(word), new IntWritable(1));
-} }
-</code></pre>
-</div>
-
-<p>这样会冲去创建对象new Text(word)和new IntWritable(1))，这样可能会产生海量的短周期对象。更高效的写法见下：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>class MyMapper … {
-Text wordText = new Text();
-IntWritable one = new IntWritable(1);
-public void map(...) {
-    for (String word: words) {
-    wordText.set(word);
-        output.collect(wordText, one);
-    }
-} }
-</code></pre>
-</div>
-
-<p>b)对于可变字符串，使用StringBuffer而不是String</p>
-
-<p>String类是经过final修饰的，那么每次对它的修改都会产生临时对象，而SB则不会。</p>
-
-<h2 id="linux">2. Linux系统层面上的配置调优</h2>
-
-<h3 id="section-2">2.1. 文件系统的配置</h3>
-<p>a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime <br />
-b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系统）</p>
-
-<h3 id="linux-1">2.2. Linux文件系统预读缓冲区大小</h3>
-<p>命令:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>blockdev
-</code></pre>
-</div>
-
-<h3 id="raidlvm">2.3. 去除RAID和LVM</h3>
-
-<h3 id="section-3">2.4. 增大同时打开的文件数和网络连接数</h3>
-<p>ulimit net.core.somaxconn</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>ulimit net.core.somaxconn
-</code></pre>
-</div>
-
-<h3 id="swap">2.5. 关闭swap分区</h3>
-<p>在Hadoop中，对于每个作业处理的数据量和每个Task中用到的各种缓冲，用户都是完全可控的。</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>/etc/sysctl.conf
-</code></pre>
-</div>
-
-<h3 id="io">2.6. I/O调度器选择</h3>
-<p>详情见AMD的白皮书</p>
-
-<h2 id="hadoop">3. Hadoop平台内参数调优</h2>
-<p>Hadoop相关可配置参数共有几百个，但是其中只有三十个左右会对其性能产生显著影响。</p>
-
-<h3 id="section-4">3.1. 计算资源优化</h3>
-<p>a) 设置合理的slot（资源槽位）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.tasktracker.map.tasks.maximum / mapred.tasktracker.reduce.tasks.maximum
-</code></pre>
-</div>
-
-<p>参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目 <br />
-默认值：都是2 <br />
-推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node) <br />
-单位：无</p>
-
-<h3 id="section-5">3.2. 节点间的通信优化</h3>
-<p><strong>a) TaskTracker和JobTracker之间的心跳间隔</strong> <br />
-这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。 <br />
-建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。 <br />
-<strong>b) 启用带外心跳(out-of-band heartbeat)</strong></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapreduce.tasktracker.outofband.heartbeat
-</code></pre>
-</div>
-
-<p>参数说明：主要是为了减少任务分配延迟。它与常规心跳不同，一般的心跳是一定时间间隔发送的，而带外心跳是在任务运行结束或是失败时发送，这样就能在TaskTracker节点出现空闲资源的时候能第一时间通知JobTracker。</p>
-
-<h3 id="section-6">3.3. 磁盘块的配置优化</h3>
-<p>a) 作业相关的磁盘配置</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.local.dir
-</code></pre>
-</div>
-
-<p>参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上 <br />
-b) 存储相关的磁盘配置（HDFS数据存储） <br />
-dfs.data.dir <br />
-参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能 <br />
-例如：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
- &lt;name&gt;dfs.name.dir&lt;/name&gt;
- &lt;value&gt;/data1/hadoopdata/mapred/jt/,/data2/hadoopdata/mapred/jt/&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-</div>
-
-<p>c) 存储相关的磁盘配置（HDFS元数据存储）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>dfs.name.dir
-</code></pre>
-</div>
-
-<p>参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份 <br />
-注：要想提升hadoop整体IO性能，对于hadoop中用到的所有文件目录，都需要评估它磁盘IO的负载，对于IO负载可能会高的目录，最好都配置到多个磁盘上，以提示IO性能</p>
-
-<h3 id="rpc-handlerhttp">3.4. RPC Handler个数和Http线程数优化</h3>
-<p>a) RPC Handler个数</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.job.tracker.handler.count
-</code></pre>
-</div>
-
-<p>参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。 <br />
-默认值：10 <br />
-推荐值：60-70，最少要是TaskTracker个数的4% <br />
-单位：无 <br />
-b) Http线程数
-   <br />
-tasktracker.http.threads</p>
-
-<p>在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。 <br />
-默认值：40 <br />
-推荐值：50-80+</p>
-
-<h3 id="section-7">3.5. 选择合适的压缩算法</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.compress.map.output / Mapred.output.compress
-</code></pre>
-</div>
-
-<p>map输出的中间结果时需要进行压缩的，指定压缩方式<strong>（Mapred.compress.map.output.codec/ Mapred.output.compress.codec）</strong>。推荐使用LZO压缩。</p>
-
-<h3 id="section-8">3.6. 启用批量任务调度(现在新版本都默认支持了)</h3>
-<p>a) Fair Scheduler</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.fairscheduler.assignmultiple
-</code></pre>
-</div>
-
-<p>b) Capacity Scheduler</p>
-
-<h3 id="apache">3.7. 启用预读机制(Apache暂时没有)</h3>
-<p>Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。
-HDFS预读：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>dfs.datanode.readahead ：true
-dfs.datanode.readahead.bytes ：4MB
-</code></pre>
-</div>
-
-<p>shuffle预读</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.tasktracker.shuffle.fadvise : true
-mapred.tasktracker.shuffle.readahead.bytes : 4MB
-</code></pre>
-</div>
-
-<h3 id="hdfs">3.8.HDFS相关参数优化</h3>
-<p>1) dfs.replication <br />
-参数说明：hdfs文件副本数 <br />
-默认值：3 <br />
-推荐值：3-5（对于IO较为密集的场景可适量增大） <br />
-单位：无 <br />
-2) dfs.blocksize <br />
-参数说明： <br />
-默认值：67108864(64MB) <br />
-推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456) <br />
-单位：无 <br />
-3) dfs.datanode.handler.count <br />
-参数说明：DateNode上的服务线程数 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-4) fs.trash.interval <br />
-参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间 <br />
-默认值：0 <br />
-推荐值：1440(1day) <br />
-单位：无 <br />
-5) io.sort.factor <br />
-参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-6) mapred.child.java.opts <br />
-参数说明：JVM堆的最大可用内存 <br />
-默认值：-Xmx200m <br />
-推荐值：-Xmx1G | -Xmx4G | -Xmx8G <br />
-单位：-Xmx8589934592也行，单位不固定 <br />
-7) io.sort.mb <br />
-参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件 <br />
-默认值：100 <br />
-推荐值：200 | 800 <br />
-单位：兆 <br />
-8) io.sort.spill.percent <br />
-参数说明：即io.sort.mb中所说的阀值 <br />
-默认值：0.8 <br />
-推荐值：0.8 <br />
-单位：无 <br />
-9) io.sort.record <br />
-参数说明：io.sort.mb中分类给元数据的空间占比 <br />
-默认值：0.05 <br />
-推荐值：0.05 <br />
-单位：无 <br />
-10) Mapred.reduce.parallel <br />
-参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25 <br />
-默认值：5 <br />
-推荐值：16~25 <br />
-单位：无</p>
-
-<h2 id="section-9">4.系统实现角度调优</h2>
-<p>https://www.xiaohui.org/archives/944.html</p>
-
-<p>主要针对HDFS进行优化，HDFS性能低下的两个原因：调度延迟和可移植性</p>
-
-<h3 id="section-10">4.1. 调度延迟</h3>
-<p>关于调度延迟主要是发生在两个阶段： <br />
-a) tasktracker上出现空余的slot到该tasktracker接收到新的task； <br />
-b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。 <br />
-之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。 <br />
-下面解释下会经历上边两个阶段发生的过程： <br />
-a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
-b) 这个过程中所发生的操作都是串行化的 <br />
-tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
-若能减短hdfs的等待时间;在执行task之前就开始把数据读到将要执行该task的tasktracker上，减少数据传输时间，那么将会显得高效很多。未解决此类问题，有这样几种解决方案：重叠I/O和CPU阶段（pipelining），task预取（task prefetching），数据预取（data prefetching）等。</p>
-
-<h3 id="section-11">4.2. 可移植性</h3>
-<p>Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。
-对于上述问题，可以尝试使用下面的解决方案：</p>
-
-<blockquote>
-  <p>tasktracker现在的线程模型是：one thread per client，即每个client连接都是由一个线程处理的（包括接受请求、处理请求，返回结果）。那么这一块一个拆分成两个部分来做，一组线程来处理和client的通信（Client Threads），一组用于数据的读写（Disk Threads）。</p>
-</blockquote>
-
-<p>想要解决上述两个问题，暂时没有十全十美的办法，只能尽可能的权衡保证调度延迟相对较低+可移植性相对较高。</p>
-
-<h3 id="prefetchingpreshuffling">4.3. 优化策略：Prefetching与preshuffling</h3>
-<ul>
-  <li>
-    <p>a) Prefetching包括Block-intra prefetching和Block-inter prefetching <br />
-<strong>Block-intra prefetching：</strong>对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。 <br />
-<strong>Block-inter prefetching：</strong>在block层面上预读数据，在某个Task正在处理数据块A1的时候，预测器能预测接下来将要读取的数据块A2、A3、A4，然后把数据块A2、A3、A4预读到Task所在的rack上。</p>
-  </li>
-  <li>
-    <p>b) preshuffling<br />
-数据被map task处理之前，由预测器判断每条记录将要被哪个reduce task处理，将这些数据交给靠近reduce task的map task来处理。</p>
-  </li>
-</ul>
-
-<p><strong>参考资料：</strong></p>
-
-<ul>
-  <li>cloudera官方文档 <br />
-http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/</li>
-  <li>
-    <p>AMD白皮书(较为实用) <br />
-http://www.admin-magazine.com/HPC/content/download/9408/73372/file/Hadoop_Tuning_Guide-Version5.pdf</p>
-  </li>
-  <li>国内博客（大部分内容都是AMD白皮书上的翻译）： <br />
-http://dongxicheng.org/mapreduce/hadoop-optimization-0/
-http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1447,6 +1364,8 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a></li>
                     
                         <li><a href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a></li>
                     
@@ -1506,6 +1425,15 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
                                 tez
                             </span>
                             <span class="badge">3</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#ELK" class="categories-list-item" cate="ELK">
+                            <span class="name">
+                                ELK
+                            </span>
+                            <span class="badge">1</span>
                         </a>
                     </li>
                     
@@ -1573,6 +1501,34 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
                       
                       
                       <a href="/tag/#oozie" style="font-size: 9pt; color: #999;">oozie</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#es" style="font-size: 9pt; color: #999;">es</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#logstash" style="font-size: 9pt; color: #999;">logstash</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#kibana" style="font-size: 9pt; color: #999;">kibana</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#ELK" style="font-size: 9pt; color: #999;">ELK</a>
                     
                 </div>
             </div>

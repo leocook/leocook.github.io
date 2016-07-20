@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第三篇 Tez和oozie整合</title>
-    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下  3.修改Jar的权限  4.是配置生效  5.在workflow里使用Tez          5.1.使单个workflow里的hive都用tez      5.2.使单个workflow里的单个hive都用t...">
+    <title>Elk安装配置介绍</title>
+    <meta name="description" content="  1.logstash配置          1.1.Jdk安装      1.2.下载logstash      1.3.启动      1.4.验证        2.ES          2.1.下载      2.2.配置      2.3.启动      2.4.插件安装      2.5.验证  ...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">
+    <link rel="canonical" href="http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -116,11 +116,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第三篇 Tez和oozie整合</h1>
+        <h1>Elk安装配置介绍</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-05-17
+                <i class="fa fa-calendar"></i>2016-07-20
             </div>
 
             <div class="label-card">
@@ -140,7 +140,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
+        <a href="/category/#ELK" title="Category: ELK" rel="category">ELK</a>
     
   
 
@@ -157,17 +157,17 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
+        <!--a href="/tag/#es" title="Tag: es" rel="tag">es</a-->
+        <a href="/tag/#es" title="Tag: es" rel="tag">es</a>&nbsp;
     
-        <!--a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a-->
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
+        <!--a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a-->
+        <a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a>&nbsp;
     
-        <!--a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a-->
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
+        <!--a href="/tag/#kibana" title="Tag: kibana" rel="tag">kibana</a-->
+        <a href="/tag/#kibana" title="Tag: kibana" rel="tag">kibana</a>&nbsp;
     
-        <!--a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a-->
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
+        <!--a href="/tag/#ELK" title="Tag: ELK" rel="tag">ELK</a-->
+        <a href="/tag/#ELK" title="Tag: ELK" rel="tag">ELK</a>
     
   
 
@@ -179,81 +179,241 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-  <li><a href="#jar" id="markdown-toc-jar">3.修改Jar的权限</a></li>
-  <li><a href="#section-1" id="markdown-toc-section-1">4.是配置生效</a></li>
-  <li><a href="#workflowtez" id="markdown-toc-workflowtez">5.在workflow里使用Tez</a>    <ul>
-      <li><a href="#workflowhivetez" id="markdown-toc-workflowhivetez">5.1.使单个workflow里的hive都用tez</a></li>
-      <li><a href="#workflowhivetez-1" id="markdown-toc-workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</a></li>
+  <li><a href="#logstash" id="markdown-toc-logstash">1.logstash配置</a>    <ul>
+      <li><a href="#jdk" id="markdown-toc-jdk">1.1.Jdk安装</a></li>
+      <li><a href="#logstash-1" id="markdown-toc-logstash-1">1.2.下载logstash</a></li>
+      <li><a href="#section" id="markdown-toc-section">1.3.启动</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">1.4.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#es" id="markdown-toc-es">2.ES</a>    <ul>
+      <li><a href="#section-2" id="markdown-toc-section-2">2.1.下载</a></li>
+      <li><a href="#section-3" id="markdown-toc-section-3">2.2.配置</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">2.3.启动</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">2.4.插件安装</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">2.5.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#kibana" id="markdown-toc-kibana">3. Kibana</a>    <ul>
+      <li><a href="#section-7" id="markdown-toc-section-7">3.1.下载</a></li>
+      <li><a href="#section-8" id="markdown-toc-section-8">3.2.配置</a></li>
+      <li><a href="#section-9" id="markdown-toc-section-9">3.3.启动</a></li>
+      <li><a href="#section-10" id="markdown-toc-section-10">3.4.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#elk" id="markdown-toc-elk">4.使ELK整体协作起来</a>    <ul>
+      <li><a href="#section-11" id="markdown-toc-section-11">4.1.原理</a></li>
+      <li><a href="#el" id="markdown-toc-el">4.2.E和L的连接</a></li>
+      <li><a href="#kibana-1" id="markdown-toc-kibana-1">4.3.Kibana的配置</a></li>
+      <li><a href="#es-1" id="markdown-toc-es-1">4.4.ES</a></li>
+      <li><a href="#section-12" id="markdown-toc-section-12">5.小结</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
+<p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
 
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+<h2 id="logstash">1.logstash配置</h2>
+
+<h3 id="jdk">1.1.Jdk安装</h3>
+<p>http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</p>
+
+<h3 id="logstash-1">1.2.下载logstash</h3>
+<p>https://www.elastic.co/downloads/logstash</p>
+
+<h3 id="section">1.3.启动</h3>
+
+<p>解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。</p>
+
+<ul>
+  <li>使用-e指定启动的参数</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./logstash -e 'input { stdin { } } output { stdout {} }'
 </code></pre>
 </div>
 
-<h2 id="jar">3.修改Jar的权限</h2>
-<p>保证oozie有权限读取、使用Jar包:
-<code class="highlighter-rouge">
-hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-</code></p>
+<p>这里设定stdin为输入，stdout为输出。</p>
 
-<h2 id="section-1">4.是配置生效</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>oozie admin -sharelibupdate
-oozie admin -shareliblist hive
-</code></pre>
-</div>
-<p>或者重启oozie也可以</p>
+<ul>
+  <li>使用配置文件启动</li>
+</ul>
 
-<h2 id="workflowtez">5.在workflow里使用Tez</h2>
-<p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>cat logstash-simple.conf
+input { stdin { } }
+output {
+   stdout { codec=&gt; rubydebug }
+}
 
-<h3 id="workflowhivetez">5.1.使单个workflow里的hive都用tez</h3>
-<p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+./logstash agent -f logstash-simple.conf
 </code></pre>
 </div>
 
-<h3 id="workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</h3>
-<p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
+<h3 id="section-1">1.4.验证</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+<p>启动后才命令行输入”hello World”，如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf
+
+Settings: Default pipeline workers: 1
+Pipeline main started
+hello World
+{
+       "message" =&gt; "hello World",
+       "@version" =&gt; "1",
+       "@timestamp" =&gt; "2016-07-18T07:20:20.526Z",
+       "host" =&gt; "0.0.0.0"
+}
 </code></pre>
 </div>
 
-<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:
-<code class="highlighter-rouge">
-set hive.execution.engine=tez;
-</code></p>
+<p>打印出来的message部分显示为输入内容。</p>
+
+<h2 id="es">2.ES</h2>
+
+<h3 id="section-2">2.1.下载</h3>
+<p>https://www.elastic.co/downloads/elasticsearch</p>
+
+<h3 id="section-3">2.2.配置</h3>
+<p>配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi config/elasticsearch.yml
+network.host: 0.0.0.0
+</code></pre>
+</div>
+
+<h3 id="section-4">2.3.启动</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
+</code></pre>
+</div>
+
+<h3 id="section-5">2.4.插件安装</h3>
+
+<p>kopf插件安装：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf
+</code></pre>
+</div>
+
+<p>安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。</p>
+
+<h3 id="section-6">2.5.验证</h3>
+
+<p>es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>netstat -anp |grep :9200
+</code></pre>
+</div>
+
+<p>或者使用浏览器访问端口9200.</p>
+
+<h2 id="kibana">3. Kibana</h2>
+
+<h3 id="section-7">3.1.下载</h3>
+<p>https://www.elastic.co/downloads/kibana</p>
+
+<h3 id="section-8">3.2.配置</h3>
+
+<p>配置一下es的地址。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi config/kibana.yml
+
+elasticsearch.url: "http://[hostname]:9200"
+</code></pre>
+</div>
+
+<p>这里默认是使用ES的数据。</p>
+
+<h3 id="section-9">3.3.启动</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
+</code></pre>
+</div>
+
+<h3 id="section-10">3.4.验证</h3>
+
+<p>访问：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://[hostname]:5601/
+</code></pre>
+</div>
+<p>点击”create”创建索引名称。</p>
+
+<h2 id="elk">4.使ELK整体协作起来</h2>
+
+<h3 id="section-11">4.1.原理</h3>
+
+<ul>
+  <li>logstash</li>
+</ul>
+
+<p>logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。</p>
+
+<ul>
+  <li>elasticsearch</li>
+</ul>
+
+<p>es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。</p>
+
+<ul>
+  <li>kibana</li>
+</ul>
+
+<p>kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。</p>
+
+<h3 id="el">4.2.E和L的连接</h3>
+<p>其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi logstash-indexer.conf
+
+input {
+  file {
+    type =&gt;"syslog"
+    path =&gt; [ "/var/log/syslog" ]
+  }
+  syslog {
+    type =&gt;"syslog"
+    port =&gt;"5544"
+  }
+}
+output {
+  stdout { codec=&gt; rubydebug }
+  elasticsearch {hosts =&gt; "localhost" }
+}
+</code></pre>
+</div>
+
+<ul>
+  <li>配置介绍</li>
+</ul>
+
+<p>logstash的配置里，一定要有一个input和一个output。
+file: 这里配置输入的文件信息。
+syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。
+output里定义了两处输出，分别是<strong>stdout</strong>命令行和<strong>elasticsearch</strong>。</p>
+
+<ul>
+  <li>启动</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nohup ./logstash agent -f logstash-indexer.conf &gt; nohup &amp;
+</code></pre>
+</div>
+
+<h3 id="kibana-1">4.3.Kibana的配置</h3>
+<p>只需要修改kibana.yml中es的地址就可以了。</p>
+
+<h3 id="es-1">4.4.ES</h3>
+<p>ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。</p>
+
+<h3 id="section-12">5.小结</h3>
+<p>ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。</p>
+
+<p>参考地址：
+http://baidu.blog.51cto.com/71938/1676798
+https://www.gitbook.com/book/chenryn/kibana-guide-cn/details</p>
+
 
         </article>
         <hr>
@@ -306,18 +466,6 @@ set hive.execution.engine=tez;
             
                 
                     
-                        
-                        <h2 id="similar_posts">Similar Posts</h2>
-                        <ul>
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
                     
                 
@@ -351,15 +499,6 @@ set hive.execution.engine=tez;
             
                 
                     
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
                     
                 
@@ -382,15 +521,6 @@ set hive.execution.engine=tez;
             
             
                 
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn
-                            
-                            </a>
-                        </li>
-                        
-                        
                     
                 
                     
@@ -450,15 +580,13 @@ set hive.execution.engine=tez;
                 
             
         
-        
-            </ul>
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/" data-title="Tez系列第三篇 Tez和oozie整合" data-url="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/" data-title="Elk安装配置介绍" data-url="http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
