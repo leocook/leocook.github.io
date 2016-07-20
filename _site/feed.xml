@@ -5,46 +5,72 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 20 Jul 2016 10:09:12 +0800</pubDate>
-    <lastBuildDate>Wed, 20 Jul 2016 10:09:12 +0800</lastBuildDate>
+    <pubDate>Wed, 20 Jul 2016 10:14:20 +0800</pubDate>
+    <lastBuildDate>Wed, 20 Jul 2016 10:14:20 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
         <title>Elk安装配置介绍</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;版本列表&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#logstash&quot; id=&quot;markdown-toc-logstash&quot;&gt;1.logstash配置&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#jdk&quot; id=&quot;markdown-toc-jdk&quot;&gt;1.1.Jdk安装&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#logstash-1&quot; id=&quot;markdown-toc-logstash-1&quot;&gt;1.2.下载logstash&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.4.验证&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;1.4.验证&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#es&quot; id=&quot;markdown-toc-es&quot;&gt;2.ES&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.1.下载&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.2.配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;2.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;2.4.插件安装&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;2.5.验证&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.1.下载&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;2.2.配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;2.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;2.4.插件安装&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;2.5.验证&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#kibana&quot; id=&quot;markdown-toc-kibana&quot;&gt;3. Kibana&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;3.1.下载&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;3.2.配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;3.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;3.4.验证&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;3.1.下载&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;3.2.配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;3.3.启动&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;3.4.验证&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#elk&quot; id=&quot;markdown-toc-elk&quot;&gt;4.使ELK整体协作起来&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;4.1.原理&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;4.1.原理&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#el&quot; id=&quot;markdown-toc-el&quot;&gt;4.2.E和L的连接&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#kibana-1&quot; id=&quot;markdown-toc-kibana-1&quot;&gt;4.3.Kibana的配置&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#es-1&quot; id=&quot;markdown-toc-es-1&quot;&gt;4.4.ES&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;5.小结&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;5.小结&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;版本列表&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;project&lt;/th&gt;
+      &lt;th&gt;version&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;es&lt;/td&gt;
+      &lt;td&gt;2.3.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;logstash&lt;/td&gt;
+      &lt;td&gt;2.3.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;kibana&lt;/td&gt;
+      &lt;td&gt;4.5.3&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;h2 id=&quot;logstash&quot;&gt;1.logstash配置&lt;/h2&gt;
 
@@ -54,7 +80,7 @@
 &lt;h3 id=&quot;logstash-1&quot;&gt;1.2.下载logstash&lt;/h3&gt;
 &lt;p&gt;https://www.elastic.co/downloads/logstash&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;1.3.启动&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;1.3.启动&lt;/h3&gt;
 
 &lt;p&gt;解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。&lt;/p&gt;
 
@@ -82,7 +108,7 @@ output {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;1.4.验证&lt;/h3&gt;
+&lt;h3 id=&quot;section-2&quot;&gt;1.4.验证&lt;/h3&gt;
 
 &lt;p&gt;启动后才命令行输入”hello World”，如下：&lt;/p&gt;
 
@@ -104,10 +130,10 @@ hello World
 
 &lt;h2 id=&quot;es&quot;&gt;2.ES&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;2.1.下载&lt;/h3&gt;
+&lt;h3 id=&quot;section-3&quot;&gt;2.1.下载&lt;/h3&gt;
 &lt;p&gt;https://www.elastic.co/downloads/elasticsearch&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;2.2.配置&lt;/h3&gt;
+&lt;h3 id=&quot;section-4&quot;&gt;2.2.配置&lt;/h3&gt;
 &lt;p&gt;配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/elasticsearch.yml
@@ -115,13 +141,13 @@ network.host: 0.0.0.0
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;2.3.启动&lt;/h3&gt;
+&lt;h3 id=&quot;section-5&quot;&gt;2.3.启动&lt;/h3&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;section-5&quot;&gt;2.4.插件安装&lt;/h3&gt;
+&lt;h3 id=&quot;section-6&quot;&gt;2.4.插件安装&lt;/h3&gt;
 
 &lt;p&gt;kopf插件安装：&lt;/p&gt;
 
@@ -131,7 +157,7 @@ network.host: 0.0.0.0
 
 &lt;p&gt;安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-6&quot;&gt;2.5.验证&lt;/h3&gt;
+&lt;h3 id=&quot;section-7&quot;&gt;2.5.验证&lt;/h3&gt;
 
 &lt;p&gt;es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：&lt;/p&gt;
 
@@ -143,10 +169,10 @@ network.host: 0.0.0.0
 
 &lt;h2 id=&quot;kibana&quot;&gt;3. Kibana&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-7&quot;&gt;3.1.下载&lt;/h3&gt;
+&lt;h3 id=&quot;section-8&quot;&gt;3.1.下载&lt;/h3&gt;
 &lt;p&gt;https://www.elastic.co/downloads/kibana&lt;/p&gt;
 
-&lt;h3 id=&quot;section-8&quot;&gt;3.2.配置&lt;/h3&gt;
+&lt;h3 id=&quot;section-9&quot;&gt;3.2.配置&lt;/h3&gt;
 
 &lt;p&gt;配置一下es的地址。&lt;/p&gt;
 
@@ -158,13 +184,13 @@ elasticsearch.url: &quot;http://[hostname]:9200&quot;
 
 &lt;p&gt;这里默认是使用ES的数据。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-9&quot;&gt;3.3.启动&lt;/h3&gt;
+&lt;h3 id=&quot;section-10&quot;&gt;3.3.启动&lt;/h3&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;section-10&quot;&gt;3.4.验证&lt;/h3&gt;
+&lt;h3 id=&quot;section-11&quot;&gt;3.4.验证&lt;/h3&gt;
 
 &lt;p&gt;访问：&lt;/p&gt;
 
@@ -175,7 +201,7 @@ elasticsearch.url: &quot;http://[hostname]:9200&quot;
 
 &lt;h2 id=&quot;elk&quot;&gt;4.使ELK整体协作起来&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-11&quot;&gt;4.1.原理&lt;/h3&gt;
+&lt;h3 id=&quot;section-12&quot;&gt;4.1.原理&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;logstash&lt;/li&gt;
@@ -240,7 +266,7 @@ output里定义了两处输出，分别是&lt;strong&gt;stdout&lt;/strong&gt;命
 &lt;h3 id=&quot;es-1&quot;&gt;4.4.ES&lt;/h3&gt;
 &lt;p&gt;ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-12&quot;&gt;5.小结&lt;/h3&gt;
+&lt;h3 id=&quot;section-13&quot;&gt;5.小结&lt;/h3&gt;
 &lt;p&gt;ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。&lt;/p&gt;
 
 &lt;p&gt;参考地址：

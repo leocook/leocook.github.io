@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Elk安装配置介绍</title>
-    <meta name="description" content="  1.logstash配置          1.1.Jdk安装      1.2.下载logstash      1.3.启动      1.4.验证        2.ES          2.1.下载      2.2.配置      2.3.启动      2.4.插件安装      2.5.验证  ...">
+    <meta name="description" content="  版本列表  1.logstash配置          1.1.Jdk安装      1.2.下载logstash      1.3.启动      1.4.验证        2.ES          2.1.下载      2.2.配置      2.3.启动      2.4.插件安装      2....">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -179,39 +179,65 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">版本列表</a></li>
   <li><a href="#logstash" id="markdown-toc-logstash">1.logstash配置</a>    <ul>
       <li><a href="#jdk" id="markdown-toc-jdk">1.1.Jdk安装</a></li>
       <li><a href="#logstash-1" id="markdown-toc-logstash-1">1.2.下载logstash</a></li>
-      <li><a href="#section" id="markdown-toc-section">1.3.启动</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.4.验证</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">1.3.启动</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">1.4.验证</a></li>
     </ul>
   </li>
   <li><a href="#es" id="markdown-toc-es">2.ES</a>    <ul>
-      <li><a href="#section-2" id="markdown-toc-section-2">2.1.下载</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">2.2.配置</a></li>
-      <li><a href="#section-4" id="markdown-toc-section-4">2.3.启动</a></li>
-      <li><a href="#section-5" id="markdown-toc-section-5">2.4.插件安装</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">2.5.验证</a></li>
+      <li><a href="#section-3" id="markdown-toc-section-3">2.1.下载</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">2.2.配置</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">2.3.启动</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">2.4.插件安装</a></li>
+      <li><a href="#section-7" id="markdown-toc-section-7">2.5.验证</a></li>
     </ul>
   </li>
   <li><a href="#kibana" id="markdown-toc-kibana">3. Kibana</a>    <ul>
-      <li><a href="#section-7" id="markdown-toc-section-7">3.1.下载</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">3.2.配置</a></li>
-      <li><a href="#section-9" id="markdown-toc-section-9">3.3.启动</a></li>
-      <li><a href="#section-10" id="markdown-toc-section-10">3.4.验证</a></li>
+      <li><a href="#section-8" id="markdown-toc-section-8">3.1.下载</a></li>
+      <li><a href="#section-9" id="markdown-toc-section-9">3.2.配置</a></li>
+      <li><a href="#section-10" id="markdown-toc-section-10">3.3.启动</a></li>
+      <li><a href="#section-11" id="markdown-toc-section-11">3.4.验证</a></li>
     </ul>
   </li>
   <li><a href="#elk" id="markdown-toc-elk">4.使ELK整体协作起来</a>    <ul>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.1.原理</a></li>
+      <li><a href="#section-12" id="markdown-toc-section-12">4.1.原理</a></li>
       <li><a href="#el" id="markdown-toc-el">4.2.E和L的连接</a></li>
       <li><a href="#kibana-1" id="markdown-toc-kibana-1">4.3.Kibana的配置</a></li>
       <li><a href="#es-1" id="markdown-toc-es-1">4.4.ES</a></li>
-      <li><a href="#section-12" id="markdown-toc-section-12">5.小结</a></li>
+      <li><a href="#section-13" id="markdown-toc-section-13">5.小结</a></li>
     </ul>
   </li>
 </ul>
 
 <p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
+
+<h2 id="section">版本列表</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>project</th>
+      <th>version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>es</td>
+      <td>2.3.4</td>
+    </tr>
+    <tr>
+      <td>logstash</td>
+      <td>2.3.4</td>
+    </tr>
+    <tr>
+      <td>kibana</td>
+      <td>4.5.3</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="logstash">1.logstash配置</h2>
 
@@ -221,7 +247,7 @@
 <h3 id="logstash-1">1.2.下载logstash</h3>
 <p>https://www.elastic.co/downloads/logstash</p>
 
-<h3 id="section">1.3.启动</h3>
+<h3 id="section-1">1.3.启动</h3>
 
 <p>解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。</p>
 
@@ -249,7 +275,7 @@ output {
 </code></pre>
 </div>
 
-<h3 id="section-1">1.4.验证</h3>
+<h3 id="section-2">1.4.验证</h3>
 
 <p>启动后才命令行输入”hello World”，如下：</p>
 
@@ -271,10 +297,10 @@ hello World
 
 <h2 id="es">2.ES</h2>
 
-<h3 id="section-2">2.1.下载</h3>
+<h3 id="section-3">2.1.下载</h3>
 <p>https://www.elastic.co/downloads/elasticsearch</p>
 
-<h3 id="section-3">2.2.配置</h3>
+<h3 id="section-4">2.2.配置</h3>
 <p>配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>vi config/elasticsearch.yml
@@ -282,13 +308,13 @@ network.host: 0.0.0.0
 </code></pre>
 </div>
 
-<h3 id="section-4">2.3.启动</h3>
+<h3 id="section-5">2.3.启动</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
 </code></pre>
 </div>
 
-<h3 id="section-5">2.4.插件安装</h3>
+<h3 id="section-6">2.4.插件安装</h3>
 
 <p>kopf插件安装：</p>
 
@@ -298,7 +324,7 @@ network.host: 0.0.0.0
 
 <p>安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。</p>
 
-<h3 id="section-6">2.5.验证</h3>
+<h3 id="section-7">2.5.验证</h3>
 
 <p>es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：</p>
 
@@ -310,10 +336,10 @@ network.host: 0.0.0.0
 
 <h2 id="kibana">3. Kibana</h2>
 
-<h3 id="section-7">3.1.下载</h3>
+<h3 id="section-8">3.1.下载</h3>
 <p>https://www.elastic.co/downloads/kibana</p>
 
-<h3 id="section-8">3.2.配置</h3>
+<h3 id="section-9">3.2.配置</h3>
 
 <p>配置一下es的地址。</p>
 
@@ -325,13 +351,13 @@ elasticsearch.url: "http://[hostname]:9200"
 
 <p>这里默认是使用ES的数据。</p>
 
-<h3 id="section-9">3.3.启动</h3>
+<h3 id="section-10">3.3.启动</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
 </code></pre>
 </div>
 
-<h3 id="section-10">3.4.验证</h3>
+<h3 id="section-11">3.4.验证</h3>
 
 <p>访问：</p>
 
@@ -342,7 +368,7 @@ elasticsearch.url: "http://[hostname]:9200"
 
 <h2 id="elk">4.使ELK整体协作起来</h2>
 
-<h3 id="section-11">4.1.原理</h3>
+<h3 id="section-12">4.1.原理</h3>
 
 <ul>
   <li>logstash</li>
@@ -407,7 +433,7 @@ output里定义了两处输出，分别是<strong>stdout</strong>命令行和<st
 <h3 id="es-1">4.4.ES</h3>
 <p>ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。</p>
 
-<h3 id="section-12">5.小结</h3>
+<h3 id="section-13">5.小结</h3>
 <p>ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。</p>
 
 <p>参考地址：
