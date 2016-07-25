@@ -123,6 +123,716 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/">使用cm安装cdh发行版的hadoop集群</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-07-23
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#hadoop" title="Category: hadoop" rel="category">hadoop</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#cm" title="Tag: cm" rel="tag">cm</a>&nbsp;
+    
+        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    <ul id="markdown-toc">
+  <li><a href="#cloudera-manager" id="markdown-toc-cloudera-manager">1.Cloudera Manager安装前准备</a>    <ul>
+      <li><a href="#section" id="markdown-toc-section">1.1. 操作系统的优化</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">1.2. 数据的存放</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloudera-manager-1" id="markdown-toc-cloudera-manager-1">2.开始安装Cloudera Manager</a>    <ul>
+      <li><a href="#cm" id="markdown-toc-cm">2.1.下载CM</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)</a>        <ul>
+          <li><a href="#section-3" id="markdown-toc-section-3">2.2.1.创建一个临时可以使用的远程仓库</a></li>
+          <li><a href="#cm-1" id="markdown-toc-cm-1">2.2.2.配置安装CM所需要的私有仓库</a></li>
+        </ul>
+      </li>
+      <li><a href="#cm-2" id="markdown-toc-cm-2">2.2.3.配置使用CM安装节点时会用到的仓库</a></li>
+      <li><a href="#jdk" id="markdown-toc-jdk">2.2.4.配置节点的JDK</a></li>
+      <li><a href="#cm-3" id="markdown-toc-cm-3">2.3.开始安装CM</a></li>
+      <li><a href="#cm-4" id="markdown-toc-cm-4">2.4.使用CM安装集群</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-4" id="markdown-toc-section-4">3.注意事项</a>    <ul>
+      <li><a href="#host" id="markdown-toc-host">3.1.主机的Host配置不能出差错</a></li>
+      <li><a href="#cm-agent" id="markdown-toc-cm-agent">3.2.cm-agent安装失败重试时</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-5" id="markdown-toc-section-5">4.会用到的一些地址总结</a>    <ul>
+      <li><a href="#mysql" id="markdown-toc-mysql">4.1.Mysql的相关配置</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">4.2.创建本地仓库</a></li>
+      <li><a href="#parcel" id="markdown-toc-parcel">4.3.parcel的下载地址</a></li>
+      <li><a href="#cm-5" id="markdown-toc-cm-5">4.4.cm的下载地址</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.</p>
+
+<h2 id="cloudera-manager">1.Cloudera Manager安装前准备</h2>
+
+<h3 id="section">1.1. 操作系统的优化</h3>
+<ul>
+  <li>打开的最大文件数
+修改当前的session配置(临时)：</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ulimit -SHn 65535
+</code></pre>
+</div>
+
+<p>永久修改（需要重启服务器）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo echo "ulimit -SHn 65535" &gt;&gt; /etc/rc.local
+sudo chmod +x /etc/rc.local
+</code></pre>
+</div>
+
+<ul>
+  <li>打开的组大文件句柄数
+临时配置</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># 一般可不做修改，这是临时配置
+sudo echo 2000000 &gt; /proc/sys/fs/file-max
+</code></pre>
+</div>
+
+<p>永久配置</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo "echo 2000000 &gt; /proc/sys/fs/file-max" &gt;&gt; /etc/rc.local
+</code></pre>
+</div>
+
+<p>或者</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo echo "fs.file-max = 2000000" &gt;&gt;/etc/sysctl.conf #推荐
+#使文件生效sudo /sbin/sysctl -p
+</code></pre>
+</div>
+
+<ul>
+  <li>打开的最大网络连接数</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo echo "net.core.somaxconn = 2048" &gt;&gt;/etc/sysctl.conf
+sudo /sbin/sysctl -p
+</code></pre>
+</div>
+
+<ul>
+  <li>关闭selinux</li>
+</ul>
+
+<p>ubuntu默认是不安装的selinux的，所以这里可以直接忽略。</p>
+
+<ul>
+  <li>配置ntp</li>
+</ul>
+
+<p>安装</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install ntp
+</code></pre>
+</div>
+
+<p>如果只需要保证集群内部的各个server之间时间保持同步，只需要在需要同步的机器上配置：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0 */12 * * * ntpdate dt-vt-154
+</code></pre>
+</div>
+
+<p>如果需要时间和互联网的时间保持一致，那么就需要在提供ntp server的机器上配置上层ntpserver:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>server [ntpserver_01]
+server [ntpserver_02]
+server [ntpserver_03]
+</code></pre>
+</div>
+
+<ul>
+  <li>关闭防火墙</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo ufw disable #关闭防火墙
+apt-get remove iptables #卸载防火墙
+</code></pre>
+</div>
+
+<ul>
+  <li>配置好hosts映射文件</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/hosts
+
+192.168.1.151   dt-vt-151
+192.168.1.152   dt-vt-152
+192.168.1.153   dt-vt-153
+192.168.1.154   dt-vt-154
+</code></pre>
+</div>
+
+<ul>
+  <li>Java环境配置</li>
+</ul>
+
+<p>安装</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mkdir /opt/java
+cd /opt/java
+#下载到安装文件到这个目录
+</code></pre>
+</div>
+
+<p>环境配置</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/profile
+
+export JAVA_HOME=/opt/java/jdk1.7.0_79
+export CLASSPATH=.:$JAVA_HOME/lib
+export PATH=$JAVA_HOME/bin:$PATH
+</code></pre>
+</div>
+
+<p>执行下面命令，使当前的session生效：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>source /etc/profile
+</code></pre>
+</div>
+
+<h3 id="section-1">1.2. 数据的存放</h3>
+<p>在使用CM来管理集群的时候，会涉及到大量的数据存储，例如Hadoop的主机列表信息，主机的配置信息，负载信息，各个模块的运行时状态等等。
+咱们这里使用mysql来作为CM的数据存储，这里不仅是CM，Hadoop中的Hive等模块的元数据，都来使用mysql存储。</p>
+
+<ul>
+  <li>安装mysql</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install mysql-server
+</code></pre>
+</div>
+
+<p>我这里安装完后是5.5.49.</p>
+
+<ul>
+  <li>关闭mysql，备份配置文件</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/init.d/mysql stop
+</code></pre>
+</div>
+
+<p>把/var/lib/mysql/ib_logfile0和/var/lib/mysql/ib_logfile1拷贝至某个配置目录中，例如：/var/lib/mysql/bak</p>
+
+<ul>
+  <li>配置InnoDB引擎</li>
+</ul>
+
+<p>务必使用InnoDB引擎引擎，若是使用MyISAM引擎CM将启动不了。在Mysql的命令行中运行下面的命令，来查看你的Mysql使用了哪个引擎。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql&gt; show table status;
+</code></pre>
+</div>
+
+<ul>
+  <li>配置mysql的innodb刷写模式</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>innodb_flush_method=O_DIRECT
+</code></pre>
+</div>
+
+<p>即：配置Innodb的刷写模式为异步写模式。</p>
+
+<ul>
+  <li>修改mysql的最大连接数</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>max_connections=1550
+</code></pre>
+</div>
+
+<p>在这里，你应该会考虑配置该数值为多少比较合适。
+当集群规模<strong>小于50台</strong>的时候，假设该库中有N个数据库是用来服务于Hadoop的，那么max_connections可以设置为100*N+50。例如：Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, 和 Hive metastore都是使用mysql的，那么就配置max_connections为550.
+当集群规模<strong>大于50台</strong>的时候，建议每个数据库只存放在一台机器上。</p>
+
+<ul>
+  <li>配置文件样例</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[mysqld]
+transaction-isolation = READ-COMMITTED
+# Disabling symbolic-links is recommended to prevent assorted security risks;
+# to do so, uncomment this line:
+# symbolic-links = 0
+
+key_buffer = 16M
+key_buffer_size = 32M
+max_allowed_packet = 32M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+
+max_connections = 1550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+
+
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+</code></pre>
+</div>
+
+<ul>
+  <li>启动mysql</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/init.d/mysql start
+</code></pre>
+</div>
+
+<p>打开开机自启</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install sysv-rc-conf
+sysv-rc-conf mysql on
+</code></pre>
+</div>
+
+<ul>
+  <li>安装mysql-jdbc驱动</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install libmysql-java
+</code></pre>
+</div>
+
+<ul>
+  <li>mysql远程连接</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/mysql/my.cnf
+
+bind-address = 0.0.0.0
+</code></pre>
+</div>
+
+<ul>
+  <li>給相关服务创建mysql的数据库</li>
+</ul>
+
+<p>相关列表如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Database</th>
+      <th>User</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Activity Monitor</td>
+      <td>amon</td>
+      <td>amon</td>
+      <td>amon_password</td>
+    </tr>
+    <tr>
+      <td>Reports Manager</td>
+      <td>rman</td>
+      <td>rman</td>
+      <td>rman_password</td>
+    </tr>
+    <tr>
+      <td>Hive Metastore Server</td>
+      <td>hive_metastore</td>
+      <td>hive</td>
+      <td>hive_password</td>
+    </tr>
+    <tr>
+      <td>Sentry Server</td>
+      <td>sentry</td>
+      <td>sentry</td>
+      <td>sentry_password</td>
+    </tr>
+    <tr>
+      <td>Cloudera Navigator Audit Server</td>
+      <td>nav</td>
+      <td>nav</td>
+      <td>nav_password</td>
+    </tr>
+    <tr>
+      <td>Cloudera Navigator Metadata Server</td>
+      <td>navms</td>
+      <td>navms</td>
+      <td>navms_password</td>
+    </tr>
+    <tr>
+      <td>OOZIE</td>
+      <td>oozie</td>
+      <td>oozie</td>
+      <td>oozie</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>建表语句格式如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>create database database DEFAULT CHARACTER SET utf8;
+grant all on database.* TO 'user'@'%' IDENTIFIED BY 'password';
+</code></pre>
+</div>
+
+<p>建表语句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>create database amon DEFAULT CHARACTER SET utf8;
+grant all on amon.* TO 'amon'@'%' IDENTIFIED BY 'amon';
+
+create database rmon DEFAULT CHARACTER SET utf8;
+grant all on rmon.* TO 'rmon'@'%' IDENTIFIED BY 'rmon';
+
+create database hive_metastore DEFAULT CHARACTER SET utf8;
+grant all on hive_metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive';
+
+create database sentry DEFAULT CHARACTER SET utf8;
+grant all on sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry';
+
+create database nav DEFAULT CHARACTER SET utf8;
+grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav';
+
+create database navms DEFAULT CHARACTER SET utf8;
+grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms';
+
+create database oozie DEFAULT CHARACTER SET utf8;
+grant all on oozie.* TO 'oozie'@'%' IDENTIFIED BY 'oozie';
+</code></pre>
+</div>
+
+<h2 id="cloudera-manager-1">2.开始安装Cloudera Manager</h2>
+
+<h3 id="cm">2.1.下载CM</h3>
+
+<p>可以下载安装最新版本的CM：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
+</code></pre>
+</div>
+
+<p>当然，如果你想选择安装其它版本，可以访问下面的地址，并选择下载你所需要的版本(cm5+)：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://archive.cloudera.com/cm5/installer/
+</code></pre>
+</div>
+
+<p>我这里使用的是版本是5.4.10，从release note上看，目前cdh5.4.10是最稳当的版本。我下载到了本地路径如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/cm/cloudera-manager-installer.bin
+</code></pre>
+</div>
+
+<p>修改权限，使其可以被执行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chmod u+x cloudera-manager-installer.bin
+</code></pre>
+</div>
+
+<h3 id="section-2">2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)</h3>
+
+<h4 id="section-3">2.2.1.创建一个临时可以使用的远程仓库</h4>
+<p>这个配置是在安装cloudera-manager-server的时候才会用的。这里的仓库是使用传统的http协议，通过网络传输数据的。可以去http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。</p>
+
+<ul>
+  <li>解压安装包</li>
+</ul>
+
+<p>下载完安装包后，解压到某个目录下，我这里下载的是cm5.4.10-ubuntu14-04.tar.gz这个版本。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>tar -zxvf cm5.4.10-ubuntu14-04.tar.gz
+chmod -R ugo+rX /opt/cm/local_resp/cm
+</code></pre>
+</div>
+
+<p>解压后的目录是/opt/cm/local_resp/cm</p>
+
+<ul>
+  <li>启动Http server</li>
+</ul>
+
+<p>启动一个Http服务，使可以通过网络来访问仓库中的数据。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /opt/cm/
+python -m SimpleHTTPServer 8900
+</code></pre>
+</div>
+
+<p>我这里使用的是8900，你可以根据需要，使用指定的端口。</p>
+
+<ul>
+  <li>验证</li>
+</ul>
+
+<p>可在浏览器中访问地址http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。</p>
+
+<h4 id="cm-1">2.2.2.配置安装CM所需要的私有仓库</h4>
+
+<p>在目录<strong>/etc/apt/sources.list.d/</strong>下创建文件<strong>my-private-cloudera-repo.list</strong>，并写入配置把这个文件和上面新建的仓库关联到一起：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/apt/sources.list.d/my-private-cloudera-repo.list
+
+deb [arch=amd64] http://192.168.1.154:8900/cm/ trusty-cm5.4.10 contrib
+</code></pre>
+</div>
+
+<p>执行下面的命令，使得上面的配置生效：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get update
+</code></pre>
+</div>
+
+<h3 id="cm-2">2.2.3.配置使用CM安装节点时会用到的仓库</h3>
+<p>可以下载地址：http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/ 里的所有内容到本地，然后使用<strong>2.2.1</strong>中的方式来启动一个Http server。</p>
+
+<h3 id="jdk">2.2.4.配置节点的JDK</h3>
+<p>这一步是可选的，如果你不想每台机器都去手动安装，也可以在后边使用CM来批量安装。</p>
+
+<h3 id="cm-3">2.3.开始安装CM</h3>
+<ul>
+  <li>连接互联网安装</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo ./cloudera-manager-installer.bin
+</code></pre>
+</div>
+
+<p>或者</p>
+
+<ul>
+  <li>使用本地仓库安装</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo ./cloudera-manager-installer.bin --skip_repo_package=1
+</code></pre>
+</div>
+
+<p>然后就是一路的YES &amp; NEXT，最后安装完成，CM默认的端口是7180，账户名和密码都是7180.</p>
+
+<h3 id="cm-4">2.4.使用CM安装集群</h3>
+
+<p>首次登陆CM管理界面的时候，会出现一个集群安装向导。我这里选择的是免费版本。然后大概有如下几步：</p>
+
+<ul>
+  <li>
+    <p>使用ip或者hostname来搜索主机，搜索到之后，go to next step.</p>
+  </li>
+  <li>
+    <p>看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。</p>
+  </li>
+</ul>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-02.png" alt="CM JDK" title="cm jdk" /></p>
+
+<ul>
+  <li>选择是否使用单用户模式（Single User Mode）</li>
+</ul>
+
+<p>不使用该模式的话，HDFS服务会使用“hdfs”账户来启动，Hbase的Region Server会使用“hbase”账户来启动。使用了该模式之后，所有的服务都是使用同一个账户去启动的。
+这里主要看集群的使用场景，如果其中涉及到不同的模块是由不同人员来运维管理的话，我建议还是不要使用单用户模式了。但如果集群是统一由一个人员来管理，那么选择使用单用户模式可能会方便很多。
+我这里没有使用单用户模式。</p>
+
+<ul>
+  <li>配置好SSH登录</li>
+</ul>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-03.png" alt="配置ssh登录信息" title="输入密码" /></p>
+
+<ul>
+  <li>
+    <p>配置好SSH后开始连入主机，安装jdk和cm-agent
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-04.png" alt="install cm agent" title="install cm agent" /></p>
+  </li>
+  <li>
+    <p>安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-05.png" alt="cm agent ok" title="cm agent ok" /></p>
+  </li>
+  <li>
+    <p>分发Hadoop的安装包</p>
+  </li>
+</ul>
+
+<p>去地址：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://archive.cloudera.com/cdh5/parcels/5.4.10/
+</code></pre>
+</div>
+
+<p>下载：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel
+CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1
+manifest.json
+</code></pre>
+</div>
+
+<p>下载完成后：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>把"CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1"重命名为"CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha"
+</code></pre>
+</div>
+
+<p>并移到目录：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/opt/cloudera/parcel-repo
+</code></pre>
+</div>
+
+<p>然后在cm-serve点击进入下一页，将会看到如下图：
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-06.png" alt="cm parcel distributed" title="cm parcel distributed" />
+因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的<strong>Download</strong>自然就是100%，<strong>Distributed</strong>是把安装包从cm-server往集群中各个节点分发的过程，<strong>Unpacked</strong>是表示各个节点的上安装包的解压情况进度，前面都OK后，<strong>Activated</strong>自然就可以了，表示安装包已经部署好了，可以随时进行安装。</p>
+
+<ul>
+  <li>
+    <p>选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-07.png" alt="hosts choose" title="hosts choose" /></p>
+  </li>
+  <li>
+    <p>这里配置的是一些组件使用的mysql信息：
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-08.png" alt="hadoop mysql config" title="hadoop mysql config" /></p>
+  </li>
+  <li>
+    <p>然后可以配置一些服务的的具体参数
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-09.png" alt="hadoop config" title="hadoop config" /></p>
+  </li>
+  <li>
+    <p>参数配置都没问题后，开始执行安装。
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-10.png" alt="hadoop install" title="hadoop install" /></p>
+  </li>
+  <li>
+    <p>安装完成后。
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/cm-11.jpeg" alt="install success" title="install success" />
+PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。</p>
+  </li>
+</ul>
+
+<h2 id="section-4">3.注意事项</h2>
+
+<h3 id="host">3.1.主机的Host配置不能出差错</h3>
+<p>我就配置错过host，期间走了一些弯路，主要表现在添加完主机之后，Hosts下的主机名都是localhost。</p>
+
+<h3 id="cm-agent">3.2.cm-agent安装失败重试时</h3>
+<p>如果在重试的过程中出现了一直等待，或者cm-agent端口被占用的情况，大概有下面的几种情况：</p>
+
+<ul>
+  <li>锁文件没有删除</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo rm /tmp/.scm_prepare_node.lock
+</code></pre>
+</div>
+
+<ul>
+  <li>端口被占用 <strong>9000/9001</strong></li>
+</ul>
+
+<p>这种情况是部分进程没有关闭成功，找到端口对应的进程号，然后然后使用<strong>kill -9停止进程</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>netstat -nap | grep 9000
+netstat -nap | grep 9001
+</code></pre>
+</div>
+
+<p>主要是<strong>supervisor</strong>和<strong>cm-agent</strong>进程</p>
+
+<h2 id="section-5">4.会用到的一些地址总结</h2>
+
+<h3 id="mysql">4.1.Mysql的相关配置</h3>
+<p>http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html</p>
+
+<h3 id="section-6">4.2.创建本地仓库</h3>
+
+<ul>
+  <li>For CM</li>
+</ul>
+
+<p>http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html</p>
+
+<ul>
+  <li>For parcel</li>
+</ul>
+
+<p>http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html</p>
+
+<h3 id="parcel">4.3.parcel的下载地址</h3>
+
+<p>http://archive.cloudera.com/cdh5/parcels/
+http://archive.cloudera.com/kafka/parcels/</p>
+
+<h3 id="cm-5">4.4.cm的下载地址</h3>
+
+<p>加压后可以直接运行
+http://archive.cloudera.com/cm5/cm/5/</p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a>
                 </h2>
                 <div class="label">
@@ -1175,195 +1885,6 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions</p>
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-03-13
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#hadoop" title="Category: hadoop" rel="category">hadoop</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <a href="/tag/#集群优化" title="Tag: 集群优化" rel="tag">集群优化</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.之前的集群存在的问题</a>    <ul>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.1.问题一：作业的执行速率不同步</a></li>
-      <li><a href="#section-2" id="markdown-toc-section-2">1.2.问题二：资源利用倾斜</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">1.3.问题三：集群资源并没有真正的参与计算</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-4" id="markdown-toc-section-4">2.集群资源重新划分的过程</a>    <ul>
-      <li><a href="#section-5" id="markdown-toc-section-5">2.1.拿到集群中所有机器的硬件资源列表</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">2.2.根据集群资源，分组的大概情况如截图：</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">2.3.资源划分的策略</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">2.4.具体的划分策略</a>        <ul>
-          <li><a href="#section-9" id="markdown-toc-section-9">2.4.1.内存划分策略</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#section-10" id="markdown-toc-section-10">4.成果</a>    <ul>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.1.集群表现情况</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-12" id="markdown-toc-section-12">5.总结</a></li>
-</ul>
-
-<p>集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。</p>
-
-<h1 id="section">1.之前的集群存在的问题</h1>
-
-<h2 id="section-1">1.1.问题一：作业的执行速率不同步</h2>
-<ul>
-  <li>问题表现
-部分任务跑的慢，部分任务跑得快。</li>
-  <li>问题的原因
-集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。</li>
-  <li>解决办法
-重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。</li>
-</ul>
-
-<h2 id="section-2">1.2.问题二：资源利用倾斜</h2>
-<ul>
-  <li>问题表现
-部分机器资源利用率极高，部分机器资源利用率级低；</li>
-  <li>问题的原因
-<strong>同【问题一】</strong></li>
-  <li>解决办法
-<strong>同【问题一】</strong></li>
-</ul>
-
-<h2 id="section-3">1.3.问题三：集群资源并没有真正的参与计算</h2>
-<ul>
-  <li>问题表现
-作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。</li>
-  <li>问题的原因
-咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。</li>
-  <li>解决办法
-a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。
-b). 减少单个任务的资源占用，提高集群的并行度。</li>
-</ul>
-
-<h1 id="section-4">2.集群资源重新划分的过程</h1>
-
-<h2 id="section-5">2.1.拿到集群中所有机器的硬件资源列表</h2>
-<p>感谢运维同学的帮助！</p>
-
-<h2 id="section-6">2.2.根据集群资源，分组的大概情况如截图：</h2>
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png" alt="服务器分组情况" title="根据机器硬件资源情况，服务器分组情况" />
-分组命名规则：
-<strong><em>NM</em></strong>: NodeManager；  <br />
-<strong><em>G01</em></strong>: Group01；  <br />
-<strong><em>C08</em></strong>: cpu是8核；  <br />
-<strong><em>M48</em></strong>: 内存是48GB。  <br />
-<strong><em>ZK</em></strong>: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）</p>
-
-<h2 id="section-7">2.3.资源划分的策略</h2>
-<p>根据机器上安装的服务，大概给服务做了如下的划分：
-- 安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
-
-<ul>
-  <li>
-    <p>安装有重要服务的机器，不参与计算
-例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。</p>
-  </li>
-  <li>
-    <p>只安装了存储和计算的机器
-例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。</p>
-  </li>
-</ul>
-
-<h2 id="section-8">2.4.具体的划分策略</h2>
-
-<h3 id="section-9">2.4.1.内存划分策略</h3>
-<ul>
-  <li>yarn容器可直接管理的资源
-主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。</li>
-  <li>单个任务可使用的任务资源
-map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-### 2.4.2.内存划分策略</li>
-  <li>yarn容器可直接管理的资源
-对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。</li>
-  <li>单个任务可使用的任务资源
-1个vcore。
-# 3.mysql调优的过程
-不同的库，挂载在不同的磁盘上，减小单块盘的压力。</li>
-</ul>
-
-<h1 id="section-10">4.成果</h1>
-
-<h2 id="section-11">4.1.集群表现情况</h2>
-<p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
-## 4.2.mysql表现情况
-优化前的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png" alt="优化前" title="优化前负载情况" />
-优化后的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql.png" alt="优化后" title="优化后负载情况" /></p>
-
-<blockquote>
-  <p>后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。</p>
-</blockquote>
-
-<h1 id="section-12">5.总结</h1>
-<p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：
-- Impala的资源管理未使用yarn，所以一直还没有开始使用；
-- OOZIE未做HA配置；
-- HDFS数据平衡效果不是很好；
-- CPU一个线程做两个vcore使用，压力还是比较大的。</p>
-
-<p>在接下，将会按照优先级逐一解决。</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1390,6 +1911,8 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/">使用cm安装cdh发行版的hadoop集群</a></li>
                     
                         <li><a href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a></li>
                     
@@ -1441,7 +1964,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                             <span class="name">
                                 hadoop
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1498,7 +2021,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                       
                       
                       
-                      <a href="/tag/#集群优化" style="font-size: 12pt; color: #666;">集群优化</a>
+                      <a href="/tag/#集群优化" style="font-size: 11.5pt; color: #777;">集群优化</a>
                     
                       
                       
@@ -1512,14 +2035,14 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                       
                       
                       
-                      <a href="/tag/#tez" style="font-size: 15pt; color: #333;">tez</a>
+                      <a href="/tag/#tez" style="font-size: 13.5pt; color: #444;">tez</a>
                     
                       
                       
                       
                       
                       
-                      <a href="/tag/#hive" style="font-size: 12pt; color: #666;">hive</a>
+                      <a href="/tag/#hive" style="font-size: 11.5pt; color: #777;">hive</a>
                     
                       
                       
@@ -1555,6 +2078,13 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                       
                       
                       <a href="/tag/#ELK" style="font-size: 9pt; color: #999;">ELK</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#cm" style="font-size: 9pt; color: #999;">cm</a>
                     
                 </div>
             </div>

@@ -5,9 +5,675 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 20 Jul 2016 10:14:20 +0800</pubDate>
-    <lastBuildDate>Wed, 20 Jul 2016 10:14:20 +0800</lastBuildDate>
+    <pubDate>Mon, 25 Jul 2016 15:35:37 +0800</pubDate>
+    <lastBuildDate>Mon, 25 Jul 2016 15:35:37 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>使用cm安装cdh发行版的hadoop集群</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#cloudera-manager&quot; id=&quot;markdown-toc-cloudera-manager&quot;&gt;1.Cloudera Manager安装前准备&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.1. 操作系统的优化&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.2. 数据的存放&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cloudera-manager-1&quot; id=&quot;markdown-toc-cloudera-manager-1&quot;&gt;2.开始安装Cloudera Manager&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm&quot; id=&quot;markdown-toc-cm&quot;&gt;2.1.下载CM&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.2.1.创建一个临时可以使用的远程仓库&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#cm-1&quot; id=&quot;markdown-toc-cm-1&quot;&gt;2.2.2.配置安装CM所需要的私有仓库&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm-2&quot; id=&quot;markdown-toc-cm-2&quot;&gt;2.2.3.配置使用CM安装节点时会用到的仓库&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#jdk&quot; id=&quot;markdown-toc-jdk&quot;&gt;2.2.4.配置节点的JDK&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm-3&quot; id=&quot;markdown-toc-cm-3&quot;&gt;2.3.开始安装CM&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm-4&quot; id=&quot;markdown-toc-cm-4&quot;&gt;2.4.使用CM安装集群&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;3.注意事项&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#host&quot; id=&quot;markdown-toc-host&quot;&gt;3.1.主机的Host配置不能出差错&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm-agent&quot; id=&quot;markdown-toc-cm-agent&quot;&gt;3.2.cm-agent安装失败重试时&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;4.会用到的一些地址总结&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#mysql&quot; id=&quot;markdown-toc-mysql&quot;&gt;4.1.Mysql的相关配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;4.2.创建本地仓库&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#parcel&quot; id=&quot;markdown-toc-parcel&quot;&gt;4.3.parcel的下载地址&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cm-5&quot; id=&quot;markdown-toc-cm-5&quot;&gt;4.4.cm的下载地址&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.&lt;/p&gt;
+
+&lt;h2 id=&quot;cloudera-manager&quot;&gt;1.Cloudera Manager安装前准备&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;1.1. 操作系统的优化&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;打开的最大文件数
+修改当前的session配置(临时)：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ulimit -SHn 65535
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;永久修改（需要重启服务器）：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;ulimit -SHn 65535&quot; &amp;gt;&amp;gt; /etc/rc.local
+sudo chmod +x /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;打开的组大文件句柄数
+临时配置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 一般可不做修改，这是临时配置
+sudo echo 2000000 &amp;gt; /proc/sys/fs/file-max
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;永久配置&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;echo 2000000 &amp;gt; /proc/sys/fs/file-max&quot; &amp;gt;&amp;gt; /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;fs.file-max = 2000000&quot; &amp;gt;&amp;gt;/etc/sysctl.conf #推荐
+#使文件生效sudo /sbin/sysctl -p
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;打开的最大网络连接数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;net.core.somaxconn = 2048&quot; &amp;gt;&amp;gt;/etc/sysctl.conf
+sudo /sbin/sysctl -p
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关闭selinux&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ubuntu默认是不安装的selinux的，所以这里可以直接忽略。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置ntp&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;安装&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install ntp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;如果只需要保证集群内部的各个server之间时间保持同步，只需要在需要同步的机器上配置：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0 */12 * * * ntpdate dt-vt-154
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;如果需要时间和互联网的时间保持一致，那么就需要在提供ntp server的机器上配置上层ntpserver:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server [ntpserver_01]
+server [ntpserver_02]
+server [ntpserver_03]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关闭防火墙&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ufw disable #关闭防火墙
+apt-get remove iptables #卸载防火墙
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置好hosts映射文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/hosts
+
+192.168.1.151   dt-vt-151
+192.168.1.152   dt-vt-152
+192.168.1.153   dt-vt-153
+192.168.1.154   dt-vt-154
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java环境配置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;安装&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir /opt/java
+cd /opt/java
+#下载到安装文件到这个目录
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;环境配置&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/profile
+
+export JAVA_HOME=/opt/java/jdk1.7.0_79
+export CLASSPATH=.:$JAVA_HOME/lib
+export PATH=$JAVA_HOME/bin:$PATH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;执行下面命令，使当前的session生效：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source /etc/profile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;1.2. 数据的存放&lt;/h3&gt;
+&lt;p&gt;在使用CM来管理集群的时候，会涉及到大量的数据存储，例如Hadoop的主机列表信息，主机的配置信息，负载信息，各个模块的运行时状态等等。
+咱们这里使用mysql来作为CM的数据存储，这里不仅是CM，Hadoop中的Hive等模块的元数据，都来使用mysql存储。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;安装mysql&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install mysql-server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我这里安装完后是5.5.49.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关闭mysql，备份配置文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/init.d/mysql stop
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;把/var/lib/mysql/ib_logfile0和/var/lib/mysql/ib_logfile1拷贝至某个配置目录中，例如：/var/lib/mysql/bak&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置InnoDB引擎&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;务必使用InnoDB引擎引擎，若是使用MyISAM引擎CM将启动不了。在Mysql的命令行中运行下面的命令，来查看你的Mysql使用了哪个引擎。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mysql&amp;gt; show table status;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置mysql的innodb刷写模式&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;innodb_flush_method=O_DIRECT
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;即：配置Innodb的刷写模式为异步写模式。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;修改mysql的最大连接数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;max_connections=1550
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在这里，你应该会考虑配置该数值为多少比较合适。
+当集群规模&lt;strong&gt;小于50台&lt;/strong&gt;的时候，假设该库中有N个数据库是用来服务于Hadoop的，那么max_connections可以设置为100*N+50。例如：Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, 和 Hive metastore都是使用mysql的，那么就配置max_connections为550.
+当集群规模&lt;strong&gt;大于50台&lt;/strong&gt;的时候，建议每个数据库只存放在一台机器上。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置文件样例&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[mysqld]
+transaction-isolation = READ-COMMITTED
+# Disabling symbolic-links is recommended to prevent assorted security risks;
+# to do so, uncomment this line:
+# symbolic-links = 0
+
+key_buffer = 16M
+key_buffer_size = 32M
+max_allowed_packet = 32M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+
+max_connections = 1550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+
+
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动mysql&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/init.d/mysql start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;打开开机自启&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install sysv-rc-conf
+sysv-rc-conf mysql on
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;安装mysql-jdbc驱动&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libmysql-java
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;mysql远程连接&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/mysql/my.cnf
+
+bind-address = 0.0.0.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;給相关服务创建mysql的数据库&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;相关列表如下：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Role&lt;/th&gt;
+      &lt;th&gt;Database&lt;/th&gt;
+      &lt;th&gt;User&lt;/th&gt;
+      &lt;th&gt;Password&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Activity Monitor&lt;/td&gt;
+      &lt;td&gt;amon&lt;/td&gt;
+      &lt;td&gt;amon&lt;/td&gt;
+      &lt;td&gt;amon_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Reports Manager&lt;/td&gt;
+      &lt;td&gt;rman&lt;/td&gt;
+      &lt;td&gt;rman&lt;/td&gt;
+      &lt;td&gt;rman_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Hive Metastore Server&lt;/td&gt;
+      &lt;td&gt;hive_metastore&lt;/td&gt;
+      &lt;td&gt;hive&lt;/td&gt;
+      &lt;td&gt;hive_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Sentry Server&lt;/td&gt;
+      &lt;td&gt;sentry&lt;/td&gt;
+      &lt;td&gt;sentry&lt;/td&gt;
+      &lt;td&gt;sentry_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Cloudera Navigator Audit Server&lt;/td&gt;
+      &lt;td&gt;nav&lt;/td&gt;
+      &lt;td&gt;nav&lt;/td&gt;
+      &lt;td&gt;nav_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Cloudera Navigator Metadata Server&lt;/td&gt;
+      &lt;td&gt;navms&lt;/td&gt;
+      &lt;td&gt;navms&lt;/td&gt;
+      &lt;td&gt;navms_password&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OOZIE&lt;/td&gt;
+      &lt;td&gt;oozie&lt;/td&gt;
+      &lt;td&gt;oozie&lt;/td&gt;
+      &lt;td&gt;oozie&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;建表语句格式如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database database DEFAULT CHARACTER SET utf8;
+grant all on database.* TO &#39;user&#39;@&#39;%&#39; IDENTIFIED BY &#39;password&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;建表语句如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database amon DEFAULT CHARACTER SET utf8;
+grant all on amon.* TO &#39;amon&#39;@&#39;%&#39; IDENTIFIED BY &#39;amon&#39;;
+
+create database rmon DEFAULT CHARACTER SET utf8;
+grant all on rmon.* TO &#39;rmon&#39;@&#39;%&#39; IDENTIFIED BY &#39;rmon&#39;;
+
+create database hive_metastore DEFAULT CHARACTER SET utf8;
+grant all on hive_metastore.* TO &#39;hive&#39;@&#39;%&#39; IDENTIFIED BY &#39;hive&#39;;
+
+create database sentry DEFAULT CHARACTER SET utf8;
+grant all on sentry.* TO &#39;sentry&#39;@&#39;%&#39; IDENTIFIED BY &#39;sentry&#39;;
+
+create database nav DEFAULT CHARACTER SET utf8;
+grant all on nav.* TO &#39;nav&#39;@&#39;%&#39; IDENTIFIED BY &#39;nav&#39;;
+
+create database navms DEFAULT CHARACTER SET utf8;
+grant all on navms.* TO &#39;navms&#39;@&#39;%&#39; IDENTIFIED BY &#39;navms&#39;;
+
+create database oozie DEFAULT CHARACTER SET utf8;
+grant all on oozie.* TO &#39;oozie&#39;@&#39;%&#39; IDENTIFIED BY &#39;oozie&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;cloudera-manager-1&quot;&gt;2.开始安装Cloudera Manager&lt;/h2&gt;
+
+&lt;h3 id=&quot;cm&quot;&gt;2.1.下载CM&lt;/h3&gt;
+
+&lt;p&gt;可以下载安装最新版本的CM：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当然，如果你想选择安装其它版本，可以访问下面的地址，并选择下载你所需要的版本(cm5+)：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://archive.cloudera.com/cm5/installer/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我这里使用的是版本是5.4.10，从release note上看，目前cdh5.4.10是最稳当的版本。我下载到了本地路径如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/cm/cloudera-manager-installer.bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;修改权限，使其可以被执行：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chmod u+x cloudera-manager-installer.bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;2.2.1.创建一个临时可以使用的远程仓库&lt;/h4&gt;
+&lt;p&gt;这个配置是在安装cloudera-manager-server的时候才会用的。这里的仓库是使用传统的http协议，通过网络传输数据的。可以去http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解压安装包&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下载完安装包后，解压到某个目录下，我这里下载的是cm5.4.10-ubuntu14-04.tar.gz这个版本。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tar -zxvf cm5.4.10-ubuntu14-04.tar.gz
+chmod -R ugo+rX /opt/cm/local_resp/cm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;解压后的目录是/opt/cm/local_resp/cm&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动Http server&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;启动一个Http服务，使可以通过网络来访问仓库中的数据。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/cm/
+python -m SimpleHTTPServer 8900
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我这里使用的是8900，你可以根据需要，使用指定的端口。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;验证&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可在浏览器中访问地址http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。&lt;/p&gt;
+
+&lt;h4 id=&quot;cm-1&quot;&gt;2.2.2.配置安装CM所需要的私有仓库&lt;/h4&gt;
+
+&lt;p&gt;在目录&lt;strong&gt;/etc/apt/sources.list.d/&lt;/strong&gt;下创建文件&lt;strong&gt;my-private-cloudera-repo.list&lt;/strong&gt;，并写入配置把这个文件和上面新建的仓库关联到一起：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/apt/sources.list.d/my-private-cloudera-repo.list
+
+deb [arch=amd64] http://192.168.1.154:8900/cm/ trusty-cm5.4.10 contrib
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;执行下面的命令，使得上面的配置生效：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;cm-2&quot;&gt;2.2.3.配置使用CM安装节点时会用到的仓库&lt;/h3&gt;
+&lt;p&gt;可以下载地址：http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/ 里的所有内容到本地，然后使用&lt;strong&gt;2.2.1&lt;/strong&gt;中的方式来启动一个Http server。&lt;/p&gt;
+
+&lt;h3 id=&quot;jdk&quot;&gt;2.2.4.配置节点的JDK&lt;/h3&gt;
+&lt;p&gt;这一步是可选的，如果你不想每台机器都去手动安装，也可以在后边使用CM来批量安装。&lt;/p&gt;
+
+&lt;h3 id=&quot;cm-3&quot;&gt;2.3.开始安装CM&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;连接互联网安装&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ./cloudera-manager-installer.bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用本地仓库安装&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ./cloudera-manager-installer.bin --skip_repo_package=1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后就是一路的YES &amp;amp; NEXT，最后安装完成，CM默认的端口是7180，账户名和密码都是7180.&lt;/p&gt;
+
+&lt;h3 id=&quot;cm-4&quot;&gt;2.4.使用CM安装集群&lt;/h3&gt;
+
+&lt;p&gt;首次登陆CM管理界面的时候，会出现一个集群安装向导。我这里选择的是免费版本。然后大概有如下几步：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;使用ip或者hostname来搜索主机，搜索到之后，go to next step.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-02.png&quot; alt=&quot;CM JDK&quot; title=&quot;cm jdk&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;选择是否使用单用户模式（Single User Mode）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不使用该模式的话，HDFS服务会使用“hdfs”账户来启动，Hbase的Region Server会使用“hbase”账户来启动。使用了该模式之后，所有的服务都是使用同一个账户去启动的。
+这里主要看集群的使用场景，如果其中涉及到不同的模块是由不同人员来运维管理的话，我建议还是不要使用单用户模式了。但如果集群是统一由一个人员来管理，那么选择使用单用户模式可能会方便很多。
+我这里没有使用单用户模式。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置好SSH登录&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-03.png&quot; alt=&quot;配置ssh登录信息&quot; title=&quot;输入密码&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;配置好SSH后开始连入主机，安装jdk和cm-agent
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-04.png&quot; alt=&quot;install cm agent&quot; title=&quot;install cm agent&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-05.png&quot; alt=&quot;cm agent ok&quot; title=&quot;cm agent ok&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;分发Hadoop的安装包&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;去地址：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://archive.cloudera.com/cdh5/parcels/5.4.10/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;下载：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel
+CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1
+manifest.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;下载完成后：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;把&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1&quot;重命名为&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;并移到目录：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/cloudera/parcel-repo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后在cm-serve点击进入下一页，将会看到如下图：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-06.png&quot; alt=&quot;cm parcel distributed&quot; title=&quot;cm parcel distributed&quot; /&gt;
+因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的&lt;strong&gt;Download&lt;/strong&gt;自然就是100%，&lt;strong&gt;Distributed&lt;/strong&gt;是把安装包从cm-server往集群中各个节点分发的过程，&lt;strong&gt;Unpacked&lt;/strong&gt;是表示各个节点的上安装包的解压情况进度，前面都OK后，&lt;strong&gt;Activated&lt;/strong&gt;自然就可以了，表示安装包已经部署好了，可以随时进行安装。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-07.png&quot; alt=&quot;hosts choose&quot; title=&quot;hosts choose&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;这里配置的是一些组件使用的mysql信息：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-08.png&quot; alt=&quot;hadoop mysql config&quot; title=&quot;hadoop mysql config&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;然后可以配置一些服务的的具体参数
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-09.png&quot; alt=&quot;hadoop config&quot; title=&quot;hadoop config&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;参数配置都没问题后，开始执行安装。
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-10.png&quot; alt=&quot;hadoop install&quot; title=&quot;hadoop install&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;安装完成后。
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-11.jpeg&quot; alt=&quot;install success&quot; title=&quot;install success&quot; /&gt;
+PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;3.注意事项&lt;/h2&gt;
+
+&lt;h3 id=&quot;host&quot;&gt;3.1.主机的Host配置不能出差错&lt;/h3&gt;
+&lt;p&gt;我就配置错过host，期间走了一些弯路，主要表现在添加完主机之后，Hosts下的主机名都是localhost。&lt;/p&gt;
+
+&lt;h3 id=&quot;cm-agent&quot;&gt;3.2.cm-agent安装失败重试时&lt;/h3&gt;
+&lt;p&gt;如果在重试的过程中出现了一直等待，或者cm-agent端口被占用的情况，大概有下面的几种情况：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;锁文件没有删除&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo rm /tmp/.scm_prepare_node.lock
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;端口被占用 &lt;strong&gt;9000/9001&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这种情况是部分进程没有关闭成功，找到端口对应的进程号，然后然后使用&lt;strong&gt;kill -9停止进程&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;netstat -nap | grep 9000
+netstat -nap | grep 9001
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;主要是&lt;strong&gt;supervisor&lt;/strong&gt;和&lt;strong&gt;cm-agent&lt;/strong&gt;进程&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;4.会用到的一些地址总结&lt;/h2&gt;
+
+&lt;h3 id=&quot;mysql&quot;&gt;4.1.Mysql的相关配置&lt;/h3&gt;
+&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;4.2.创建本地仓库&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;For CM&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;For parcel&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html&lt;/p&gt;
+
+&lt;h3 id=&quot;parcel&quot;&gt;4.3.parcel的下载地址&lt;/h3&gt;
+
+&lt;p&gt;http://archive.cloudera.com/cdh5/parcels/
+http://archive.cloudera.com/kafka/parcels/&lt;/p&gt;
+
+&lt;h3 id=&quot;cm-5&quot;&gt;4.4.cm的下载地址&lt;/h3&gt;
+
+&lt;p&gt;加压后可以直接运行
+http://archive.cloudera.com/cm5/cm/5/&lt;/p&gt;
+</description>
+        <pubDate>Sat, 23 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/</guid>
+        
+        <category>cm</category>
+        
+        <category>hadoop</category>
+        
+        
+        <category>hadoop</category>
+        
+      </item>
     
       <item>
         <title>Elk安装配置介绍</title>
