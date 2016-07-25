@@ -18,6 +18,9 @@ hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
 hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
 ```
 
+
+
+
 ## 3.修改Jar的权限
 保证oozie有权限读取、使用Jar包:
 ```

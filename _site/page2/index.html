@@ -173,134 +173,8 @@
                     </div>
                 </div>
                 <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.之前的集群存在的问题</a>    <ul>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.1.问题一：作业的执行速率不同步</a></li>
-      <li><a href="#section-2" id="markdown-toc-section-2">1.2.问题二：资源利用倾斜</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">1.3.问题三：集群资源并没有真正的参与计算</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-4" id="markdown-toc-section-4">2.集群资源重新划分的过程</a>    <ul>
-      <li><a href="#section-5" id="markdown-toc-section-5">2.1.拿到集群中所有机器的硬件资源列表</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">2.2.根据集群资源，分组的大概情况如截图：</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">2.3.资源划分的策略</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">2.4.具体的划分策略</a>        <ul>
-          <li><a href="#section-9" id="markdown-toc-section-9">2.4.1.内存划分策略</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#section-10" id="markdown-toc-section-10">4.成果</a>    <ul>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.1.集群表现情况</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-12" id="markdown-toc-section-12">5.总结</a></li>
-</ul>
-
+                    
 <p>集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。</p>
-
-<h1 id="section">1.之前的集群存在的问题</h1>
-
-<h2 id="section-1">1.1.问题一：作业的执行速率不同步</h2>
-<ul>
-  <li>问题表现
-部分任务跑的慢，部分任务跑得快。</li>
-  <li>问题的原因
-集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。</li>
-  <li>解决办法
-重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。</li>
-</ul>
-
-<h2 id="section-2">1.2.问题二：资源利用倾斜</h2>
-<ul>
-  <li>问题表现
-部分机器资源利用率极高，部分机器资源利用率级低；</li>
-  <li>问题的原因
-<strong>同【问题一】</strong></li>
-  <li>解决办法
-<strong>同【问题一】</strong></li>
-</ul>
-
-<h2 id="section-3">1.3.问题三：集群资源并没有真正的参与计算</h2>
-<ul>
-  <li>问题表现
-作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。</li>
-  <li>问题的原因
-咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。</li>
-  <li>解决办法
-a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。
-b). 减少单个任务的资源占用，提高集群的并行度。</li>
-</ul>
-
-<h1 id="section-4">2.集群资源重新划分的过程</h1>
-
-<h2 id="section-5">2.1.拿到集群中所有机器的硬件资源列表</h2>
-<p>感谢运维同学的帮助！</p>
-
-<h2 id="section-6">2.2.根据集群资源，分组的大概情况如截图：</h2>
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png" alt="服务器分组情况" title="根据机器硬件资源情况，服务器分组情况" />
-分组命名规则：
-<strong><em>NM</em></strong>: NodeManager；  <br />
-<strong><em>G01</em></strong>: Group01；  <br />
-<strong><em>C08</em></strong>: cpu是8核；  <br />
-<strong><em>M48</em></strong>: 内存是48GB。  <br />
-<strong><em>ZK</em></strong>: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）</p>
-
-<h2 id="section-7">2.3.资源划分的策略</h2>
-<p>根据机器上安装的服务，大概给服务做了如下的划分：
-- 安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
-
-<ul>
-  <li>
-    <p>安装有重要服务的机器，不参与计算
-例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。</p>
-  </li>
-  <li>
-    <p>只安装了存储和计算的机器
-例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。</p>
-  </li>
-</ul>
-
-<h2 id="section-8">2.4.具体的划分策略</h2>
-
-<h3 id="section-9">2.4.1.内存划分策略</h3>
-<ul>
-  <li>yarn容器可直接管理的资源
-主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。</li>
-  <li>单个任务可使用的任务资源
-map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-### 2.4.2.内存划分策略</li>
-  <li>yarn容器可直接管理的资源
-对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。</li>
-  <li>单个任务可使用的任务资源
-1个vcore。
-# 3.mysql调优的过程
-不同的库，挂载在不同的磁盘上，减小单块盘的压力。</li>
-</ul>
-
-<h1 id="section-10">4.成果</h1>
-
-<h2 id="section-11">4.1.集群表现情况</h2>
-<p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
-## 4.2.mysql表现情况
-优化前的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png" alt="优化前" title="优化前负载情况" />
-优化后的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql.png" alt="优化后" title="优化后负载情况" /></p>
-
-<blockquote>
-  <p>后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。</p>
-</blockquote>
-
-<h1 id="section-12">5.总结</h1>
-<p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：
-- Impala的资源管理未使用yarn，所以一直还没有开始使用；
-- OOZIE未做HA配置；
-- HDFS数据平衡效果不是很好；
-- CPU一个线程做两个vcore使用，压力还是比较大的。</p>
-
-<p>在接下，将会按照优先级逐一解决。</p>
 
 
                 </div>
@@ -360,331 +234,9 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                     </div>
                 </div>
                 <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.应用程序角度进行优化</a>    <ul>
-      <li><a href="#reduce" id="markdown-toc-reduce">1.1.减少不必要的reduce任务</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.外部文件引用</a></li>
-      <li><a href="#combiner" id="markdown-toc-combiner">1.3.使用Combiner</a></li>
-      <li><a href="#writable" id="markdown-toc-writable">1.4.使用合适的Writable类型</a></li>
-      <li><a href="#java" id="markdown-toc-java">1.5.尽可能的少创建新的Java对象</a></li>
-    </ul>
-  </li>
-  <li><a href="#linux" id="markdown-toc-linux">2. Linux系统层面上的配置调优</a>    <ul>
-      <li><a href="#section-2" id="markdown-toc-section-2">2.1. 文件系统的配置</a></li>
-      <li><a href="#linux-1" id="markdown-toc-linux-1">2.2. Linux文件系统预读缓冲区大小</a></li>
-      <li><a href="#raidlvm" id="markdown-toc-raidlvm">2.3. 去除RAID和LVM</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">2.4. 增大同时打开的文件数和网络连接数</a></li>
-      <li><a href="#swap" id="markdown-toc-swap">2.5. 关闭swap分区</a></li>
-      <li><a href="#io" id="markdown-toc-io">2.6. I/O调度器选择</a></li>
-    </ul>
-  </li>
-  <li><a href="#hadoop" id="markdown-toc-hadoop">3. Hadoop平台内参数调优</a>    <ul>
-      <li><a href="#section-4" id="markdown-toc-section-4">3.1. 计算资源优化</a></li>
-      <li><a href="#section-5" id="markdown-toc-section-5">3.2. 节点间的通信优化</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">3.3. 磁盘块的配置优化</a></li>
-      <li><a href="#rpc-handlerhttp" id="markdown-toc-rpc-handlerhttp">3.4. RPC Handler个数和Http线程数优化</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">3.5. 选择合适的压缩算法</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">3.6. 启用批量任务调度(现在新版本都默认支持了)</a></li>
-      <li><a href="#apache" id="markdown-toc-apache">3.7. 启用预读机制(Apache暂时没有)</a></li>
-      <li><a href="#hdfs" id="markdown-toc-hdfs">3.8.HDFS相关参数优化</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-9" id="markdown-toc-section-9">4.系统实现角度调优</a>    <ul>
-      <li><a href="#section-10" id="markdown-toc-section-10">4.1. 调度延迟</a></li>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.2. 可移植性</a></li>
-      <li><a href="#prefetchingpreshuffling" id="markdown-toc-prefetchingpreshuffling">4.3. 优化策略：Prefetching与preshuffling</a></li>
-    </ul>
-  </li>
-</ul>
-
+                    
 <p>这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。</p>
 
-<h2 id="section">1.应用程序角度进行优化</h2>
-
-<h3 id="reduce">1.1.减少不必要的reduce任务</h3>
-<p>若对于同一份数据需要多次处理，可以尝试先排序、分区，然后自定义InputSplit将某一个分区作为一个Map的输入，在Map中处理数据，将Reduce的个数设置为空。</p>
-
-<h3 id="section-1">1.2.外部文件引用</h3>
-<p>如字典、配置文件等需要在Task之间共享的数据，可使用分布式缓存DistributedCache或者使用-files</p>
-
-<h3 id="combiner">1.3.使用Combiner</h3>
-<p>combiner是发生在map端的，作用是归并Map端输出的文件，这样Map端输出的数据量就小了，减少了Map端和reduce端间的数据传输。需要注意的是，Combiner不能影响作业的结果;不是每个MR都可以使用Combiner的，需要根据具体业务来定;Combiner是发生在Map端的，不能垮Map来执行（只有Reduce可以接收多个Map任务的输出数据）</p>
-
-<h3 id="writable">1.4.使用合适的Writable类型</h3>
-<p>尽可能使用二进制的Writable类型，例如：IntWritable， FloatWritable等，而不是Text。因为在一个批处理系统中将数值转换为文本时低效率的。使用二进制的Writable类型可以降低cpu资源的消耗，也可以减少Map端中间数据、结果数据占用的空间。</p>
-
-<h3 id="java">1.5.尽可能的少创建新的Java对象</h3>
-<p>a)需要注意的Writable对象，例如下面的写法：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>public void map(...) {
-…
-for (String word : words) {
-    output.collect(new Text(word), new IntWritable(1));
-} }
-</code></pre>
-</div>
-
-<p>这样会冲去创建对象new Text(word)和new IntWritable(1))，这样可能会产生海量的短周期对象。更高效的写法见下：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>class MyMapper … {
-Text wordText = new Text();
-IntWritable one = new IntWritable(1);
-public void map(...) {
-    for (String word: words) {
-    wordText.set(word);
-        output.collect(wordText, one);
-    }
-} }
-</code></pre>
-</div>
-
-<p>b)对于可变字符串，使用StringBuffer而不是String</p>
-
-<p>String类是经过final修饰的，那么每次对它的修改都会产生临时对象，而SB则不会。</p>
-
-<h2 id="linux">2. Linux系统层面上的配置调优</h2>
-
-<h3 id="section-2">2.1. 文件系统的配置</h3>
-<p>a) 关闭文件在被操作时会记下时间戳:noatime和nodiratime <br />
-b) 选择I/O性能较好的文件系统（Hadoop比较依赖本地的文件系统）</p>
-
-<h3 id="linux-1">2.2. Linux文件系统预读缓冲区大小</h3>
-<p>命令:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>blockdev
-</code></pre>
-</div>
-
-<h3 id="raidlvm">2.3. 去除RAID和LVM</h3>
-
-<h3 id="section-3">2.4. 增大同时打开的文件数和网络连接数</h3>
-<p>ulimit net.core.somaxconn</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>ulimit net.core.somaxconn
-</code></pre>
-</div>
-
-<h3 id="swap">2.5. 关闭swap分区</h3>
-<p>在Hadoop中，对于每个作业处理的数据量和每个Task中用到的各种缓冲，用户都是完全可控的。</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>/etc/sysctl.conf
-</code></pre>
-</div>
-
-<h3 id="io">2.6. I/O调度器选择</h3>
-<p>详情见AMD的白皮书</p>
-
-<h2 id="hadoop">3. Hadoop平台内参数调优</h2>
-<p>Hadoop相关可配置参数共有几百个，但是其中只有三十个左右会对其性能产生显著影响。</p>
-
-<h3 id="section-4">3.1. 计算资源优化</h3>
-<p>a) 设置合理的slot（资源槽位）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.tasktracker.map.tasks.maximum / mapred.tasktracker.reduce.tasks.maximum
-</code></pre>
-</div>
-
-<p>参数说明：每个TaskTracker上可并发执行的Map Task和Reduce Task数目 <br />
-默认值：都是2 <br />
-推荐值：根据具体的节点资源来看，推荐值是(core_per_node)/2~2*(cores_per_node) <br />
-单位：无</p>
-
-<h3 id="section-5">3.2. 节点间的通信优化</h3>
-<p><strong>a) TaskTracker和JobTracker之间的心跳间隔</strong> <br />
-这个值太小的话，在一个大集群中会造成JobTracker需要处理高并发心跳，可能会有很大的压力。 <br />
-建议集群规模小于300时，使用默认值3秒，在此基础上，集群规模每增加100台，会加1秒。 <br />
-<strong>b) 启用带外心跳(out-of-band heartbeat)</strong></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapreduce.tasktracker.outofband.heartbeat
-</code></pre>
-</div>
-
-<p>参数说明：主要是为了减少任务分配延迟。它与常规心跳不同，一般的心跳是一定时间间隔发送的，而带外心跳是在任务运行结束或是失败时发送，这样就能在TaskTracker节点出现空闲资源的时候能第一时间通知JobTracker。</p>
-
-<h3 id="section-6">3.3. 磁盘块的配置优化</h3>
-<p>a) 作业相关的磁盘配置</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.local.dir
-</code></pre>
-</div>
-
-<p>参数说明：map本地计算时所用到的目录，建议配置在多块硬盘上 <br />
-b) 存储相关的磁盘配置（HDFS数据存储） <br />
-dfs.data.dir <br />
-参数说明：HDFS的数据存储目录，建议配置在多块硬盘上，可提高整体IO性能 <br />
-例如：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
- &lt;name&gt;dfs.name.dir&lt;/name&gt;
- &lt;value&gt;/data1/hadoopdata/mapred/jt/,/data2/hadoopdata/mapred/jt/&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-</div>
-
-<p>c) 存储相关的磁盘配置（HDFS元数据存储）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>dfs.name.dir
-</code></pre>
-</div>
-
-<p>参数说明：HDFS的元数据存储目录，建议设置多目录，每个多目录都可保存元数据的一个备份 <br />
-注：要想提升hadoop整体IO性能，对于hadoop中用到的所有文件目录，都需要评估它磁盘IO的负载，对于IO负载可能会高的目录，最好都配置到多个磁盘上，以提示IO性能</p>
-
-<h3 id="rpc-handlerhttp">3.4. RPC Handler个数和Http线程数优化</h3>
-<p>a) RPC Handler个数</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.job.tracker.handler.count
-</code></pre>
-</div>
-
-<p>参数说明：JobTracker需要并发的处理来自各个TaskTracker的RPC请求，可根据集群规模和并发数来调整RPC Handler的个数。 <br />
-默认值：10 <br />
-推荐值：60-70，最少要是TaskTracker个数的4% <br />
-单位：无 <br />
-b) Http线程数
-   <br />
-tasktracker.http.threads</p>
-
-<p>在Shuffle阶段，Reduce Task会通过Http请求从各个TaskTracker上读取Map Task的结果，TaskTracker是使用Jetty Server来提供服务的，这里可适量调整Jetty Server的工作线程以提高它的并发处理能力。 <br />
-默认值：40 <br />
-推荐值：50-80+</p>
-
-<h3 id="section-7">3.5. 选择合适的压缩算法</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.compress.map.output / Mapred.output.compress
-</code></pre>
-</div>
-
-<p>map输出的中间结果时需要进行压缩的，指定压缩方式<strong>（Mapred.compress.map.output.codec/ Mapred.output.compress.codec）</strong>。推荐使用LZO压缩。</p>
-
-<h3 id="section-8">3.6. 启用批量任务调度(现在新版本都默认支持了)</h3>
-<p>a) Fair Scheduler</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.fairscheduler.assignmultiple
-</code></pre>
-</div>
-
-<p>b) Capacity Scheduler</p>
-
-<h3 id="apache">3.7. 启用预读机制(Apache暂时没有)</h3>
-<p>Hadoop是顺序读，所以预读机制可以很明显的提高HDFS的读性能。
-HDFS预读：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>dfs.datanode.readahead ：true
-dfs.datanode.readahead.bytes ：4MB
-</code></pre>
-</div>
-
-<p>shuffle预读</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>mapred.tasktracker.shuffle.fadvise : true
-mapred.tasktracker.shuffle.readahead.bytes : 4MB
-</code></pre>
-</div>
-
-<h3 id="hdfs">3.8.HDFS相关参数优化</h3>
-<p>1) dfs.replication <br />
-参数说明：hdfs文件副本数 <br />
-默认值：3 <br />
-推荐值：3-5（对于IO较为密集的场景可适量增大） <br />
-单位：无 <br />
-2) dfs.blocksize <br />
-参数说明： <br />
-默认值：67108864(64MB) <br />
-推荐值：稍大型集群建议设为128MB(134217728)或256MB(268435456) <br />
-单位：无 <br />
-3) dfs.datanode.handler.count <br />
-参数说明：DateNode上的服务线程数 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-4) fs.trash.interval <br />
-参数说明：HDFS文件删除后会移动到垃圾箱，该参数时清理垃圾箱的时间 <br />
-默认值：0 <br />
-推荐值：1440(1day) <br />
-单位：无 <br />
-5) io.sort.factor <br />
-参数说明：当一个map task执行完之后，本地磁盘上(mapred.local.dir)有若干个spill文件，map task最后做的一件事就是执行merge sort，把这些spill文件合成一个文件（partition）。执行merge sort的时候，每次同时打开多少个spill文件由该参数决定。打开的文件越多，不一定merge sort就越快，所以要根据数据情况适当的调整。 <br />
-默认值：10 <br />
-推荐值： <br />
-单位：无 <br />
-6) mapred.child.java.opts <br />
-参数说明：JVM堆的最大可用内存 <br />
-默认值：-Xmx200m <br />
-推荐值：-Xmx1G | -Xmx4G | -Xmx8G <br />
-单位：-Xmx8589934592也行，单位不固定 <br />
-7) io.sort.mb <br />
-参数说明：Map Task的输出结果和元数据在内存中占的buffer总大小，当buffer达到一定阀值时，会启动一个后台进程来对buffer里的内容进行排序，然后写入本地磁盘，形成一个split小文件 <br />
-默认值：100 <br />
-推荐值：200 | 800 <br />
-单位：兆 <br />
-8) io.sort.spill.percent <br />
-参数说明：即io.sort.mb中所说的阀值 <br />
-默认值：0.8 <br />
-推荐值：0.8 <br />
-单位：无 <br />
-9) io.sort.record <br />
-参数说明：io.sort.mb中分类给元数据的空间占比 <br />
-默认值：0.05 <br />
-推荐值：0.05 <br />
-单位：无 <br />
-10) Mapred.reduce.parallel <br />
-参数说明：Reduce shuffle阶段copier线程数。默认是5，对于较大集群，可调整为16~25 <br />
-默认值：5 <br />
-推荐值：16~25 <br />
-单位：无</p>
-
-<h2 id="section-9">4.系统实现角度调优</h2>
-<p>https://www.xiaohui.org/archives/944.html</p>
-
-<p>主要针对HDFS进行优化，HDFS性能低下的两个原因：调度延迟和可移植性</p>
-
-<h3 id="section-10">4.1. 调度延迟</h3>
-<p>关于调度延迟主要是发生在两个阶段： <br />
-a) tasktracker上出现空余的slot到该tasktracker接收到新的task； <br />
-b) tasktracker获取到了新的Task后，到连接上了datanode，并且可以读写数据。 <br />
-之所以说这两个阶段不够高效，因为一个分布式计算系统需要解决的是计算问题，如果把过多的时间花费在其它上，就显得很不合适，例如线程等待、高负荷的数据传输。 <br />
-下面解释下会经历上边两个阶段发生的过程： <br />
-a) 当tasktracker上出现slot时，他会调用heartbeat方法向jobtracker发送心跳包（默认时间间隔是3秒，集群很大时可适量调整）来告知它，假设此时有准备需要执行的task，那么jobtracker会采用某种调度机制（调度机制很重要，是一个可以深度研究的东东）选择一个Task，然后通过调用heartbeat方法发送心跳包告知tasktracker。在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
-b) 这个过程中所发生的操作都是串行化的 <br />
-tasktracker会连接到namenode上获取到自己需要的数据在datanode上的存储情况，然后再从datanode上读数据，在该过程中，HDFS一直处于等待状态，这就使得资源利用率不高。 <br />
-若能减短hdfs的等待时间;在执行task之前就开始把数据读到将要执行该task的tasktracker上，减少数据传输时间，那么将会显得高效很多。未解决此类问题，有这样几种解决方案：重叠I/O和CPU阶段（pipelining），task预取（task prefetching），数据预取（data prefetching）等。</p>
-
-<h3 id="section-11">4.2. 可移植性</h3>
-<p>Hadoop是Java写的，所以可移植性相对较高。由于它屏蔽了底层文件系统，所以无法使用底层api来优化数据的读写。在活跃度较高的集群里（例如共享集群），大量并发读写会增加磁盘的随机寻道时间，这会降低读写效率;在大并发写的场景下，还会增加大量的磁盘碎片，这样将会大大的增加了读数据的成本，hdfs更适合文件顺序读取。
-对于上述问题，可以尝试使用下面的解决方案：</p>
-
-<blockquote>
-  <p>tasktracker现在的线程模型是：one thread per client，即每个client连接都是由一个线程处理的（包括接受请求、处理请求，返回结果）。那么这一块一个拆分成两个部分来做，一组线程来处理和client的通信（Client Threads），一组用于数据的读写（Disk Threads）。</p>
-</blockquote>
-
-<p>想要解决上述两个问题，暂时没有十全十美的办法，只能尽可能的权衡保证调度延迟相对较低+可移植性相对较高。</p>
-
-<h3 id="prefetchingpreshuffling">4.3. 优化策略：Prefetching与preshuffling</h3>
-<ul>
-  <li>
-    <p>a) Prefetching包括Block-intra prefetching和Block-inter prefetching <br />
-<strong>Block-intra prefetching：</strong>对block内部数据处理方式进行了优化，即一边进行计算，一边预读将要用到的数据。这种方式需要解决两个难题：一个是计算和预取同步，另一个是确定合适的预取率。前者可以使用进度条（processing bar）的概念，进度条主要是记录计算数据和预读数据的进度，当同步被打破时发出同步失效的通知。后者是要根据实际情况来设定，可采用重复试验的方法来确定。 <br />
-<strong>Block-inter prefetching：</strong>在block层面上预读数据，在某个Task正在处理数据块A1的时候，预测器能预测接下来将要读取的数据块A2、A3、A4，然后把数据块A2、A3、A4预读到Task所在的rack上。</p>
-  </li>
-  <li>
-    <p>b) preshuffling<br />
-数据被map task处理之前，由预测器判断每条记录将要被哪个reduce task处理，将这些数据交给靠近reduce task的map task来处理。</p>
-  </li>
-</ul>
-
-<p><strong>参考资料：</strong></p>
-
-<ul>
-  <li>cloudera官方文档 <br />
-http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/</li>
-  <li>
-    <p>AMD白皮书(较为实用) <br />
-http://www.admin-magazine.com/HPC/content/download/9408/73372/file/Hadoop_Tuning_Guide-Version5.pdf</p>
-  </li>
-  <li>国内博客（大部分内容都是AMD白皮书上的翻译）： <br />
-http://dongxicheng.org/mapreduce/hadoop-optimization-0/
-http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
-</ul>
 
                 </div>
                 <div class="read-all">
@@ -745,19 +297,6 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
                 <div class="excerpt">
                     <ul id="markdown-toc">
   <li><a href="#section" id="markdown-toc-section">1.概要</a></li>
-  <li><a href="#apache" id="markdown-toc-apache">2.Apache配置</a>    <ul>
-      <li><a href="#httpconf" id="markdown-toc-httpconf">2.1.http.conf配置修改</a></li>
-      <li><a href="#modjkconf" id="markdown-toc-modjkconf">2.2.mod_jk.conf配置修改</a></li>
-      <li><a href="#workersproperties" id="markdown-toc-workersproperties">2.3.workers.properties配置修改</a></li>
-    </ul>
-  </li>
-  <li><a href="#tomcat" id="markdown-toc-tomcat">3.Tomcat配置</a>    <ul>
-      <li><a href="#tomcat-1" id="markdown-toc-tomcat-1">3.1 tomcat的关闭端口</a></li>
-      <li><a href="#tomcat-2" id="markdown-toc-tomcat-2">3.2.tomcat的服务端口</a></li>
-      <li><a href="#ajp13" id="markdown-toc-ajp13">3.3.AJP13通信端口</a></li>
-      <li><a href="#session" id="markdown-toc-session">3.4.Session共享</a></li>
-    </ul>
-  </li>
 </ul>
 
 <h1 id="section">1.概要</h1>
@@ -773,109 +312,6 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/</li>
   <li>apache</li>
   <li>mod_jk-1.2.28-httpd-2.2.3.so</li>
 </ul>
-
-<h1 id="apache">2.Apache配置</h1>
-<p>在本案例中是使用Apache来做的，下边用到的mod模块和Apache版本需要兼容才行。文中所使用的软件，会在文章底部附上下载链接。</p>
-
-<h2 id="httpconf">2.1.http.conf配置修改</h2>
-<p>在apache安装目录的conf目录下，修改http.conf配置文件，在任意某一行加入</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>Include conf/mod_jk.conf
-</code></pre>
-</div>
-
-<p>修改Apache监听端口（在文件的第46行左右）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>Listen 90
-</code></pre>
-</div>
-
-<h2 id="modjkconf">2.2.mod_jk.conf配置修改</h2>
-<p>在conf目录下新建文件mod_jk.conf，写入如下内容</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>#加载mod_jk Module  把mod_jk-1.2.28-httpd-2.2.3.so放到相应的目录中
-LoadModule jk_module modules/mod_jk-1.2.28-httpd-2.2.3.so
-#指定 workers.properties文件路径
-JkWorkersFile conf/workers.properties
-#指定那些请求交给tomcat处理,"controller"为在workers.properties里指定的负载分配控制器
-JkMount /*.jsp  controller
-JkMount /*.action  controller
-
-</code></pre>
-</div>
-<p>其中，mod_jk-1.2.28-httpd-2.2.3.so文件更具自己实际添加的模块文件名来写。</p>
-
-<h2 id="workersproperties">2.3.workers.properties配置修改</h2>
-<p>在conf目录下新建文件workers.properties，写入如下内容</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>worker.list=controller,tomcat1,tomcat2
-
-#tomcat1
-worker.tomcat1.port=8109         #ajp13端口号在tomcat下server.xml配置,默认8009 默认与HTTP通信的协议
-worker.tomcat1.host=localhost     
-worker.tomcat1.type=ajp13          #tomcat的主机地址，如不为本机，请填写ip地址
-worker.tomcat1.lbfactor = 1       #server的加权比重，值越高，分得的请求越多
-
-#tomcat2
-worker.tomcat2.port=9109       
-worker.tomcat2.host=localhost 
-worker.tomcat2.type=ajp13
-worker.tomcat2.lbfactor = 1  
-
-#========controller,负载均衡控制器========
-worker.controller.type=lb    
-worker.controller.balanced_workers=tomcat1,tomcat2    #指定分担请求的tomcat
-worker.controller.sticky_session=1
-</code></pre>
-</div>
-
-<p>其中tomcat上ajp13协议通信端口需要根据具体的设置区修改（ajp13协议在这里就是Apache与tomcat之间的通信协议）。</p>
-
-<h1 id="tomcat">3.Tomcat配置</h1>
-
-<h2 id="tomcat-1">3.1 tomcat的关闭端口</h2>
-<p>默认是8005，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Server port="8005" shutdown="SHUTDOWN"&gt;
-</code></pre>
-</div>
-
-<h2 id="tomcat-2">3.2.tomcat的服务端口</h2>
-<p>默认是8080，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8080" protocol="HTTP/1.1" 
-               connectionTimeout="20000" 
-               redirectPort="8443" /&gt;
-</code></pre>
-</div>
-
-<h2 id="ajp13">3.3.AJP13通信端口</h2>
-<p>tomcat上的AJP13协议通信端口：默认是8009，这里的端口配置需要和上边文件workers.properties中的AJP13协议端口配置相对应，若同一台机器上配置了多个tomcat，这里必须要修改：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Connector port="8009" protocol="AJP/1.3" redirectPort="8443" /&gt;
-</code></pre>
-</div>
-
-<h2 id="session">3.4.Session共享</h2>
-<ul>
-  <li>在Tomcat中启用标签</li>
-</ul>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/&gt;
-</code></pre>
-</div>
-
-<ul>
-  <li>在web项目中的web.xml中加入</li>
-</ul>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;distributable/&gt;
-</code></pre>
-</div>
-
-<p>则这个项目就支持集群了。
-到此，配置完毕。
-下载链接： http://pan.baidu.com/s/1mgLq8Dq</p>
 
 
                 </div>
@@ -935,87 +371,9 @@ worker.controller.sticky_session=1
                     </div>
                 </div>
                 <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#ubuntu-desktop" id="markdown-toc-ubuntu-desktop">1.ubuntu desktop接双显示器</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">1.1.环境</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.修改系统配置</a></li>
-      <li><a href="#arandr" id="markdown-toc-arandr">1.3.使用可视化软件Arandr</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-2" id="markdown-toc-section-2">2.最好用的终端</a></li>
-  <li><a href="#smplay" id="markdown-toc-smplay">3.视频播放器SMPlay</a></li>
-</ul>
+                    
+<p>在使用ubuntu作为自己的开发环境时，可能会用到下面的这些小技巧哦！</p>
 
-<h1 id="ubuntu-desktop">1.ubuntu desktop接双显示器</h1>
-
-<h2 id="section">1.1.环境</h2>
-<ul>
-  <li>ubuntu12.04</li>
-  <li>Arandr</li>
-</ul>
-
-<h2 id="section-1">1.2.修改系统配置</h2>
-<ul>
-  <li>
-    <p>编辑/etc/X11/xorg.conf文件  <br />
-<code class="highlighter-rouge">
-vi /etc/X11/xorg.conf
-</code></p>
-  </li>
-  <li>
-    <p>在Section “Screen”内容之内增加以下内容  <br />
-<code class="highlighter-rouge">
-SubSection "Display"
-Virtual 4000 3000
-EndSubSection
-</code></p>
-  </li>
-  <li>
-    <p>重启xwindow</p>
-  </li>
-</ul>
-
-<p>方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).</p>
-
-<p>方法二：
-<code class="highlighter-rouge">
-sudo init 6
-</code></p>
-
-<h2 id="arandr">1.3.使用可视化软件Arandr</h2>
-<ul>
-  <li>
-    <p>安装Arandr  <br />
-<code class="highlighter-rouge">
-sudo apt-get install arandr
-</code></p>
-  </li>
-  <li>
-    <p>打开查看各个主屏的名称  <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/arandr.png" alt="Arandr" title="Arandr" /></p>
-  </li>
-  <li>
-    <p>设置对应的显示设备为主屏  <br />
-<code class="highlighter-rouge">
-sudo xrandr --output CRT1 --primary
-</code></p>
-  </li>
-</ul>
-
-<p>聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！</p>
-
-<h1 id="section-2">2.最好用的终端</h1>
-<p>Terminator  <br />
-<code class="highlighter-rouge">
-sudo apt-get install terminator
-</code></p>
-
-<h1 id="smplay">3.视频播放器SMPlay</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install mplayer 
-sudo apt-get install ffmpeg
-sudo apt-get install smplayer
-</code></pre>
-</div>
 
                 </div>
                 <div class="read-all">
@@ -1044,39 +402,11 @@ sudo apt-get install smplayer
     <!-- <button class="anchor"><i class="fa fa-anchor"></i></button> -->
     <div class="right">
         <div class="wrap">
-            <div class="side">
-                <div>
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    Recent Posts
-                </div>
-                <ul class="content-ul" recent>
-                    
-                        <li><a href="/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/">使用cm安装cdh发行版的hadoop集群</a></li>
-                    
-                        <li><a href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a></li>
-                    
-                        <li><a href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a></li>
-                    
-                        <li><a href="/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez</a></li>
-                    
-                        <li><a href="/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识</a></li>
-                    
-                        <li><a href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn</a></li>
-                    
-                        <li><a href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/">Hadoop优化 概述</a></li>
-                    
-                        <li><a href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">Tomcat6集群配置</a></li>
-                    
-                        <li><a href="/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/">Ubuntu常用配置</a></li>
-                    
-                </ul>
-            </div>
-
-            <!-- Content -->
+            <!-- Categories -->
             <div class="side ">
                 <div>
                     <i class="fa fa-th-list"></i>
-                    Categories
+                    分类列表
                 </div>
                 <ul class="content-ul" cate>
                     
@@ -1131,7 +461,7 @@ sudo apt-get install smplayer
             <div class="side">
                 <div>
                     <i class="fa fa-tags"></i>
-                    Tags
+                    标签
                 </div>
                 <div class="tags-cloud">
                     
@@ -1226,6 +556,34 @@ sudo apt-get install smplayer
                       <a href="/tag/#cm" style="font-size: 9pt; color: #999;">cm</a>
                     
                 </div>
+            </div>
+            <!-- Recent Posts -->
+            <div class="side">
+                <div>
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    最近提交
+                </div>
+                <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm</a></li>
+                    
+                        <li><a href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a></li>
+                    
+                        <li><a href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a></li>
+                    
+                        <li><a href="/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez</a></li>
+                    
+                        <li><a href="/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识</a></li>
+                    
+                        <li><a href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn</a></li>
+                    
+                        <li><a href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/">Hadoop优化 概述</a></li>
+                    
+                        <li><a href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">Tomcat6集群配置</a></li>
+                    
+                        <li><a href="/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/">Ubuntu常用配置</a></li>
+                    
+                </ul>
             </div>
 
             <!-- <div class="side">

@@ -9,6 +9,8 @@ tags: hadoop tez hive
 * content
 {:toc}
 
+本文主要描述Tez的安装配置，以及使用Tez作为Hive的计算引擎时的相关配置。
+
 ## 1.安装配置Tez
 
 ### 1.1.环境要求
@@ -20,6 +22,10 @@ tags: hadoop tez hive
 - pb2.5.0
 - maven3
 - Tez0.8.2
+
+
+
+
 
 ### 1.2.集群准备
 以及安装完成的cdh5.4.4集群。

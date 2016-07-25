@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Hadoop优化 Yarn</title>
-    <meta name="description" content="  1.之前的集群存在的问题          1.1.问题一：作业的执行速率不同步      1.2.问题二：资源利用倾斜      1.3.问题三：集群资源并没有真正的参与计算        2.集群资源重新划分的过程          2.1.拿到集群中所有机器的硬件资源列表      2.2.根据集群资源...">
+    <meta name="description" content="集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -321,7 +321,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                         <ul>
                         
                         <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/">使用cm安装cdh发行版的hadoop集群
+                            <a href="http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm
                             
                             </a>
                         </li>

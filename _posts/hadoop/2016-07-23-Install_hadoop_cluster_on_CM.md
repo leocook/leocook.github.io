@@ -13,6 +13,8 @@ tags: cm hadoop
 对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.
 
 
+
+
 ## 1.Cloudera Manager安装前准备
 
 ### 1.1. 操作系统的优化
@@ -512,3 +514,9 @@ http://archive.cloudera.com/kafka/parcels/
 
 加压后可以直接运行
 http://archive.cloudera.com/cm5/cm/5/
+
+## 5.附件
+
+博文中的图片是压缩后的，清晰度比较低，原图可以访问下面的地址：
+
+链接: http://pan.baidu.com/s/1cmiBCE 密码: rnmw

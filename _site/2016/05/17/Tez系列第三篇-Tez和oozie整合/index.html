@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Tez系列第三篇 Tez和oozie整合</title>
-    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下  3.修改Jar的权限  4.是配置生效  5.在workflow里使用Tez          5.1.使单个workflow里的hive都用tez      5.2.使单个workflow里的单个hive都用t...">
+    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下1.完成上一篇的基础的相关配置2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_201507...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -278,7 +278,7 @@ set hive.execution.engine=tez;
                         <ul>
                         
                         <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/07/23/%E4%BD%BF%E7%94%A8CM%E5%AE%89%E8%A3%85CDH%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4/">使用cm安装cdh发行版的hadoop集群
+                            <a href="http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm
                             
                             </a>
                         </li>

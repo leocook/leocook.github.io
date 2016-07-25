@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Tomcat6集群配置</title>
-    <meta name="description" content="  1.概要  2.Apache配置          2.1.http.conf配置修改      2.2.mod_jk.conf配置修改      2.3.workers.properties配置修改        3.Tomcat配置          3.1 tomcat的关闭端口      3.2.to...">
+    <meta name="description" content="  1.概要1.概要web容器在做集群配置时，有3点需要注意- 负载均衡配置；- session共享；- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。环境  tomcat6  apache  mod_jk-1.2.28-httpd-2.2.3.so">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
