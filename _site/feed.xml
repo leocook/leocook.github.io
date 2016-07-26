@@ -5,9 +5,211 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 25 Jul 2016 16:17:12 +0800</pubDate>
-    <lastBuildDate>Mon, 25 Jul 2016 16:17:12 +0800</lastBuildDate>
+    <pubDate>Tue, 26 Jul 2016 09:48:03 +0800</pubDate>
+    <lastBuildDate>Tue, 26 Jul 2016 09:48:03 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Lua_on_nginx</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.系统环境&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#lua&quot; id=&quot;markdown-toc-lua&quot;&gt;2.Lua的运行时环境配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#lua-1&quot; id=&quot;markdown-toc-lua-1&quot;&gt;2.1.下载Lua的运行环境&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;2.2.编译安装&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#nginxlua&quot; id=&quot;markdown-toc-nginxlua&quot;&gt;3.下载Nginx的lua模块&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#nginx&quot; id=&quot;markdown-toc-nginx&quot;&gt;4.Nginx配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#nginx-1&quot; id=&quot;markdown-toc-nginx-1&quot;&gt;4.1.下载nginx&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;4.2.编译安装&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;4.3.配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#nginx-2&quot; id=&quot;markdown-toc-nginx-2&quot;&gt;4.4.启动nginx&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;4.5.验证&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#faq&quot; id=&quot;markdown-toc-faq&quot;&gt;5.FAQ&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#pcre3&quot; id=&quot;markdown-toc-pcre3&quot;&gt;5.1.缺少pcre3&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#libssl&quot; id=&quot;markdown-toc-libssl&quot;&gt;5.2.缺少libssl&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。
+Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。&lt;/p&gt;
+
+&lt;p&gt;nginx  地址：http://www.nginx.org
+luajit 地址：http://luajit.org/download.html
+HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.系统环境&lt;/h2&gt;
+
+&lt;p&gt;必须的编译环境，需要提前准备好。我这里的环境是ubuntu14.04，用的apt source是官方的源，使用163 source的时候有问题。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install make
+apt-get install gcc
+apt-get install libpcre3 libpcre3-dev
+apt-get install libssl-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;lua&quot;&gt;2.Lua的运行时环境配置&lt;/h2&gt;
+
+&lt;h3 id=&quot;lua-1&quot;&gt;2.1.下载Lua的运行环境&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
+
+wget http://luajit.org/download/LuaJIT-2.0.4.tar.gz
+
+tar zxvf LuaJIT-2.0.4.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;2.2.编译安装&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/LuaJIT-2.0.4
+make
+make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;nginxlua&quot;&gt;3.下载Nginx的lua模块&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
+
+wget https://github.com/openresty/lua-nginx-module/archive/v0.10.5.tar.gz
+
+tar zxvf v0.10.5.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;nginx&quot;&gt;4.Nginx配置&lt;/h2&gt;
+
+&lt;h3 id=&quot;nginx-1&quot;&gt;4.1.下载nginx&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
+
+wget http://nginx.org/download/nginx-1.10.1.tar.gz
+
+tar zxvf nginx-1.10.1.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;4.2.编译安装&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 导入环境变
+export LUAJIT_LIB=/usr/local/lib
+export LUAJIT_INC=/usr/local/include/luajit-2.0
+
+# 安装到/usr/local/nginx-1.10.1目录下
+./configure --prefix=/usr/local/nginx-1.10.1 --add-module=../lua-nginx-module-0.10.5
+
+make -j2
+make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;4.3.配置&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /usr/local/nginx-1.10.1
+vi conf/nginx.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后在http -&amp;gt; server下加入配置：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;location /lua_test {
+    default_type &#39;text/plain&#39;;
+    content_by_lua &#39;ngx.say(&quot;hello, ttlsa lua&quot;)&#39;;
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这个配置后，访问http://[hostname]:[port]/lua_test，就能访问你所定义的代码块了。&lt;/p&gt;
+
+&lt;p&gt;如果你还想修改nginx的http端口，修改一下&lt;strong&gt;http.server&lt;/strong&gt;中的&lt;strong&gt;listen&lt;/strong&gt;值，就可以了。&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx-2&quot;&gt;4.4.启动nginx&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/local/nginx-1.10.1/sbin/nginx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;4.5.验证&lt;/h3&gt;
+
+&lt;p&gt;查看端口的运行情况：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@ubuntu:~# netstat -anp|grep 4002
+tcp        0      0 0.0.0.0:4002            0.0.0.0:*               LISTEN      1736/nginx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;或者直接请求4002端口。（我这里使用的是4002端口，你可以根据需要，设置为你需要的。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-`&quot;&gt;root@ubuntu:/usr/local/nginx-1.10.1/sbin# curl http://192.168.1.160:4002/lua_test
+hello, ttlsa lua
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;faq&quot;&gt;5.FAQ&lt;/h2&gt;
+
+&lt;h3 id=&quot;pcre3&quot;&gt;5.1.缺少pcre3&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;错误log&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure: error: the HTTP rewrite module requires the PCRE library.
+You can either disable the module by using --without-http_rewrite_module
+option, or install the PCRE library into the system, or build the PCRE library
+statically from the source with nginx by using --with-pcre=&amp;lt;path&amp;gt; option.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解决办法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libpcre3 libpcre3-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;libssl&quot;&gt;5.2.缺少libssl&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;错误log&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure: error: the HTTP gzip module requires the zlib library.
+You can either disable the module by using --without-http_gzip_module
+option, or install the zlib library into the system, or build the zlib library
+statically from the source with nginx by using --with-zlib=&amp;lt;path&amp;gt; option.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解决办法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libssl-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;参考地址：
+http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 26 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/07/26/Lua_on_Nginx/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/07/26/Lua_on_Nginx/</guid>
+        
+        <category>nginx</category>
+        
+        <category>lua</category>
+        
+        
+        <category>nginx</category>
+        
+      </item>
     
       <item>
         <title>Install_hadoop_cluster_on_cm</title>

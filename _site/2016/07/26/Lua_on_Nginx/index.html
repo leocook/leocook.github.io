@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第三篇 Tez和oozie整合</title>
-    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下1.完成上一篇的基础的相关配置2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_201507...">
+    <title>Lua_on_nginx</title>
+    <meta name="description" content="Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。nginx  地址：http://www.nginx.orgluajit 地址：http...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">
+    <link rel="canonical" href="http://leocook.github.io/2016/07/26/Lua_on_Nginx/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -116,11 +116,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第三篇 Tez和oozie整合</h1>
+        <h1>Lua_on_nginx</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-05-17
+                <i class="fa fa-calendar"></i>2016-07-26
             </div>
 
             <div class="label-card">
@@ -140,7 +140,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
+        <a href="/category/#nginx" title="Category: nginx" rel="category">nginx</a>
     
   
 
@@ -157,17 +157,11 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
+        <!--a href="/tag/#nginx" title="Tag: nginx" rel="tag">nginx</a-->
+        <a href="/tag/#nginx" title="Tag: nginx" rel="tag">nginx</a>&nbsp;
     
-        <!--a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a-->
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <!--a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a-->
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
-    
-        <!--a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a-->
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
+        <!--a href="/tag/#lua" title="Tag: lua" rel="tag">lua</a-->
+        <a href="/tag/#lua" title="Tag: lua" rel="tag">lua</a>
     
   
 
@@ -179,81 +173,191 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-  <li><a href="#jar" id="markdown-toc-jar">3.修改Jar的权限</a></li>
-  <li><a href="#section-1" id="markdown-toc-section-1">4.是配置生效</a></li>
-  <li><a href="#workflowtez" id="markdown-toc-workflowtez">5.在workflow里使用Tez</a>    <ul>
-      <li><a href="#workflowhivetez" id="markdown-toc-workflowhivetez">5.1.使单个workflow里的hive都用tez</a></li>
-      <li><a href="#workflowhivetez-1" id="markdown-toc-workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</a></li>
+  <li><a href="#section" id="markdown-toc-section">1.系统环境</a></li>
+  <li><a href="#lua" id="markdown-toc-lua">2.Lua的运行时环境配置</a>    <ul>
+      <li><a href="#lua-1" id="markdown-toc-lua-1">2.1.下载Lua的运行环境</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">2.2.编译安装</a></li>
+    </ul>
+  </li>
+  <li><a href="#nginxlua" id="markdown-toc-nginxlua">3.下载Nginx的lua模块</a></li>
+  <li><a href="#nginx" id="markdown-toc-nginx">4.Nginx配置</a>    <ul>
+      <li><a href="#nginx-1" id="markdown-toc-nginx-1">4.1.下载nginx</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">4.2.编译安装</a></li>
+      <li><a href="#section-3" id="markdown-toc-section-3">4.3.配置</a></li>
+      <li><a href="#nginx-2" id="markdown-toc-nginx-2">4.4.启动nginx</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">4.5.验证</a></li>
+    </ul>
+  </li>
+  <li><a href="#faq" id="markdown-toc-faq">5.FAQ</a>    <ul>
+      <li><a href="#pcre3" id="markdown-toc-pcre3">5.1.缺少pcre3</a></li>
+      <li><a href="#libssl" id="markdown-toc-libssl">5.2.缺少libssl</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
+<p>Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。
+Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。</p>
 
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+<p>nginx  地址：http://www.nginx.org
+luajit 地址：http://luajit.org/download.html
+HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule</p>
+
+<h2 id="section">1.系统环境</h2>
+
+<p>必须的编译环境，需要提前准备好。我这里的环境是ubuntu14.04，用的apt source是官方的源，使用163 source的时候有问题。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install make
+apt-get install gcc
+apt-get install libpcre3 libpcre3-dev
+apt-get install libssl-dev
 </code></pre>
 </div>
 
-<h2 id="jar">3.修改Jar的权限</h2>
-<p>保证oozie有权限读取、使用Jar包:
-<code class="highlighter-rouge">
-hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-</code></p>
+<h2 id="lua">2.Lua的运行时环境配置</h2>
 
-<h2 id="section-1">4.是配置生效</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>oozie admin -sharelibupdate
-oozie admin -shareliblist hive
-</code></pre>
-</div>
-<p>或者重启oozie也可以</p>
+<h3 id="lua-1">2.1.下载Lua的运行环境</h3>
 
-<h2 id="workflowtez">5.在workflow里使用Tez</h2>
-<p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /opt/
 
-<h3 id="workflowhivetez">5.1.使单个workflow里的hive都用tez</h3>
-<p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
+wget http://luajit.org/download/LuaJIT-2.0.4.tar.gz
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+tar zxvf LuaJIT-2.0.4.tar.gz
 </code></pre>
 </div>
 
-<h3 id="workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</h3>
-<p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
+<h3 id="section-1">2.2.编译安装</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /opt/LuaJIT-2.0.4
+make
+make install
 </code></pre>
 </div>
 
-<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:
-<code class="highlighter-rouge">
-set hive.execution.engine=tez;
-</code></p>
+<h2 id="nginxlua">3.下载Nginx的lua模块</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /opt/
+
+wget https://github.com/openresty/lua-nginx-module/archive/v0.10.5.tar.gz
+
+tar zxvf v0.10.5.tar.gz
+</code></pre>
+</div>
+
+<h2 id="nginx">4.Nginx配置</h2>
+
+<h3 id="nginx-1">4.1.下载nginx</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /opt/
+
+wget http://nginx.org/download/nginx-1.10.1.tar.gz
+
+tar zxvf nginx-1.10.1.tar.gz
+</code></pre>
+</div>
+
+<h3 id="section-2">4.2.编译安装</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># 导入环境变
+export LUAJIT_LIB=/usr/local/lib
+export LUAJIT_INC=/usr/local/include/luajit-2.0
+
+# 安装到/usr/local/nginx-1.10.1目录下
+./configure --prefix=/usr/local/nginx-1.10.1 --add-module=../lua-nginx-module-0.10.5
+
+make -j2
+make install
+</code></pre>
+</div>
+
+<h3 id="section-3">4.3.配置</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd /usr/local/nginx-1.10.1
+vi conf/nginx.conf
+</code></pre>
+</div>
+
+<p>然后在http -&gt; server下加入配置：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>location /lua_test {
+    default_type 'text/plain';
+    content_by_lua 'ngx.say("hello, ttlsa lua")';
+}
+
+</code></pre>
+</div>
+
+<p>这个配置后，访问http://[hostname]:[port]/lua_test，就能访问你所定义的代码块了。</p>
+
+<p>如果你还想修改nginx的http端口，修改一下<strong>http.server</strong>中的<strong>listen</strong>值，就可以了。</p>
+
+<h3 id="nginx-2">4.4.启动nginx</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/usr/local/nginx-1.10.1/sbin/nginx
+</code></pre>
+</div>
+
+<h3 id="section-4">4.5.验证</h3>
+
+<p>查看端口的运行情况：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# netstat -anp|grep 4002
+tcp        0      0 0.0.0.0:4002            0.0.0.0:*               LISTEN      1736/nginx
+</code></pre>
+</div>
+
+<p>或者直接请求4002端口。（我这里使用的是4002端口，你可以根据需要，设置为你需要的。）</p>
+
+<pre><code class="language-`">root@ubuntu:/usr/local/nginx-1.10.1/sbin# curl http://192.168.1.160:4002/lua_test
+hello, ttlsa lua
+</code></pre>
+
+<h2 id="faq">5.FAQ</h2>
+
+<h3 id="pcre3">5.1.缺少pcre3</h3>
+
+<ul>
+  <li>错误log</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./configure: error: the HTTP rewrite module requires the PCRE library.
+You can either disable the module by using --without-http_rewrite_module
+option, or install the PCRE library into the system, or build the PCRE library
+statically from the source with nginx by using --with-pcre=&lt;path&gt; option.
+</code></pre>
+</div>
+
+<ul>
+  <li>解决办法</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install libpcre3 libpcre3-dev
+</code></pre>
+</div>
+
+<h3 id="libssl">5.2.缺少libssl</h3>
+
+<ul>
+  <li>错误log</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./configure: error: the HTTP gzip module requires the zlib library.
+You can either disable the module by using --without-http_gzip_module
+option, or install the zlib library into the system, or build the zlib library
+statically from the source with nginx by using --with-zlib=&lt;path&gt; option.
+</code></pre>
+</div>
+
+<ul>
+  <li>解决办法</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install libssl-dev
+</code></pre>
+</div>
+
+<p>参考地址：
+http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/</p>
+
 
         </article>
         <hr>
@@ -266,15 +370,7 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
-                
             
-                
-                    
-                
-                    
                 
                     
                 
@@ -289,6 +385,8 @@ set hive.execution.engine=tez;
                 
                     
                 
+            
+                
                     
                 
                     
@@ -296,20 +394,10 @@ set hive.execution.engine=tez;
             
                 
                     
-                        
-                        <h2 id="similar_posts">Similar Posts</h2>
-                        <ul>
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
                     
+                
+            
                 
                     
                 
@@ -324,15 +412,7 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
-                
             
-                
-                    
-                
-                    
                 
                     
                 
@@ -344,121 +424,7 @@ set hive.execution.engine=tez;
                 
                     
                 
-                    
-                
-                    
-                
             
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
                 
                     
                 
@@ -473,6 +439,14 @@ set hive.execution.engine=tez;
                 
                     
                 
+            
+                
+                    
+                
+                    
+                
+            
+                
                     
                 
                     
@@ -486,6 +460,8 @@ set hive.execution.engine=tez;
                 
                     
                 
+            
+                
                     
                 
                     
@@ -499,21 +475,48 @@ set hive.execution.engine=tez;
                 
                     
                 
+            
+                
                     
                 
                     
                 
             
         
+            
+            
+                
+                    
+                
+                    
+                
+            
         
-            </ul>
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/" data-title="Tez系列第三篇 Tez和oozie整合" data-url="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/07/26/Lua_on_Nginx/" data-title="Lua_on_nginx" data-url="http://leocook.github.io/2016/07/26/Lua_on_Nginx/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
