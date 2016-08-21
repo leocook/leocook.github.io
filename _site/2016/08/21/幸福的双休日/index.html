@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第一篇 基础常识</title>
-    <meta name="description" content="  1.Tez是什么          1.1.介绍      本文主要围绕着这么几个问题来展开：Tez是什么？为什么要有Tez？Tez能解决什么问题？1.Tez是什么1.1.介绍Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez...">
+    <title>幸福的双休日</title>
+    <meta name="description" content="自从离开北京到现在也有两个月了，中间在上海待了一个多月，最后还是来了杭州。来了杭州之后才知道，这是一个幸福感爆棚的准一线城市！离开北京后，一直在奔波。北京和上海这两个城市，留给外地的年轻人更多的是想象，房价、落户等等都是遥不可及的。北京离家比较远，如果不能买房留在那也没啥意思。上海离家近一些，还是那个问题，买房和...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">
+    <link rel="canonical" href="http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -118,11 +118,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第一篇 基础常识</h1>
+        <h1>幸福的双休日</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-04-01
+                <i class="fa fa-calendar"></i>2016-08-21
             </div>
 
             <div class="label-card">
@@ -142,7 +142,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
+        <a href="/category/#生活" title="Category: 生活" rel="category">生活</a>
     
   
 
@@ -159,11 +159,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <!--a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a-->
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>
+        <!--a href="/tag/#%E5%8F%8C%E4%BC%91%E6%97%A5" title="Tag: 双休日" rel="tag">双休日</a-->
+        <a href="/tag/#双休日" title="Tag: 双休日" rel="tag">双休日</a>
     
   
 
@@ -175,82 +172,32 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#tez" id="markdown-toc-tez">1.Tez是什么</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">1.1.介绍</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.两大优势</a></li>
-    </ul>
-  </li>
-  <li><a href="#tez-1" id="markdown-toc-tez-1">2.为什么要有Tez</a>    <ul>
-      <li><a href="#yarnam" id="markdown-toc-yarnam">2.1.YARN的AM</a></li>
-      <li><a href="#yarn" id="markdown-toc-yarn">2.2.YARN的资源无法重用</a></li>
-      <li><a href="#yarndag" id="markdown-toc-yarndag">2.3.YARN的DAG中间计算结果读写效率低下</a></li>
-    </ul>
-  </li>
-  <li><a href="#tez-2" id="markdown-toc-tez-2">3.Tez能解决什么问题</a>    <ul>
-      <li><a href="#amamampoolserver" id="markdown-toc-amamampoolserver">3.1.使用AM缓冲池实现AM的复用，AMPoolServer</a></li>
-      <li><a href="#container" id="markdown-toc-container">3.2.Container预启动</a></li>
-      <li><a href="#container-1" id="markdown-toc-container-1">3.3.Container重用</a></li>
-    </ul>
-  </li>
+  <li><a href="#section" id="markdown-toc-section">扯几句</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">周六</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">周日</a></li>
 </ul>
 
-<p>本文主要围绕着这么几个问题来展开：Tez是什么？为什么要有Tez？Tez能解决什么问题？</p>
+<p>自从离开北京到现在也有两个月了，中间在上海待了一个多月，最后还是来了杭州。来了杭州之后才知道，这是一个幸福感爆棚的准一线城市！</p>
 
-<h2 id="tez">1.Tez是什么</h2>
+<p>离开北京后，一直在奔波。北京和上海这两个城市，留给外地的年轻人更多的是想象，房价、落户等等都是遥不可及的。北京离家比较远，如果不能买房留在那也没啥意思。上海离家近一些，还是那个问题，买房和落户的问题，经过和女朋友三年异地的历程，不想把宝贵的时间耗费在距离上，爱情、亲情都是这样。</p>
 
-<h3 id="section">1.1.介绍</h3>
-<p>Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez.apache.org/</p>
+<h2 id="section">扯几句</h2>
 
-<h3 id="section-1">1.2.两大优势</h3>
-<p><strong>用户体验</strong></p>
-<ul>
-  <li>使用API来自定义数据流</li>
-  <li>灵活的Input-Processor-Output运行模式</li>
-  <li>与计算的数据类型无关</li>
-  <li>简单的部署流程</li>
-</ul>
+<p>生活和工作上，杭州这总城市整体上没有北京和上海那么浮躁。没遇到过大家为了上个地铁或者公交，挤得你死我活，关于挤地铁这个事情，个人感觉上海那边比北京要显得糟糕点。在杭州则不一样，主城区到郊区距离也不是很远，大多数同事到公司的距离都在5公里以内吧，自行车和电动车都是比较好的代步工具。工作上，</p>
 
-<p><strong>计算性能</strong></p>
-<ul>
-  <li>性能高于MapReduce</li>
-  <li>资源管理更加优化</li>
-  <li>运行时配置预加载</li>
-  <li>物理数据流动态运行</li>
-</ul>
+<h2 id="section-1">周六</h2>
 
-<p><strong>举例</strong>  <br />
-下图是一个基于MR的Hive/Pig的DAG数据流处理过程:  <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/tez01-PigHiveQueryOnMR.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
+<p>按照惯例，周六会好好的睡一觉，一直睡到自然醒。上了一个星期的班，补充一下睡眠。中午有朋友在这，一起吃了个饭，下午一起逛逛街，去超市买点东西就回家了。晚餐后（媳妇做的晚餐，超棒！），看看书，学习学习新的技术，十点不到就睡着了。</p>
 
-<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:  <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/tez02-PigHiveQueryOnTez.png" alt="Hive/Pig" title="Hive/Pig的DAG" /></p>
+<h2 id="section-2">周日</h2>
 
-<h2 id="tez-1">2.为什么要有Tez</h2>
+<p>六点多就醒了，微信上月朋友一起跑了两公里多，早上不需要跑太久，跑久了一天都会有疲惫感。回来的路上买了点早餐，到家后和朋友，还有媳妇一起开始了早餐。油条、小笼包，还有自己煮的白米粥，粗茶淡饭，健康的生活。吃完了早饭，朋友离去后才八点多。哇~早起会给你增添这么多时间！</p>
 
-<h3 id="yarnam">2.1.YARN的AM</h3>
+<p>随后继续看书、学习技术。午饭后玩了玩游戏，傍晚和朋友一起去买菜，三个男人买了二十块钱的菜，花了一个多小时的时间做好了晚餐，朋友住的地方到我住的地方步行也就3分钟，才做好了，喊了媳妇来吃饭（现在都是男人下厨房有木有？）。晚餐后3哥们在一块吹吹牛，媳妇去洗碗了（俺媳妇还是比较贤惠滴）。</p>
 
-<p>YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。</p>
+<p>晚餐散后回到住处看了会资料，写下这篇文字，记录一下这个双休。家里有个贤惠漂亮的媳妇、身边好友三两，不用考虑太多关于生存的话题。可以把时间花费在自己感兴趣的事情上，例如技术追求和厨艺。</p>
 
-<h3 id="yarn">2.2.YARN的资源无法重用</h3>
-<p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。
-但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。</p>
-
-<h3 id="yarndag">2.3.YARN的DAG中间计算结果读写效率低下</h3>
-<p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。  <br />
-如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。</p>
-
-<h2 id="tez-2">3.Tez能解决什么问题</h2>
-
-<h3 id="amamampoolserver">3.1.使用AM缓冲池实现AM的复用，AMPoolServer</h3>
-
-<p>使用Tez后，yarn的作业不是先提交给RM了，而是提交给AMPS。AMPS在启动后，会预先创建若干个AM，作为AM资源池，当作业被提交到AMPS的时候，AMPS会把该作业直接提交到AM上，这样就避免每个作业都创建独立的AM，大大的提高了效率。</p>
-
-<h3 id="container">3.2.Container预启动</h3>
-<p>AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。</p>
-
-<h3 id="container-1">3.3.Container重用</h3>
-<p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。  <br />
-看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。</p>
+<p>最后，杭州是一个适合年轻人奋斗和生活的地方。</p>
 
 
         </article>
@@ -262,20 +209,7 @@
                 
                     
                 
-                    
-                
             
-        
-            
-            
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -286,23 +220,7 @@
                 
                     
                 
-                    
-                
             
-                
-                    
-                        
-                        <h2 id="similar_posts">Similar Posts</h2>
-                        <ul>
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
                     
                 
@@ -313,17 +231,7 @@
                 
                     
                 
-                    
-                
             
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -331,95 +239,7 @@
                 
                     
                 
-                    
-                
             
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -430,6 +250,16 @@
                 
                     
                 
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
                     
                 
             
@@ -439,6 +269,12 @@
                 
                     
                 
+            
+                
+                    
+                
+            
+                
                     
                 
             
@@ -448,19 +284,51 @@
                 
                     
                 
+            
+                
                     
                 
             
         
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
         
-            </ul>
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/" data-title="Tez系列第一篇 基础常识" data-url="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/" data-title="幸福的双休日" data-url="http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

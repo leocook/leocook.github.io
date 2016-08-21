@@ -108,6 +108,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -192,59 +194,53 @@
 
 <h2 id="section-1">1.2.修改系统配置</h2>
 <ul>
-  <li>
-    <p>编辑/etc/X11/xorg.conf文件  <br />
-<code class="highlighter-rouge">
-vi /etc/X11/xorg.conf
-</code></p>
+  <li>编辑/etc/X11/xorg.conf文件
+    <div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/X11/xorg.conf
+</code></pre>
+    </div>
   </li>
-  <li>
-    <p>在Section “Screen”内容之内增加以下内容  <br />
-<code class="highlighter-rouge">
-SubSection "Display"
+  <li>在Section “Screen”内容之内增加以下内容
+    <div class="highlighter-rouge"><pre class="highlight"><code>SubSection "Display"
 Virtual 4000 3000
 EndSubSection
-</code></p>
+</code></pre>
+    </div>
   </li>
-  <li>
-    <p>重启xwindow</p>
-  </li>
+  <li>重启xwindow</li>
 </ul>
 
 <p>方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).</p>
 
-<p>方法二：
-<code class="highlighter-rouge">
-sudo init 6
-</code></p>
+<p>方法二：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo init 6
+</code></pre>
+</div>
 
 <h2 id="arandr">1.3.使用可视化软件Arandr</h2>
 <ul>
-  <li>
-    <p>安装Arandr  <br />
-<code class="highlighter-rouge">
-sudo apt-get install arandr
-</code></p>
+  <li>安装Arandr
+    <div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install arandr
+</code></pre>
+    </div>
   </li>
   <li>
     <p>打开查看各个主屏的名称  <br />
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/arandr.png" alt="Arandr" title="Arandr" /></p>
   </li>
-  <li>
-    <p>设置对应的显示设备为主屏  <br />
-<code class="highlighter-rouge">
-sudo xrandr --output CRT1 --primary
-</code></p>
+  <li>设置对应的显示设备为主屏
+    <div class="highlighter-rouge"><pre class="highlight"><code>sudo xrandr --output CRT1 --primary
+</code></pre>
+    </div>
   </li>
 </ul>
 
 <p>聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！</p>
 
 <h1 id="section-2">2.最好用的终端</h1>
-<p>Terminator  <br />
-<code class="highlighter-rouge">
-sudo apt-get install terminator
-</code></p>
+<p>Terminator</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install terminator
+</code></pre>
+</div>
 
 <h1 id="smplay">3.视频播放器SMPlay</h1>
 <div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install mplayer 
@@ -257,6 +253,13 @@ sudo apt-get install smplayer
         </article>
         <hr>
         
+        
+            
+            
+                
+                    
+                
+            
         
             
             

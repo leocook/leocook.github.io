@@ -108,6 +108,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -185,15 +187,18 @@
       <li><a href="#section-7" id="markdown-toc-section-7">2.3.资源划分的策略</a></li>
       <li><a href="#section-8" id="markdown-toc-section-8">2.4.具体的划分策略</a>        <ul>
           <li><a href="#section-9" id="markdown-toc-section-9">2.4.1.内存划分策略</a></li>
+          <li><a href="#section-10" id="markdown-toc-section-10">2.4.2.内存划分策略</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#section-10" id="markdown-toc-section-10">4.成果</a>    <ul>
-      <li><a href="#section-11" id="markdown-toc-section-11">4.1.集群表现情况</a></li>
+  <li><a href="#mysql" id="markdown-toc-mysql">3.mysql调优的过程</a></li>
+  <li><a href="#section-11" id="markdown-toc-section-11">4.成果</a>    <ul>
+      <li><a href="#section-12" id="markdown-toc-section-12">4.1.集群表现情况</a></li>
+      <li><a href="#mysql-1" id="markdown-toc-mysql-1">4.2.mysql表现情况</a></li>
     </ul>
   </li>
-  <li><a href="#section-12" id="markdown-toc-section-12">5.总结</a></li>
+  <li><a href="#section-13" id="markdown-toc-section-13">5.总结</a></li>
 </ul>
 
 <p>集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。</p>
@@ -246,11 +251,12 @@ b). 减少单个任务的资源占用，提高集群的并行度。</li>
 <strong><em>ZK</em></strong>: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）</p>
 
 <h2 id="section-7">2.3.资源划分的策略</h2>
-<p>根据机器上安装的服务，大概给服务做了如下的划分：
-- 安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
-
+<p>根据机器上安装的服务，大概给服务做了如下的划分：</p>
 <ul>
+  <li>
+    <p>安装有重要服务的机器，可参与计算
+例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
+  </li>
   <li>
     <p>安装有重要服务的机器，不参与计算
 例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。</p>
@@ -269,21 +275,23 @@ b). 减少单个任务的资源占用，提高集群的并行度。</li>
 主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。</li>
   <li>单个任务可使用的任务资源
 map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-### 2.4.2.内存划分策略</li>
+    <h3 id="section-10">2.4.2.内存划分策略</h3>
+  </li>
   <li>yarn容器可直接管理的资源
 对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。</li>
   <li>单个任务可使用的任务资源
 1个vcore。
-# 3.mysql调优的过程
-不同的库，挂载在不同的磁盘上，减小单块盘的压力。</li>
+    <h1 id="mysql">3.mysql调优的过程</h1>
+    <p>不同的库，挂载在不同的磁盘上，减小单块盘的压力。</p>
+  </li>
 </ul>
 
-<h1 id="section-10">4.成果</h1>
+<h1 id="section-11">4.成果</h1>
 
-<h2 id="section-11">4.1.集群表现情况</h2>
-<p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
-## 4.2.mysql表现情况
-优化前的负载情况入下图：
+<h2 id="section-12">4.1.集群表现情况</h2>
+<p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。</p>
+<h2 id="mysql-1">4.2.mysql表现情况</h2>
+<p>优化前的负载情况入下图：
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png" alt="优化前" title="优化前负载情况" />
 优化后的负载情况入下图：
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql.png" alt="优化后" title="优化后负载情况" /></p>
@@ -292,12 +300,14 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
   <p>后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。</p>
 </blockquote>
 
-<h1 id="section-12">5.总结</h1>
-<p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：
-- Impala的资源管理未使用yarn，所以一直还没有开始使用；
-- OOZIE未做HA配置；
-- HDFS数据平衡效果不是很好；
-- CPU一个线程做两个vcore使用，压力还是比较大的。</p>
+<h1 id="section-13">5.总结</h1>
+<p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：</p>
+<ul>
+  <li>Impala的资源管理未使用yarn，所以一直还没有开始使用；</li>
+  <li>OOZIE未做HA配置；</li>
+  <li>HDFS数据平衡效果不是很好；</li>
+  <li>CPU一个线程做两个vcore使用，压力还是比较大的。</li>
+</ul>
 
 <p>在接下，将会按照优先级逐一解决。</p>
 
@@ -305,6 +315,15 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
         </article>
         <hr>
         
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
         
             
             

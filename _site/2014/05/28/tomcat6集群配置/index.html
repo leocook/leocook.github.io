@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Tomcat6集群配置</title>
-    <meta name="description" content="  1.概要1.概要web容器在做集群配置时，有3点需要注意- 负载均衡配置；- session共享；- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。环境  tomcat6  apache  mod_jk-1.2.28-httpd-2.2.3.so">
+    <meta name="description" content="  1.概要1.概要web容器在做集群配置时，有3点需要注意  负载均衡配置；  session共享；  若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。环境  tomcat6  apache  mod_jk-1.2.28-httpd-2.2.3.so">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -108,6 +108,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -187,10 +189,12 @@
 </ul>
 
 <h1 id="section">1.概要</h1>
-<p>web容器在做集群配置时，有3点需要注意
-- 负载均衡配置；
-- session共享；
-- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。</p>
+<p>web容器在做集群配置时，有3点需要注意</p>
+<ul>
+  <li>负载均衡配置；</li>
+  <li>session共享；</li>
+  <li>若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。</li>
+</ul>
 
 <p><strong>环境</strong></p>
 
@@ -307,6 +311,13 @@ worker.controller.sticky_session=1
         </article>
         <hr>
         
+        
+            
+            
+                
+                    
+                
+            
         
             
             

@@ -108,6 +108,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -227,68 +229,70 @@
 <p>以及安装完成的cdh5.4.4集群。</p>
 
 <h3 id="section-2">1.3. 编译环境准备</h3>
-<p>安装gcc, gcc-c++, make, build  <br />
-<code class="highlighter-rouge">
-yum install gcc gcc-c++ libstdc++-devel make build
-</code></p>
+<p>安装gcc, gcc-c++, make, build</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>yum install gcc gcc-c++ libstdc++-devel make build
+</code></pre>
+</div>
 
 <h3 id="nodejsnpm">1.4. Nodejs、npm</h3>
-<p>下载源码:  <br />
-<code class="highlighter-rouge">
-wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
-</code></p>
+<p>下载源码:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
+</code></pre>
+</div>
 
-<p>解压后编译:  <br />
-<code class="highlighter-rouge">
-./configure
+<p>解压后编译:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>./configure
 make &amp;&amp; make install
-</code></p>
+</code></pre>
+</div>
 
-<p>查看nodejs和npm的版本:  <br />
-<code class="highlighter-rouge">
-node --version
+<p>查看nodejs和npm的版本:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>node --version
 npm --version
-</code></p>
+</code></pre>
+</div>
 
 <p>笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9</p>
 
 <h3 id="git">1.5.安装GIT</h3>
-<p>下载git:  <br />
-<code class="highlighter-rouge">
-https://git-scm.com/download    
+<p>下载git:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>https://git-scm.com/download    
 笔者选择的是1.7.3版本
-</code></p>
+</code></pre>
+</div>
 
-<p>解压后编译:  <br />
-<code class="highlighter-rouge">
-./configure
+<p>解压后编译:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>./configure
 make
 make install
-</code></p>
+</code></pre>
+</div>
 
 <h3 id="protocolbuffer250">1.6. ProtocolBuffer2.5.0</h3>
 <ul>
-  <li>下载pb源码  <br />
-<code class="highlighter-rouge">
-https://github.com/google/protobuf/releases/tag/v2.5.0
-</code></li>
-  <li>
-    <p>编译安装pb  <br />
-<code class="highlighter-rouge">
-./configure -prefix=/opt/protoc/
-make &amp;&amp; make install
-</code></p>
+  <li>下载pb源码
+    <div class="highlighter-rouge"><pre class="highlight"><code>https://github.com/google/protobuf/releases/tag/v2.5.0
+</code></pre>
+    </div>
   </li>
-  <li>配置环境变量 <br />
-<code class="highlighter-rouge">
-export PROTOC_HOME=/opt/protoc
+  <li>编译安装pb
+    <div class="highlighter-rouge"><pre class="highlight"><code>./configure -prefix=/opt/protoc/
+make &amp;&amp; make install
+</code></pre>
+    </div>
+  </li>
+  <li>配置环境变量
+    <div class="highlighter-rouge"><pre class="highlight"><code>export PROTOC_HOME=/opt/protoc
 export PATH=$PATH:$PROTOC_HOME/bin
-</code></li>
-  <li>检验  <br />
-<code class="highlighter-rouge">
-protoc --version
-</code>  <br />
-查看pb的版本是不是2.5.0，笔者这里显示为 <strong>libprotoc 2.5.0</strong></li>
+</code></pre>
+    </div>
+  </li>
+  <li>检验
+    <div class="highlighter-rouge"><pre class="highlight"><code>protoc --version
+</code></pre>
+    </div>
+    <p>查看pb的版本是不是2.5.0，笔者这里显示为 <strong>libprotoc 2.5.0</strong></p>
+  </li>
 </ul>
 
 <h3 id="tez-1">1.7.编译&amp;安装Tez</h3>
@@ -486,13 +490,16 @@ hive&gt;
 [ERROR] npm WARN engine cryptiles@2.0.5: wanted: {"node":"&gt;=0.10.40"} (current: {"node":"v0.10.18","npm":"1.3.8"})
 </code></pre>
 </div>
-<p>解决办法：
-1. 安装正确版本的nodeJs；
-2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
-<code class="highlighter-rouge">
-node --version
+<p>解决办法：</p>
+<ol>
+  <li>安装正确版本的nodeJs；</li>
+  <li>修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
+    <div class="highlighter-rouge"><pre class="highlight"><code>node --version
 npm --version
-</code></p>
+</code></pre>
+    </div>
+  </li>
+</ol>
 
 <h3 id="mrerror-when-run-hive-on-tez">5.缺少MR的依赖包（error when run hive on tez）</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>Vertex failed, vertexName=Map 1, vertexId=vertex_1457012272029_352429_1_00, diagnostics=[Vertex vertex_1457012272029_352429_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: dual initializer failed, vertex=vertex_1457012272029_352429_1_00 [Map 1], java.lang.NoClassDefFoundError: org/apache/hadoop/mapred/MRVersion
@@ -573,6 +580,17 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions</p>
         </article>
         <hr>
         
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
         
             
             

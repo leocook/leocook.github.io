@@ -5,9 +5,51 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 26 Jul 2016 09:48:03 +0800</pubDate>
-    <lastBuildDate>Tue, 26 Jul 2016 09:48:03 +0800</lastBuildDate>
-    <generator>Jekyll v3.1.6</generator>
+    <pubDate>Sun, 21 Aug 2016 22:12:06 +0800</pubDate>
+    <lastBuildDate>Sun, 21 Aug 2016 22:12:06 +0800</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>幸福的双休日</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;扯几句&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;周六&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;周日&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;自从离开北京到现在也有两个月了，中间在上海待了一个多月，最后还是来了杭州。来了杭州之后才知道，这是一个幸福感爆棚的准一线城市！&lt;/p&gt;
+
+&lt;p&gt;离开北京后，一直在奔波。北京和上海这两个城市，留给外地的年轻人更多的是想象，房价、落户等等都是遥不可及的。北京离家比较远，如果不能买房留在那也没啥意思。上海离家近一些，还是那个问题，买房和落户的问题，经过和女朋友三年异地的历程，不想把宝贵的时间耗费在距离上，爱情、亲情都是这样。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;扯几句&lt;/h2&gt;
+
+&lt;p&gt;生活和工作上，杭州这总城市整体上没有北京和上海那么浮躁。没遇到过大家为了上个地铁或者公交，挤得你死我活，关于挤地铁这个事情，个人感觉上海那边比北京要显得糟糕点。在杭州则不一样，主城区到郊区距离也不是很远，大多数同事到公司的距离都在5公里以内吧，自行车和电动车都是比较好的代步工具。工作上，&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;周六&lt;/h2&gt;
+
+&lt;p&gt;按照惯例，周六会好好的睡一觉，一直睡到自然醒。上了一个星期的班，补充一下睡眠。中午有朋友在这，一起吃了个饭，下午一起逛逛街，去超市买点东西就回家了。晚餐后（媳妇做的晚餐，超棒！），看看书，学习学习新的技术，十点不到就睡着了。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;周日&lt;/h2&gt;
+
+&lt;p&gt;六点多就醒了，微信上月朋友一起跑了两公里多，早上不需要跑太久，跑久了一天都会有疲惫感。回来的路上买了点早餐，到家后和朋友，还有媳妇一起开始了早餐。油条、小笼包，还有自己煮的白米粥，粗茶淡饭，健康的生活。吃完了早饭，朋友离去后才八点多。哇~早起会给你增添这么多时间！&lt;/p&gt;
+
+&lt;p&gt;随后继续看书、学习技术。午饭后玩了玩游戏，傍晚和朋友一起去买菜，三个男人买了二十块钱的菜，花了一个多小时的时间做好了晚餐，朋友住的地方到我住的地方步行也就3分钟，才做好了，喊了媳妇来吃饭（现在都是男人下厨房有木有？）。晚餐后3哥们在一块吹吹牛，媳妇去洗碗了（俺媳妇还是比较贤惠滴）。&lt;/p&gt;
+
+&lt;p&gt;晚餐散后回到住处看了会资料，写下这篇文字，记录一下这个双休。家里有个贤惠漂亮的媳妇、身边好友三两，不用考虑太多关于生存的话题。可以把时间花费在自己感兴趣的事情上，例如技术追求和厨艺。&lt;/p&gt;
+
+&lt;p&gt;最后，杭州是一个适合年轻人奋斗和生活的地方。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 21 Aug 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/</guid>
+        
+        <category>双休日</category>
+        
+        
+        <category>生活</category>
+        
+      </item>
     
       <item>
         <title>Lua_on_nginx</title>
@@ -118,8 +160,8 @@ vi conf/nginx.conf
 &lt;p&gt;然后在http -&amp;gt; server下加入配置：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;location /lua_test {
-    default_type &#39;text/plain&#39;;
-    content_by_lua &#39;ngx.say(&quot;hello, ttlsa lua&quot;)&#39;;
+    default_type 'text/plain';
+    content_by_lua 'ngx.say(&quot;hello, ttlsa lua&quot;)';
 }
 
 &lt;/code&gt;&lt;/pre&gt;
@@ -573,32 +615,32 @@ bind-address = 0.0.0.0
 &lt;p&gt;建表语句格式如下：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database database DEFAULT CHARACTER SET utf8;
-grant all on database.* TO &#39;user&#39;@&#39;%&#39; IDENTIFIED BY &#39;password&#39;;
+grant all on database.* TO 'user'@'%' IDENTIFIED BY 'password';
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;建表语句如下：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database amon DEFAULT CHARACTER SET utf8;
-grant all on amon.* TO &#39;amon&#39;@&#39;%&#39; IDENTIFIED BY &#39;amon&#39;;
+grant all on amon.* TO 'amon'@'%' IDENTIFIED BY 'amon';
 
 create database rmon DEFAULT CHARACTER SET utf8;
-grant all on rmon.* TO &#39;rmon&#39;@&#39;%&#39; IDENTIFIED BY &#39;rmon&#39;;
+grant all on rmon.* TO 'rmon'@'%' IDENTIFIED BY 'rmon';
 
 create database hive_metastore DEFAULT CHARACTER SET utf8;
-grant all on hive_metastore.* TO &#39;hive&#39;@&#39;%&#39; IDENTIFIED BY &#39;hive&#39;;
+grant all on hive_metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive';
 
 create database sentry DEFAULT CHARACTER SET utf8;
-grant all on sentry.* TO &#39;sentry&#39;@&#39;%&#39; IDENTIFIED BY &#39;sentry&#39;;
+grant all on sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry';
 
 create database nav DEFAULT CHARACTER SET utf8;
-grant all on nav.* TO &#39;nav&#39;@&#39;%&#39; IDENTIFIED BY &#39;nav&#39;;
+grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav';
 
 create database navms DEFAULT CHARACTER SET utf8;
-grant all on navms.* TO &#39;navms&#39;@&#39;%&#39; IDENTIFIED BY &#39;navms&#39;;
+grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms';
 
 create database oozie DEFAULT CHARACTER SET utf8;
-grant all on oozie.* TO &#39;oozie&#39;@&#39;%&#39; IDENTIFIED BY &#39;oozie&#39;;
+grant all on oozie.* TO 'oozie'@'%' IDENTIFIED BY 'oozie';
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -963,7 +1005,7 @@ http://archive.cloudera.com/cm5/cm/5/&lt;/p&gt;
   &lt;li&gt;使用-e指定启动的参数&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./logstash -e &#39;input { stdin { } } output { stdout {} }&#39;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./logstash -e 'input { stdin { } } output { stdout {} }'
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -1189,10 +1231,10 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
 &lt;/div&gt;
 
 &lt;h2 id=&quot;jar&quot;&gt;3.修改Jar的权限&lt;/h2&gt;
-&lt;p&gt;保证oozie有权限读取、使用Jar包:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;保证oozie有权限读取、使用Jar包:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;section-1&quot;&gt;4.是配置生效&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oozie admin -sharelibupdate
@@ -1240,10 +1282,10 @@ oozie admin -shareliblist hive
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-set hive.execution.engine=tez;
-&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set hive.execution.engine=tez;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
         <pubDate>Tue, 17 May 2016 00:00:00 +0800</pubDate>
         <link>http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/</link>
@@ -1316,68 +1358,70 @@ set hive.execution.engine=tez;
 &lt;p&gt;以及安装完成的cdh5.4.4集群。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;1.3. 编译环境准备&lt;/h3&gt;
-&lt;p&gt;安装gcc, gcc-c++, make, build  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-yum install gcc gcc-c++ libstdc++-devel make build
-&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;安装gcc, gcc-c++, make, build&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install gcc gcc-c++ libstdc++-devel make build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3 id=&quot;nodejsnpm&quot;&gt;1.4. Nodejs、npm&lt;/h3&gt;
-&lt;p&gt;下载源码:  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
-&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;下载源码:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;解压后编译:  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-./configure
+&lt;p&gt;解压后编译:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure
 make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;查看nodejs和npm的版本:  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-node --version
+&lt;p&gt;查看nodejs和npm的版本:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node --version
 npm --version
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9&lt;/p&gt;
 
 &lt;h3 id=&quot;git&quot;&gt;1.5.安装GIT&lt;/h3&gt;
-&lt;p&gt;下载git:  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-https://git-scm.com/download    
+&lt;p&gt;下载git:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://git-scm.com/download    
 笔者选择的是1.7.3版本
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;解压后编译:  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-./configure
+&lt;p&gt;解压后编译:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure
 make
 make install
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3 id=&quot;protocolbuffer250&quot;&gt;1.6. ProtocolBuffer2.5.0&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;下载pb源码  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-https://github.com/google/protobuf/releases/tag/v2.5.0
-&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;编译安装pb  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-./configure -prefix=/opt/protoc/
-make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/p&gt;
+  &lt;li&gt;下载pb源码
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/google/protobuf/releases/tag/v2.5.0
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
   &lt;/li&gt;
-  &lt;li&gt;配置环境变量 &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-export PROTOC_HOME=/opt/protoc
+  &lt;li&gt;编译安装pb
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure -prefix=/opt/protoc/
+make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;配置环境变量
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export PROTOC_HOME=/opt/protoc
 export PATH=$PATH:$PROTOC_HOME/bin
-&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;检验  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-protoc --version
-&lt;/code&gt;  &lt;br /&gt;
-查看pb的版本是不是2.5.0，笔者这里显示为 &lt;strong&gt;libprotoc 2.5.0&lt;/strong&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;检验
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;protoc --version
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;查看pb的版本是不是2.5.0，笔者这里显示为 &lt;strong&gt;libprotoc 2.5.0&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;tez-1&quot;&gt;1.7.编译&amp;amp;安装Tez&lt;/h3&gt;
@@ -1563,7 +1607,7 @@ hive&amp;gt;
 
 &lt;h3 id=&quot;nodetez&quot;&gt;3.解压Node压缩包时错误（编译tez时的错误）&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Could not extract the Node archive: Could not extract archive: &#39;/home/.../tez/tez-ui/src/main/webapp/node_tmp/node.tar.gz&#39;: EOFException -&amp;gt; [Help 1]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Could not extract the Node archive: Could not extract archive: '/home/.../tez/tez-ui/src/main/webapp/node_tmp/node.tar.gz': EOFException -&amp;gt; [Help 1]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;解决版本：检查第二个问题，并重新执行。如果还失败，可以多执行几次，可能和网络有关系。&lt;/p&gt;
@@ -1575,13 +1619,16 @@ hive&amp;gt;
 [ERROR] npm WARN engine cryptiles@2.0.5: wanted: {&quot;node&quot;:&quot;&amp;gt;=0.10.40&quot;} (current: {&quot;node&quot;:&quot;v0.10.18&quot;,&quot;npm&quot;:&quot;1.3.8&quot;})
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;解决办法：
-1. 安装正确版本的nodeJs；
-2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-node --version
+&lt;p&gt;解决办法：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;安装正确版本的nodeJs；&lt;/li&gt;
+  &lt;li&gt;修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node --version
 npm --version
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;h3 id=&quot;mrerror-when-run-hive-on-tez&quot;&gt;5.缺少MR的依赖包（error when run hive on tez）&lt;/h3&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Vertex failed, vertexName=Map 1, vertexId=vertex_1457012272029_352429_1_00, diagnostics=[Vertex vertex_1457012272029_352429_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: dual initializer failed, vertex=vertex_1457012272029_352429_1_00 [Map 1], java.lang.NoClassDefFoundError: org/apache/hadoop/mapred/MRVersion
@@ -1704,17 +1751,21 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
 &lt;p&gt;Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：http://tez.apache.org/&lt;/p&gt;
 
 &lt;h3 id=&quot;section-1&quot;&gt;1.2.两大优势&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;用户体验&lt;/strong&gt;  &lt;br /&gt;
-- 使用API来自定义数据流  &lt;br /&gt;
-- 灵活的Input-Processor-Output运行模式  &lt;br /&gt;
-- 与计算的数据类型无关  &lt;br /&gt;
-- 简单的部署流程&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;用户体验&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;使用API来自定义数据流&lt;/li&gt;
+  &lt;li&gt;灵活的Input-Processor-Output运行模式&lt;/li&gt;
+  &lt;li&gt;与计算的数据类型无关&lt;/li&gt;
+  &lt;li&gt;简单的部署流程&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;计算性能&lt;/strong&gt;  &lt;br /&gt;
-- 性能高于MapReduce  &lt;br /&gt;
-- 资源管理更加优化  &lt;br /&gt;
-- 运行时配置预加载  &lt;br /&gt;
-- 物理数据流动态运行&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;计算性能&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;性能高于MapReduce&lt;/li&gt;
+  &lt;li&gt;资源管理更加优化&lt;/li&gt;
+  &lt;li&gt;运行时配置预加载&lt;/li&gt;
+  &lt;li&gt;物理数据流动态运行&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;举例&lt;/strong&gt;  &lt;br /&gt;
 下图是一个基于MR的Hive/Pig的DAG数据流处理过程:  &lt;br /&gt;
@@ -1779,15 +1830,18 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
       &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;2.3.资源划分的策略&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;2.4.具体的划分策略&lt;/a&gt;        &lt;ul&gt;
           &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;2.4.1.内存划分策略&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;2.4.2.内存划分策略&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;4.成果&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;4.1.集群表现情况&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#mysql&quot; id=&quot;markdown-toc-mysql&quot;&gt;3.mysql调优的过程&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;4.成果&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;4.1.集群表现情况&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#mysql-1&quot; id=&quot;markdown-toc-mysql-1&quot;&gt;4.2.mysql表现情况&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;5.总结&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;5.总结&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。&lt;/p&gt;
@@ -1840,11 +1894,12 @@ b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
 &lt;strong&gt;&lt;em&gt;ZK&lt;/em&gt;&lt;/strong&gt;: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）&lt;/p&gt;
 
 &lt;h2 id=&quot;section-7&quot;&gt;2.3.资源划分的策略&lt;/h2&gt;
-&lt;p&gt;根据机器上安装的服务，大概给服务做了如下的划分：
-- 安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。&lt;/p&gt;
-
+&lt;p&gt;根据机器上安装的服务，大概给服务做了如下的划分：&lt;/p&gt;
 &lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;安装有重要服务的机器，可参与计算
+例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。&lt;/p&gt;
+  &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;安装有重要服务的机器，不参与计算
 例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。&lt;/p&gt;
@@ -1863,21 +1918,23 @@ b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
 主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。&lt;/li&gt;
   &lt;li&gt;单个任务可使用的任务资源
 map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-### 2.4.2.内存划分策略&lt;/li&gt;
+    &lt;h3 id=&quot;section-10&quot;&gt;2.4.2.内存划分策略&lt;/h3&gt;
+  &lt;/li&gt;
   &lt;li&gt;yarn容器可直接管理的资源
 对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。&lt;/li&gt;
   &lt;li&gt;单个任务可使用的任务资源
 1个vcore。
-# 3.mysql调优的过程
-不同的库，挂载在不同的磁盘上，减小单块盘的压力。&lt;/li&gt;
+    &lt;h1 id=&quot;mysql&quot;&gt;3.mysql调优的过程&lt;/h1&gt;
+    &lt;p&gt;不同的库，挂载在不同的磁盘上，减小单块盘的压力。&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&quot;section-10&quot;&gt;4.成果&lt;/h1&gt;
+&lt;h1 id=&quot;section-11&quot;&gt;4.成果&lt;/h1&gt;
 
-&lt;h2 id=&quot;section-11&quot;&gt;4.1.集群表现情况&lt;/h2&gt;
-&lt;p&gt;到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
-## 4.2.mysql表现情况
-优化前的负载情况入下图：
+&lt;h2 id=&quot;section-12&quot;&gt;4.1.集群表现情况&lt;/h2&gt;
+&lt;p&gt;到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。&lt;/p&gt;
+&lt;h2 id=&quot;mysql-1&quot;&gt;4.2.mysql表现情况&lt;/h2&gt;
+&lt;p&gt;优化前的负载情况入下图：
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png&quot; alt=&quot;优化前&quot; title=&quot;优化前负载情况&quot; /&gt;
 优化后的负载情况入下图：
 &lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql.png&quot; alt=&quot;优化后&quot; title=&quot;优化后负载情况&quot; /&gt;&lt;/p&gt;
@@ -1886,12 +1943,14 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
   &lt;p&gt;后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h1 id=&quot;section-12&quot;&gt;5.总结&lt;/h1&gt;
-&lt;p&gt;在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：
-- Impala的资源管理未使用yarn，所以一直还没有开始使用；
-- OOZIE未做HA配置；
-- HDFS数据平衡效果不是很好；
-- CPU一个线程做两个vcore使用，压力还是比较大的。&lt;/p&gt;
+&lt;h1 id=&quot;section-13&quot;&gt;5.总结&lt;/h1&gt;
+&lt;p&gt;在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Impala的资源管理未使用yarn，所以一直还没有开始使用；&lt;/li&gt;
+  &lt;li&gt;OOZIE未做HA配置；&lt;/li&gt;
+  &lt;li&gt;HDFS数据平衡效果不是很好；&lt;/li&gt;
+  &lt;li&gt;CPU一个线程做两个vcore使用，压力还是比较大的。&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;在接下，将会按照优先级逐一解决。&lt;/p&gt;
 
@@ -2268,10 +2327,12 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;section&quot;&gt;1.概要&lt;/h1&gt;
-&lt;p&gt;web容器在做集群配置时，有3点需要注意
-- 负载均衡配置；
-- session共享；
-- 若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。&lt;/p&gt;
+&lt;p&gt;web容器在做集群配置时，有3点需要注意&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;负载均衡配置；&lt;/li&gt;
+  &lt;li&gt;session共享；&lt;/li&gt;
+  &lt;li&gt;若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;环境&lt;/strong&gt;&lt;/p&gt;
 
@@ -2393,104 +2454,6 @@ worker.controller.sticky_session=1
         
         
         <category>WebService</category>
-        
-      </item>
-    
-      <item>
-        <title>Ubuntu常用配置</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#ubuntu-desktop&quot; id=&quot;markdown-toc-ubuntu-desktop&quot;&gt;1.ubuntu desktop接双显示器&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.1.环境&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.2.修改系统配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#arandr&quot; id=&quot;markdown-toc-arandr&quot;&gt;1.3.使用可视化软件Arandr&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.最好用的终端&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#smplay&quot; id=&quot;markdown-toc-smplay&quot;&gt;3.视频播放器SMPlay&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在使用ubuntu作为自己的开发环境时，可能会用到下面的这些小技巧哦！&lt;/p&gt;
-
-&lt;h1 id=&quot;ubuntu-desktop&quot;&gt;1.ubuntu desktop接双显示器&lt;/h1&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.1.环境&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;ubuntu12.04&lt;/li&gt;
-  &lt;li&gt;Arandr&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;1.2.修改系统配置&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;编辑/etc/X11/xorg.conf文件  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-vi /etc/X11/xorg.conf
-&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;在Section “Screen”内容之内增加以下内容  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-SubSection &quot;Display&quot;
-Virtual 4000 3000
-EndSubSection
-&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;重启xwindow&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).&lt;/p&gt;
-
-&lt;p&gt;方法二：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-sudo init 6
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;arandr&quot;&gt;1.3.使用可视化软件Arandr&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;安装Arandr  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-sudo apt-get install arandr
-&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;打开查看各个主屏的名称  &lt;br /&gt;
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/arandr.png&quot; alt=&quot;Arandr&quot; title=&quot;Arandr&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;设置对应的显示设备为主屏  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-sudo xrandr --output CRT1 --primary
-&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！&lt;/p&gt;
-
-&lt;h1 id=&quot;section-2&quot;&gt;2.最好用的终端&lt;/h1&gt;
-&lt;p&gt;Terminator  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-sudo apt-get install terminator
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;smplay&quot;&gt;3.视频播放器SMPlay&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install mplayer 
-sudo apt-get install ffmpeg
-sudo apt-get install smplayer
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-</description>
-        <pubDate>Thu, 15 May 2014 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/</guid>
-        
-        <category>ubuntu</category>
-        
-        
-        <category>linux</category>
         
       </item>
     
