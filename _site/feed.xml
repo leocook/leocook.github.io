@@ -5,9 +5,142 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 21 Aug 2016 22:12:06 +0800</pubDate>
-    <lastBuildDate>Sun, 21 Aug 2016 22:12:06 +0800</lastBuildDate>
+    <pubDate>Wed, 12 Oct 2016 18:58:36 +0800</pubDate>
+    <lastBuildDate>Wed, 12 Oct 2016 18:58:36 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Spark streaming最佳实践 概述</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.内存溢出&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;2.外部系统连接数过多&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;3.资源分配的浪费&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。&lt;/p&gt;
+
+&lt;p&gt;Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.内存溢出&lt;/h2&gt;
+
+&lt;p&gt;Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。&lt;/p&gt;
+
+&lt;p&gt;我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;a).数据倾斜引；&lt;/li&gt;
+  &lt;li&gt;b).数据未倾斜，分区数过少；&lt;/li&gt;
+  &lt;li&gt;c).某个分区中产生了一个较大的内存集合，例如大的List、Set，或者Map。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这类问题在spark core中也是经常会出现的，关于数据倾斜的问题以后会详细讲解。入手一个新的业务时，应该对该业务的数据量有个大概的预估，这样给这个应用分配多少节点，每个节点会处理多大的数据量，这样就能很好的预估出每个节点分配多少资源比较合理了。&lt;/p&gt;
+
+&lt;p&gt;为了避免内存溢出，可以从下面几个方向来做：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;a).避免数据倾斜；&lt;/li&gt;
+  &lt;li&gt;b).评估每个分区的数据量，给每个分区分配合理的资源；&lt;/li&gt;
+  &lt;li&gt;c).控制好List、Set等集合的大小；&lt;/li&gt;
+  &lt;li&gt;d).控制Spark streaming读取源数据的最大速度（spark.streaming.kafka.maxRatePerPartition），实时数据流量有高峰和低谷，不同时间处理的数据量是不一样的，为防止数据高峰的时候内存溢出，这里有必要做配置；&lt;/li&gt;
+  &lt;li&gt;e).配置Spark streaming可动态控制读取数据源的速度（spark.streaming.backpressure.enabled）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;2.外部系统连接数过多&lt;/h2&gt;
+
+&lt;p&gt;在使用spark streaming解决问题的时候，经常会对外部数据源进行读写操作，切记每次读写完成之后需要关闭网络连接。在我们以往的编程经验中，这些思维都是一直持有的。 &lt;br /&gt;
+在往hbase写入数据的时候，如果你使用了RDD.saveAsHadoopDataset方法，就需要注意了，org.apache.hadoop.hbase.mapred.TableOutputFormat类存在bug：不能释放zookeeper连接，导致在往hbase写数据的时候，zookeeper的连接数不停得增长。&lt;/p&gt;
+
+&lt;p&gt;推荐使用下面这种写法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+import org.apache.hadoop.mapreduce.Job
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat
+
+val conf = HBaseConfiguration.create()
+conf.set(&quot;hbase.zookeeper.quorum&quot;, zk_hosts)
+conf.set(&quot;hbase.zookeeper.property.clientPort&quot;, zk_port)
+
+conf.set(TableOutputFormat.OUTPUT_TABLE, &quot;TABLE_NAME&quot;)
+val job = Job.getInstance(conf)
+job.setOutputFormatClass(classOf[TableOutputFormat[String]])
+
+formatedLines.map{
+  case (a,b, c) =&amp;gt; {
+    val row = Bytes.toBytes(a)
+
+    val put = new Put(row)
+    put.setDurability(Durability.SKIP_WAL)
+
+    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;node&quot;), Bytes.toBytes(b))
+    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;topic&quot;), Bytes.toBytes(c))
+
+    (new ImmutableBytesWritable(row), put)
+  }
+}.saveAsNewAPIHadoopDataset(job.getConfiguration)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;3.资源分配的浪费&lt;/h2&gt;
+
+&lt;p&gt;如果实时数据在每天的某个时间点有着平时的几倍的数据量，如果给该作业分配过多的资源，那么在绝大多数，这些资源都是闲置浪费的。这里可以启用动态资源分配。&lt;/p&gt;
+
+&lt;p&gt;关于配置介绍可以查看官方文档：http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation&lt;/p&gt;
+
+&lt;p&gt;如果启用该配置，需要做如下配置：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.在spark应用中配置spark.dynamicAllocation.enabled=true &lt;br /&gt;
+2.每个节点启动外部shuffle服务，并在spark应用中配置spark.shuffle.service.enabled=true&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于外部shuffle服务，在standalone、Mesos，yarn中的配置是不一样的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;standalone&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;启动worker的时候指定spark.shuffle.service.enabled=true&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Mesos&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在所有节点上配置spark.shuffle.service.enabled=true，然后执行$SPARK_HOME/sbin/start-mesos-shuffle-service.sh&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;yarn&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;a.添加yarn的配置文件，重新编译spark。如果使用官方编译好的安装包，可以忽略这一步。
+b.找到spark-&lt;version&gt;-yarn-shuffle.jar。如果自己编译spark的话，在目录$SPARK_HOME/common/network-yarn/target/scala-&lt;version&gt;下；如果是使用官方编译好的spark，在lib目录下寻找。
+c.添加到spark-&lt;version&gt;-yarn-shuffle.jar到yarn所有NodeManager的classpath下。
+d.配置所有NodeManager的yarn-site.xml文件如下：&lt;/version&gt;&lt;/version&gt;&lt;/version&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&amp;lt;property&amp;gt;
+  &amp;lt;name&amp;gt;yarn.nodemanager.aux-services&amp;lt;/name&amp;gt;
+  &amp;lt;value&amp;gt;spark_shuffle&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+&amp;lt;property&amp;gt;
+  &amp;lt;name&amp;gt;yarn.nodemanager.aux-services.spark_shuffle.class&amp;lt;/name&amp;gt;
+  &amp;lt;value&amp;gt;org.apache.spark.network.yarn.YarnShuffleService&amp;lt;/value&amp;gt;
+&amp;lt;/property&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;spark on yarn配置了外部shuffle之后，&lt;code&gt;--num-executors&lt;/code&gt;配置将不再生效。&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 12 Oct 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/</guid>
+        
+        <category>spark</category>
+        
+        
+        <category>spark</category>
+        
+      </item>
     
       <item>
         <title>幸福的双休日</title>
@@ -23,7 +156,7 @@
 
 &lt;h2 id=&quot;section&quot;&gt;扯几句&lt;/h2&gt;
 
-&lt;p&gt;生活和工作上，杭州这总城市整体上没有北京和上海那么浮躁。没遇到过大家为了上个地铁或者公交，挤得你死我活，关于挤地铁这个事情，个人感觉上海那边比北京要显得糟糕点。在杭州则不一样，主城区到郊区距离也不是很远，大多数同事到公司的距离都在5公里以内吧，自行车和电动车都是比较好的代步工具。工作上，&lt;/p&gt;
+&lt;p&gt;生活和工作上，杭州这总城市整体上没有北京和上海那么浮躁。没遇到过大家为了上个地铁或者公交，挤得你死我活，关于挤地铁这个事情，个人感觉上海那边比北京要显得糟糕点。在杭州则不一样，主城区到郊区距离也不是很远，大多数同事到公司的距离都在5公里以内吧，自行车和电动车都是比较好的代步工具。&lt;/p&gt;
 
 &lt;h2 id=&quot;section-1&quot;&gt;周六&lt;/h2&gt;
 
@@ -2304,156 +2437,6 @@ http://dongxicheng.org/mapreduce/hadoop-optimization-1/&lt;/li&gt;
         
         
         <category>hadoop</category>
-        
-      </item>
-    
-      <item>
-        <title>Tomcat6集群配置</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.概要&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#apache&quot; id=&quot;markdown-toc-apache&quot;&gt;2.Apache配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#httpconf&quot; id=&quot;markdown-toc-httpconf&quot;&gt;2.1.http.conf配置修改&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#modjkconf&quot; id=&quot;markdown-toc-modjkconf&quot;&gt;2.2.mod_jk.conf配置修改&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#workersproperties&quot; id=&quot;markdown-toc-workersproperties&quot;&gt;2.3.workers.properties配置修改&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#tomcat&quot; id=&quot;markdown-toc-tomcat&quot;&gt;3.Tomcat配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#tomcat-1&quot; id=&quot;markdown-toc-tomcat-1&quot;&gt;3.1 tomcat的关闭端口&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tomcat-2&quot; id=&quot;markdown-toc-tomcat-2&quot;&gt;3.2.tomcat的服务端口&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#ajp13&quot; id=&quot;markdown-toc-ajp13&quot;&gt;3.3.AJP13通信端口&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#session&quot; id=&quot;markdown-toc-session&quot;&gt;3.4.Session共享&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;1.概要&lt;/h1&gt;
-&lt;p&gt;web容器在做集群配置时，有3点需要注意&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;负载均衡配置；&lt;/li&gt;
-  &lt;li&gt;session共享；&lt;/li&gt;
-  &lt;li&gt;若做的是单机集群（多个tomcat安装在同一台机器上），需要注意端口冲突问题。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;环境&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;tomcat6&lt;/li&gt;
-  &lt;li&gt;apache&lt;/li&gt;
-  &lt;li&gt;mod_jk-1.2.28-httpd-2.2.3.so&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;apache&quot;&gt;2.Apache配置&lt;/h1&gt;
-&lt;p&gt;在本案例中是使用Apache来做的，下边用到的mod模块和Apache版本需要兼容才行。文中所使用的软件，会在文章底部附上下载链接。&lt;/p&gt;
-
-&lt;h2 id=&quot;httpconf&quot;&gt;2.1.http.conf配置修改&lt;/h2&gt;
-&lt;p&gt;在apache安装目录的conf目录下，修改http.conf配置文件，在任意某一行加入&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Include conf/mod_jk.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;修改Apache监听端口（在文件的第46行左右）&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Listen 90
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;modjkconf&quot;&gt;2.2.mod_jk.conf配置修改&lt;/h2&gt;
-&lt;p&gt;在conf目录下新建文件mod_jk.conf，写入如下内容&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#加载mod_jk Module  把mod_jk-1.2.28-httpd-2.2.3.so放到相应的目录中
-LoadModule jk_module modules/mod_jk-1.2.28-httpd-2.2.3.so
-#指定 workers.properties文件路径
-JkWorkersFile conf/workers.properties
-#指定那些请求交给tomcat处理,&quot;controller&quot;为在workers.properties里指定的负载分配控制器
-JkMount /*.jsp  controller
-JkMount /*.action  controller
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;其中，mod_jk-1.2.28-httpd-2.2.3.so文件更具自己实际添加的模块文件名来写。&lt;/p&gt;
-
-&lt;h2 id=&quot;workersproperties&quot;&gt;2.3.workers.properties配置修改&lt;/h2&gt;
-&lt;p&gt;在conf目录下新建文件workers.properties，写入如下内容&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;worker.list=controller,tomcat1,tomcat2
-
-#tomcat1
-worker.tomcat1.port=8109         #ajp13端口号在tomcat下server.xml配置,默认8009 默认与HTTP通信的协议
-worker.tomcat1.host=localhost     
-worker.tomcat1.type=ajp13          #tomcat的主机地址，如不为本机，请填写ip地址
-worker.tomcat1.lbfactor = 1       #server的加权比重，值越高，分得的请求越多
-
-#tomcat2
-worker.tomcat2.port=9109       
-worker.tomcat2.host=localhost 
-worker.tomcat2.type=ajp13
-worker.tomcat2.lbfactor = 1  
-
-#========controller,负载均衡控制器========
-worker.controller.type=lb    
-worker.controller.balanced_workers=tomcat1,tomcat2    #指定分担请求的tomcat
-worker.controller.sticky_session=1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;其中tomcat上ajp13协议通信端口需要根据具体的设置区修改（ajp13协议在这里就是Apache与tomcat之间的通信协议）。&lt;/p&gt;
-
-&lt;h1 id=&quot;tomcat&quot;&gt;3.Tomcat配置&lt;/h1&gt;
-
-&lt;h2 id=&quot;tomcat-1&quot;&gt;3.1 tomcat的关闭端口&lt;/h2&gt;
-&lt;p&gt;默认是8005，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;tomcat-2&quot;&gt;3.2.tomcat的服务端口&lt;/h2&gt;
-&lt;p&gt;默认是8080，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; 
-               connectionTimeout=&quot;20000&quot; 
-               redirectPort=&quot;8443&quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;ajp13&quot;&gt;3.3.AJP13通信端口&lt;/h2&gt;
-&lt;p&gt;tomcat上的AJP13协议通信端口：默认是8009，这里的端口配置需要和上边文件workers.properties中的AJP13协议端口配置相对应，若同一台机器上配置了多个tomcat，这里必须要修改：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;session&quot;&gt;3.4.Session共享&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;在Tomcat中启用标签&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Cluster className=&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;在web项目中的web.xml中加入&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;distributable/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;则这个项目就支持集群了。
-到此，配置完毕。
-下载链接： http://pan.baidu.com/s/1mgLq8Dq&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 28 May 2014 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</guid>
-        
-        <category>tomcat</category>
-        
-        
-        <category>WebService</category>
         
       </item>
     

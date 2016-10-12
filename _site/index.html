@@ -125,6 +125,69 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
+
+<p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/">幸福的双休日</a>
                 </h2>
                 <div class="label">
@@ -384,83 +447,6 @@ HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule</p>
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-05-17
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
-    
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-</ul>
-
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
-
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
-</code></pre>
-</div>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -547,6 +533,15 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                         <a href="/category/#生活" class="categories-list-item" cate="生活">
                             <span class="name">
                                 生活
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#spark" class="categories-list-item" cate="spark">
+                            <span class="name">
+                                spark
                             </span>
                             <span class="badge">1</span>
                         </a>
@@ -673,6 +668,13 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                       
                       <a href="/tag/#双休日" style="font-size: 9pt; color: #999;">双休日</a>
                     
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#spark" style="font-size: 9pt; color: #999;">spark</a>
+                    
                 </div>
             </div>
             <!-- Recent Posts -->
@@ -682,6 +684,8 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                     最近提交
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a></li>
                     
                         <li><a href="/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/">幸福的双休日</a></li>
                     
@@ -700,8 +704,6 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                         <li><a href="/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn</a></li>
                     
                         <li><a href="/2015/02/23/hadoop%E4%BC%98%E5%8C%96-%E6%A6%82%E8%BF%B0/">Hadoop优化 概述</a></li>
-                    
-                        <li><a href="/2014/05/28/tomcat6%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/">Tomcat6集群配置</a></li>
                     
                 </ul>
             </div>

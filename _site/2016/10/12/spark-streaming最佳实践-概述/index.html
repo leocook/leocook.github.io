@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tez系列第三篇 Tez和oozie整合</title>
-    <meta name="description" content="  1.完成上一篇的基础的相关配置  2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下1.完成上一篇的基础的相关配置2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_201507...">
+    <title>Spark streaming最佳实践 概述</title>
+    <meta name="description" content="Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">
+    <link rel="canonical" href="http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -118,11 +118,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Tez系列第三篇 Tez和oozie整合</h1>
+        <h1>Spark streaming最佳实践 概述</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-05-17
+                <i class="fa fa-calendar"></i>2016-10-12
             </div>
 
             <div class="label-card">
@@ -142,7 +142,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
+        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
     
   
 
@@ -159,17 +159,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <!--a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a-->
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <!--a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a-->
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
-    
-        <!--a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a-->
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
+        <!--a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a-->
+        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
     
   
 
@@ -181,81 +172,124 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-  <li><a href="#jar" id="markdown-toc-jar">3.修改Jar的权限</a></li>
-  <li><a href="#section-1" id="markdown-toc-section-1">4.是配置生效</a></li>
-  <li><a href="#workflowtez" id="markdown-toc-workflowtez">5.在workflow里使用Tez</a>    <ul>
-      <li><a href="#workflowhivetez" id="markdown-toc-workflowhivetez">5.1.使单个workflow里的hive都用tez</a></li>
-      <li><a href="#workflowhivetez-1" id="markdown-toc-workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</a></li>
-    </ul>
-  </li>
+  <li><a href="#section" id="markdown-toc-section">1.内存溢出</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">2.外部系统连接数过多</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">3.资源分配的浪费</a></li>
 </ul>
 
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
+<p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
 
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
+<p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
+
+<h2 id="section">1.内存溢出</h2>
+
+<p>Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。</p>
+
+<p>我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：</p>
+<ul>
+  <li>a).数据倾斜引；</li>
+  <li>b).数据未倾斜，分区数过少；</li>
+  <li>c).某个分区中产生了一个较大的内存集合，例如大的List、Set，或者Map。</li>
+</ul>
+
+<p>这类问题在spark core中也是经常会出现的，关于数据倾斜的问题以后会详细讲解。入手一个新的业务时，应该对该业务的数据量有个大概的预估，这样给这个应用分配多少节点，每个节点会处理多大的数据量，这样就能很好的预估出每个节点分配多少资源比较合理了。</p>
+
+<p>为了避免内存溢出，可以从下面几个方向来做：</p>
+<ul>
+  <li>a).避免数据倾斜；</li>
+  <li>b).评估每个分区的数据量，给每个分区分配合理的资源；</li>
+  <li>c).控制好List、Set等集合的大小；</li>
+  <li>d).控制Spark streaming读取源数据的最大速度（spark.streaming.kafka.maxRatePerPartition），实时数据流量有高峰和低谷，不同时间处理的数据量是不一样的，为防止数据高峰的时候内存溢出，这里有必要做配置；</li>
+  <li>e).配置Spark streaming可动态控制读取数据源的速度（spark.streaming.backpressure.enabled）。</li>
+</ul>
+
+<h2 id="section-1">2.外部系统连接数过多</h2>
+
+<p>在使用spark streaming解决问题的时候，经常会对外部数据源进行读写操作，切记每次读写完成之后需要关闭网络连接。在我们以往的编程经验中，这些思维都是一直持有的。 <br />
+在往hbase写入数据的时候，如果你使用了RDD.saveAsHadoopDataset方法，就需要注意了，org.apache.hadoop.hbase.mapred.TableOutputFormat类存在bug：不能释放zookeeper连接，导致在往hbase写数据的时候，zookeeper的连接数不停得增长。</p>
+
+<p>推荐使用下面这种写法：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+import org.apache.hadoop.mapreduce.Job
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat
+
+val conf = HBaseConfiguration.create()
+conf.set("hbase.zookeeper.quorum", zk_hosts)
+conf.set("hbase.zookeeper.property.clientPort", zk_port)
+
+conf.set(TableOutputFormat.OUTPUT_TABLE, "TABLE_NAME")
+val job = Job.getInstance(conf)
+job.setOutputFormatClass(classOf[TableOutputFormat[String]])
+
+formatedLines.map{
+  case (a,b, c) =&gt; {
+    val row = Bytes.toBytes(a)
+
+    val put = new Put(row)
+    put.setDurability(Durability.SKIP_WAL)
+
+    put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("node"), Bytes.toBytes(b))
+    put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("topic"), Bytes.toBytes(c))
+
+    (new ImmutableBytesWritable(row), put)
+  }
+}.saveAsNewAPIHadoopDataset(job.getConfiguration)
+
 </code></pre>
 </div>
 
-<h2 id="jar">3.修改Jar的权限</h2>
-<p>保证oozie有权限读取、使用Jar包:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-</code></pre>
-</div>
+<h2 id="section-2">3.资源分配的浪费</h2>
 
-<h2 id="section-1">4.是配置生效</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>oozie admin -sharelibupdate
-oozie admin -shareliblist hive
-</code></pre>
-</div>
-<p>或者重启oozie也可以</p>
+<p>如果实时数据在每天的某个时间点有着平时的几倍的数据量，如果给该作业分配过多的资源，那么在绝大多数，这些资源都是闲置浪费的。这里可以启用动态资源分配。</p>
 
-<h2 id="workflowtez">5.在workflow里使用Tez</h2>
-<p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
+<p>关于配置介绍可以查看官方文档：http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation</p>
 
-<h3 id="workflowhivetez">5.1.使单个workflow里的hive都用tez</h3>
-<p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
+<p>如果启用该配置，需要做如下配置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
+<blockquote>
+  <p>1.在spark应用中配置spark.dynamicAllocation.enabled=true <br />
+2.每个节点启动外部shuffle服务，并在spark应用中配置spark.shuffle.service.enabled=true</p>
+</blockquote>
+
+<p>关于外部shuffle服务，在standalone、Mesos，yarn中的配置是不一样的。</p>
+
+<ul>
+  <li>standalone</li>
+</ul>
+
+<p>启动worker的时候指定spark.shuffle.service.enabled=true</p>
+
+<ul>
+  <li>Mesos</li>
+</ul>
+
+<p>在所有节点上配置spark.shuffle.service.enabled=true，然后执行$SPARK_HOME/sbin/start-mesos-shuffle-service.sh</p>
+
+<ul>
+  <li>yarn</li>
+</ul>
+
+<p>a.添加yarn的配置文件，重新编译spark。如果使用官方编译好的安装包，可以忽略这一步。
+b.找到spark-<version>-yarn-shuffle.jar。如果自己编译spark的话，在目录$SPARK_HOME/common/network-yarn/target/scala-<version>下；如果是使用官方编译好的spark，在lib目录下寻找。
+c.添加到spark-<version>-yarn-shuffle.jar到yarn所有NodeManager的classpath下。
+d.配置所有NodeManager的yarn-site.xml文件如下：</version></version></version></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+&lt;property&gt;
+  &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+  &lt;value&gt;spark_shuffle&lt;/value&gt;
 &lt;/property&gt;
 &lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
+  &lt;name&gt;yarn.nodemanager.aux-services.spark_shuffle.class&lt;/name&gt;
+  &lt;value&gt;org.apache.spark.network.yarn.YarnShuffleService&lt;/value&gt;
 &lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
+
 </code></pre>
 </div>
 
-<h3 id="workflowhivetez-1">5.2.使单个workflow里的单个hive都用tez</h3>
-<p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
+<p>spark on yarn配置了外部shuffle之后，<code>--num-executors</code>配置将不再生效。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;property&gt;
-	&lt;name&gt;hive.execution.engine&lt;/name&gt;
-	&lt;value&gt;tez&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.lib.uris&lt;/name&gt;
-	&lt;value&gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;
-	&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-</div>
-
-<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>set hive.execution.engine=tez;
-</code></pre>
-</div>
 
         </article>
         <hr>
@@ -266,9 +300,14 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
+            
+        
+            
+            
                 
                     
+                
+            
                 
                     
                 
@@ -279,9 +318,7 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -292,9 +329,7 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -302,9 +337,7 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -315,31 +348,15 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
             
                 
                     
-                        
-                        <h2 id="similar_posts">Similar Posts</h2>
-                        <ul>
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -350,145 +367,11 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
-                
-                    
-                
             
                 
                     
                 
-                    
-                
-                    
-                
-                    
-                
             
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/04/01/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%AF%86/">Tez系列第一篇 基础常识
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                        
-                        <li class="relatedPost">
-                            <a href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">Hadoop优化 Yarn
-                            
-                            </a>
-                        </li>
-                        
-                        
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
                 
                     
                 
@@ -499,9 +382,7 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
@@ -512,23 +393,33 @@ oozie admin -shareliblist hive
                 
                     
                 
-                    
-                
-                    
+            
                 
                     
                 
             
         
+            
+            
+                
+                    
+                
+            
         
-            </ul>
+            
+            
+                
+                    
+                
+            
+        
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/" data-title="Tez系列第三篇 Tez和oozie整合" data-url="http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/" data-title="Spark streaming最佳实践 概述" data-url="http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
