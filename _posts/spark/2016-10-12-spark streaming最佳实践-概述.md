@@ -111,6 +111,8 @@ d.配置所有NodeManager的yarn-site.xml文件如下：
 
 ```
 
+e.重启所有的NodeManager
+
 spark on yarn配置了外部shuffle之后，<code>--num-executors</code>配置将不再生效。
 
 
