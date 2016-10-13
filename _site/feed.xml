@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Oct 2016 14:46:57 +0800</pubDate>
-    <lastBuildDate>Thu, 13 Oct 2016 14:46:57 +0800</lastBuildDate>
+    <pubDate>Thu, 13 Oct 2016 14:48:07 +0800</pubDate>
+    <lastBuildDate>Thu, 13 Oct 2016 14:48:07 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -36,6 +36,7 @@
 &lt;p&gt;这类问题在spark core中也是经常会出现的，关于数据倾斜的问题以后会详细讲解。入手一个新的业务时，应该对该业务的数据量有个大概的预估，这样给这个应用分配多少节点，每个节点会处理多大的数据量，这样就能很好的预估出每个节点分配多少资源比较合理了。&lt;/p&gt;
 
 &lt;p&gt;为了避免内存溢出，可以从下面几个方向来做：&lt;/p&gt;
+
 &lt;ul&gt;
   &lt;li&gt;a).避免数据倾斜；&lt;/li&gt;
   &lt;li&gt;b).评估每个分区的数据量，给每个分区分配合理的资源；&lt;/li&gt;
