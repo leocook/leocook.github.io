@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Oct 2016 14:45:14 +0800</pubDate>
-    <lastBuildDate>Thu, 13 Oct 2016 14:45:14 +0800</lastBuildDate>
+    <pubDate>Thu, 13 Oct 2016 14:46:57 +0800</pubDate>
+    <lastBuildDate>Thu, 13 Oct 2016 14:46:57 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -26,6 +26,7 @@
 &lt;p&gt;Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。&lt;/p&gt;
 
 &lt;p&gt;我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：&lt;/p&gt;
+
 &lt;ul&gt;
   &lt;li&gt;a).数据倾斜引；&lt;/li&gt;
   &lt;li&gt;b).数据未倾斜，分区数过少；&lt;/li&gt;

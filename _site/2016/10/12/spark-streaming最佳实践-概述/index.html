@@ -186,6 +186,7 @@
 <p>Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。</p>
 
 <p>我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：</p>
+
 <ul>
   <li>a).数据倾斜引；</li>
   <li>b).数据未倾斜，分区数过少；</li>
