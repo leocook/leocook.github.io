@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Ubuntu常用配置</title>
-    <meta name="description" content="在使用ubuntu作为自己的开发环境时，可能会用到下面的这些小技巧哦！">
+    <title>Spark内存管理</title>
+    <meta name="description" content="Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memo...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/">
+    <link rel="canonical" href="http://leocook.github.io/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -118,11 +118,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Ubuntu常用配置</h1>
+        <h1>Spark内存管理</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2014-05-15
+                <i class="fa fa-calendar"></i>2016-10-13
             </div>
 
             <div class="label-card">
@@ -142,7 +142,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#linux" title="Category: linux" rel="category">linux</a>
+        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
     
   
 
@@ -159,8 +159,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#ubuntu" title="Tag: ubuntu" rel="tag">ubuntu</a-->
-        <a href="/tag/#ubuntu" title="Tag: ubuntu" rel="tag">ubuntu</a>
+        <!--a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a-->
+        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
     
   
 
@@ -172,82 +172,78 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#ubuntu-desktop" id="markdown-toc-ubuntu-desktop">1.ubuntu desktop接双显示器</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">1.1.环境</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.2.修改系统配置</a></li>
-      <li><a href="#arandr" id="markdown-toc-arandr">1.3.使用可视化软件Arandr</a></li>
+  <li><a href="#reserved-memory" id="markdown-toc-reserved-memory">1.Reserved Memory</a></li>
+  <li><a href="#user-memory" id="markdown-toc-user-memory">2.User Memory</a></li>
+  <li><a href="#spark-memory" id="markdown-toc-spark-memory">3.Spark Memory</a>    <ul>
+      <li><a href="#storage-memory" id="markdown-toc-storage-memory">3.1.Storage Memory</a></li>
+      <li><a href="#execution-memory" id="markdown-toc-execution-memory">3.2.Execution Memory</a></li>
+      <li><a href="#storage-memoryexecution-memory" id="markdown-toc-storage-memoryexecution-memory">3.3.Storage Memory和Execution Memory共享规则</a></li>
     </ul>
   </li>
-  <li><a href="#section-2" id="markdown-toc-section-2">2.最好用的终端</a></li>
-  <li><a href="#smplay" id="markdown-toc-smplay">3.视频播放器SMPlay</a></li>
 </ul>
 
-<p>在使用ubuntu作为自己的开发环境时，可能会用到下面的这些小技巧哦！</p>
+<p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
 
-<h1 id="ubuntu-desktop">1.ubuntu desktop接双显示器</h1>
+<p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong></p>
 
-<h2 id="section">1.1.环境</h2>
+<p>本文在描述spark各个部分内存的时候，大概从三个方面介绍：概念描述、该内存参数怎么配置，内存不够的时候会发生什么情况。</p>
+
+<h2 id="reserved-memory">1.Reserved Memory</h2>
+
+<p>系统预留内存，用于存储Spark内部对象。它的大小是300MB，不能通过参数修改，如果真的需要修改，需要重新编译（spark.testing.reservedMemory参数可以使用，但是不推荐在线上环境中使用）。</p>
+
+<p>当executor分配的内存小于1.5*Reserved Memory的时候，将会报“please use larger heap size”错误。</p>
+
+<h2 id="user-memory">2.User Memory</h2>
+
+<p>用户内存，用于存储RDD转换操作所需要的数据，例如RDD依赖等信息。
+这个内存大小为(“Java Heap” – “Reserved Memory”) * (1.0 – spark.memory.fraction)，默认是(“Java Heap” – 300MB) * 0.25。如果用户使用的内存大于这个值，将会导致OOM。</p>
+
+<h2 id="spark-memory">3.Spark Memory</h2>
+
+<p>这部分内存是归Spark自身管理的，大小为(“Java Heap” – “Reserved Memory”) * spark.memory.fraction，默认为(“Java Heap” – 300MB) * 0.75。Spark Memory又被分为Storage Memory和Execution Memory，下面详细说明。</p>
+
+<h3 id="storage-memory">3.1.Storage Memory</h3>
+
+<p>用来存储spark的cache数据，例如RDD的缓存、unroll数据。当缓存数据的持久化level达到一定的时候，spark将会把它存到磁盘中，例如广播变量的数据持久化级别都是“MEMORY_AND_DISK”，所以所有的广播变量数据大小达到一定量的时候，都会存到磁盘中的。默认大小是Spark Memory的0.5，可用过参数spark.memory.storageFraction来配置（spark.memory.storageFraction=0.5）。</p>
+
 <ul>
-  <li>ubuntu12.04</li>
-  <li>Arandr</li>
+  <li>Unroll Memory</li>
 </ul>
 
-<h2 id="section-1">1.2.修改系统配置</h2>
+<p>“Unroll Memory”是”Storage Memory”的一部分，在Spark中数据可以以序列化和反序列化的形式存储，序列化后的数据是无法直接被访问的，只有反序列化后才能被使用，反序列化过程中用到的RAM就是Unroll Memory。Spark中的大部分数据都是以序列化的形式传输的。</p>
+
+<h3 id="execution-memory">3.2.Execution Memory</h3>
+
+<p>用于存储spark的buffer部分，例如task运行过程中产生的一些对象，shuffle过程中map的输出，在内存不够的时候，支持写到磁盘上。Spark Memory中能被应用使用的内存中，除了Storage Memory剩余内存都是Execution Memory的了。</p>
+
 <ul>
-  <li>编辑/etc/X11/xorg.conf文件
-    <div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/X11/xorg.conf
-</code></pre>
-    </div>
-  </li>
-  <li>在Section “Screen”内容之内增加以下内容
-    <div class="highlighter-rouge"><pre class="highlight"><code>SubSection "Display"
-Virtual 4000 3000
-EndSubSection
-</code></pre>
-    </div>
-  </li>
-  <li>重启xwindow</li>
+  <li>Shuffle Memory</li>
 </ul>
 
-<p>方法一：快捷键是Ctrl + Alt + Backspace;(这个快捷键默认是关闭的，在快捷键设置中可以更改).</p>
+<p>shuffle阶段使用的内存，主要是使用在sort上。如果这一块没有足够的内存来用作shuffle，将会内存溢出失败。
+当然，在内存不足的时候，也可以使用spark的外部排序（spark.shuffle.spill=true），但是性能将会有些折扣。</p>
 
-<p>方法二：</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo init 6
-</code></pre>
-</div>
+<h3 id="storage-memoryexecution-memory">3.3.Storage Memory和Execution Memory共享规则</h3>
 
-<h2 id="arandr">1.3.使用可视化软件Arandr</h2>
 <ul>
-  <li>安装Arandr
-    <div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install arandr
-</code></pre>
-    </div>
+  <li>
+    <p><strong>一方空闲，一方内存不足的时候，内存不足的一方可以借用另一方的内存。</strong></p>
   </li>
   <li>
-    <p>打开查看各个主屏的名称  <br />
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/arandr.png" alt="Arandr" title="Arandr" /></p>
-  </li>
-  <li>设置对应的显示设备为主屏
-    <div class="highlighter-rouge"><pre class="highlight"><code>sudo xrandr --output CRT1 --primary
-</code></pre>
-    </div>
+    <p><strong>Storage Memory占用了Execution Memory的内存，当Execution Memory内存不够用时</strong></p>
   </li>
 </ul>
 
-<p>聪明的你一定会知道要设置LVDS为主显示器需要怎么做！Enjoy it！</p>
+<p>强制释放Storage Memory中属于Execution Memory的那部分内存，释放后的内存被Execution Memory使用。Storage Memory丢失的数据在下次使用的时候会被重新计算。</p>
 
-<h1 id="section-2">2.最好用的终端</h1>
-<p>Terminator</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install terminator
-</code></pre>
-</div>
+<ul>
+  <li><strong>Execution Memory占用了Storage Memory的内存，当Storage Memory内存不够用时</strong></li>
+</ul>
 
-<h1 id="smplay">3.视频播放器SMPlay</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install mplayer 
-sudo apt-get install ffmpeg
-sudo apt-get install smplayer
-</code></pre>
-</div>
+<p>不强制释放Execution Memory中属于Storage Memory的那部分内存，Storage Memory会一直等待，直到Execution Memory主动释放属于Storage Memory的那部分内存。因为强制释放Execution Memory会导致任务失败。</p>
+
+<p>（PS：感觉Execution Memory在欺负Storage Memory，有木有~~~）</p>
 
 
         </article>
@@ -258,12 +254,17 @@ sudo apt-get install smplayer
             
                 
                     
-                
-            
-        
-            
-            
-                
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述
+                            
+                            </a>
+                        </li>
+                        
+                        
                     
                 
             
@@ -372,13 +373,22 @@ sudo apt-get install smplayer
                 
             
         
+            
+            
+                
+                    
+                
+            
+        
+        
+            </ul>
         
 
 
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/" data-title="Ubuntu常用配置" data-url="http://leocook.github.io/2014/05/15/ubuntu%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-title="Spark内存管理" data-url="http://leocook.github.io/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
