@@ -5,9 +5,59 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 02 Jan 2017 00:48:37 +0800</pubDate>
-    <lastBuildDate>Mon, 02 Jan 2017 00:48:37 +0800</lastBuildDate>
+    <pubDate>Mon, 02 Jan 2017 00:52:25 +0800</pubDate>
+    <lastBuildDate>Mon, 02 Jan 2017 00:52:25 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>2016书单</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.《西游记》&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spark&quot; id=&quot;markdown-toc-spark&quot;&gt;2.《Spark最佳实践》&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spark-1&quot; id=&quot;markdown-toc-spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.《西游记》&lt;/h2&gt;
+
+&lt;p&gt;和86版的电视剧差别挺大，在北京时，主要是坐地铁的时候看完的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/xiyouji.png&quot; alt=&quot;西游记&quot; title=&quot;西游记&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://www.amazon.cn/dp/B00C4PGGUW&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spark&quot;&gt;2.《Spark最佳实践》&lt;/h2&gt;
+
+&lt;p&gt;同类目书籍中，比较偏向实战，推荐。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img3.doubanio.com/lpic/s28707922.jpg&quot; alt=&quot;Spark最佳实践&quot; title=&quot;Spark最佳实践&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://item.jd.com/11923673.html&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/h2&gt;
+
+&lt;p&gt;spark入门级别的书，写得比较细致，也可以作为手册查询，内容基本上都是官网翻译过来的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img1.doubanio.com/lpic/s28300707.jpg&quot; alt=&quot;Spark快速大数据分析&quot; title=&quot;Spark快速大数据分析&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://item.jd.com/11782888.html&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 30 Dec 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/12/30/2016%E4%B9%A6%E5%8D%95/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/12/30/2016%E4%B9%A6%E5%8D%95/</guid>
+        
+        <category>书单</category>
+        
+        
+        <category>书单</category>
+        
+      </item>
     
       <item>
         <title>Spark内存管理</title>
@@ -1149,56 +1199,6 @@ http://archive.cloudera.com/cm5/cm/5/&lt;/p&gt;
         
         
         <category>hadoop</category>
-        
-      </item>
-    
-      <item>
-        <title>2016书单</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.《西游记》&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#spark&quot; id=&quot;markdown-toc-spark&quot;&gt;2.《Spark最佳实践》&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#spark-1&quot; id=&quot;markdown-toc-spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.《西游记》&lt;/h2&gt;
-
-&lt;p&gt;和86版的电视剧差别挺大，在北京时，主要是坐地铁的时候看完的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/xiyouji.png&quot; alt=&quot;西游记&quot; title=&quot;西游记&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图书地址：https://www.amazon.cn/dp/B00C4PGGUW&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;spark&quot;&gt;2.《Spark最佳实践》&lt;/h2&gt;
-
-&lt;p&gt;同类目书籍中，比较偏向实战，推荐。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://img3.doubanio.com/lpic/s28707922.jpg&quot; alt=&quot;Spark最佳实践&quot; title=&quot;Spark最佳实践&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图书地址：https://item.jd.com/11923673.html&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/h2&gt;
-
-&lt;p&gt;spark入门级别的书，写得比较细致，也可以作为手册查询，内容基本上都是官网翻译过来的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://img1.doubanio.com/lpic/s28300707.jpg&quot; alt=&quot;Spark快速大数据分析&quot; title=&quot;Spark快速大数据分析&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图书地址：https://item.jd.com/11782888.html&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 20 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/07/20/2016%E4%B9%A6%E5%8D%95/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/07/20/2016%E4%B9%A6%E5%8D%95/</guid>
-        
-        <category>书单</category>
-        
-        
-        <category>书单</category>
         
       </item>
     
