@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 18 Nov 2016 15:10:34 +0800</pubDate>
-    <lastBuildDate>Fri, 18 Nov 2016 15:10:34 +0800</lastBuildDate>
+    <pubDate>Mon, 02 Jan 2017 00:48:37 +0800</pubDate>
+    <lastBuildDate>Mon, 02 Jan 2017 00:48:37 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -1153,6 +1153,56 @@ http://archive.cloudera.com/cm5/cm/5/&lt;/p&gt;
       </item>
     
       <item>
+        <title>2016书单</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.《西游记》&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spark&quot; id=&quot;markdown-toc-spark&quot;&gt;2.《Spark最佳实践》&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spark-1&quot; id=&quot;markdown-toc-spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.《西游记》&lt;/h2&gt;
+
+&lt;p&gt;和86版的电视剧差别挺大，在北京时，主要是坐地铁的时候看完的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/xiyouji.png&quot; alt=&quot;西游记&quot; title=&quot;西游记&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://www.amazon.cn/dp/B00C4PGGUW&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spark&quot;&gt;2.《Spark最佳实践》&lt;/h2&gt;
+
+&lt;p&gt;同类目书籍中，比较偏向实战，推荐。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img3.doubanio.com/lpic/s28707922.jpg&quot; alt=&quot;Spark最佳实践&quot; title=&quot;Spark最佳实践&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://item.jd.com/11923673.html&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spark-1&quot;&gt;3.《Spark快速大数据分析》&lt;/h2&gt;
+
+&lt;p&gt;spark入门级别的书，写得比较细致，也可以作为手册查询，内容基本上都是官网翻译过来的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img1.doubanio.com/lpic/s28300707.jpg&quot; alt=&quot;Spark快速大数据分析&quot; title=&quot;Spark快速大数据分析&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图书地址：https://item.jd.com/11782888.html&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 20 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2016/07/20/2016%E4%B9%A6%E5%8D%95/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2016/07/20/2016%E4%B9%A6%E5%8D%95/</guid>
+        
+        <category>书单</category>
+        
+        
+        <category>书单</category>
+        
+      </item>
+    
+      <item>
         <title>Elk安装配置介绍</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;版本列表&lt;/a&gt;&lt;/li&gt;
@@ -2038,159 +2088,6 @@ https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p
         
         
         <category>tez</category>
-        
-      </item>
-    
-      <item>
-        <title>Hadoop优化 Yarn</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.之前的集群存在的问题&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.1.问题一：作业的执行速率不同步&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;1.2.问题二：资源利用倾斜&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;1.3.问题三：集群资源并没有真正的参与计算&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;2.集群资源重新划分的过程&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;2.1.拿到集群中所有机器的硬件资源列表&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;2.2.根据集群资源，分组的大概情况如截图：&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;2.3.资源划分的策略&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;2.4.具体的划分策略&lt;/a&gt;        &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;2.4.1.内存划分策略&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;2.4.2.内存划分策略&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#mysql&quot; id=&quot;markdown-toc-mysql&quot;&gt;3.mysql调优的过程&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;4.成果&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;4.1.集群表现情况&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#mysql-1&quot; id=&quot;markdown-toc-mysql-1&quot;&gt;4.2.mysql表现情况&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;5.总结&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。&lt;/p&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;1.之前的集群存在的问题&lt;/h1&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;1.1.问题一：作业的执行速率不同步&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;问题表现
-部分任务跑的慢，部分任务跑得快。&lt;/li&gt;
-  &lt;li&gt;问题的原因
-集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。&lt;/li&gt;
-  &lt;li&gt;解决办法
-重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;1.2.问题二：资源利用倾斜&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;问题表现
-部分机器资源利用率极高，部分机器资源利用率级低；&lt;/li&gt;
-  &lt;li&gt;问题的原因
-&lt;strong&gt;同【问题一】&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;解决办法
-&lt;strong&gt;同【问题一】&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;1.3.问题三：集群资源并没有真正的参与计算&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;问题表现
-作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。&lt;/li&gt;
-  &lt;li&gt;问题的原因
-咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。&lt;/li&gt;
-  &lt;li&gt;解决办法
-a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。
-b). 减少单个任务的资源占用，提高集群的并行度。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;section-4&quot;&gt;2.集群资源重新划分的过程&lt;/h1&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;2.1.拿到集群中所有机器的硬件资源列表&lt;/h2&gt;
-&lt;p&gt;感谢运维同学的帮助！&lt;/p&gt;
-
-&lt;h2 id=&quot;section-6&quot;&gt;2.2.根据集群资源，分组的大概情况如截图：&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png&quot; alt=&quot;服务器分组情况&quot; title=&quot;根据机器硬件资源情况，服务器分组情况&quot; /&gt;
-分组命名规则：
-&lt;strong&gt;&lt;em&gt;NM&lt;/em&gt;&lt;/strong&gt;: NodeManager；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;G01&lt;/em&gt;&lt;/strong&gt;: Group01；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;C08&lt;/em&gt;&lt;/strong&gt;: cpu是8核；  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;M48&lt;/em&gt;&lt;/strong&gt;: 内存是48GB。  &lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;ZK&lt;/em&gt;&lt;/strong&gt;: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）&lt;/p&gt;
-
-&lt;h2 id=&quot;section-7&quot;&gt;2.3.资源划分的策略&lt;/h2&gt;
-&lt;p&gt;根据机器上安装的服务，大概给服务做了如下的划分：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;安装有重要服务的机器，不参与计算
-例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;只安装了存储和计算的机器
-例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-8&quot;&gt;2.4.具体的划分策略&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-9&quot;&gt;2.4.1.内存划分策略&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;yarn容器可直接管理的资源
-主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。&lt;/li&gt;
-  &lt;li&gt;单个任务可使用的任务资源
-map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-    &lt;h3 id=&quot;section-10&quot;&gt;2.4.2.内存划分策略&lt;/h3&gt;
-  &lt;/li&gt;
-  &lt;li&gt;yarn容器可直接管理的资源
-对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。&lt;/li&gt;
-  &lt;li&gt;单个任务可使用的任务资源
-1个vcore。
-    &lt;h1 id=&quot;mysql&quot;&gt;3.mysql调优的过程&lt;/h1&gt;
-    &lt;p&gt;不同的库，挂载在不同的磁盘上，减小单块盘的压力。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;section-11&quot;&gt;4.成果&lt;/h1&gt;
-
-&lt;h2 id=&quot;section-12&quot;&gt;4.1.集群表现情况&lt;/h2&gt;
-&lt;p&gt;到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。&lt;/p&gt;
-&lt;h2 id=&quot;mysql-1&quot;&gt;4.2.mysql表现情况&lt;/h2&gt;
-&lt;p&gt;优化前的负载情况入下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png&quot; alt=&quot;优化前&quot; title=&quot;优化前负载情况&quot; /&gt;
-优化后的负载情况入下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/mysql.png&quot; alt=&quot;优化后&quot; title=&quot;优化后负载情况&quot; /&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&quot;section-13&quot;&gt;5.总结&lt;/h1&gt;
-&lt;p&gt;在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Impala的资源管理未使用yarn，所以一直还没有开始使用；&lt;/li&gt;
-  &lt;li&gt;OOZIE未做HA配置；&lt;/li&gt;
-  &lt;li&gt;HDFS数据平衡效果不是很好；&lt;/li&gt;
-  &lt;li&gt;CPU一个线程做两个vcore使用，压力还是比较大的。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在接下，将会按照优先级逐一解决。&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/</guid>
-        
-        <category>hadoop</category>
-        
-        <category>集群优化</category>
-        
-        
-        <category>hadoop</category>
         
       </item>
     
