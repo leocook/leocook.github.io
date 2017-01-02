@@ -5,9 +5,99 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 02 Jan 2017 00:52:25 +0800</pubDate>
-    <lastBuildDate>Mon, 02 Jan 2017 00:52:25 +0800</lastBuildDate>
+    <pubDate>Mon, 02 Jan 2017 14:05:39 +0800</pubDate>
+    <lastBuildDate>Mon, 02 Jan 2017 14:05:39 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>2016总结与2017计划</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;2017年计划&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;结婚&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;学驾照&amp;amp;买车&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;旅行&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;健身&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;摄影&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;技术&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;2016年总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;过去的2016年做了几件大事，买了房，离开北京换了城市，结束了三年之久的异地年。很精彩的一年，2017将会更出彩！&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;2017年计划&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;结婚&lt;/h3&gt;
+
+&lt;p&gt;和媳妇在一起五年了，是时候结婚、组建一个家庭了。很感谢在过去的我们，五年里经历风雨，一直到现在。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;学驾照&amp;amp;买车&lt;/h3&gt;
+
+&lt;p&gt;驾照一定要拿到手，然后买车&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;旅行&lt;/h3&gt;
+
+&lt;p&gt;以前一直比较宅，不怎么往外跑。&lt;/p&gt;
+
+&lt;p&gt;先来个很容易就能实现的目标：去转转乌镇、绍兴。&lt;/p&gt;
+
+&lt;p&gt;一个稍微准备下就能实现的目标：云南、大理走一走，时间充裕去一趟三亚。&lt;/p&gt;
+
+&lt;p&gt;稍微多准备下就能实现的目标：来一趟国外旅行，泰国、日本、韩国、美国、欧洲。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;健身&lt;/h3&gt;
+
+&lt;p&gt;从16年的11月，已经开始健身，这一年要继续加强，学习健身方法，保证一周2到4次的健身频率。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;摄影&lt;/h3&gt;
+
+&lt;p&gt;一个月至少一次的户外摄影学习。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;技术&lt;/h3&gt;
+
+&lt;p&gt;目前正在研读Spark的源码，17年将重点研究基于Spark生态的大数据解决方案。给自己一个小小的目标：成为spark commiter。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-7&quot;&gt;2016年总结&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;订婚&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;开始健身&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;开始健身比懂健身更重要。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;来杭州生活&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上有天堂，下有苏杭，不多说。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;技术&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;独立搞定上百台（PB级）大数据集群优化工作，并且在两个月内无故障作业。
+从Hadoop平台转向Spark技术栈的研究，开始阅读Spark源码。
+开始关于算法的学习，但未做主技能培养。&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 02 Jan 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/01/02/2016%E6%80%BB%E7%BB%93%E4%B8%8E2017%E8%AE%A1%E5%88%92/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/01/02/2016%E6%80%BB%E7%BB%93%E4%B8%8E2017%E8%AE%A1%E5%88%92/</guid>
+        
+        <category>年初计划</category>
+        
+        <category>年终总结</category>
+        
+        
+        <category>生活</category>
+        
+      </item>
     
       <item>
         <title>2016书单</title>
@@ -282,48 +372,6 @@ d.配置所有NodeManager的yarn-site.xml文件如下：&lt;/version&gt;&lt;/ver
         
         
         <category>spark</category>
-        
-      </item>
-    
-      <item>
-        <title>幸福的双休日</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;扯几句&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;周六&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;周日&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;自从离开北京到现在也有两个月了，中间在上海待了一个多月，最后还是来了杭州。来了杭州之后才知道，这是一个幸福感爆棚的准一线城市！&lt;/p&gt;
-
-&lt;p&gt;离开北京后，一直在奔波。北京和上海这两个城市，留给外地的年轻人更多的是想象，房价、落户等等都是遥不可及的。北京离家比较远，如果不能买房留在那也没啥意思。上海离家近一些，还是那个问题，买房和落户的问题，经过和女朋友三年异地的历程，不想把宝贵的时间耗费在距离上，爱情、亲情都是这样。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;扯几句&lt;/h2&gt;
-
-&lt;p&gt;生活和工作上，杭州这总城市整体上没有北京和上海那么浮躁。没遇到过大家为了上个地铁或者公交，挤得你死我活，关于挤地铁这个事情，个人感觉上海那边比北京要显得糟糕点。在杭州则不一样，主城区到郊区距离也不是很远，大多数同事到公司的距离都在5公里以内吧，自行车和电动车都是比较好的代步工具。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;周六&lt;/h2&gt;
-
-&lt;p&gt;按照惯例，周六会好好的睡一觉，一直睡到自然醒。上了一个星期的班，补充一下睡眠。中午有朋友在这，一起吃了个饭，下午一起逛逛街，去超市买点东西就回家了。晚餐后（媳妇做的晚餐，超棒！），看看书，学习学习新的技术，十点不到就睡着了。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;周日&lt;/h2&gt;
-
-&lt;p&gt;六点多就醒了，微信上月朋友一起跑了两公里多，早上不需要跑太久，跑久了一天都会有疲惫感。回来的路上买了点早餐，到家后和朋友，还有媳妇一起开始了早餐。油条、小笼包，还有自己煮的白米粥，粗茶淡饭，健康的生活。吃完了早饭，朋友离去后才八点多。哇~早起会给你增添这么多时间！&lt;/p&gt;
-
-&lt;p&gt;随后继续看书、学习技术。午饭后玩了玩游戏，傍晚和朋友一起去买菜，三个男人买了二十块钱的菜，花了一个多小时的时间做好了晚餐，朋友住的地方到我住的地方步行也就3分钟，才做好了，喊了媳妇来吃饭（现在都是男人下厨房有木有？）。晚餐后3哥们在一块吹吹牛，媳妇去洗碗了（俺媳妇还是比较贤惠滴）。&lt;/p&gt;
-
-&lt;p&gt;晚餐散后回到住处看了会资料，写下这篇文字，记录一下这个双休。家里有个贤惠漂亮的媳妇、身边好友三两，不用考虑太多关于生存的话题。可以把时间花费在自己感兴趣的事情上，例如技术追求和厨艺。&lt;/p&gt;
-
-&lt;p&gt;最后，杭州是一个适合年轻人奋斗和生活的地方。&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 21 Aug 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/08/21/%E5%B9%B8%E7%A6%8F%E7%9A%84%E5%8F%8C%E4%BC%91%E6%97%A5/</guid>
-        
-        <category>双休日</category>
-        
-        
-        <category>生活</category>
         
       </item>
     
