@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>2016书单</title>
-    <meta name="description" content="2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。">
+    <title>Matplotlib on mac安装体验</title>
+    <meta name="description" content="Matplotlib是一个基于Python的2D绘图库，使用起来方便、快捷，图片质量较高，本文将简单的做一些介绍，并安装体验。">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/12/30/2016%E4%B9%A6%E5%8D%95/">
+    <link rel="canonical" href="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -148,11 +148,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>2016书单</h1>
+        <h1>Matplotlib on mac安装体验</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-12-30
+                <i class="fa fa-calendar"></i>2017-05-10
             </div>
 
             <div class="label-card">
@@ -172,7 +172,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#书单" title="Category: 书单" rel="category">书单</a>
+        <a href="/category/#python" title="Category: python" rel="category">python</a>
     
   
 
@@ -189,8 +189,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#%E4%B9%A6%E5%8D%95" title="Tag: 书单" rel="tag">书单</a-->
-        <a href="/tag/#书单" title="Tag: 书单" rel="tag">书单</a>
+        <!--a href="/tag/#matplotlib" title="Tag: matplotlib" rel="tag">matplotlib</a-->
+        <a href="/tag/#matplotlib" title="Tag: matplotlib" rel="tag">matplotlib</a>
     
   
 
@@ -202,40 +202,70 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.《西游记》</a></li>
-  <li><a href="#spark" id="markdown-toc-spark">2.《Spark最佳实践》</a></li>
-  <li><a href="#spark-1" id="markdown-toc-spark-1">3.《Spark快速大数据分析》</a></li>
+  <li><a href="#pip" id="markdown-toc-pip">关于Pip</a></li>
+  <li><a href="#matplotlib" id="markdown-toc-matplotlib">安装matplotlib</a></li>
+  <li><a href="#example" id="markdown-toc-example">Example</a></li>
 </ul>
 
-<p>2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。</p>
+<p>Matplotlib是一个基于Python的2D绘图库，使用起来方便、快捷，图片质量较高，本文将简单的做一些介绍，并安装体验。</p>
 
-<h2 id="section">1.《西游记》</h2>
+<p>官方安装说明：http://matplotlib.org/users/installing.html
+在Mac OSX上，可以使用Pip来安装。</p>
 
-<p>和86版的电视剧差别挺大，在北京时，主要是坐地铁的时候看完的。</p>
+<h2 id="pip">关于Pip</h2>
+<p>Pip是python的一个包管理工具，下面说说它的安装。</p>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/xiyouji.png" alt="西游记" title="西游记" /></p>
+<ul>
+  <li>下载安装脚本</li>
+</ul>
 
-<p>图书地址：https://www.amazon.cn/dp/B00C4PGGUW</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -O https://bootstrap.pypa.io/get-pip.py
+</code></pre>
+</div>
 
-<hr />
+<ul>
+  <li>安装</li>
+</ul>
 
-<h2 id="spark">2.《Spark最佳实践》</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>#如果你使用Python 2.7,运行下面的命令：
+python get-pip.py
 
-<p>同类目书籍中，比较偏向实战，推荐。</p>
+#如果你使用Python 3,运行下面的命令：
+python3 get-pip.py
+</code></pre>
+</div>
 
-<p><img src="https://img3.doubanio.com/lpic/s28707922.jpg" alt="Spark最佳实践" title="Spark最佳实践" /></p>
+<p>安装是不是很简单？</p>
 
-<p>图书地址：https://item.jd.com/11923673.html</p>
+<h2 id="matplotlib">安装matplotlib</h2>
+<p>直接命令安装：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install matplotlib
+</code></pre>
+</div>
 
-<hr />
+<h2 id="example">Example</h2>
 
-<h2 id="spark-1">3.《Spark快速大数据分析》</h2>
+<p>关于matplotlib的例子，在<code>http://matplotlib.org/examples/index.html</code>这里有很多，下面随机选了两个运行一下作为例子让大家看下。</p>
 
-<p>spark入门级别的书，写得比较细致，也可以作为手册查询，内容基本上都是官网翻译过来的。</p>
+<ul>
+  <li>animate_decay</li>
+</ul>
 
-<p><img src="https://img1.doubanio.com/lpic/s28300707.jpg" alt="Spark快速大数据分析" title="Spark快速大数据分析" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>python animate_decay.py
+</code></pre>
+</div>
 
-<p>图书地址：https://item.jd.com/11782888.html</p>
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/animate_decay.gif" alt="animate_decay" title="animate_decay" /></p>
+
+<ul>
+  <li>dynamic_image</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>python dynamic_image.py
+</code></pre>
+</div>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/dynamic_image.gif" alt="dynamic_image" title="dynamic_image" /></p>
 
 
         </article>
@@ -362,7 +392,7 @@
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/12/30/2016%E4%B9%A6%E5%8D%95/" data-title="2016书单" data-url="http://leocook.github.io/2016/12/30/2016%E4%B9%A6%E5%8D%95/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/" data-title="Matplotlib on mac安装体验" data-url="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
