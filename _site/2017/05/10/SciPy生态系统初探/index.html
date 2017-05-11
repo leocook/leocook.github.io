@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Matplotlib on mac安装体验</title>
-    <meta name="description" content="Matplotlib是一个基于Python的2D绘图库，使用起来方便、快捷，图片质量较高，本文将简单的做一些介绍，并安装体验。">
+    <title>Scipy生态系统初探</title>
+    <meta name="description" content="SciPy是一个基于Python的开源生态系统，也称为SciPy技术栈，主要为数学计算、科学研究以及工程计算提供服务。">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/">
+    <link rel="canonical" href="http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -148,7 +148,7 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Matplotlib on mac安装体验</h1>
+        <h1>Scipy生态系统初探</h1>
         <div class="label">
 
             <div class="label-card">
@@ -172,7 +172,9 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#python" title="Category: python" rel="category">python</a>
+        <a href="/category/#python" title="Category: python" rel="category">python</a>&nbsp;
+    
+        <a href="/category/#SciPy" title="Category: SciPy" rel="category">SciPy</a>
     
   
 
@@ -189,8 +191,26 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#matplotlib" title="Tag: matplotlib" rel="tag">matplotlib</a-->
-        <a href="/tag/#matplotlib" title="Tag: matplotlib" rel="tag">matplotlib</a>
+        <!--a href="/tag/#SciPy" title="Tag: SciPy" rel="tag">SciPy</a-->
+        <a href="/tag/#SciPy" title="Tag: SciPy" rel="tag">SciPy</a>&nbsp;
+    
+        <!--a href="/tag/#NumPy" title="Tag: NumPy" rel="tag">NumPy</a-->
+        <a href="/tag/#NumPy" title="Tag: NumPy" rel="tag">NumPy</a>&nbsp;
+    
+        <!--a href="/tag/#python" title="Tag: python" rel="tag">python</a-->
+        <a href="/tag/#python" title="Tag: python" rel="tag">python</a>&nbsp;
+    
+        <!--a href="/tag/#Matplotlib" title="Tag: Matplotlib" rel="tag">Matplotlib</a-->
+        <a href="/tag/#Matplotlib" title="Tag: Matplotlib" rel="tag">Matplotlib</a>&nbsp;
+    
+        <!--a href="/tag/#IPython" title="Tag: IPython" rel="tag">IPython</a-->
+        <a href="/tag/#IPython" title="Tag: IPython" rel="tag">IPython</a>&nbsp;
+    
+        <!--a href="/tag/#Sympy" title="Tag: Sympy" rel="tag">Sympy</a-->
+        <a href="/tag/#Sympy" title="Tag: Sympy" rel="tag">Sympy</a>&nbsp;
+    
+        <!--a href="/tag/#pandas" title="Tag: pandas" rel="tag">pandas</a-->
+        <a href="/tag/#pandas" title="Tag: pandas" rel="tag">pandas</a>
     
   
 
@@ -202,50 +222,104 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#pip" id="markdown-toc-pip">关于Pip</a></li>
-  <li><a href="#matplotlib" id="markdown-toc-matplotlib">安装matplotlib</a></li>
-  <li><a href="#example" id="markdown-toc-example">Example</a></li>
+  <li><a href="#scipy" id="markdown-toc-scipy">1.SciPy技术栈的安装</a></li>
+  <li><a href="#numpyscipy" id="markdown-toc-numpyscipy">2.NumPy&amp;scipy测试</a></li>
+  <li><a href="#matplotlib" id="markdown-toc-matplotlib">2.Matplotlib测试</a></li>
+  <li><a href="#ipython" id="markdown-toc-ipython">3.IPython</a></li>
 </ul>
 
-<p>Matplotlib是一个基于Python的2D绘图库，使用起来方便、快捷，图片质量较高，本文将简单的做一些介绍，并安装体验。</p>
+<p>SciPy是一个基于Python的开源生态系统，也称为<code>SciPy技术栈</code>，主要为数学计算、科学研究以及工程计算提供服务。</p>
 
-<p>官方安装说明：http://matplotlib.org/users/installing.html
-在Mac OSX上，可以使用Pip来安装。</p>
-
-<h2 id="pip">关于Pip</h2>
-<p>Pip是python的一个包管理工具，下面说说它的安装。</p>
+<p>下面是SciPy生态圈中一些常用的包：</p>
 
 <ul>
-  <li>下载安装脚本</li>
+  <li>NumPy</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -O https://bootstrap.pypa.io/get-pip.py
-</code></pre>
-</div>
+<p>NumPy是Python科学计算中的一个比较基础的包，它主要有下面几项功能：</p>
+
+<p>a.强大的矩阵计算能力
+b.用于整合C/C++和Fortran代码的工具包
+c.比较成熟的（广播）函数库
+d.支持线性代数求解、傅里叶变换，以及随机数处理</p>
 
 <ul>
-  <li>安装</li>
+  <li>SciPy library</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#如果你使用Python 2.7,运行下面的命令：
-python get-pip.py
+<p>SciPy是组成SciPy技术栈的核心包之一，它的相关API使用起来都比较友好，且执行效率高。</p>
 
-#如果你使用Python 3,运行下面的命令：
-python3 get-pip.py
+<ul>
+  <li>Matplotlib</li>
+</ul>
+
+<p>Matplotlib是一个基于Python的2D绘图库，能绘制出出版社级别的高质量图。</p>
+
+<ul>
+  <li>IPython</li>
+</ul>
+
+<p>一个功能强大的Python命令行，也是Jupyter的内核。
+关于Jupyter，被人们广为熟知的有Jupyter Notebook，之前的名字叫IPython Notebook，是一个交互式笔记本，可以运行几十种语言。在Jupyter Notebook中，代码可以实时的生成图像、视频等。</p>
+
+<ul>
+  <li>Sympy</li>
+</ul>
+
+<p>基于Python的符号计算包。</p>
+
+<ul>
+  <li>pandas</li>
+</ul>
+
+<p>pandas提供一些高效、易用的数据结构，以及数据分析工具。</p>
+
+<h2 id="scipy">1.SciPy技术栈的安装</h2>
+
+<p>直接使用pip安装</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 </code></pre>
 </div>
 
-<p>安装是不是很简单？</p>
+<h2 id="numpyscipy">2.NumPy&amp;scipy测试</h2>
 
-<h2 id="matplotlib">安装matplotlib</h2>
-<p>直接命令安装：</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>pip install matplotlib
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; a = np.arange(15).reshape(3, 5)
+&gt;&gt;&gt; a
+array([[ 0,  1,  2,  3,  4],
+       [ 5,  6,  7,  8,  9],
+       [10, 11, 12, 13, 14]])
+&gt;&gt;&gt; a.shape
+(3, 5)
+&gt;&gt;&gt; a.ndim
+2
+&gt;&gt;&gt; a.dtype.name
+'int64'
+&gt;&gt;&gt; a.itemsize
+8
+&gt;&gt;&gt; a.size
+15
+&gt;&gt;&gt; type(a)
+&lt;type 'numpy.ndarray'&gt;
+&gt;&gt;&gt; b = np.array([6, 7, 8])
+&gt;&gt;&gt; b
+array([6, 7, 8])
+&gt;&gt;&gt; type(b)
+&lt;type 'numpy.ndarray'&gt;
 </code></pre>
 </div>
 
-<h2 id="example">Example</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>$ python
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; np.test('full')
+&gt;&gt;&gt; import scipy
+&gt;&gt;&gt; scipy.test()
+</code></pre>
+</div>
 
-<p>关于matplotlib的例子，在<code>http://matplotlib.org/examples/index.html</code>这里有很多，下面随机选了两个运行一下作为例子让大家看下。</p>
+<h2 id="matplotlib">2.Matplotlib测试</h2>
+
+<p>关于matplotlib的例子，在http://matplotlib.org/examples/index.html这里有很多，下面随机选了两个运行一下作为例子让大家看下。</p>
 
 <ul>
   <li>animate_decay</li>
@@ -267,6 +341,9 @@ python3 get-pip.py
 
 <p><img src="http://7xriy2.com1.z0.glb.clouddn.com/dynamic_image.gif" alt="dynamic_image" title="dynamic_image" /></p>
 
+<h2 id="ipython">3.IPython</h2>
+
+<p>直接使用命令ipython进入</p>
 
         </article>
         <hr>
@@ -277,10 +354,15 @@ python3 get-pip.py
                 
                     
                 
-            
-        
-            
-            
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -291,10 +373,15 @@ python3 get-pip.py
                 
                     
                 
-            
-        
-            
-            
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -305,7 +392,15 @@ python3 get-pip.py
                 
                     
                 
-            
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -316,7 +411,15 @@ python3 get-pip.py
                 
                     
                 
-            
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -327,7 +430,15 @@ python3 get-pip.py
                 
                     
                 
-            
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -335,41 +446,15 @@ python3 get-pip.py
                 
                     
                 
-            
+                    
                 
                     
                 
-            
-        
-            
-            
+                    
                 
                     
                 
-            
-                
                     
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
                 
                     
                 
@@ -380,7 +465,251 @@ python3 get-pip.py
                 
                     
                 
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
             
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
                 
                     
                 
@@ -392,7 +721,7 @@ python3 get-pip.py
         <h2 id="comments">Comments</h2>
         
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/" data-title="Matplotlib on mac安装体验" data-url="http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/"></div>
+<div class="ds-thread" data-thread-key="http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/" data-title="Scipy生态系统初探" data-url="http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

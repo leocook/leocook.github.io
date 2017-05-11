@@ -5,57 +5,111 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 10 May 2017 22:54:01 +0800</pubDate>
-    <lastBuildDate>Wed, 10 May 2017 22:54:01 +0800</lastBuildDate>
+    <pubDate>Thu, 11 May 2017 14:32:28 +0800</pubDate>
+    <lastBuildDate>Thu, 11 May 2017 14:32:28 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>Matplotlib on mac安装体验</title>
+        <title>Scipy生态系统初探</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#pip&quot; id=&quot;markdown-toc-pip&quot;&gt;关于Pip&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#matplotlib&quot; id=&quot;markdown-toc-matplotlib&quot;&gt;安装matplotlib&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#example&quot; id=&quot;markdown-toc-example&quot;&gt;Example&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#scipy&quot; id=&quot;markdown-toc-scipy&quot;&gt;1.SciPy技术栈的安装&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#numpyscipy&quot; id=&quot;markdown-toc-numpyscipy&quot;&gt;2.NumPy&amp;amp;scipy测试&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#matplotlib&quot; id=&quot;markdown-toc-matplotlib&quot;&gt;2.Matplotlib测试&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#ipython&quot; id=&quot;markdown-toc-ipython&quot;&gt;3.IPython&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Matplotlib是一个基于Python的2D绘图库，使用起来方便、快捷，图片质量较高，本文将简单的做一些介绍，并安装体验。&lt;/p&gt;
+&lt;p&gt;SciPy是一个基于Python的开源生态系统，也称为&lt;code&gt;SciPy技术栈&lt;/code&gt;，主要为数学计算、科学研究以及工程计算提供服务。&lt;/p&gt;
 
-&lt;p&gt;官方安装说明：http://matplotlib.org/users/installing.html
-在Mac OSX上，可以使用Pip来安装。&lt;/p&gt;
-
-&lt;h2 id=&quot;pip&quot;&gt;关于Pip&lt;/h2&gt;
-&lt;p&gt;Pip是python的一个包管理工具，下面说说它的安装。&lt;/p&gt;
+&lt;p&gt;下面是SciPy生态圈中一些常用的包：&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;下载安装脚本&lt;/li&gt;
+  &lt;li&gt;NumPy&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -O https://bootstrap.pypa.io/get-pip.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;NumPy是Python科学计算中的一个比较基础的包，它主要有下面几项功能：&lt;/p&gt;
+
+&lt;p&gt;a.强大的矩阵计算能力
+b.用于整合C/C++和Fortran代码的工具包
+c.比较成熟的（广播）函数库
+d.支持线性代数求解、傅里叶变换，以及随机数处理&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;安装&lt;/li&gt;
+  &lt;li&gt;SciPy library&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#如果你使用Python 2.7,运行下面的命令：
-python get-pip.py
+&lt;p&gt;SciPy是组成SciPy技术栈的核心包之一，它的相关API使用起来都比较友好，且执行效率高。&lt;/p&gt;
 
-#如果你使用Python 3,运行下面的命令：
-python3 get-pip.py
+&lt;ul&gt;
+  &lt;li&gt;Matplotlib&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Matplotlib是一个基于Python的2D绘图库，能绘制出出版社级别的高质量图。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;IPython&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一个功能强大的Python命令行，也是Jupyter的内核。
+关于Jupyter，被人们广为熟知的有Jupyter Notebook，之前的名字叫IPython Notebook，是一个交互式笔记本，可以运行几十种语言。在Jupyter Notebook中，代码可以实时的生成图像、视频等。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Sympy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基于Python的符号计算包。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;pandas&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;pandas提供一些高效、易用的数据结构，以及数据分析工具。&lt;/p&gt;
+
+&lt;h2 id=&quot;scipy&quot;&gt;1.SciPy技术栈的安装&lt;/h2&gt;
+
+&lt;p&gt;直接使用pip安装&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;安装是不是很简单？&lt;/p&gt;
+&lt;h2 id=&quot;numpyscipy&quot;&gt;2.NumPy&amp;amp;scipy测试&lt;/h2&gt;
 
-&lt;h2 id=&quot;matplotlib&quot;&gt;安装matplotlib&lt;/h2&gt;
-&lt;p&gt;直接命令安装：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install matplotlib
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import numpy as np
+&amp;gt;&amp;gt;&amp;gt; a = np.arange(15).reshape(3, 5)
+&amp;gt;&amp;gt;&amp;gt; a
+array([[ 0,  1,  2,  3,  4],
+       [ 5,  6,  7,  8,  9],
+       [10, 11, 12, 13, 14]])
+&amp;gt;&amp;gt;&amp;gt; a.shape
+(3, 5)
+&amp;gt;&amp;gt;&amp;gt; a.ndim
+2
+&amp;gt;&amp;gt;&amp;gt; a.dtype.name
+'int64'
+&amp;gt;&amp;gt;&amp;gt; a.itemsize
+8
+&amp;gt;&amp;gt;&amp;gt; a.size
+15
+&amp;gt;&amp;gt;&amp;gt; type(a)
+&amp;lt;type 'numpy.ndarray'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; b = np.array([6, 7, 8])
+&amp;gt;&amp;gt;&amp;gt; b
+array([6, 7, 8])
+&amp;gt;&amp;gt;&amp;gt; type(b)
+&amp;lt;type 'numpy.ndarray'&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h2 id=&quot;example&quot;&gt;Example&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python
+&amp;gt;&amp;gt;&amp;gt; import numpy as np
+&amp;gt;&amp;gt;&amp;gt; np.test('full')
+&amp;gt;&amp;gt;&amp;gt; import scipy
+&amp;gt;&amp;gt;&amp;gt; scipy.test()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;关于matplotlib的例子，在&lt;code&gt;http://matplotlib.org/examples/index.html&lt;/code&gt;这里有很多，下面随机选了两个运行一下作为例子让大家看下。&lt;/p&gt;
+&lt;h2 id=&quot;matplotlib&quot;&gt;2.Matplotlib测试&lt;/h2&gt;
+
+&lt;p&gt;关于matplotlib的例子，在http://matplotlib.org/examples/index.html这里有很多，下面随机选了两个运行一下作为例子让大家看下。&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;animate_decay&lt;/li&gt;
@@ -77,15 +131,32 @@ python3 get-pip.py
 
 &lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/dynamic_image.gif&quot; alt=&quot;dynamic_image&quot; title=&quot;dynamic_image&quot; /&gt;&lt;/p&gt;
 
+&lt;h2 id=&quot;ipython&quot;&gt;3.IPython&lt;/h2&gt;
+
+&lt;p&gt;直接使用命令ipython进入&lt;/p&gt;
 </description>
         <pubDate>Wed, 10 May 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/05/10/matplotlib-on-mac%E5%AE%89%E8%A3%85%E4%BD%93%E9%AA%8C/</guid>
+        <link>http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/</guid>
         
-        <category>matplotlib</category>
+        <category>SciPy</category>
+        
+        <category>NumPy</category>
+        
+        <category>python</category>
+        
+        <category>Matplotlib</category>
+        
+        <category>IPython</category>
+        
+        <category>Sympy</category>
+        
+        <category>pandas</category>
         
         
         <category>python</category>
+        
+        <category>SciPy</category>
         
       </item>
     
