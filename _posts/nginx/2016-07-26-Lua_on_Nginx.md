@@ -13,7 +13,9 @@ Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚
 Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。
 
 nginx  地址：http://www.nginx.org
+
 luajit 地址：http://luajit.org/download.html
+
 HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule
 
 

@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 11 May 2017 17:02:13 +0800</pubDate>
-    <lastBuildDate>Thu, 11 May 2017 17:02:13 +0800</lastBuildDate>
+    <pubDate>Mon, 05 Jun 2017 13:27:26 +0800</pubDate>
+    <lastBuildDate>Mon, 05 Jun 2017 13:27:26 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -852,9 +852,11 @@ d.配置所有NodeManager的yarn-site.xml文件如下：&lt;/version&gt;&lt;/ver
 &lt;p&gt;Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。
 Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。&lt;/p&gt;
 
-&lt;p&gt;nginx  地址：http://www.nginx.org
-luajit 地址：http://luajit.org/download.html
-HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule&lt;/p&gt;
+&lt;p&gt;nginx  地址：http://www.nginx.org&lt;/p&gt;
+
+&lt;p&gt;luajit 地址：http://luajit.org/download.html&lt;/p&gt;
+
+&lt;p&gt;HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule&lt;/p&gt;
 
 &lt;h2 id=&quot;section&quot;&gt;1.系统环境&lt;/h2&gt;
 

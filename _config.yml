@@ -24,7 +24,9 @@ weibo_username: wulinjq
 description_footer: 小鸟的成长记录.
 
 # comments
-duoshuo_shortname: leocook
+# duoshuo_shortname: leocook
+comments: true
+disqus_shortname: leocook
 
 # statistic analysis 统计代码
 # 百度统计 id，将统计代码替换为自己的百度统计id，即

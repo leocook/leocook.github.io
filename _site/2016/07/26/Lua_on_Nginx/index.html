@@ -230,9 +230,11 @@
 <p>Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。
 Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。</p>
 
-<p>nginx  地址：http://www.nginx.org
-luajit 地址：http://luajit.org/download.html
-HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule</p>
+<p>nginx  地址：http://www.nginx.org</p>
+
+<p>luajit 地址：http://luajit.org/download.html</p>
+
+<p>HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule</p>
 
 <h2 id="section">1.系统环境</h2>
 
@@ -598,26 +600,31 @@ http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/</p>
 
         <h2 id="comments">Comments</h2>
         
-<!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="http://leocook.github.io/2016/07/26/Lua_on_Nginx/" data-title="Lua_on_nginx" data-url="http://leocook.github.io/2016/07/26/Lua_on_Nginx/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    var duoshuoQuery = {
-        short_name: "leocook"
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://leocook.github.io/2016/07/26/Lua_on_Nginx/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2016/07/26/Lua_on_Nginx/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';
-        ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//leocook.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<!-- 多说公共JS代码 end -->
-
-
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 
 
