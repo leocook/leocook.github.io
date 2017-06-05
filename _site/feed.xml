@@ -5,9 +5,334 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 05 Jun 2017 13:27:26 +0800</pubDate>
-    <lastBuildDate>Mon, 05 Jun 2017 13:27:26 +0800</lastBuildDate>
+    <pubDate>Mon, 05 Jun 2017 23:45:03 +0800</pubDate>
+    <lastBuildDate>Mon, 05 Jun 2017 23:45:03 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Jcf（java集合框架）概括</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.概述&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#iterator&quot; id=&quot;markdown-toc-iterator&quot;&gt;2.Iterator接口&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#collection&quot; id=&quot;markdown-toc-collection&quot;&gt;3.Collection&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#list&quot; id=&quot;markdown-toc-list&quot;&gt;3.1.List&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#set&quot; id=&quot;markdown-toc-set&quot;&gt;3.2.Set&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#queue&quot; id=&quot;markdown-toc-queue&quot;&gt;3.3.Queue&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#map&quot; id=&quot;markdown-toc-map&quot;&gt;4.Map&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#hashmap&quot; id=&quot;markdown-toc-hashmap&quot;&gt;4.1.HashMap&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#linkedhashmap&quot; id=&quot;markdown-toc-linkedhashmap&quot;&gt;4.2.LinkedHashMap&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#treemap&quot; id=&quot;markdown-toc-treemap&quot;&gt;4.3.TreeMap&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;5.其它集合&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#vector&quot; id=&quot;markdown-toc-vector&quot;&gt;5.1.Vector&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#stack&quot; id=&quot;markdown-toc-stack&quot;&gt;5.2.Stack&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#hashtable&quot; id=&quot;markdown-toc-hashtable&quot;&gt;5.3.HashTable&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;6.总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在Java中，集合也就是可以装载多个&lt;strong&gt;Java对象&lt;/strong&gt;的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。&lt;/p&gt;
+
+&lt;p&gt;在学习JCF之前，我们先回顾一下，在计算机编程中我们期望&lt;strong&gt;集合能有哪些能力？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可以遍历集合全部的元素&lt;/li&gt;
+  &lt;li&gt;关于集合类部元素的顺序
+    &lt;ul&gt;
+      &lt;li&gt;保留写入集合的顺序&lt;/li&gt;
+      &lt;li&gt;可根据元素的大小自动排序&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;能快速查找出集合中的某个元素&lt;/li&gt;
+  &lt;li&gt;可以根据位置来快速的修改元素&lt;/li&gt;
+  &lt;li&gt;能高效的增加、删除集合中元素&lt;/li&gt;
+  &lt;li&gt;集合内的元素可以快速去重&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;聊到集合，那肯定少不了下面几种基础的数据结构：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;线性存储
+    &lt;ul&gt;
+      &lt;li&gt;（可变）数组&lt;/li&gt;
+      &lt;li&gt;链表&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Hash散列表&lt;/li&gt;
+  &lt;li&gt;平衡树&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;1.概述&lt;/h2&gt;
+
+&lt;p&gt;在Java2.0之前，只有一些简单的集合，例如Vector/Stack/Hashtable，由于这些集合直接使用synchronized关键字来实现线程安全，使得这些集合在使用的时候效率极低。从Java2.0开始之后，Java提供了一系列的Java Collections Framework（JCF）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif&quot; alt=&quot;JCF&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面开始讲讲Java的集合框架（后面简称JCF）。JCF主要包括了两种类型的集合：&lt;strong&gt;Collection&lt;/strong&gt;和&lt;strong&gt;Map&lt;/strong&gt;。
+Collection集合中的每个节点存放的是一个元素。Map集合中的每个元素存放的是&amp;lt;key,value&amp;gt;型的键值对。&lt;/p&gt;
+
+&lt;h2 id=&quot;iterator&quot;&gt;2.Iterator接口&lt;/h2&gt;
+
+&lt;p&gt;这是迭代器接口，不同集合的Iterator实现会不一样。例如ArrayList的Iterator实现是内部类Itr。
+集合实现了Iterator之后，就可以使用迭代器顺序遍历了。
+Iterator接口的定义如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Object next()：返回迭代器刚越过的元素的引用，返回值是Object，需要强制转换成自己需要的类型
+
+boolean hasNext()：判断容器内是否还有可供访问的元素
+
+void remove()：删除迭代器刚越过的元素
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;查看源码的话，会看到下面这一段代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ......
+ * @see Collection
+ * @see ListIterator
+ * @see Iterable
+ public interface Iterator&amp;lt;E&amp;gt; {
+ ......
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Iterable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所有实现了Iterable接口的集合，都可以使用增强的for循环，因为这个集合将会实现一个自己的Iterator。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ListIterator&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ListIterator是针对List实现的迭代器。由于List是顺序存储结构，所以除了next()、hasNext()、remove()方法，ListIterator还提供了List下标处理的相关方法，例如获取上/下一个元素以及它们的下标情况。&lt;/p&gt;
+
+&lt;h2 id=&quot;collection&quot;&gt;3.Collection&lt;/h2&gt;
+
+&lt;p&gt;Collection是Java集合层次结构中的根节点，实现Collection的集合中，有的是允许存放重复的元素，有的不允许有重复的元素（set），有的集合是有序的，有的则是无序的。Collection下面有三种子接口，分别是List、Set、Queue，下面逐一介绍。&lt;/p&gt;
+
+&lt;h3 id=&quot;list&quot;&gt;3.1.List&lt;/h3&gt;
+
+&lt;p&gt;实现List接口的集合有着两大特性：允许元素重复、元素是有序的。实现了List接口的集合，可以通过位置来操作集合的元素。下图展示了List接口中的全部方法：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/list.png&quot; alt=&quot;List&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面是几个常用的List类型集合。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ArrayList&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基于数组实现的线性存储集合。数组的大小可以变化，当元素个数超过了数组的大小，将会重新创建一个更大长度的数组，并把当前数组中的内容复制进去，每次长度增长为原来的1.5倍左右，可以查看源码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    int newCapacity = oldCapacity + (oldCapacity &amp;gt;&amp;gt; 1);
+    if (newCapacity - minCapacity &amp;lt; 0)
+        newCapacity = minCapacity;
+    if (newCapacity - MAX_ARRAY_SIZE &amp;gt; 0)
+        newCapacity = hugeCapacity(minCapacity);
+    // minCapacity is usually close to size, so this is a win:
+    elementData = Arrays.copyOf(elementData, newCapacity);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;LinkedList&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基于链表实现的线性存储集合。下面对比ArrayList和LinkedList：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;操作&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;ArrayList&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;LinkedList&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;内部数据结构&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;数组&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;链表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;是否顺序结构&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;是&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;是&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;位置检索&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;快&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;慢&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;增、删&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;慢&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;快&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;set&quot;&gt;3.2.Set&lt;/h3&gt;
+
+&lt;p&gt;实现Set接口的集合内部元素不重复，Set有三个具体的实现类：HashSet（散列集）、LinkedHashSet（顺序集）、TreeSet（平衡树）。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HashSet&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基于hash的无序set。其实HashSet内部是用HashMap实现的，HashMap后边会说到。在散列集中，有两个名词需要关注，初始容量和客座率。客座率是确定在增加规则集之前，该规则集的饱满程度，当元素个数超过了容量与客座率的乘积时，容量就会自动翻倍。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;LinkedHashSet&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基于链表实现的HashSet，LinkedHashSet中的元素是有序的，且顺序和写入的顺序一致。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;TreeSet&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;TreeSet是一个有序的Set，排序的比较器可以通过传入Comparator来自定义。&lt;/p&gt;
+
+&lt;h3 id=&quot;queue&quot;&gt;3.3.Queue&lt;/h3&gt;
+
+&lt;p&gt;队列是一种FIFO（First in first out）数据结构，元素在Queue的末尾添加，在头部删除。
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/Queue.png&quot; alt=&quot;Queue&quot; /&gt;
+Queue接口分别定义了上面6个方法，分别有插入、移除和检查的功能，有的方法在某些特殊情况下回报错，有的则不会，具体见下表：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Operation&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;抛出异常&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;返回特殊值&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;操作失败的条件&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Insert（插入）&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;add(e)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;offer(e),return false&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;当队列空间有限制，且没有多余的空间时&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Remove（移除）&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;remove()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;poll(),return null&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;队列为空&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Examine（检查）&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;element()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;peek(),return null&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;队列为空&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Queue平时用的不是很多，优先队列PriorityQueue有的时候会用到。&lt;/p&gt;
+
+&lt;h2 id=&quot;map&quot;&gt;4.Map&lt;/h2&gt;
+
+&lt;p&gt;Map是存储键值对映射（key,value）的容器类，可以存储任意类型的对象。但是key不能重复，且一个key只能对应一个值。如果使用对象作为key,那么必须要考虑一下该对象类的hashCode方法和equals方法是否需要重写，因为map是用着两个方法来判断key是否相等的，其中hashCode是用来加速判断的，如果hashCode相等，还会用equals方法来判断。&lt;/p&gt;
+
+&lt;p&gt;常用到的Map接口实现类，有三个：HashMap、LinkedHashMap、TreeMap。Map接口定义的方法列表可见下图：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/map.png&quot; alt=&quot;Map&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;hashmap&quot;&gt;4.1.HashMap&lt;/h3&gt;
+
+&lt;p&gt;HashMap是基于数组+链表实现的Hash散列Map结构，数组里存放着索引，链表里存放的是元素数据。(key,value)键值对中，key的hash值就是数组的下标。&lt;/p&gt;
+
+&lt;p&gt;在Jdk1.8中，对HashMap做了优化，当链表的长度超过8时，链表结构将会变为了平衡树，这样做主要是为了在HashMap里的元素较多时，能够加快查找的速度。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/map%20struct.png&quot; alt=&quot;map结构&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;关于HashMap，其实有很多可以细聊的，它与很多集合都有着关系。后边会再来一篇，详细说一下Java中HashMap的设计，以及Java中散列存储的设计思想。&lt;/p&gt;
+
+&lt;h3 id=&quot;linkedhashmap&quot;&gt;4.2.LinkedHashMap&lt;/h3&gt;
+
+&lt;p&gt;LinkedHashMap类继承了HashMap类，HashMap中的元素是没有顺序的，但是LinkedHashMap中的元素是有顺序的。
+LinkedHashMap里的元素顺序有两种排序方式：第一种是根据元素key被插入的顺序;第二种是根据元素被访问的顺序来排序（最近最少被访问的元素优先）。&lt;/p&gt;
+
+&lt;h3 id=&quot;treemap&quot;&gt;4.3.TreeMap&lt;/h3&gt;
+
+&lt;p&gt;TreeMap是基于红黑树结构来实现的，可以使用Comparable或Comparator接口来实现排序的比较算法。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在日常开发中，如果不用考虑键值对元素的顺序，就使用HashMap；如果需要考虑元素插入顺序，就使用LinkedHashMap；如果需要根据Key自定义排序规则，那么就使用TreeMap。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;5.其它集合&lt;/h2&gt;
+
+&lt;p&gt;下面简单说几个不是很常用的集合。&lt;/p&gt;
+
+&lt;h3 id=&quot;vector&quot;&gt;5.1.Vector&lt;/h3&gt;
+
+&lt;p&gt;Vector的使用和ArrayList的使用基本一样，它是线程安全的线程安全，但是Vector的线程安全是使用关键字synchronized修饰实现的，所以Vector的效率很低。相对来说，ArrayList更加高效！&lt;/p&gt;
+
+&lt;h3 id=&quot;stack&quot;&gt;5.2.Stack&lt;/h3&gt;
+
+&lt;p&gt;Stack是Java2之前设计的栈结构，内部是使用数组实现的。我们知道栈结构的操作中会频繁的出现入栈和出栈，那么使用数组结构的话，在栈结构变长时，自然会带来性能上的折扣。
+LinkedList也具备栈的功能，而且是基于链表实现的，所以在开发需要用到栈结构时，推荐使用LinkedList。&lt;/p&gt;
+
+&lt;h3 id=&quot;hashtable&quot;&gt;5.3.HashTable&lt;/h3&gt;
+
+&lt;p&gt;HashTable的功能和HashMap相似，它是Dictionary类的，并且使用了synchronized关键字实现了线程安全，所以性能会很差！
+除此之外，HashTable的Key不能为空指针null,但是HashMap的key可以为null。&lt;/p&gt;
+
+&lt;p&gt;关于集合的线程安全，后边会另写一篇详细说明。&lt;/p&gt;
+
+&lt;p&gt;参考地址：
+http://www.open-open.com/lib/view/open1474167415464.html
+http://www.cnblogs.com/CarpenterLee/p/5414253.html&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;6.总结&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JCF接口架构&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif&quot; alt=&quot;JCF接口架构&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;常用的集合分类情况&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/jcf%E4%BD%BF%E7%94%A8.png&quot; alt=&quot;常用的集合分类情况&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;接口功能实现&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面表格描述的比较好，每个接口对应不同数据结构的实现。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/jcf%20imp.png&quot; alt=&quot;JCF 接口实现&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;参考文档：
+http://docs.oracle.com/javase/6/docs/technotes/guides/collections/overview.html
+http://www.jianshu.com/p/63e76826e852&lt;/p&gt;
+</description>
+        <pubDate>Mon, 05 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Scipy生态系统初探</title>
@@ -2071,423 +2396,6 @@ oozie admin -shareliblist hive
         <category>tez</category>
         
         <category>oozie</category>
-        
-        <category>hive</category>
-        
-        
-        <category>tez</category>
-        
-      </item>
-    
-      <item>
-        <title>Tez系列第二篇 Hive_on_tez</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#tez&quot; id=&quot;markdown-toc-tez&quot;&gt;1.安装配置Tez&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.1.环境要求&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.2.集群准备&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;1.3. 编译环境准备&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#nodejsnpm&quot; id=&quot;markdown-toc-nodejsnpm&quot;&gt;1.4. Nodejs、npm&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#git&quot; id=&quot;markdown-toc-git&quot;&gt;1.5.安装GIT&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#protocolbuffer250&quot; id=&quot;markdown-toc-protocolbuffer250&quot;&gt;1.6. ProtocolBuffer2.5.0&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tez-1&quot; id=&quot;markdown-toc-tez-1&quot;&gt;1.7.编译&amp;amp;安装Tez&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#hivetez&quot; id=&quot;markdown-toc-hivetez&quot;&gt;2. 开始整合Hive和Tez&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.1. 查看编译完成的目标目录结构&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tez-082-minimalhdfs&quot; id=&quot;markdown-toc-tez-082-minimalhdfs&quot;&gt;2.1. 拷贝tez-0.8.2-minimal目录至HDFS&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#jar&quot; id=&quot;markdown-toc-jar&quot;&gt;2.2. 拷贝对应以来jar&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tez-082&quot; id=&quot;markdown-toc-tez-082&quot;&gt;2.3. 把tez-0.8.2拷贝到服务器本地部署的目录&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#conftez-sitexml&quot; id=&quot;markdown-toc-conftez-sitexml&quot;&gt;2.4. 进入部署的目录创建conf/tez-site.xml&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tez-2&quot; id=&quot;markdown-toc-tez-2&quot;&gt;2.4. 把Tez加入到环境变量&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#hivetez-1&quot; id=&quot;markdown-toc-hivetez-1&quot;&gt;2.5. 让Hive把Tez用起来&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;常见的错误&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#sudotez&quot; id=&quot;markdown-toc-sudotez&quot;&gt;1.不要使用sudo权限来编译（编译tez时的错误）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#mavenfrontend-maven-plugintez&quot; id=&quot;markdown-toc-mavenfrontend-maven-plugintez&quot;&gt;2.maven插件frontend-maven-plugin的版本问题（编译tez时的错误）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#nodetez&quot; id=&quot;markdown-toc-nodetez&quot;&gt;3.解压Node压缩包时错误（编译tez时的错误）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#nodenpmtez&quot; id=&quot;markdown-toc-nodenpmtez&quot;&gt;4.node&amp;amp;npm版本不对应（编译tez时的错误）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#mrerror-when-run-hive-on-tez&quot; id=&quot;markdown-toc-mrerror-when-run-hive-on-tez&quot;&gt;5.缺少MR的依赖包（error when run hive on tez）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tezhive-on-oozie-&quot; id=&quot;markdown-toc-tezhive-on-oozie-&quot;&gt;6.tez&amp;amp;hive on oozie 错误&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本文主要描述Tez的安装配置，以及使用Tez作为Hive的计算引擎时的相关配置。&lt;/p&gt;
-
-&lt;h2 id=&quot;tez&quot;&gt;1.安装配置Tez&lt;/h2&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;1.1.环境要求&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;CDH5.4.4(hadoop2.6.0)&lt;/li&gt;
-  &lt;li&gt;编译环境：gcc, gcc-c++, make, build&lt;/li&gt;
-  &lt;li&gt;Nodejs、npm (Tez-ui需要)&lt;/li&gt;
-  &lt;li&gt;Git&lt;/li&gt;
-  &lt;li&gt;pb2.5.0&lt;/li&gt;
-  &lt;li&gt;maven3&lt;/li&gt;
-  &lt;li&gt;Tez0.8.2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;1.2.集群准备&lt;/h3&gt;
-&lt;p&gt;以及安装完成的cdh5.4.4集群。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;1.3. 编译环境准备&lt;/h3&gt;
-&lt;p&gt;安装gcc, gcc-c++, make, build&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install gcc gcc-c++ libstdc++-devel make build
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;nodejsnpm&quot;&gt;1.4. Nodejs、npm&lt;/h3&gt;
-&lt;p&gt;下载源码:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;解压后编译:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure
-make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;查看nodejs和npm的版本:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node --version
-npm --version
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9&lt;/p&gt;
-
-&lt;h3 id=&quot;git&quot;&gt;1.5.安装GIT&lt;/h3&gt;
-&lt;p&gt;下载git:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://git-scm.com/download    
-笔者选择的是1.7.3版本
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;解压后编译:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure
-make
-make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;protocolbuffer250&quot;&gt;1.6. ProtocolBuffer2.5.0&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;下载pb源码
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/google/protobuf/releases/tag/v2.5.0
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;编译安装pb
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure -prefix=/opt/protoc/
-make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;配置环境变量
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export PROTOC_HOME=/opt/protoc
-export PATH=$PATH:$PROTOC_HOME/bin
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;检验
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;protoc --version
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-    &lt;p&gt;查看pb的版本是不是2.5.0，笔者这里显示为 &lt;strong&gt;libprotoc 2.5.0&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;tez-1&quot;&gt;1.7.编译&amp;amp;安装Tez&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;下载Tez &lt;br /&gt;
-Tez所有版本列表在者：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://tez.apache.org/releases/index.html
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;笔者这里下载的是0.8.2版本。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解压修改配置&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;vi pom.xml&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;hadoop.version&amp;gt;2.6.0-cdh5.4.4&amp;lt;/hadoop.version&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;vi tez-ui/pom.xml&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;nodeVersion&amp;gt;v0.12.9&amp;lt;/nodeVersion&amp;gt;
-&amp;lt;npmVersion&amp;gt;2.14.9&amp;lt;/npmVersion&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;开始编译&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.23
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;编译的过程中可能会发生错误，我这边由于网络故障，经常会出现node.gz.tar文件下载失败。最后还是编译成功了。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;hivetez&quot;&gt;2. 开始整合Hive和Tez&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;2.1. 查看编译完成的目标目录结构&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[wulin@lf-R710-29 target]$ ls
-archive-tmp  maven-archiver  tez-0.8.2  tez-0.8.2-minimal  tez-0.8.2-minimal.tar.gz  tez-0.8.2.tar.gz  tez-dist-0.8.2-tests.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;tez-082-minimalhdfs&quot;&gt;2.1. 拷贝tez-0.8.2-minimal目录至HDFS&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hdfs dfs -put tez-0.8.2-minimal /tmp/tez-dir/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;先拷贝到tmp目录做测试，成功运行后在拷贝到正式目录。&lt;/p&gt;
-
-&lt;h3 id=&quot;jar&quot;&gt;2.2. 拷贝对应以来jar&lt;/h3&gt;
-&lt;p&gt;把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录&lt;/p&gt;
-
-&lt;h3 id=&quot;tez-082&quot;&gt;2.3. 把tez-0.8.2拷贝到服务器本地部署的目录&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp -r tez-0.8.2 /opt/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;conftez-sitexml&quot;&gt;2.4. 进入部署的目录创建conf/tez-site.xml&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
- &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;tez.lib.uris&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;${fs.defaultFS}/tmp/tez-dir/tez-0.8.2-minimal,${fs.defaultFS}/tmp/tez-dir/tez-0.8.2-minimal/lib&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
- &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
- &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;tez.use.cluster.hadoop-libs&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
- &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;注：tez.lib.uris参数值，是之前上传到hdfs目录的tez包，它必须是tez-0.8.2-minimal目录，而不能是tez-0.8.2目录。（如果有谁使用tez-0.8.2目录部署成功的话，可以告诉我，谢谢！）。根据官网的说明，使用tez-0.8.2-minimal包的时候，务必设置tez.use.cluster.hadoop-libs属性为true。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;tez-2&quot;&gt;2.4. 把Tez加入到环境变量&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export TEZ_JARS=/opt/tez-0.8.2-minimal
-export TEZ_CONF_DIR=$TEZ_JARS/conf
-export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/*:${TEZ_JARS}/lib/*
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;注：经笔者的测试，TEZ_JARS指向tez-0.8.2-minimal目录或者tez-0.8.2目录都是可以的。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;hivetez-1&quot;&gt;2.5. 让Hive把Tez用起来&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;配置整合
-临时配置&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hive&amp;gt;set hive.execution.engine=tez;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;或者修改hive-site.xml（长期配置）&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;property&amp;gt;
-   &amp;lt;name&amp;gt;hive.execution.engine&amp;lt;/name&amp;gt;
-   &amp;lt;value&amp;gt;tez&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;执行hive，验证查看&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hive&amp;gt; select count(*) from dual;
-Query ID = wulin_20160406152121_6fd704e7-a437-4345-9958-2fbd1cccb057
-Total jobs = 1
-Launching Job 1 out of 1
-Number of reduce tasks determined at compile time: 1
-In order to change the average load for a reducer (in bytes):
-  set hive.exec.reducers.bytes.per.reducer=&amp;lt;number&amp;gt;
-In order to limit the maximum number of reducers:
-  set hive.exec.reducers.max=&amp;lt;number&amp;gt;
-In order to set a constant number of reducers:
-  set mapreduce.job.reduces=&amp;lt;number&amp;gt;
-Starting Job = job_1457012272029_352465, Tracking URL = http://lfh-R710-165:8088/proxy/application_1457012272029_352465/
-Kill Command = /opt/cloudera/parcels/CDH-5.4.4-1.cdh5.4.4.p0.4/lib/hadoop/bin/hadoop job  -kill job_1457012272029_352465
-Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
-2016-04-06 15:21:29,925 Stage-1 map = 0%,  reduce = 0%
-2016-04-06 15:21:38,274 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.05 sec
-2016-04-06 15:21:45,611 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 3.86 sec
-MapReduce Total cumulative CPU time: 3 seconds 860 msec
-Ended Job = job_1457012272029_352465
-MapReduce Jobs Launched: 
-Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 3.86 sec   HDFS Read: 6138 HDFS Write: 2 SUCCESS
-Total MapReduce CPU Time Spent: 3 seconds 860 msec
-OK
-1
-Time taken: 35.934 seconds, Fetched: 1 row(s)
-hive&amp;gt; set hive.execution.engine=tez;
-hive&amp;gt; select count(*) from dual;
-Query ID = wulin_20160406152222_426dd505-1f6a-4d02-ae95-5a4d0e6bbc76
-Total jobs = 1
-Launching Job 1 out of 1
-Status: Running (Executing on YARN cluster with App id application_1457012272029_352467)
---------------------------------------------------------------------------------
-        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
---------------------------------------------------------------------------------
-Map 1 ..........   SUCCEEDED      1          1        0        0       0       0
-Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
---------------------------------------------------------------------------------
-VERTICES: 02/02  [==========================&amp;gt;&amp;gt;] 100%  ELAPSED TIME: 9.64 s     
---------------------------------------------------------------------------------
-OK
-1
-Time taken: 22.211 seconds, Fetched: 1 row(s)
-hive&amp;gt; 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;如下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/tez-ok.png&quot; alt=&quot;Hive on Tez&quot; title=&quot;Hive on Tez&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;到此，hive on tez，整合完毕！&lt;/p&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;常见的错误&lt;/h2&gt;
-
-&lt;h3 id=&quot;sudotez&quot;&gt;1.不要使用sudo权限来编译（编译tez时的错误）&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.3.2:exec (Bower install) on project tez-ui: Command execution failed. Process exited with an error: 1 (Exit value: 1) -&amp;gt; [Help 1]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;解决办法：
-不要使用root用户，也不要使用sudo来编译.&lt;/p&gt;
-
-&lt;h3 id=&quot;mavenfrontend-maven-plugintez&quot;&gt;2.maven插件frontend-maven-plugin的版本问题（编译tez时的错误）&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Execution install node and npm of goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm failed: A required class was missing while executing com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm: org/slf4j/helpers/MarkerIgnoringBase
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）
-如果maven的版本低于3.1，frontend-maven-plugin版本应该 &amp;lt;= 0.0.22；
-如果maven的版本大于或等于3.1，frontend-maven-plugin版本应该 &amp;gt;= 0.0.23.&lt;/p&gt;
-
-&lt;h3 id=&quot;nodetez&quot;&gt;3.解压Node压缩包时错误（编译tez时的错误）&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Could not extract the Node archive: Could not extract archive: '/home/.../tez/tez-ui/src/main/webapp/node_tmp/node.tar.gz': EOFException -&amp;gt; [Help 1]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;解决版本：检查第二个问题，并重新执行。如果还失败，可以多执行几次，可能和网络有关系。&lt;/p&gt;
-
-&lt;h3 id=&quot;nodenpmtez&quot;&gt;4.node&amp;amp;npm版本不对应（编译tez时的错误）&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ERROR] npm WARN engine hoek@2.16.3: wanted: {&quot;node&quot;:&quot;&amp;gt;=0.10.40&quot;} (current: {&quot;node&quot;:&quot;v0.10.18&quot;,&quot;npm&quot;:&quot;1.3.8&quot;})
-[ERROR] npm WARN engine boom@2.10.1: wanted: {&quot;node&quot;:&quot;&amp;gt;=0.10.40&quot;} (current: {&quot;node&quot;:&quot;v0.10.18&quot;,&quot;npm&quot;:&quot;1.3.8&quot;})
-[ERROR] npm WARN engine cryptiles@2.0.5: wanted: {&quot;node&quot;:&quot;&amp;gt;=0.10.40&quot;} (current: {&quot;node&quot;:&quot;v0.10.18&quot;,&quot;npm&quot;:&quot;1.3.8&quot;})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;解决办法：&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;安装正确版本的nodeJs；&lt;/li&gt;
-  &lt;li&gt;修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node --version
-npm --version
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;mrerror-when-run-hive-on-tez&quot;&gt;5.缺少MR的依赖包（error when run hive on tez）&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Vertex failed, vertexName=Map 1, vertexId=vertex_1457012272029_352429_1_00, diagnostics=[Vertex vertex_1457012272029_352429_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: dual initializer failed, vertex=vertex_1457012272029_352429_1_00 [Map 1], java.lang.NoClassDefFoundError: org/apache/hadoop/mapred/MRVersion
-        at org.apache.hadoop.hive.shims.Hadoop23Shims.isMR2(Hadoop23Shims.java:843)
-        at org.apache.hadoop.hive.shims.Hadoop23Shims.getHadoopConfNames(Hadoop23Shims.java:914)
-        at org.apache.hadoop.hive.conf.HiveConf$ConfVars.&amp;lt;clinit&amp;gt;(HiveConf.java:356)
-        at org.apache.hadoop.hive.ql.exec.Utilities.getBaseWork(Utilities.java:371)
-        at org.apache.hadoop.hive.ql.exec.Utilities.getMapWork(Utilities.java:296)
-        at org.apache.hadoop.hive.ql.exec.tez.HiveSplitGenerator.initialize(HiveSplitGenerator.java:106)
-        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:278)
-        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:269)
-        at java.security.AccessController.doPrivileged(Native Method)
-        at javax.security.auth.Subject.doAs(Subject.java:415)
-        at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1628)
-        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:269)
-        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:253)
-        at java.util.concurrent.FutureTask.run(FutureTask.java:262)
-        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-        at java.lang.Thread.run(Thread.java:745)
-Caused by: java.lang.ClassNotFoundException: org.apache.hadoop.mapred.MRVersion
-        at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
-        at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
-        at java.security.AccessController.doPrivileged(Native Method)
-        at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
-        at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
-        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
-        at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
-        ... 17 more
-]
-Vertex killed, vertexName=Reducer 2, vertexId=vertex_1457012272029_352429_1_01, diagnostics=[Vertex received Kill in INITED state., Vertex vertex_1457012272029_352429_1_01 [Reducer 2] killed/failed due to:OTHER_VERTEX_FAILURE]
-DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1
-FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;这个错误是在配置完之后，运行hive时才会出现的。
-解决办法：
-拷贝mr依赖包至tez的hdfs目录中。笔者的环境是CDH5.4.4，所以把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar拷贝到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录，就解决问题了。&lt;/p&gt;
-
-&lt;h3 id=&quot;tezhive-on-oozie-&quot;&gt;6.tez&amp;amp;hive on oozie 错误&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Status: Running (Executing on YARN cluster with App id application_1461470184587_0770)
-
-Map 1: -/-	Reducer 2: 0/1	
-Status: Failed
-Vertex failed, vertexName=Map 1, vertexId=vertex_1461470184587_0770_1_00, diagnostics=[Vertex vertex_1461470184587_0770_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: wl_manager_core_assembly initializer failed, vertex=vertex_1461470184587_0770_1_00 [Map 1], java.lang.IllegalArgumentException: Illegal Capacity: -1
-	at java.util.ArrayList.&amp;lt;init&amp;gt;(ArrayList.java:142)
-	at org.apache.hadoop.mapred.FileInputFormat.getSplits(FileInputFormat.java:330)
-	at org.apache.hadoop.hive.ql.io.HiveInputFormat.addSplitsForGroup(HiveInputFormat.java:306)
-	at org.apache.hadoop.hive.ql.io.HiveInputFormat.getSplits(HiveInputFormat.java:408)
-	at org.apache.hadoop.hive.ql.exec.tez.HiveSplitGenerator.initialize(HiveSplitGenerator.java:129)
-	at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:278)
-	at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:269)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:415)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1671)
-	at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:269)
-	at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:253)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-	at java.lang.Thread.run(Thread.java:745)
-]
-Vertex killed, vertexName=Reducer 2, vertexId=vertex_1461470184587_0770_1_01, diagnostics=[Vertex received Kill in INITED state., Vertex vertex_1461470184587_0770_1_01 [Reducer 2] killed/failed due to:OTHER_VERTEX_FAILURE]
-DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1
-FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask
-Intercepting System.exit(2)
-Failing Oozie Launcher, Main class [org.apache.oozie.action.hadoop.HiveMain], exit code [2]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;参考链接：
-http://m.oschina.net/blog/421764  &lt;br /&gt;
-http://duguyiren3476.iteye.com/blog/2214549
-https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 09 May 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/</guid>
-        
-        <category>hadoop</category>
-        
-        <category>tez</category>
         
         <category>hive</category>
         
