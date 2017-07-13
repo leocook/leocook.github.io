@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Java并发：unsafe和cas</title>
+    <meta name="description" content="关键词：CAS、UnsafeCAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。在学习CAS、sun.misc....">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href=" /css/main.css ">
+    <link rel="canonical" href="http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">
+    <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f1ad6f37c7565a0fbaf172ac83132650";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+<script type='text/javascript'>
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', 'b628e9072406c903']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="wrapper">
+        <a href="/" class="brand">leocook</a>
+        <small>Big-Data Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+    <script type='text/javascript'>
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', 'b628e9072406c903']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+  </script>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Java并发：unsafe和cas</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-24
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#CAS%E3%80%81Unsafe" title="Tag: CAS、Unsafe" rel="tag">CAS、Unsafe</a-->
+        <a href="/tag/#CAS、Unsafe" title="Tag: CAS、Unsafe" rel="tag">CAS、Unsafe</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#cas" id="markdown-toc-cas">CAS</a>    <ul>
+      <li><a href="#cas-1" id="markdown-toc-cas-1">CAS原理</a></li>
+      <li><a href="#atomicinteger" id="markdown-toc-atomicinteger">AtomicInteger示例</a></li>
+      <li><a href="#casaba" id="markdown-toc-casaba">CAS的ABA问题</a></li>
+    </ul>
+  </li>
+  <li><a href="#sunmiscunsafe" id="markdown-toc-sunmiscunsafe">sun.misc.Unsafe</a>    <ul>
+      <li><a href="#unsafe" id="markdown-toc-unsafe">Unsafe类是单例的</a></li>
+      <li><a href="#unsafe-1" id="markdown-toc-unsafe-1">创建Unsafe对象</a></li>
+      <li><a href="#unsafe-2" id="markdown-toc-unsafe-2">Unsafe类的方法介绍</a></li>
+      <li><a href="#examples-for-unsafe" id="markdown-toc-examples-for-unsafe">Examples for Unsafe</a></li>
+      <li><a href="#section" id="markdown-toc-section">总结</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>关键词：CAS、Unsafe</p>
+
+<p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。</p>
+
+<p>在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：</p>
+
+<ul>
+  <li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+  <li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+</ul>
+
+<h2 id="cas">CAS</h2>
+<p>CAS是<code>Compare and Swap</code>的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。
+维基百科对CAS的解释可以看这里：<a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2">CAS比较并交换</a></p>
+
+<p>Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。</p>
+<h4 id="cas-1">CAS原理</h4>
+<p>CAS有三个操作数：内存位置V，预期值A和新值B（将要被修改成的值）。
+在修改值的时候，若内存位置V存的值和预期值A相等，那么就把内存位置的V的值修改为B，返回true；否则，什么都不做，并返回false。
+在Java的实现中，V可以是一个存储A地址的long整数，A是一个使用了volatile修饰的基础数据类型或者对象，B的类型和A的类型一致。</p>
+
+<h4 id="atomicinteger">AtomicInteger示例</h4>
+<p>java.util.concurrent.atomicAtomicInteger是Jdk提供的一个类，如果你需要一个读写有原子性的整数类型，使用它就对了！
+我们可以趴一下AtomicInteger的源码，可以观察到下面这个方法:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/**
+ * 在当前值上原子性的自增1
+ */
+public final int getAndIncrement() {
+    for (;;) {
+        int current = get();
+        int next = current + 1;
+        if (compareAndSet(current, next))
+            return current;
+    }
+}
+
+public final boolean compareAndSet(int expect, int update) {
+    return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
+}
+</code></pre>
+</div>
+<p>我们能够看到，为了保证操作的原子性，调用了<code>compareAndSet</code>方法，而<code>compareAndSet</code>方法又调用了Unsafe的<code>compareAndSwapInt</code>方法。</p>
+
+<h4 id="casaba">CAS的ABA问题</h4>
+<p>维基百科上的说明是如下：</p>
+
+<ul>
+  <li>1.进程P1读取了一个数值A</li>
+  <li>2.P1被挂起(时间片耗尽、中断等)，进程P2开始执行</li>
+  <li>3.P2修改数值A为数值B，然后又修改回A</li>
+  <li>4.P1被唤醒，比较后发现数值A没有变化，程序继续执行。
+对于线程P1来说，数值一直是A未变化过，但实际上数值发生过变化的。关于这个维基百科里说的很清楚。</li>
+</ul>
+
+<h2 id="sunmiscunsafe">sun.misc.Unsafe</h2>
+
+<p>我们在日常开发的时候，Java是无法直接做操作系统级别的访问，如果想访问操作系统，我们可以使用C/C++来开发，然后使用JNI或者JNA来调用C/C++的库。
+JVM中存在<code>sun.misc.Unsafe</code>这样的一个类，该类中提供了一系列的底层方法，这些方法可以直接操作操作系统的内存等。该类在设计的时候，默认是不让一般的开发人员不可以使用，只有授信代码才可以使用。</p>
+
+<h4 id="unsafe">Unsafe类是单例的</h4>
+<p>从下面的代码中，我们可以看出Unsafe是单例的。且只能通过类加载器来获取，不能直接使用new来创建。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>private static final Unsafe theUnsafe;
+
+private Unsafe() {
+}
+
+@CallerSensitive
+public static Unsafe getUnsafe() {
+    Class var0 = Reflection.getCallerClass();
+    if(var0.getClassLoader() != null) {
+        throw new SecurityException("Unsafe");
+    } else {
+        return theUnsafe;
+    }
+}
+</code></pre>
+</div>
+
+<h4 id="unsafe-1">创建Unsafe对象</h4>
+
+<p>如果你直接调用getUnsafe方法来创建Unsafe对象，那么在编译的时候你将会得到警告提示，例如对于下面这段代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import sun.misc.Unsafe;
+
+public class ThreadDemo{
+    public static void main(String[] args){
+        Unsafe unsafe = Unsafe.getUnsafe();
+    }
+}
+</code></pre>
+</div>
+
+<p>我们编译时将会看到如下的警告信息：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ThreadDemo.java:1: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+import sun.misc.Unsafe;
+               ^
+ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+Unsafe unsafe = Unsafe.getUnsafe();
+^
+ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+Unsafe unsafe = Unsafe.getUnsafe();
+                ^
+3 个警告
+</code></pre>
+</div>
+
+<p>但是我可以对代码进行授信处理，Java是通过内加载器是否为根类加载器判断是否授信的，我们可以使用JVM参数bootclasspath：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java -Xbootclasspath:/usr/java/jdk1.7.0/jre/lib/rt.jar:. com.mishadoff.magic.UnsafeClient
+</code></pre>
+</div>
+
+<p><strong>Jdk不建议开发者直接创建Unsafe对象</strong>，如果我们必须要创建，那么我们可以使用<strong>反射</strong>的方式来创建：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField("theUnsafe");
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+System.out.println(unsafe);
+</code></pre>
+</div>
+
+<h4 id="unsafe-2">Unsafe类的方法介绍</h4>
+<p>Unsafe类中的方法有很多，其实我们需要关注只有这么几个。</p>
+
+<ul>
+  <li>
+    <p>内存分配<br />
+allocateMemory：分配内存（非堆内存）
+reallocateMemory：重新分配内存
+freeMemory：释放内存</p>
+  </li>
+  <li>
+    <p>线程操作<br />
+park：锁定当前的线程
+unpark：解锁指定的线程</p>
+  </li>
+  <li>
+    <p>CAS操作<br />
+public final native boolean compareAndSwapXXX(Object o,long offset,K expected,K x)
+例如：compareAndSwapInt、compareAndSwapLong、compareAndSwapObject等等。
+该方法也就是Java中的CAS的实现，这个方法会比较expected的值和内存地址在offset位置的值是否一样，如果一样则会更新expected的值为x，并返回true，否则返回false。</p>
+  </li>
+</ul>
+
+<p>还有其它的相关方法可以看下面：</p>
+
+<ul>
+  <li>
+    <p>public native int addressSize()<br />
+本地指针所占用的存储大小，值为4或8.</p>
+  </li>
+  <li>
+    <p>public native int pageSize()<br />
+返回内存页信息</p>
+  </li>
+  <li>
+    <p>public native Object allocateInstance(Class cls)<br />
+分配一个指定的对象，但是不执行任何构造方法。</p>
+  </li>
+  <li>
+    <p>public native int arrayBaseOffset(Class arrayClass)<br />
+返回数组的内存起始位置</p>
+  </li>
+  <li>
+    <p>copyMemory<br />
+把某段内存块中的数据copy到另外一段内存块中。</p>
+  </li>
+  <li>
+    <p>defineAnonymousClass<br />
+定义一个匿名类。</p>
+  </li>
+  <li>
+    <p>defineClass<br />
+让JVM定义一个类，不进行安全性检查。</p>
+  </li>
+  <li>
+    <p>ensureClassInitialized<br />
+确定类已经被初始化了。这个经常在访问类的静态成员变量时会结合访问。</p>
+  </li>
+  <li>
+    <p>fieldOffset<br />
+返回字段在对象中的内存offset</p>
+  </li>
+  <li>
+    <p>freeMemory<br />
+释放内存</p>
+  </li>
+  <li>
+    <p>getXXX(Object o,long offset) <br />
+获取对象o中内存偏移量为offset的值。</p>
+  </li>
+  <li>
+    <p>getUnsafe<br />
+单例，获取Unsafe对象</p>
+  </li>
+  <li>
+    <p>monitorEnter(Object o)<br />
+锁定对象，直到调用了monitorExit(Object o)后才会被解锁</p>
+  </li>
+  <li>
+    <p>monitorExit(Object o)<br />
+解锁对象，该对象必须是之前就已经被锁定了(被执行过monitorExit)</p>
+  </li>
+</ul>
+
+<p>详情可以查看：<code>http://www.docjar.com/docs/api/sun/misc/Unsafe.html</code></p>
+
+<h4 id="examples-for-unsafe">Examples for Unsafe</h4>
+<ul>
+  <li>sun.misc.Unsafe#allocateInstance()<br />
+不使用类的构造方法，来生成一个类的对象。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField("theUnsafe");
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+
+Person person1 = (Person)unsafe.allocateInstance(Person.class);
+System.out.println(person1); //null: 0
+
+Person person2 = new Person();
+System.out.println(person2);//test: 22
+</code></pre>
+</div>
+<p>我们对比person1和person2，可以发现person1是没有使用构造方法的，而person2是使用了构造方法的。</p>
+
+<ul>
+  <li>objectFieldOffset、putXXX<br />
+操作对象成员的值：
+<code>objectFieldOffset(Field var1)</code>是获取成员变量的相对于对象内存的偏移量。
+<code>putLong，putInt，putDouble，putChar，putObject</code>等，可以直接修改对象内存中的数据，可以突破访问修饰符(private/protected)的限制。可以查看下面的例子：</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField("theUnsafe");
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+
+Person person1 = (Person)unsafe.allocateInstance(Person.class);
+System.out.println(person1);    //null: 0
+
+Class clazz = person1.getClass();
+Field name = clazz.getDeclaredField("name");
+Field age = clazz.getDeclaredField("age");
+
+unsafe.putObject(person1, unsafe.objectFieldOffset(name),"张三");
+unsafe.putInt(person1, unsafe.objectFieldOffset(age),18);
+
+System.out.println(person1);    //张三: 18
+</code></pre>
+</div>
+
+<p>关于Unsafe类里的方法，感兴趣的网上查找阅读相关的C/C++实现。</p>
+
+<ul>
+  <li>大数组操作<br />
+Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们知道当JVM消耗内存过高的时候发生GC，性能上会大打折扣。那么当我们需要创建一个大数组，且不想因为GC而引起大的性能损耗时，我们能想到的就是使用堆外内存。例如下边的代码就实现了一个大的字节数组：</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class BigByteArray {
+    private final static int BYTE = 1;
+
+    private long size;
+    private long address;
+
+    public BigArray(long size) {
+        this.size = size;
+        address = getUnsafe().allocateMemory(size * BYTE);
+    }
+
+    public void set(long i, byte value) {
+        getUnsafe().putByte(address + i * BYTE, value);
+    }
+
+    public int get(long idx) {
+        return getUnsafe().getByte(address + idx * BYTE);
+    }
+
+    public long size() {
+        return size;
+    }
+}
+</code></pre>
+</div>
+
+<h4 id="section">总结</h4>
+<p>学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。</p>
+
+        </article>
+
+        
+        <hr>
+        
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+        
+
+
+        <h2 id="comments">订阅号</h2>
+        <img src="http://7xriy2.com1.z0.glb.clouddn.com/leocook.jpg" /><br />
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//leocook.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/scroll.min.js " charset="utf-8"></script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+  <div class="wrapper">
+      <p class="description">
+          
+          小鸟的成长记录.
+          
+      </p>
+        <p class="contact">
+            Contact me at:
+            
+            <a href="https://github.com/leocook"><i class="fa fa-github" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="mailto:leocook@163.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="http://weibo.com/wulinjq"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/Gaohaoyang">HyG</a>.
+            </span>
+        </p>
+
+  </div>
+</footer>
+<script src="/js/main.js " charset="utf-8"></script>
+
+
+  </body>
+
+</html>

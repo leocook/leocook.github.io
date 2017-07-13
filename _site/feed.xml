@@ -5,9 +5,988 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 05 Jun 2017 23:45:03 +0800</pubDate>
-    <lastBuildDate>Mon, 05 Jun 2017 23:45:03 +0800</lastBuildDate>
+    <pubDate>Thu, 13 Jul 2017 11:26:10 +0800</pubDate>
+    <lastBuildDate>Thu, 13 Jul 2017 11:26:10 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Java并发：unsafe和cas</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#cas&quot; id=&quot;markdown-toc-cas&quot;&gt;CAS&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#cas-1&quot; id=&quot;markdown-toc-cas-1&quot;&gt;CAS原理&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#atomicinteger&quot; id=&quot;markdown-toc-atomicinteger&quot;&gt;AtomicInteger示例&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#casaba&quot; id=&quot;markdown-toc-casaba&quot;&gt;CAS的ABA问题&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#sunmiscunsafe&quot; id=&quot;markdown-toc-sunmiscunsafe&quot;&gt;sun.misc.Unsafe&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#unsafe&quot; id=&quot;markdown-toc-unsafe&quot;&gt;Unsafe类是单例的&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#unsafe-1&quot; id=&quot;markdown-toc-unsafe-1&quot;&gt;创建Unsafe对象&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#unsafe-2&quot; id=&quot;markdown-toc-unsafe-2&quot;&gt;Unsafe类的方法介绍&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#examples-for-unsafe&quot; id=&quot;markdown-toc-examples-for-unsafe&quot;&gt;Examples for Unsafe&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：CAS、Unsafe&lt;/p&gt;
+
+&lt;p&gt;CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。&lt;/p&gt;
+
+&lt;p&gt;在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/&quot;&gt;Java并发：原子性、可见性、有序性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/&quot;&gt;Java并发：volatile关键字&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;cas&quot;&gt;CAS&lt;/h2&gt;
+&lt;p&gt;CAS是&lt;code&gt;Compare and Swap&lt;/code&gt;的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。
+维基百科对CAS的解释可以看这里：&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2&quot;&gt;CAS比较并交换&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。&lt;/p&gt;
+&lt;h4 id=&quot;cas-1&quot;&gt;CAS原理&lt;/h4&gt;
+&lt;p&gt;CAS有三个操作数：内存位置V，预期值A和新值B（将要被修改成的值）。
+在修改值的时候，若内存位置V存的值和预期值A相等，那么就把内存位置的V的值修改为B，返回true；否则，什么都不做，并返回false。
+在Java的实现中，V可以是一个存储A地址的long整数，A是一个使用了volatile修饰的基础数据类型或者对象，B的类型和A的类型一致。&lt;/p&gt;
+
+&lt;h4 id=&quot;atomicinteger&quot;&gt;AtomicInteger示例&lt;/h4&gt;
+&lt;p&gt;java.util.concurrent.atomicAtomicInteger是Jdk提供的一个类，如果你需要一个读写有原子性的整数类型，使用它就对了！
+我们可以趴一下AtomicInteger的源码，可以观察到下面这个方法:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 在当前值上原子性的自增1
+ */
+public final int getAndIncrement() {
+    for (;;) {
+        int current = get();
+        int next = current + 1;
+        if (compareAndSet(current, next))
+            return current;
+    }
+}
+
+public final boolean compareAndSet(int expect, int update) {
+    return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我们能够看到，为了保证操作的原子性，调用了&lt;code&gt;compareAndSet&lt;/code&gt;方法，而&lt;code&gt;compareAndSet&lt;/code&gt;方法又调用了Unsafe的&lt;code&gt;compareAndSwapInt&lt;/code&gt;方法。&lt;/p&gt;
+
+&lt;h4 id=&quot;casaba&quot;&gt;CAS的ABA问题&lt;/h4&gt;
+&lt;p&gt;维基百科上的说明是如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1.进程P1读取了一个数值A&lt;/li&gt;
+  &lt;li&gt;2.P1被挂起(时间片耗尽、中断等)，进程P2开始执行&lt;/li&gt;
+  &lt;li&gt;3.P2修改数值A为数值B，然后又修改回A&lt;/li&gt;
+  &lt;li&gt;4.P1被唤醒，比较后发现数值A没有变化，程序继续执行。
+对于线程P1来说，数值一直是A未变化过，但实际上数值发生过变化的。关于这个维基百科里说的很清楚。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;sunmiscunsafe&quot;&gt;sun.misc.Unsafe&lt;/h2&gt;
+
+&lt;p&gt;我们在日常开发的时候，Java是无法直接做操作系统级别的访问，如果想访问操作系统，我们可以使用C/C++来开发，然后使用JNI或者JNA来调用C/C++的库。
+JVM中存在&lt;code&gt;sun.misc.Unsafe&lt;/code&gt;这样的一个类，该类中提供了一系列的底层方法，这些方法可以直接操作操作系统的内存等。该类在设计的时候，默认是不让一般的开发人员不可以使用，只有授信代码才可以使用。&lt;/p&gt;
+
+&lt;h4 id=&quot;unsafe&quot;&gt;Unsafe类是单例的&lt;/h4&gt;
+&lt;p&gt;从下面的代码中，我们可以看出Unsafe是单例的。且只能通过类加载器来获取，不能直接使用new来创建。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private static final Unsafe theUnsafe;
+
+private Unsafe() {
+}
+
+@CallerSensitive
+public static Unsafe getUnsafe() {
+    Class var0 = Reflection.getCallerClass();
+    if(var0.getClassLoader() != null) {
+        throw new SecurityException(&quot;Unsafe&quot;);
+    } else {
+        return theUnsafe;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;unsafe-1&quot;&gt;创建Unsafe对象&lt;/h4&gt;
+
+&lt;p&gt;如果你直接调用getUnsafe方法来创建Unsafe对象，那么在编译的时候你将会得到警告提示，例如对于下面这段代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import sun.misc.Unsafe;
+
+public class ThreadDemo{
+    public static void main(String[] args){
+        Unsafe unsafe = Unsafe.getUnsafe();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们编译时将会看到如下的警告信息：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ThreadDemo.java:1: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+import sun.misc.Unsafe;
+               ^
+ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+Unsafe unsafe = Unsafe.getUnsafe();
+^
+ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除
+Unsafe unsafe = Unsafe.getUnsafe();
+                ^
+3 个警告
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;但是我可以对代码进行授信处理，Java是通过内加载器是否为根类加载器判断是否授信的，我们可以使用JVM参数bootclasspath：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java -Xbootclasspath:/usr/java/jdk1.7.0/jre/lib/rt.jar:. com.mishadoff.magic.UnsafeClient
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Jdk不建议开发者直接创建Unsafe对象&lt;/strong&gt;，如果我们必须要创建，那么我们可以使用&lt;strong&gt;反射&lt;/strong&gt;的方式来创建：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+System.out.println(unsafe);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;unsafe-2&quot;&gt;Unsafe类的方法介绍&lt;/h4&gt;
+&lt;p&gt;Unsafe类中的方法有很多，其实我们需要关注只有这么几个。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;内存分配&lt;br /&gt;
+allocateMemory：分配内存（非堆内存）
+reallocateMemory：重新分配内存
+freeMemory：释放内存&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;线程操作&lt;br /&gt;
+park：锁定当前的线程
+unpark：解锁指定的线程&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CAS操作&lt;br /&gt;
+public final native boolean compareAndSwapXXX(Object o,long offset,K expected,K x)
+例如：compareAndSwapInt、compareAndSwapLong、compareAndSwapObject等等。
+该方法也就是Java中的CAS的实现，这个方法会比较expected的值和内存地址在offset位置的值是否一样，如果一样则会更新expected的值为x，并返回true，否则返回false。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;还有其它的相关方法可以看下面：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;public native int addressSize()&lt;br /&gt;
+本地指针所占用的存储大小，值为4或8.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public native int pageSize()&lt;br /&gt;
+返回内存页信息&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public native Object allocateInstance(Class cls)&lt;br /&gt;
+分配一个指定的对象，但是不执行任何构造方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public native int arrayBaseOffset(Class arrayClass)&lt;br /&gt;
+返回数组的内存起始位置&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;copyMemory&lt;br /&gt;
+把某段内存块中的数据copy到另外一段内存块中。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;defineAnonymousClass&lt;br /&gt;
+定义一个匿名类。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;defineClass&lt;br /&gt;
+让JVM定义一个类，不进行安全性检查。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ensureClassInitialized&lt;br /&gt;
+确定类已经被初始化了。这个经常在访问类的静态成员变量时会结合访问。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;fieldOffset&lt;br /&gt;
+返回字段在对象中的内存offset&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;freeMemory&lt;br /&gt;
+释放内存&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;getXXX(Object o,long offset) &lt;br /&gt;
+获取对象o中内存偏移量为offset的值。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;getUnsafe&lt;br /&gt;
+单例，获取Unsafe对象&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;monitorEnter(Object o)&lt;br /&gt;
+锁定对象，直到调用了monitorExit(Object o)后才会被解锁&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;monitorExit(Object o)&lt;br /&gt;
+解锁对象，该对象必须是之前就已经被锁定了(被执行过monitorExit)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;详情可以查看：&lt;code&gt;http://www.docjar.com/docs/api/sun/misc/Unsafe.html&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;examples-for-unsafe&quot;&gt;Examples for Unsafe&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;sun.misc.Unsafe#allocateInstance()&lt;br /&gt;
+不使用类的构造方法，来生成一个类的对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+
+Person person1 = (Person)unsafe.allocateInstance(Person.class);
+System.out.println(person1); //null: 0
+
+Person person2 = new Person();
+System.out.println(person2);//test: 22
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我们对比person1和person2，可以发现person1是没有使用构造方法的，而person2是使用了构造方法的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;objectFieldOffset、putXXX&lt;br /&gt;
+操作对象成员的值：
+&lt;code&gt;objectFieldOffset(Field var1)&lt;/code&gt;是获取成员变量的相对于对象内存的偏移量。
+&lt;code&gt;putLong，putInt，putDouble，putChar，putObject&lt;/code&gt;等，可以直接修改对象内存中的数据，可以突破访问修饰符(private/protected)的限制。可以查看下面的例子：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import java.lang.reflect.Field;
+import sun.misc.Unsafe;
+import sun.reflect.Reflection;
+
+Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);
+field.setAccessible(true);
+Unsafe unsafe = (Unsafe) field.get(null);
+
+Person person1 = (Person)unsafe.allocateInstance(Person.class);
+System.out.println(person1);    //null: 0
+
+Class clazz = person1.getClass();
+Field name = clazz.getDeclaredField(&quot;name&quot;);
+Field age = clazz.getDeclaredField(&quot;age&quot;);
+
+unsafe.putObject(person1, unsafe.objectFieldOffset(name),&quot;张三&quot;);
+unsafe.putInt(person1, unsafe.objectFieldOffset(age),18);
+
+System.out.println(person1);    //张三: 18
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;关于Unsafe类里的方法，感兴趣的网上查找阅读相关的C/C++实现。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;大数组操作&lt;br /&gt;
+Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数组，我们知道当JVM消耗内存过高的时候发生GC，性能上会大打折扣。那么当我们需要创建一个大数组，且不想因为GC而引起大的性能损耗时，我们能想到的就是使用堆外内存。例如下边的代码就实现了一个大的字节数组：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class BigByteArray {
+    private final static int BYTE = 1;
+
+    private long size;
+    private long address;
+
+    public BigArray(long size) {
+        this.size = size;
+        address = getUnsafe().allocateMemory(size * BYTE);
+    }
+
+    public void set(long i, byte value) {
+        getUnsafe().putByte(address + i * BYTE, value);
+    }
+
+    public int get(long idx) {
+        return getUnsafe().getByte(address + idx * BYTE);
+    }
+
+    public long size() {
+        return size;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;总结&lt;/h4&gt;
+&lt;p&gt;学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 24 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</guid>
+        
+        <category>CAS、Unsafe</category>
+        
+        
+        <category>java</category>
+        
+      </item>
+    
+      <item>
+        <title>Java并发：volatile关键字</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#cpu&quot; id=&quot;markdown-toc-cpu&quot;&gt;CPU读取值的过程&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile&quot; id=&quot;markdown-toc-volatile&quot;&gt;volatile变量具有可见性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile-1&quot; id=&quot;markdown-toc-volatile-1&quot;&gt;volatile变量不具有原子性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile-2&quot; id=&quot;markdown-toc-volatile-2&quot;&gt;volatile变量一定程度上具有有序性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile-3&quot; id=&quot;markdown-toc-volatile-3&quot;&gt;volatile关键字的实现原理&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#happen-before&quot; id=&quot;markdown-toc-happen-before&quot;&gt;happen-before&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;内存屏障&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#volatile-4&quot; id=&quot;markdown-toc-volatile-4&quot;&gt;volatile关键字原理&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile-5&quot; id=&quot;markdown-toc-volatile-5&quot;&gt;volatile的几个使用场景&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#volatile-6&quot; id=&quot;markdown-toc-volatile-6&quot;&gt;volatile关键字陷阱&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：volatile、happen-before、内存屏障&lt;/p&gt;
+
+&lt;p&gt;在阅读Java并发编程相关的jdk源码中，有个关键字&lt;code&gt;volatile&lt;/code&gt;会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。
+&lt;code&gt;volatile&lt;/code&gt;关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。&lt;/p&gt;
+
+&lt;p&gt;阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：&lt;a href=&quot;http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/&quot;&gt;Java并发：原子性、可见性、有序性&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。&lt;/p&gt;
+
+&lt;h3 id=&quot;cpu&quot;&gt;CPU读取值的过程&lt;/h3&gt;
+
+&lt;p&gt;CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition1.png&quot; alt=&quot;CPU读取值的过程&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果修改某个变量的值，大概会有下面几步操作：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;把值从内存中读到CPU Cache中&lt;/li&gt;
+  &lt;li&gt;CPU读取Cache中的值执行操作，并把修改后的值写入到CPU Cache中&lt;/li&gt;
+  &lt;li&gt;数据从CPU Cache中刷到内存中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以，只有上面三个步骤在执行的过程中不被其它操作干扰时，这个修改操作才会正常完成。&lt;/p&gt;
+
+&lt;h3 id=&quot;volatile&quot;&gt;volatile变量具有可见性&lt;/h3&gt;
+&lt;p&gt;简言之，被volatile关键字修饰的变量在修改后，将会强制被刷到内存中，且该变量在其它CPU中的Cache将会失效，从而保证线程在修改变量值后，其它线程能立马读到。&lt;/p&gt;
+
+&lt;p&gt;下面详细说说使用与不使用volatile关键字的差异：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;未使用volatile关键字&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int i=0;//共享变量
+
+//线程1的操作
+i=i+1
+
+//线程2的操作
+j=i
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们假设先执行的线程1，然后执行线程2，一般会想到j=1，但事实上却不一定。&lt;/p&gt;
+
+&lt;p&gt;在创建线程的时候，内存结构如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行&lt;code&gt;j=i&lt;/code&gt;的时候，给j赋的值是0，而不是1。
+很显然，在线程1修改了i的值之后，线程2并没有读到修改后的i值，可以理解i的读取操作不具备可见性。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用volatile关键字&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在Java中，我们可以使用&lt;code&gt;volatile&lt;/code&gt;关键字来保证变量的可见性，&lt;strong&gt;被volatile修饰后的变量在被修改后，会直接把缓存刷入内存，从而保证下次读取能够读到最新的值&lt;/strong&gt;。如下分析：&lt;/p&gt;
+
+&lt;p&gt;第一步：线程1直接读取内存的i值&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第二步：执行&lt;code&gt;i=i+1&lt;/code&gt;，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。&lt;/p&gt;
+
+&lt;h3 id=&quot;volatile-1&quot;&gt;volatile变量不具有原子性&lt;/h3&gt;
+&lt;p&gt;volatile可以理解为一个轻量级的synchronized，但是volatile变量不具备原子性。synchronized对比volatile实现的是锁，锁提供了两个重要的特性：互斥（mutual exclusion） 和可见性（visibility）。正是互斥保证了操作的原子性。&lt;/p&gt;
+
+&lt;p&gt;那么什么时候使用volatile，什么时候使用synchronized呢？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当变量只需要具备可见性的时候使用volatile，例如：对变量的写操作不依赖于该变量当前值；&lt;/li&gt;
+  &lt;li&gt;当变量需要同时具备原子性和可见性的时候，就使用synchronized。&lt;/li&gt;
+  &lt;li&gt;在使用volatile和synchronized都可以的时候，优先使用volatile，因为volatile的同步机制性能要高于锁的性能。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;volatile-2&quot;&gt;volatile变量一定程度上具有有序性&lt;/h3&gt;
+
+&lt;p&gt;在使用了volatile关键字之后，将会禁用指令重排，从而保证有序性。
+当程序执行到volatile变量的读取或写操作时，将会保证该操作前面的语句都已经执行完成且结果对后边代码具有可见性；该操作后边的代码都没有执行。&lt;/p&gt;
+
+&lt;p&gt;我们可以查看下面这个代码块：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;x = 2;        //语句1
+y = 0;        //语句2
+flag = true;  //语句3
+x = 4;         //语句4
+y = -1;       //语句5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;flag变量没有被volatile关键字修饰时 &lt;br /&gt;
+由于指令重排的原因，我们可以得到下面依赖关系：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition11.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+我们可以看出：
+语句1执行完之后才可以执行语句4；
+语句2执行完之后才可以执行语句5；
+其它执行的顺序不一定。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;flag变量被volatile关键字修饰后&lt;br /&gt;
+由于volatile禁用了指令重排，我们可以得到下面依赖关系：&lt;br /&gt;
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition12.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+我们可以看出：
+语句1和语句2的顺序不一定；
+语句1和语句2都执行完之后执行语句3；
+语句3执行完之后才执行语句4和语句5；
+语句4和语句5谁先执行不一定。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;volatile-3&quot;&gt;volatile关键字的实现原理&lt;/h3&gt;
+
+&lt;h4 id=&quot;happen-before&quot;&gt;happen-before&lt;/h4&gt;
+&lt;p&gt;如果A happen-before B，那么A的所有操作完成后并产生结果才会执行B操作，可以说A所做的任何操作对B都是可见的。happen-before大概有下面几种场景：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1.程序次序规则：在一个单独的线程中，按照程序代码的执行流顺序，（时间上）先执行的操作happen—before（时间上）后执行的操作；&lt;/li&gt;
+  &lt;li&gt;2.管理锁定规则：一个unlock操作happen—before后面（时间上的先后顺序，下同）对同一个锁的lock操作；&lt;/li&gt;
+  &lt;li&gt;3.volatile变量规则：对一个volatile变量的写操作happen—before后面对该变量的读操作。&lt;/li&gt;
+  &lt;li&gt;4.线程启动规则：Thread对象的start()方法happen—before此线程的每一个动作；&lt;/li&gt;
+  &lt;li&gt;5.线程终止规则：线程的所有操作都happen—before对此线程的终止检测，可以通过调用Thread.join()方法、获取Thread.isAlive()的返回值等手段检测到线程已经终止执行；&lt;/li&gt;
+  &lt;li&gt;6.线程中断规则：对线程interrupt()方法的调用happen—before发生于被中断线程的代码检测到中断时事件的发生；&lt;/li&gt;
+  &lt;li&gt;7.对象终结规则：一个对象的初始化完成（构造函数执行结束）happen—before它的finalize（）方法的开始；&lt;/li&gt;
+  &lt;li&gt;8.传递性：如果操作A happen—before操作B，操作B happen—before操作C，那么可以得出A happen—before操作C。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其实我们这里主要查看的是第3条，即volatile变量保证的有序性。在代码重排中，主要分为编译器重排和指令重排，为了实现volatile变量的内存语义，JMM会限制这两类重排，下面是JMM针对volatile变量所规定的重排规则表：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Normal Load&lt;br /&gt;Normal Store&lt;/td&gt;
+      &lt;td&gt;Volatile Load&lt;/td&gt;
+      &lt;td&gt;Volatile Store&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Normal Load&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Normal Store&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Volatile Load&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Volatile Store&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;观察上述表格，可以得知Volation变量的happen—before原则：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有的Volatile变量读都happen—before改变量的其它操作&lt;/li&gt;
+  &lt;li&gt;Volation变量的所有操作都happen—before该变量的写操作&lt;/li&gt;
+  &lt;li&gt;Volation变量的写操作happen—before该变量的读操作&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;内存屏障&lt;/h4&gt;
+
+&lt;p&gt;内存屏障也称之为内存栅栏，是一组处理器指令，用于实现对内存操作顺序限制。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+      &lt;th&gt;2st operation&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Normal Load&lt;/td&gt;
+      &lt;td&gt;Normal Store&lt;/td&gt;
+      &lt;td&gt;Volatile Load&lt;/td&gt;
+      &lt;td&gt;Volatile Store&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Normal Load&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;LoadStore&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Normal Store&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;StoreStore&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Volatile Load&lt;/td&gt;
+      &lt;td&gt;LoadLoad&lt;/td&gt;
+      &lt;td&gt;LoadStore&lt;/td&gt;
+      &lt;td&gt;LoadLoad&lt;/td&gt;
+      &lt;td&gt;LoadStore&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Volatile Store&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;StoreLoad&lt;/td&gt;
+      &lt;td&gt;StoreStore&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;JMM中共有这4种屏障：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;LoadLoad屏障&lt;br /&gt;
+执行顺序：Load1—&amp;gt;Loadload—&amp;gt;Load2&lt;br /&gt;
+Load2以及后序的Load指令在加载数据之前，都能访问到Load1加载的数据。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;LoadStore屏障  &lt;br /&gt;
+执行顺序： Load1—&amp;gt;LoadStore—&amp;gt;Store2&lt;br /&gt;
+Store2以及后序的Store指令在存储数据之前，都能访问到Load1加载的数据。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;StoreStore屏障&lt;br /&gt;
+执行顺序：Store1—&amp;gt;StoreStore—&amp;gt;Store2&lt;br /&gt;
+Store2以及后序的Store指令在存储数据之前，都能访问到Store1操作所存储的数据。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;StoreLoad屏障&lt;br /&gt;
+执行顺序: Store1—&amp;gt; StoreLoad—&amp;gt;Load2&lt;br /&gt;
+Load2以及后序的Load指令在加载数据之前，都可以访问到Store1操作所存储的数据。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;volatile-4&quot;&gt;volatile关键字原理&lt;/h4&gt;
+&lt;p&gt;volatile实际上就是使用内存屏障的来实现可见性和有序性的：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;有序性：它会确保指令重排时，使用内存屏障保证volatile变量操作前的操作都已经完成了，且在volatile变量操作完成后，才会执行后边的代码&lt;/li&gt;
+  &lt;li&gt;可见性：CPU每次在修改volatile变量值之后，它会强制把数据从缓存刷到内存中去，才算本次操作完成&lt;/li&gt;
+  &lt;li&gt;可见性：volatile变量值修改后，它会导致其他CPU中的缓存失效&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;volatile-5&quot;&gt;volatile的几个使用场景&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;状态标记量&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//使用volatile来保证标记变量的可见性
+volatile boolean flag = false;
+ 
+while(!flag){
+    doSomething();
+}
+ 
+public void setFlag() {
+    flag = true;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//使用volatile来保证标有序性
+volatile boolean inited = false;
+//线程1:
+context = loadContext();  
+inited = true;            
+ 
+//线程2:
+while(!inited ){
+sleep()
+}
+doSomethingwithconfig(context);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;双重检查锁
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//除了饿汉模式，这种写法创建单例效率最高
+class Singleton{
+  private volatile static Singleton instance = null;
+     
+  private Singleton() {
+         
+  }
+     
+  public static Singleton getInstance() {
+      if(instance==null) {
+          synchronized (Singleton.class) {
+              if(instance==null)
+                  //一定会把数据刷到内存中
+                  instance = new Singleton();
+          }
+      }
+      return instance;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;volatile-6&quot;&gt;volatile关键字陷阱&lt;/h3&gt;
+&lt;p&gt;Java是一门支持多线程的语言，为了解决线程的并发问题，使用了&lt;code&gt;同步块&lt;/code&gt;和&lt;code&gt;volatile关键字&lt;/code&gt;机制。
+synchronized关键字是同时具备原子性、可见性和有序性；而volatile关键字只具备可见性和有序性，并不具备原子性，问题就出在这里，下面我们举例代码来看看。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;代码一
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class Counter {
+
+  public static Integer count = 0;
+  static CountDownLatch countDownLatch = null;
+
+  public static void inc() {
+
+      //这里延迟1毫秒，使得结果明显
+      try {
+          Thread.sleep(1);
+      } catch (InterruptedException e) {
+      }
+
+      count++;
+      countDownLatch.countDown();
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+      int threadCount = 1000;
+
+      countDownLatch = new CountDownLatch(threadCount);
+      //同时启动1000个线程，去进行i++计算，看看实际结果
+
+      for (int i = 0; i &amp;lt; threadCount; i++) {
+          Thread t = new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  Counter.inc();
+              }});
+          t.start();
+      }
+
+      countDownLatch.await();
+
+      //这里每次运行的值都有可能不同,可能为1000
+      System.out.println(&quot;运行结果:Counter.count=&quot; + Counter.count);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我这边计算的结果是978，每次运行的结果应该都是不一样的。这段代码应该很好理解，上面代码是很常见的线程不安全实例。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;代码二&lt;br /&gt;
+在上面代码的基础上，使用volatile来修饰count：
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public volatile static int count = 0;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当执行完之后，我们发现结果仍然不是1000，原因是volatile无法保证变量的操作是原子的，只能保证变量的操作是具备可见性的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;代码三&lt;br /&gt;
+在代码一的基础上，修改了inc方法,给&lt;code&gt;count++;&lt;/code&gt;添加同步代码：
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public synchronized static void inc() {
+
+  //这里延迟1毫秒，使得结果明显
+  try {
+      Thread.sleep(1);
+  } catch (InterruptedException e) {
+  }
+
+  count++;
+    
+  countDownLatch.countDown();
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;查看上面的代码，我们可以发现volatile关键字是不具备原子性的。我们再使用的时候，需要避免这个坑。&lt;/p&gt;
+
+&lt;p&gt;当我们需要使用具备原子操作的基础类型时，我们除了使用同步代码块，还可以使用&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;包下的原子类型,例如代码一可以这样修改：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class Counter {
+
+    public static AtomicInteger count = new AtomicInteger(0);
+    static CountDownLatch countDownLatch = null;
+
+    public static void inc() {
+
+        //这里延迟1毫秒，使得结果明显
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+        }
+
+        count.incrementAndGet();
+        countDownLatch.countDown();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        int threadCount = 1000;
+
+        countDownLatch = new CountDownLatch(threadCount);
+        //同时启动1000个线程，去进行i++计算，看看实际结果
+
+        for (int i = 0; i &amp;lt; threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Counter.inc();
+                }});
+            t.start();
+        }
+
+        countDownLatch.await();
+
+        //这里每次运行的值都有可能不同,可能为1000
+        System.out.println(&quot;运行结果:Counter.count=&quot; + Counter.count.get());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;总结&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一句话总结下，volatile关键字通过内存屏障来保证了变量的可见性和有序性。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 17 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
+        
+        <category>volatile、happen-before、内存屏障</category>
+        
+        
+        <category>java</category>
+        
+      </item>
+    
+      <item>
+        <title>Java并发：原子性、可见性、有序性</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;原子性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;可见性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;有序性&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#happen-before&quot; id=&quot;markdown-toc-happen-before&quot;&gt;happen-before&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;指令重排&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：原子性、可见性、有序性、volatile、happen-before&lt;/p&gt;
+
+&lt;p&gt;并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：&lt;a href=&quot;http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/&quot;&gt;Java并发：volatile关键字&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;原子性&lt;/h3&gt;
+&lt;p&gt;如果某个操作是原子的，那么该操作要么不执行，若执行的话就一定会成功。可以理解该操作在执行期间不会被其它因素中断，若是被一些不可控的元素破坏，该操作也不会产生副作用。&lt;/p&gt;
+
+&lt;p&gt;银行转账的操作就具备原子性，例如A向B转账1000元，其中包括了2个动作：A账户减去1000元，B账户加上1000元。很好理解，这个转账操作要么不执行，若执行必须保证这两个动作都成功才行。&lt;/p&gt;
+
+&lt;p&gt;编程时，假设Int类型是4字节(32位)，我们把一个Int类型的内存结构用下图展示：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%8E%9F%E5%AD%90%E6%80%A7.png&quot; alt=&quot;原子性&quot; /&gt;
+当执行赋值语句&lt;code&gt;a = 128&lt;/code&gt;的时候，如果能保证要么不执行，要执行的话&lt;code&gt;1~8B&lt;/code&gt;、&lt;code&gt;9~16B&lt;/code&gt;、&lt;code&gt;17~24B&lt;/code&gt;、&lt;code&gt;26~32B&lt;/code&gt;这四个字节都成功写入，且不会被其它线程操作干扰，那么这个赋值操作就具备原子性。&lt;/p&gt;
+
+&lt;p&gt;在Java中，&lt;code&gt;基础数据类型&lt;/code&gt;的变量的&lt;code&gt;赋值&lt;/code&gt;和&lt;code&gt;读取&lt;/code&gt;是原子性的操作。例如下面代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;x = 10; //原子的
+y = x; //非原子的
+x++; //非原子的
+x = x + 1; //非原子的
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;可见性&lt;/h3&gt;
+&lt;p&gt;可见性就是指当多个线程访问同一个变量时，若某个线程修改了变量的值，其他线程能够立即看得到修改的值。&lt;/p&gt;
+
+&lt;p&gt;例如下面的代码块：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;i=0;//共享变量
+
+//线程1的操作
+i=i+1
+
+//线程2的操作
+j=i
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们假设先执行的线程1，然后执行线程2，且&lt;code&gt;线程1和线程2不同时执行&lt;/code&gt;一般会想到j=1，但事实上却不一定。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;在创建线程的时候，内存结构如下：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;
+由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行&lt;code&gt;j=i&lt;/code&gt;的时候，给j赋的值是0，而不是1。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以上述的并发设计是不具备可见性的，因为在线程1修改了i的时候，线程2并没有立刻就能读到。面对这个问题，在Java中，我们可以使用&lt;code&gt;volatile&lt;/code&gt;关键字声明变量不使用CPU缓存，这样就能保证了并发的可见性。如下分析：&lt;/p&gt;
+
+&lt;p&gt;第一步：线程1直接读取内存的i值&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第二步：执行&lt;code&gt;i=i+1&lt;/code&gt;，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。&lt;/p&gt;
+
+&lt;p&gt;由于线程1修改了变量i的值之后，会立马把值刷到内存中，并使其它CPU中i的缓存失效，这样就能保证变量值修改后，其它线程能立刻读到最新的值。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;有序性&lt;/h3&gt;
+&lt;p&gt;有序性指的是程序执行时按照代码的先后顺序执行。&lt;/p&gt;
+
+&lt;h4 id=&quot;happen-before&quot;&gt;happen-before&lt;/h4&gt;
+&lt;p&gt;如果A happen-before B，那么A的所有操作完成后并产生结果才会执行B操作，可以说A所做的任何操作对B都是可见的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1.程序次序规则：在一个单独的线程中，按照程序代码的执行流顺序，（时间上）先执行的操作happen—before（时间上）后执行的操作；&lt;/li&gt;
+  &lt;li&gt;2.管理锁定规则：一个unlock操作happen—before后面（时间上的先后顺序，下同）对同一个锁的lock操作；&lt;/li&gt;
+  &lt;li&gt;3.volatile变量规则：对一个volatile变量的写操作happen—before后面对该变量的读操作。&lt;/li&gt;
+  &lt;li&gt;4.线程启动规则：Thread对象的start（）方法happen—before此线程的每一个动作；&lt;/li&gt;
+  &lt;li&gt;5.线程终止规则：线程的所有操作都happen—before对此线程的终止检测，可以通过Thread.join（）方法结束、Thread.isAlive（）的返回值等手段检测到线程已经终止执行；&lt;/li&gt;
+  &lt;li&gt;6.线程中断规则：对线程interrupt（）方法的调用happen—before发生于被中断线程的代码检测到中断时事件的发生；&lt;/li&gt;
+  &lt;li&gt;7.对象终结规则：一个对象的初始化完成（构造函数执行结束）happen—before它的finalize（）方法的开始；&lt;/li&gt;
+  &lt;li&gt;8.传递性：如果操作A happen—before操作B，操作B happen—before操作C，那么可以得出A happen—before操作C。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;指令重排&lt;/h4&gt;
+&lt;p&gt;在Java中，为了提高执行效率、CPU的利用率，在执行字节码文件的时候会发生&lt;code&gt;指令重排&lt;/code&gt;操作。我们观察下面这段代码：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int a = 1; //语句1
+int b = 2; //语句2
+a += 1; //语句3
+b += 1; //语句4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;假设每行代码执行需要耗时1ms(实际上执行实际会比1ms短很多很多)，那么这四条语句会执行4ms时间，他们的执行顺序是：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;第1步：int a = 1; 
+第2步：int b = 2; 
+第3步：a += 1; 
+第4步：b += 1; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们可以观察出这四行语句有如下的依赖关系：&lt;code&gt;语句3依赖语句1&lt;/code&gt;、&lt;code&gt;语句4依赖语句2&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;其实在Java中，JVM在执行时会发生指令重排，&lt;strong&gt;语句1和语句2&lt;/strong&gt;谁先执行是说不定的，&lt;strong&gt;语句3和语句4&lt;/strong&gt;谁先执行也是说不定的。但一定是&lt;strong&gt;语句1&lt;/strong&gt;执行完之后才执行&lt;strong&gt;语句3&lt;/strong&gt;，&lt;strong&gt;语句2&lt;/strong&gt;执行完之后才执行&lt;strong&gt;语句4&lt;/strong&gt;，这样就可以把语句1和语句3放在一个cpu中，语句2和语句4放在一个cpu，两个cpu并行执行。这样的话，执行的顺序可能就是：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;第1步：int a = 1; a += 1; 
+第2步：int b = 2; b += 1;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这样操作完只需要花费2ms，相比于之前的4ms，时间节省了一倍！&lt;/p&gt;
+
+&lt;p&gt;虽然有序性在一定程度上提高了效率，但是在实际开发中也会带来一些灾难，例如下面的这段代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//线程1:
+context = loadContext();   //语句1
+inited = true;             //语句2
+ 
+//线程2:
+while(!inited ){
+  sleep()
+}
+doSomethingwithconfig(context);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;由于语句2可能会在语句1之前运行，所以可能会在context还没有被初始化的时候，就开始执行doSomethingwithconfig(context)了。
+在Java中可以使用volatile关键字来对inited进行修饰，从而保证语句1 happen-before 语句2。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;总结&lt;/h3&gt;
+&lt;p&gt;原子性保证了某（多）个操作在执行的时候不会被打断；&lt;br /&gt;
+可见性保证了某个值被修改后在其它线程中可以立马看到，不会读到久值；&lt;br /&gt;
+有序性保证了某些操作happen-before另外一些操作。&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 12 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</guid>
+        
+        <category>原子性、可见性、有序性、volatile、happen-before</category>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Jcf（java集合框架）概括</title>
@@ -1350,1057 +2329,6 @@ http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/&lt;/p&gt;
         
         
         <category>nginx</category>
-        
-      </item>
-    
-      <item>
-        <title>Install_hadoop_cluster_on_cm</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#cloudera-manager&quot; id=&quot;markdown-toc-cloudera-manager&quot;&gt;1.Cloudera Manager安装前准备&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.1. 操作系统的优化&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.2. 数据的存放&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#cloudera-manager-1&quot; id=&quot;markdown-toc-cloudera-manager-1&quot;&gt;2.开始安装Cloudera Manager&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm&quot; id=&quot;markdown-toc-cm&quot;&gt;2.1.下载CM&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)&lt;/a&gt;        &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.2.1.创建一个临时可以使用的远程仓库&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#cm-1&quot; id=&quot;markdown-toc-cm-1&quot;&gt;2.2.2.配置安装CM所需要的私有仓库&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm-2&quot; id=&quot;markdown-toc-cm-2&quot;&gt;2.2.3.配置使用CM安装节点时会用到的仓库&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#jdk&quot; id=&quot;markdown-toc-jdk&quot;&gt;2.2.4.配置节点的JDK&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm-3&quot; id=&quot;markdown-toc-cm-3&quot;&gt;2.3.开始安装CM&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm-4&quot; id=&quot;markdown-toc-cm-4&quot;&gt;2.4.使用CM安装集群&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;3.注意事项&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#host&quot; id=&quot;markdown-toc-host&quot;&gt;3.1.主机的Host配置不能出差错&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm-agent&quot; id=&quot;markdown-toc-cm-agent&quot;&gt;3.2.cm-agent安装失败重试时&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;4.会用到的一些地址总结&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#mysql&quot; id=&quot;markdown-toc-mysql&quot;&gt;4.1.Mysql的相关配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;4.2.创建本地仓库&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#parcel&quot; id=&quot;markdown-toc-parcel&quot;&gt;4.3.parcel的下载地址&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cm-5&quot; id=&quot;markdown-toc-cm-5&quot;&gt;4.4.cm的下载地址&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;5.附件&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.&lt;/p&gt;
-
-&lt;h2 id=&quot;cloudera-manager&quot;&gt;1.Cloudera Manager安装前准备&lt;/h2&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;1.1. 操作系统的优化&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;打开的最大文件数
-修改当前的session配置(临时)：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ulimit -SHn 65535
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;永久修改（需要重启服务器）：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;ulimit -SHn 65535&quot; &amp;gt;&amp;gt; /etc/rc.local
-sudo chmod +x /etc/rc.local
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;打开的组大文件句柄数
-临时配置&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 一般可不做修改，这是临时配置
-sudo echo 2000000 &amp;gt; /proc/sys/fs/file-max
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;永久配置&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;echo 2000000 &amp;gt; /proc/sys/fs/file-max&quot; &amp;gt;&amp;gt; /etc/rc.local
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;或者&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;fs.file-max = 2000000&quot; &amp;gt;&amp;gt;/etc/sysctl.conf #推荐
-#使文件生效sudo /sbin/sysctl -p
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;打开的最大网络连接数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo echo &quot;net.core.somaxconn = 2048&quot; &amp;gt;&amp;gt;/etc/sysctl.conf
-sudo /sbin/sysctl -p
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;关闭selinux&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ubuntu默认是不安装的selinux的，所以这里可以直接忽略。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置ntp&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;安装&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install ntp
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果只需要保证集群内部的各个server之间时间保持同步，只需要在需要同步的机器上配置：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0 */12 * * * ntpdate dt-vt-154
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果需要时间和互联网的时间保持一致，那么就需要在提供ntp server的机器上配置上层ntpserver:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server [ntpserver_01]
-server [ntpserver_02]
-server [ntpserver_03]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;关闭防火墙&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ufw disable #关闭防火墙
-apt-get remove iptables #卸载防火墙
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置好hosts映射文件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/hosts
-
-192.168.1.151   dt-vt-151
-192.168.1.152   dt-vt-152
-192.168.1.153   dt-vt-153
-192.168.1.154   dt-vt-154
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Java环境配置&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;安装&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir /opt/java
-cd /opt/java
-#下载到安装文件到这个目录
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;环境配置&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/profile
-
-export JAVA_HOME=/opt/java/jdk1.7.0_79
-export CLASSPATH=.:$JAVA_HOME/lib
-export PATH=$JAVA_HOME/bin:$PATH
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;执行下面命令，使当前的session生效：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source /etc/profile
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;1.2. 数据的存放&lt;/h3&gt;
-&lt;p&gt;在使用CM来管理集群的时候，会涉及到大量的数据存储，例如Hadoop的主机列表信息，主机的配置信息，负载信息，各个模块的运行时状态等等。
-咱们这里使用mysql来作为CM的数据存储，这里不仅是CM，Hadoop中的Hive等模块的元数据，都来使用mysql存储。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;安装mysql&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install mysql-server
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;我这里安装完后是5.5.49.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;关闭mysql，备份配置文件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/init.d/mysql stop
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;把/var/lib/mysql/ib_logfile0和/var/lib/mysql/ib_logfile1拷贝至某个配置目录中，例如：/var/lib/mysql/bak&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置InnoDB引擎&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;务必使用InnoDB引擎引擎，若是使用MyISAM引擎CM将启动不了。在Mysql的命令行中运行下面的命令，来查看你的Mysql使用了哪个引擎。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mysql&amp;gt; show table status;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置mysql的innodb刷写模式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;innodb_flush_method=O_DIRECT
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;即：配置Innodb的刷写模式为异步写模式。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;修改mysql的最大连接数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;max_connections=1550
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;在这里，你应该会考虑配置该数值为多少比较合适。
-当集群规模&lt;strong&gt;小于50台&lt;/strong&gt;的时候，假设该库中有N个数据库是用来服务于Hadoop的，那么max_connections可以设置为100*N+50。例如：Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, 和 Hive metastore都是使用mysql的，那么就配置max_connections为550.
-当集群规模&lt;strong&gt;大于50台&lt;/strong&gt;的时候，建议每个数据库只存放在一台机器上。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置文件样例&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[mysqld]
-transaction-isolation = READ-COMMITTED
-# Disabling symbolic-links is recommended to prevent assorted security risks;
-# to do so, uncomment this line:
-# symbolic-links = 0
-
-key_buffer = 16M
-key_buffer_size = 32M
-max_allowed_packet = 32M
-thread_stack = 256K
-thread_cache_size = 64
-query_cache_limit = 8M
-query_cache_size = 64M
-query_cache_type = 1
-
-max_connections = 1550
-#expire_logs_days = 10
-#max_binlog_size = 100M
-
-
-# InnoDB settings
-innodb_file_per_table = 1
-innodb_flush_log_at_trx_commit  = 2
-innodb_log_buffer_size = 64M
-innodb_buffer_pool_size = 4G
-innodb_thread_concurrency = 8
-innodb_flush_method = O_DIRECT
-innodb_log_file_size = 512M
-
-[mysqld_safe]
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;启动mysql&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/init.d/mysql start
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;打开开机自启&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install sysv-rc-conf
-sysv-rc-conf mysql on
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;安装mysql-jdbc驱动&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libmysql-java
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;mysql远程连接&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/mysql/my.cnf
-
-bind-address = 0.0.0.0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;給相关服务创建mysql的数据库&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;相关列表如下：&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Role&lt;/th&gt;
-      &lt;th&gt;Database&lt;/th&gt;
-      &lt;th&gt;User&lt;/th&gt;
-      &lt;th&gt;Password&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Activity Monitor&lt;/td&gt;
-      &lt;td&gt;amon&lt;/td&gt;
-      &lt;td&gt;amon&lt;/td&gt;
-      &lt;td&gt;amon_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Reports Manager&lt;/td&gt;
-      &lt;td&gt;rman&lt;/td&gt;
-      &lt;td&gt;rman&lt;/td&gt;
-      &lt;td&gt;rman_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Hive Metastore Server&lt;/td&gt;
-      &lt;td&gt;hive_metastore&lt;/td&gt;
-      &lt;td&gt;hive&lt;/td&gt;
-      &lt;td&gt;hive_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Sentry Server&lt;/td&gt;
-      &lt;td&gt;sentry&lt;/td&gt;
-      &lt;td&gt;sentry&lt;/td&gt;
-      &lt;td&gt;sentry_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Cloudera Navigator Audit Server&lt;/td&gt;
-      &lt;td&gt;nav&lt;/td&gt;
-      &lt;td&gt;nav&lt;/td&gt;
-      &lt;td&gt;nav_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Cloudera Navigator Metadata Server&lt;/td&gt;
-      &lt;td&gt;navms&lt;/td&gt;
-      &lt;td&gt;navms&lt;/td&gt;
-      &lt;td&gt;navms_password&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;OOZIE&lt;/td&gt;
-      &lt;td&gt;oozie&lt;/td&gt;
-      &lt;td&gt;oozie&lt;/td&gt;
-      &lt;td&gt;oozie&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;建表语句格式如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database database DEFAULT CHARACTER SET utf8;
-grant all on database.* TO 'user'@'%' IDENTIFIED BY 'password';
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;建表语句如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database amon DEFAULT CHARACTER SET utf8;
-grant all on amon.* TO 'amon'@'%' IDENTIFIED BY 'amon';
-
-create database rmon DEFAULT CHARACTER SET utf8;
-grant all on rmon.* TO 'rmon'@'%' IDENTIFIED BY 'rmon';
-
-create database hive_metastore DEFAULT CHARACTER SET utf8;
-grant all on hive_metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive';
-
-create database sentry DEFAULT CHARACTER SET utf8;
-grant all on sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry';
-
-create database nav DEFAULT CHARACTER SET utf8;
-grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav';
-
-create database navms DEFAULT CHARACTER SET utf8;
-grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms';
-
-create database oozie DEFAULT CHARACTER SET utf8;
-grant all on oozie.* TO 'oozie'@'%' IDENTIFIED BY 'oozie';
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;cloudera-manager-1&quot;&gt;2.开始安装Cloudera Manager&lt;/h2&gt;
-
-&lt;h3 id=&quot;cm&quot;&gt;2.1.下载CM&lt;/h3&gt;
-
-&lt;p&gt;可以下载安装最新版本的CM：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;当然，如果你想选择安装其它版本，可以访问下面的地址，并选择下载你所需要的版本(cm5+)：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://archive.cloudera.com/cm5/installer/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;我这里使用的是版本是5.4.10，从release note上看，目前cdh5.4.10是最稳当的版本。我下载到了本地路径如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/cm/cloudera-manager-installer.bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;修改权限，使其可以被执行：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chmod u+x cloudera-manager-installer.bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)&lt;/h3&gt;
-
-&lt;h4 id=&quot;section-3&quot;&gt;2.2.1.创建一个临时可以使用的远程仓库&lt;/h4&gt;
-&lt;p&gt;这个配置是在安装cloudera-manager-server的时候才会用的。这里的仓库是使用传统的http协议，通过网络传输数据的。可以去http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解压安装包&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;下载完安装包后，解压到某个目录下，我这里下载的是cm5.4.10-ubuntu14-04.tar.gz这个版本。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tar -zxvf cm5.4.10-ubuntu14-04.tar.gz
-chmod -R ugo+rX /opt/cm/local_resp/cm
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;解压后的目录是/opt/cm/local_resp/cm&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;启动Http server&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;启动一个Http服务，使可以通过网络来访问仓库中的数据。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/cm/
-python -m SimpleHTTPServer 8900
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;我这里使用的是8900，你可以根据需要，使用指定的端口。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;验证&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;可在浏览器中访问地址http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。&lt;/p&gt;
-
-&lt;h4 id=&quot;cm-1&quot;&gt;2.2.2.配置安装CM所需要的私有仓库&lt;/h4&gt;
-
-&lt;p&gt;在目录&lt;strong&gt;/etc/apt/sources.list.d/&lt;/strong&gt;下创建文件&lt;strong&gt;my-private-cloudera-repo.list&lt;/strong&gt;，并写入配置把这个文件和上面新建的仓库关联到一起：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/apt/sources.list.d/my-private-cloudera-repo.list
-
-deb [arch=amd64] http://192.168.1.154:8900/cm/ trusty-cm5.4.10 contrib
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;执行下面的命令，使得上面的配置生效：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;cm-2&quot;&gt;2.2.3.配置使用CM安装节点时会用到的仓库&lt;/h3&gt;
-&lt;p&gt;可以下载地址：http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/ 里的所有内容到本地，然后使用&lt;strong&gt;2.2.1&lt;/strong&gt;中的方式来启动一个Http server。&lt;/p&gt;
-
-&lt;h3 id=&quot;jdk&quot;&gt;2.2.4.配置节点的JDK&lt;/h3&gt;
-&lt;p&gt;这一步是可选的，如果你不想每台机器都去手动安装，也可以在后边使用CM来批量安装。&lt;/p&gt;
-
-&lt;h3 id=&quot;cm-3&quot;&gt;2.3.开始安装CM&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;连接互联网安装&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ./cloudera-manager-installer.bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;或者&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用本地仓库安装&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ./cloudera-manager-installer.bin --skip_repo_package=1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然后就是一路的YES &amp;amp; NEXT，最后安装完成，CM默认的端口是7180，账户名和密码都是7180.&lt;/p&gt;
-
-&lt;h3 id=&quot;cm-4&quot;&gt;2.4.使用CM安装集群&lt;/h3&gt;
-
-&lt;p&gt;首次登陆CM管理界面的时候，会出现一个集群安装向导。我这里选择的是免费版本。然后大概有如下几步：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用ip或者hostname来搜索主机，搜索到之后，go to next step.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-02.png&quot; alt=&quot;CM JDK&quot; title=&quot;cm jdk&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;选择是否使用单用户模式（Single User Mode）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;不使用该模式的话，HDFS服务会使用“hdfs”账户来启动，Hbase的Region Server会使用“hbase”账户来启动。使用了该模式之后，所有的服务都是使用同一个账户去启动的。
-这里主要看集群的使用场景，如果其中涉及到不同的模块是由不同人员来运维管理的话，我建议还是不要使用单用户模式了。但如果集群是统一由一个人员来管理，那么选择使用单用户模式可能会方便很多。
-我这里没有使用单用户模式。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置好SSH登录&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-03.png&quot; alt=&quot;配置ssh登录信息&quot; title=&quot;输入密码&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;配置好SSH后开始连入主机，安装jdk和cm-agent
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-04.png&quot; alt=&quot;install cm agent&quot; title=&quot;install cm agent&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-05.png&quot; alt=&quot;cm agent ok&quot; title=&quot;cm agent ok&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;分发Hadoop的安装包&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;去地址：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://archive.cloudera.com/cdh5/parcels/5.4.10/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;下载：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel
-CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1
-manifest.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;下载完成后：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;把&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1&quot;重命名为&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;并移到目录：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/cloudera/parcel-repo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然后在cm-serve点击进入下一页，将会看到如下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-06.png&quot; alt=&quot;cm parcel distributed&quot; title=&quot;cm parcel distributed&quot; /&gt;
-因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的&lt;strong&gt;Download&lt;/strong&gt;自然就是100%，&lt;strong&gt;Distributed&lt;/strong&gt;是把安装包从cm-server往集群中各个节点分发的过程，&lt;strong&gt;Unpacked&lt;/strong&gt;是表示各个节点的上安装包的解压情况进度，前面都OK后，&lt;strong&gt;Activated&lt;/strong&gt;自然就可以了，表示安装包已经部署好了，可以随时进行安装。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-07.png&quot; alt=&quot;hosts choose&quot; title=&quot;hosts choose&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;这里配置的是一些组件使用的mysql信息：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-08.png&quot; alt=&quot;hadoop mysql config&quot; title=&quot;hadoop mysql config&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;然后可以配置一些服务的的具体参数
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-09.png&quot; alt=&quot;hadoop config&quot; title=&quot;hadoop config&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;参数配置都没问题后，开始执行安装。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-10.png&quot; alt=&quot;hadoop install&quot; title=&quot;hadoop install&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;安装完成后。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/cm-11.jpeg&quot; alt=&quot;install success&quot; title=&quot;install success&quot; /&gt;
-PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;3.注意事项&lt;/h2&gt;
-
-&lt;h3 id=&quot;host&quot;&gt;3.1.主机的Host配置不能出差错&lt;/h3&gt;
-&lt;p&gt;我就配置错过host，期间走了一些弯路，主要表现在添加完主机之后，Hosts下的主机名都是localhost。&lt;/p&gt;
-
-&lt;h3 id=&quot;cm-agent&quot;&gt;3.2.cm-agent安装失败重试时&lt;/h3&gt;
-&lt;p&gt;如果在重试的过程中出现了一直等待，或者cm-agent端口被占用的情况，大概有下面的几种情况：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;锁文件没有删除&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo rm /tmp/.scm_prepare_node.lock
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;端口被占用 &lt;strong&gt;9000/9001&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这种情况是部分进程没有关闭成功，找到端口对应的进程号，然后然后使用&lt;strong&gt;kill -9停止进程&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;netstat -nap | grep 9000
-netstat -nap | grep 9001
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;主要是&lt;strong&gt;supervisor&lt;/strong&gt;和&lt;strong&gt;cm-agent&lt;/strong&gt;进程&lt;/p&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;4.会用到的一些地址总结&lt;/h2&gt;
-
-&lt;h3 id=&quot;mysql&quot;&gt;4.1.Mysql的相关配置&lt;/h3&gt;
-&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html&lt;/p&gt;
-
-&lt;h3 id=&quot;section-6&quot;&gt;4.2.创建本地仓库&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;For CM&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;For parcel&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html&lt;/p&gt;
-
-&lt;h3 id=&quot;parcel&quot;&gt;4.3.parcel的下载地址&lt;/h3&gt;
-
-&lt;p&gt;http://archive.cloudera.com/cdh5/parcels/
-http://archive.cloudera.com/kafka/parcels/&lt;/p&gt;
-
-&lt;h3 id=&quot;cm-5&quot;&gt;4.4.cm的下载地址&lt;/h3&gt;
-
-&lt;p&gt;加压后可以直接运行
-http://archive.cloudera.com/cm5/cm/5/&lt;/p&gt;
-
-&lt;h2 id=&quot;section-7&quot;&gt;5.附件&lt;/h2&gt;
-
-&lt;p&gt;博文中的图片是压缩后的，清晰度比较低，原图可以访问下面的地址：&lt;/p&gt;
-
-&lt;p&gt;链接: http://pan.baidu.com/s/1cmiBCE 密码: rnmw&lt;/p&gt;
-</description>
-        <pubDate>Sat, 23 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/07/23/Install_hadoop_cluster_on_CM/</guid>
-        
-        <category>cm</category>
-        
-        <category>hadoop</category>
-        
-        
-        <category>hadoop</category>
-        
-      </item>
-    
-      <item>
-        <title>Elk安装配置介绍</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;版本列表&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#logstash&quot; id=&quot;markdown-toc-logstash&quot;&gt;1.logstash配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#jdk&quot; id=&quot;markdown-toc-jdk&quot;&gt;1.1.Jdk安装&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#logstash-1&quot; id=&quot;markdown-toc-logstash-1&quot;&gt;1.2.下载logstash&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;1.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;1.4.验证&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#es&quot; id=&quot;markdown-toc-es&quot;&gt;2.ES&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;2.1.下载&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;2.2.配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;2.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;2.4.插件安装&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;2.5.验证&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#kibana&quot; id=&quot;markdown-toc-kibana&quot;&gt;3. Kibana&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;3.1.下载&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;3.2.配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;3.3.启动&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;3.4.验证&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#elk&quot; id=&quot;markdown-toc-elk&quot;&gt;4.使ELK整体协作起来&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;4.1.原理&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#el&quot; id=&quot;markdown-toc-el&quot;&gt;4.2.E和L的连接&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#kibana-1&quot; id=&quot;markdown-toc-kibana-1&quot;&gt;4.3.Kibana的配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#es-1&quot; id=&quot;markdown-toc-es-1&quot;&gt;4.4.ES&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;5.小结&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;版本列表&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;project&lt;/th&gt;
-      &lt;th&gt;version&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;es&lt;/td&gt;
-      &lt;td&gt;2.3.4&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;logstash&lt;/td&gt;
-      &lt;td&gt;2.3.4&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;kibana&lt;/td&gt;
-      &lt;td&gt;4.5.3&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&quot;logstash&quot;&gt;1.logstash配置&lt;/h2&gt;
-
-&lt;h3 id=&quot;jdk&quot;&gt;1.1.Jdk安装&lt;/h3&gt;
-&lt;p&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html&lt;/p&gt;
-
-&lt;h3 id=&quot;logstash-1&quot;&gt;1.2.下载logstash&lt;/h3&gt;
-&lt;p&gt;https://www.elastic.co/downloads/logstash&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;1.3.启动&lt;/h3&gt;
-
-&lt;p&gt;解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用-e指定启动的参数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./logstash -e 'input { stdin { } } output { stdout {} }'
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这里设定stdin为输入，stdout为输出。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用配置文件启动&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat logstash-simple.conf
-input { stdin { } }
-output {
-   stdout { codec=&amp;gt; rubydebug }
-}
-
-./logstash agent -f logstash-simple.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;1.4.验证&lt;/h3&gt;
-
-&lt;p&gt;启动后才命令行输入”hello World”，如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf
-
-Settings: Default pipeline workers: 1
-Pipeline main started
-hello World
-{
-       &quot;message&quot; =&amp;gt; &quot;hello World&quot;,
-       &quot;@version&quot; =&amp;gt; &quot;1&quot;,
-       &quot;@timestamp&quot; =&amp;gt; &quot;2016-07-18T07:20:20.526Z&quot;,
-       &quot;host&quot; =&amp;gt; &quot;0.0.0.0&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;打印出来的message部分显示为输入内容。&lt;/p&gt;
-
-&lt;h2 id=&quot;es&quot;&gt;2.ES&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;2.1.下载&lt;/h3&gt;
-&lt;p&gt;https://www.elastic.co/downloads/elasticsearch&lt;/p&gt;
-
-&lt;h3 id=&quot;section-4&quot;&gt;2.2.配置&lt;/h3&gt;
-&lt;p&gt;配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/elasticsearch.yml
-network.host: 0.0.0.0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-5&quot;&gt;2.3.启动&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-6&quot;&gt;2.4.插件安装&lt;/h3&gt;
-
-&lt;p&gt;kopf插件安装：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;安装完之后，可以访问web页面http://[hostname]:9200/_plugin/kopf查看。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-7&quot;&gt;2.5.验证&lt;/h3&gt;
-
-&lt;p&gt;es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;netstat -anp |grep :9200
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;或者使用浏览器访问端口9200.&lt;/p&gt;
-
-&lt;h2 id=&quot;kibana&quot;&gt;3. Kibana&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-8&quot;&gt;3.1.下载&lt;/h3&gt;
-&lt;p&gt;https://www.elastic.co/downloads/kibana&lt;/p&gt;
-
-&lt;h3 id=&quot;section-9&quot;&gt;3.2.配置&lt;/h3&gt;
-
-&lt;p&gt;配置一下es的地址。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/kibana.yml
-
-elasticsearch.url: &quot;http://[hostname]:9200&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这里默认是使用ES的数据。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-10&quot;&gt;3.3.启动&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-11&quot;&gt;3.4.验证&lt;/h3&gt;
-
-&lt;p&gt;访问：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://[hostname]:5601/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;点击”create”创建索引名称。&lt;/p&gt;
-
-&lt;h2 id=&quot;elk&quot;&gt;4.使ELK整体协作起来&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-12&quot;&gt;4.1.原理&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;logstash&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;elasticsearch&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;kibana&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。&lt;/p&gt;
-
-&lt;h3 id=&quot;el&quot;&gt;4.2.E和L的连接&lt;/h3&gt;
-&lt;p&gt;其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi logstash-indexer.conf
-
-input {
-  file {
-    type =&amp;gt;&quot;syslog&quot;
-    path =&amp;gt; [ &quot;/var/log/syslog&quot; ]
-  }
-  syslog {
-    type =&amp;gt;&quot;syslog&quot;
-    port =&amp;gt;&quot;5544&quot;
-  }
-}
-output {
-  stdout { codec=&amp;gt; rubydebug }
-  elasticsearch {hosts =&amp;gt; &quot;localhost&quot; }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;配置介绍&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;logstash的配置里，一定要有一个input和一个output。
-file: 这里配置输入的文件信息。
-syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。
-output里定义了两处输出，分别是&lt;strong&gt;stdout&lt;/strong&gt;命令行和&lt;strong&gt;elasticsearch&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;启动&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nohup ./logstash agent -f logstash-indexer.conf &amp;gt; nohup &amp;amp;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;kibana-1&quot;&gt;4.3.Kibana的配置&lt;/h3&gt;
-&lt;p&gt;只需要修改kibana.yml中es的地址就可以了。&lt;/p&gt;
-
-&lt;h3 id=&quot;es-1&quot;&gt;4.4.ES&lt;/h3&gt;
-&lt;p&gt;ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-13&quot;&gt;5.小结&lt;/h3&gt;
-&lt;p&gt;ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。&lt;/p&gt;
-
-&lt;p&gt;参考地址：
-http://baidu.blog.51cto.com/71938/1676798
-https://www.gitbook.com/book/chenryn/kibana-guide-cn/details&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 20 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/</guid>
-        
-        <category>es</category>
-        
-        <category>logstash</category>
-        
-        <category>kibana</category>
-        
-        <category>ELK</category>
-        
-        
-        <category>ELK</category>
-        
-      </item>
-    
-      <item>
-        <title>Tez系列第三篇 Tez和oozie整合</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.完成上一篇的基础的相关配置&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#tezjarooziehdfs&quot; id=&quot;markdown-toc-tezjarooziehdfs&quot;&gt;2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#jar&quot; id=&quot;markdown-toc-jar&quot;&gt;3.修改Jar的权限&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;4.是配置生效&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#workflowtez&quot; id=&quot;markdown-toc-workflowtez&quot;&gt;5.在workflow里使用Tez&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#workflowhivetez&quot; id=&quot;markdown-toc-workflowhivetez&quot;&gt;5.1.使单个workflow里的hive都用tez&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#workflowhivetez-1&quot; id=&quot;markdown-toc-workflowhivetez-1&quot;&gt;5.2.使单个workflow里的单个hive都用tez&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.完成上一篇的基础的相关配置&lt;/h2&gt;
-
-&lt;h2 id=&quot;tezjarooziehdfs&quot;&gt;2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;jar&quot;&gt;3.修改Jar的权限&lt;/h2&gt;
-&lt;p&gt;保证oozie有权限读取、使用Jar包:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;4.是配置生效&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oozie admin -sharelibupdate
-oozie admin -shareliblist hive
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;或者重启oozie也可以&lt;/p&gt;
-
-&lt;h2 id=&quot;workflowtez&quot;&gt;5.在workflow里使用Tez&lt;/h2&gt;
-&lt;p&gt;这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.&lt;/p&gt;
-
-&lt;h3 id=&quot;workflowhivetez&quot;&gt;5.1.使单个workflow里的hive都用tez&lt;/h3&gt;
-&lt;p&gt;在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;hive.execution.engine&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;tez&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;tez.lib.uris&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;tez.use.cluster.hadoop-libs&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;workflowhivetez-1&quot;&gt;5.2.使单个workflow里的单个hive都用tez&lt;/h3&gt;
-&lt;p&gt;上面的配置不用加，在workflow.xml里的hive节点添加如下配置:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;hive.execution.engine&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;tez&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;tez.lib.uris&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;${nameNode}/tmp/apps/tez-0.8.2/,${nameNode}/tmp/apps/tez-0.8.2/lib&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&amp;lt;property&amp;gt;
-	&amp;lt;name&amp;gt;tez.use.cluster.hadoop-libs&amp;lt;/name&amp;gt;
-	&amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set hive.execution.engine=tez;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Tue, 17 May 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/</guid>
-        
-        <category>hadoop</category>
-        
-        <category>tez</category>
-        
-        <category>oozie</category>
-        
-        <category>hive</category>
-        
-        
-        <category>tez</category>
         
       </item>
     

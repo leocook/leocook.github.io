@@ -157,6 +157,208 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-06-24
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#CAS、Unsafe" title="Tag: CAS、Unsafe" rel="tag">CAS、Unsafe</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：CAS、Unsafe</p>
+
+<p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。</p>
+
+<p>在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：</p>
+
+<ul>
+  <li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+  <li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-06-17
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#volatile、happen-before、内存屏障" title="Tag: volatile、happen-before、内存屏障" rel="tag">volatile、happen-before、内存屏障</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：volatile、happen-before、内存屏障</p>
+
+<p>在阅读Java并发编程相关的jdk源码中，有个关键字<code>volatile</code>会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。
+<code>volatile</code>关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。</p>
+
+<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></p>
+
+<p>本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-06-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#原子性、可见性、有序性、volatile、happen-before" title="Tag: 原子性、可见性、有序性、volatile、happen-before" rel="tag">原子性、可见性、有序性、volatile、happen-before</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
+
+<p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a>
                 </h2>
                 <div class="label">
@@ -327,195 +529,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Jvm内存模型</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-04-05
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#java" title="Category: java" rel="category">java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#jvm" title="Tag: jvm" rel="tag">jvm</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>Java开发人员无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/JVM%20mem%20model.png" alt="JVM mem model" title="JVM mem model" /></p>
-
-<p>JVM的运行时内存共有5块区域，其中有3个是线程间隔离的，有2个是线程间共享的。</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/12/30/2016%E4%B9%A6%E5%8D%95/">2016书单</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-12-30
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#书单" title="Category: 书单" rel="category">书单</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#书单" title="Tag: 书单" rel="tag">书单</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/12/30/2016%E4%B9%A6%E5%8D%95/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-13
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
-
-<p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong>
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/spark%20m.png" alt="spark mem" title="spark mem" /></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -621,7 +634,7 @@
                             <span class="name">
                                 java
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -848,6 +861,27 @@
                       
                       <a href="/tag/#java" style="font-size: 9pt; color: #999;">java</a>
                     
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#原子性、可见性、有序性、volatile、happen-before" style="font-size: 9pt; color: #999;">原子性、可见性、有序性、volatile、happen-before</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#volatile、happen-before、内存屏障" style="font-size: 9pt; color: #999;">volatile、happen-before、内存屏障</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#CAS、Unsafe" style="font-size: 9pt; color: #999;">CAS、Unsafe</a>
+                    
                 </div>
             </div>
             <!-- Recent Posts -->
@@ -857,6 +891,12 @@
                     最近提交
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a></li>
+                    
+                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+                    
+                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
                     
                         <li><a href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a></li>
                     
@@ -871,12 +911,6 @@
                         <li><a href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a></li>
                     
                         <li><a href="/2016/07/26/Lua_on_Nginx/">Lua_on_nginx</a></li>
-                    
-                        <li><a href="/2016/07/23/Install_hadoop_cluster_on_CM/">Install_hadoop_cluster_on_cm</a></li>
-                    
-                        <li><a href="/2016/07/20/ELK%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D/">Elk安装配置介绍</a></li>
-                    
-                        <li><a href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a></li>
                     
                 </ul>
             </div>

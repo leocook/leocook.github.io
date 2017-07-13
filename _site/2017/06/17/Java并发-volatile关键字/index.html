@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Java并发：volatile关键字</title>
+    <meta name="description" content="关键词：volatile、happen-before、内存屏障在阅读Java并发编程相关的jdk源码中，有个关键字volatile会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。volatile关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href=" /css/main.css ">
+    <link rel="canonical" href="http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">
+    <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f1ad6f37c7565a0fbaf172ac83132650";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+<script type='text/javascript'>
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', 'b628e9072406c903']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+    <div class="wrapper">
+        <a href="/" class="brand">leocook</a>
+        <small>Big-Data Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+    <script type='text/javascript'>
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', 'b628e9072406c903']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+  </script>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Java并发：volatile关键字</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-17
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#volatile%E3%80%81happen-before%E3%80%81%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C" title="Tag: volatile、happen-before、内存屏障" rel="tag">volatile、happen-before、内存屏障</a-->
+        <a href="/tag/#volatile、happen-before、内存屏障" title="Tag: volatile、happen-before、内存屏障" rel="tag">volatile、happen-before、内存屏障</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#cpu" id="markdown-toc-cpu">CPU读取值的过程</a></li>
+  <li><a href="#volatile" id="markdown-toc-volatile">volatile变量具有可见性</a></li>
+  <li><a href="#volatile-1" id="markdown-toc-volatile-1">volatile变量不具有原子性</a></li>
+  <li><a href="#volatile-2" id="markdown-toc-volatile-2">volatile变量一定程度上具有有序性</a></li>
+  <li><a href="#volatile-3" id="markdown-toc-volatile-3">volatile关键字的实现原理</a>    <ul>
+      <li><a href="#happen-before" id="markdown-toc-happen-before">happen-before</a></li>
+      <li><a href="#section" id="markdown-toc-section">内存屏障</a></li>
+      <li><a href="#volatile-4" id="markdown-toc-volatile-4">volatile关键字原理</a></li>
+    </ul>
+  </li>
+  <li><a href="#volatile-5" id="markdown-toc-volatile-5">volatile的几个使用场景</a></li>
+  <li><a href="#volatile-6" id="markdown-toc-volatile-6">volatile关键字陷阱</a></li>
+</ul>
+
+<p>关键词：volatile、happen-before、内存屏障</p>
+
+<p>在阅读Java并发编程相关的jdk源码中，有个关键字<code>volatile</code>会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。
+<code>volatile</code>关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。</p>
+
+<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></p>
+
+<p>本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。</p>
+
+<h3 id="cpu">CPU读取值的过程</h3>
+
+<p>CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：</p>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/volition1.png" alt="CPU读取值的过程" /></p>
+
+<p>如果修改某个变量的值，大概会有下面几步操作：</p>
+
+<ul>
+  <li>把值从内存中读到CPU Cache中</li>
+  <li>CPU读取Cache中的值执行操作，并把修改后的值写入到CPU Cache中</li>
+  <li>数据从CPU Cache中刷到内存中</li>
+</ul>
+
+<p>所以，只有上面三个步骤在执行的过程中不被其它操作干扰时，这个修改操作才会正常完成。</p>
+
+<h3 id="volatile">volatile变量具有可见性</h3>
+<p>简言之，被volatile关键字修饰的变量在修改后，将会强制被刷到内存中，且该变量在其它CPU中的Cache将会失效，从而保证线程在修改变量值后，其它线程能立马读到。</p>
+
+<p>下面详细说说使用与不使用volatile关键字的差异：</p>
+
+<ul>
+  <li>未使用volatile关键字</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>int i=0;//共享变量
+
+//线程1的操作
+i=i+1
+
+//线程2的操作
+j=i
+</code></pre>
+</div>
+
+<p>我们假设先执行的线程1，然后执行线程2，一般会想到j=1，但事实上却不一定。</p>
+
+<p>在创建线程的时候，内存结构如下：</p>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png" alt="" /></p>
+
+<p>当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：</p>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png" alt="" /></p>
+
+<p>由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行<code>j=i</code>的时候，给j赋的值是0，而不是1。
+很显然，在线程1修改了i的值之后，线程2并没有读到修改后的i值，可以理解i的读取操作不具备可见性。</p>
+
+<ul>
+  <li>使用volatile关键字</li>
+</ul>
+
+<p>在Java中，我们可以使用<code>volatile</code>关键字来保证变量的可见性，<strong>被volatile修饰后的变量在被修改后，会直接把缓存刷入内存，从而保证下次读取能够读到最新的值</strong>。如下分析：</p>
+
+<p>第一步：线程1直接读取内存的i值</p>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png" alt="" /></p>
+
+<p>第二步：执行<code>i=i+1</code>，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存</p>
+
+<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png" alt="" /></p>
+
+<p>这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。</p>
+
+<h3 id="volatile-1">volatile变量不具有原子性</h3>
+<p>volatile可以理解为一个轻量级的synchronized，但是volatile变量不具备原子性。synchronized对比volatile实现的是锁，锁提供了两个重要的特性：互斥（mutual exclusion） 和可见性（visibility）。正是互斥保证了操作的原子性。</p>
+
+<p>那么什么时候使用volatile，什么时候使用synchronized呢？</p>
+
+<ul>
+  <li>当变量只需要具备可见性的时候使用volatile，例如：对变量的写操作不依赖于该变量当前值；</li>
+  <li>当变量需要同时具备原子性和可见性的时候，就使用synchronized。</li>
+  <li>在使用volatile和synchronized都可以的时候，优先使用volatile，因为volatile的同步机制性能要高于锁的性能。</li>
+</ul>
+
+<h3 id="volatile-2">volatile变量一定程度上具有有序性</h3>
+
+<p>在使用了volatile关键字之后，将会禁用指令重排，从而保证有序性。
+当程序执行到volatile变量的读取或写操作时，将会保证该操作前面的语句都已经执行完成且结果对后边代码具有可见性；该操作后边的代码都没有执行。</p>
+
+<p>我们可以查看下面这个代码块：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>x = 2;        //语句1
+y = 0;        //语句2
+flag = true;  //语句3
+x = 4;         //语句4
+y = -1;       //语句5
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p>flag变量没有被volatile关键字修饰时 <br />
+由于指令重排的原因，我们可以得到下面依赖关系：
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/volition11.png" alt="" /><br />
+我们可以看出：
+语句1执行完之后才可以执行语句4；
+语句2执行完之后才可以执行语句5；
+其它执行的顺序不一定。</p>
+  </li>
+  <li>
+    <p>flag变量被volatile关键字修饰后<br />
+由于volatile禁用了指令重排，我们可以得到下面依赖关系：<br />
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/volition12.png" alt="" /><br />
+我们可以看出：
+语句1和语句2的顺序不一定；
+语句1和语句2都执行完之后执行语句3；
+语句3执行完之后才执行语句4和语句5；
+语句4和语句5谁先执行不一定。</p>
+  </li>
+</ul>
+
+<h3 id="volatile-3">volatile关键字的实现原理</h3>
+
+<h4 id="happen-before">happen-before</h4>
+<p>如果A happen-before B，那么A的所有操作完成后并产生结果才会执行B操作，可以说A所做的任何操作对B都是可见的。happen-before大概有下面几种场景：</p>
+
+<ul>
+  <li>1.程序次序规则：在一个单独的线程中，按照程序代码的执行流顺序，（时间上）先执行的操作happen—before（时间上）后执行的操作；</li>
+  <li>2.管理锁定规则：一个unlock操作happen—before后面（时间上的先后顺序，下同）对同一个锁的lock操作；</li>
+  <li>3.volatile变量规则：对一个volatile变量的写操作happen—before后面对该变量的读操作。</li>
+  <li>4.线程启动规则：Thread对象的start()方法happen—before此线程的每一个动作；</li>
+  <li>5.线程终止规则：线程的所有操作都happen—before对此线程的终止检测，可以通过调用Thread.join()方法、获取Thread.isAlive()的返回值等手段检测到线程已经终止执行；</li>
+  <li>6.线程中断规则：对线程interrupt()方法的调用happen—before发生于被中断线程的代码检测到中断时事件的发生；</li>
+  <li>7.对象终结规则：一个对象的初始化完成（构造函数执行结束）happen—before它的finalize（）方法的开始；</li>
+  <li>8.传递性：如果操作A happen—before操作B，操作B happen—before操作C，那么可以得出A happen—before操作C。</li>
+</ul>
+
+<p>其实我们这里主要查看的是第3条，即volatile变量保证的有序性。在代码重排中，主要分为编译器重排和指令重排，为了实现volatile变量的内存语义，JMM会限制这两类重排，下面是JMM针对volatile变量所规定的重排规则表：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>1st operation</th>
+      <th>2st operation</th>
+      <th>2st operation</th>
+      <th>2st operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>Normal Load<br />Normal Store</td>
+      <td>Volatile Load</td>
+      <td>Volatile Store</td>
+    </tr>
+    <tr>
+      <td>Normal Load</td>
+      <td> </td>
+      <td> </td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Normal Store</td>
+      <td> </td>
+      <td> </td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Volatile Load</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Volatile Store</td>
+      <td> </td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>观察上述表格，可以得知Volation变量的happen—before原则：</p>
+
+<ul>
+  <li>所有的Volatile变量读都happen—before改变量的其它操作</li>
+  <li>Volation变量的所有操作都happen—before该变量的写操作</li>
+  <li>Volation变量的写操作happen—before该变量的读操作</li>
+</ul>
+
+<h4 id="section">内存屏障</h4>
+
+<p>内存屏障也称之为内存栅栏，是一组处理器指令，用于实现对内存操作顺序限制。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>1st operation</th>
+      <th>2st operation</th>
+      <th>2st operation</th>
+      <th>2st operation</th>
+      <th>2st operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>Normal Load</td>
+      <td>Normal Store</td>
+      <td>Volatile Load</td>
+      <td>Volatile Store</td>
+    </tr>
+    <tr>
+      <td>Normal Load</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>LoadStore</td>
+    </tr>
+    <tr>
+      <td>Normal Store</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>StoreStore</td>
+    </tr>
+    <tr>
+      <td>Volatile Load</td>
+      <td>LoadLoad</td>
+      <td>LoadStore</td>
+      <td>LoadLoad</td>
+      <td>LoadStore</td>
+    </tr>
+    <tr>
+      <td>Volatile Store</td>
+      <td> </td>
+      <td> </td>
+      <td>StoreLoad</td>
+      <td>StoreStore</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>JMM中共有这4种屏障：</p>
+
+<ul>
+  <li>
+    <p>LoadLoad屏障<br />
+执行顺序：Load1—&gt;Loadload—&gt;Load2<br />
+Load2以及后序的Load指令在加载数据之前，都能访问到Load1加载的数据。</p>
+  </li>
+  <li>
+    <p>LoadStore屏障  <br />
+执行顺序： Load1—&gt;LoadStore—&gt;Store2<br />
+Store2以及后序的Store指令在存储数据之前，都能访问到Load1加载的数据。</p>
+  </li>
+  <li>
+    <p>StoreStore屏障<br />
+执行顺序：Store1—&gt;StoreStore—&gt;Store2<br />
+Store2以及后序的Store指令在存储数据之前，都能访问到Store1操作所存储的数据。</p>
+  </li>
+  <li>
+    <p>StoreLoad屏障<br />
+执行顺序: Store1—&gt; StoreLoad—&gt;Load2<br />
+Load2以及后序的Load指令在加载数据之前，都可以访问到Store1操作所存储的数据。</p>
+  </li>
+</ul>
+
+<h4 id="volatile-4">volatile关键字原理</h4>
+<p>volatile实际上就是使用内存屏障的来实现可见性和有序性的：</p>
+<ul>
+  <li>有序性：它会确保指令重排时，使用内存屏障保证volatile变量操作前的操作都已经完成了，且在volatile变量操作完成后，才会执行后边的代码</li>
+  <li>可见性：CPU每次在修改volatile变量值之后，它会强制把数据从缓存刷到内存中去，才算本次操作完成</li>
+  <li>可见性：volatile变量值修改后，它会导致其他CPU中的缓存失效</li>
+</ul>
+
+<h3 id="volatile-5">volatile的几个使用场景</h3>
+
+<ul>
+  <li>状态标记量</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//使用volatile来保证标记变量的可见性
+volatile boolean flag = false;
+ 
+while(!flag){
+    doSomething();
+}
+ 
+public void setFlag() {
+    flag = true;
+}
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//使用volatile来保证标有序性
+volatile boolean inited = false;
+//线程1:
+context = loadContext();  
+inited = true;            
+ 
+//线程2:
+while(!inited ){
+sleep()
+}
+doSomethingwithconfig(context);
+</code></pre>
+</div>
+
+<ul>
+  <li>双重检查锁
+    <div class="highlighter-rouge"><pre class="highlight"><code>//除了饿汉模式，这种写法创建单例效率最高
+class Singleton{
+  private volatile static Singleton instance = null;
+     
+  private Singleton() {
+         
+  }
+     
+  public static Singleton getInstance() {
+      if(instance==null) {
+          synchronized (Singleton.class) {
+              if(instance==null)
+                  //一定会把数据刷到内存中
+                  instance = new Singleton();
+          }
+      }
+      return instance;
+  }
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h3 id="volatile-6">volatile关键字陷阱</h3>
+<p>Java是一门支持多线程的语言，为了解决线程的并发问题，使用了<code>同步块</code>和<code>volatile关键字</code>机制。
+synchronized关键字是同时具备原子性、可见性和有序性；而volatile关键字只具备可见性和有序性，并不具备原子性，问题就出在这里，下面我们举例代码来看看。</p>
+
+<ul>
+  <li>代码一
+    <div class="highlighter-rouge"><pre class="highlight"><code>public class Counter {
+
+  public static Integer count = 0;
+  static CountDownLatch countDownLatch = null;
+
+  public static void inc() {
+
+      //这里延迟1毫秒，使得结果明显
+      try {
+          Thread.sleep(1);
+      } catch (InterruptedException e) {
+      }
+
+      count++;
+      countDownLatch.countDown();
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+      int threadCount = 1000;
+
+      countDownLatch = new CountDownLatch(threadCount);
+      //同时启动1000个线程，去进行i++计算，看看实际结果
+
+      for (int i = 0; i &lt; threadCount; i++) {
+          Thread t = new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  Counter.inc();
+              }});
+          t.start();
+      }
+
+      countDownLatch.await();
+
+      //这里每次运行的值都有可能不同,可能为1000
+      System.out.println("运行结果:Counter.count=" + Counter.count);
+  }
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p>我这边计算的结果是978，每次运行的结果应该都是不一样的。这段代码应该很好理解，上面代码是很常见的线程不安全实例。</p>
+
+<ul>
+  <li>代码二<br />
+在上面代码的基础上，使用volatile来修饰count：
+    <div class="highlighter-rouge"><pre class="highlight"><code>public volatile static int count = 0;
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p>当执行完之后，我们发现结果仍然不是1000，原因是volatile无法保证变量的操作是原子的，只能保证变量的操作是具备可见性的。</p>
+
+<ul>
+  <li>代码三<br />
+在代码一的基础上，修改了inc方法,给<code>count++;</code>添加同步代码：
+    <div class="highlighter-rouge"><pre class="highlight"><code>public synchronized static void inc() {
+
+  //这里延迟1毫秒，使得结果明显
+  try {
+      Thread.sleep(1);
+  } catch (InterruptedException e) {
+  }
+
+  count++;
+    
+  countDownLatch.countDown();
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p>查看上面的代码，我们可以发现volatile关键字是不具备原子性的。我们再使用的时候，需要避免这个坑。</p>
+
+<p>当我们需要使用具备原子操作的基础类型时，我们除了使用同步代码块，还可以使用<code>java.util.concurrent.atomic</code>包下的原子类型,例如代码一可以这样修改：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>public class Counter {
+
+    public static AtomicInteger count = new AtomicInteger(0);
+    static CountDownLatch countDownLatch = null;
+
+    public static void inc() {
+
+        //这里延迟1毫秒，使得结果明显
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+        }
+
+        count.incrementAndGet();
+        countDownLatch.countDown();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        int threadCount = 1000;
+
+        countDownLatch = new CountDownLatch(threadCount);
+        //同时启动1000个线程，去进行i++计算，看看实际结果
+
+        for (int i = 0; i &lt; threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Counter.inc();
+                }});
+            t.start();
+        }
+
+        countDownLatch.await();
+
+        //这里每次运行的值都有可能不同,可能为1000
+        System.out.println("运行结果:Counter.count=" + Counter.count.get());
+    }
+}
+</code></pre>
+</div>
+
+<ul>
+  <li>总结</li>
+</ul>
+
+<p>一句话总结下，volatile关键字通过内存屏障来保证了变量的可见性和有序性。</p>
+
+
+        </article>
+
+        
+        <hr>
+        
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+        
+
+
+        <h2 id="comments">订阅号</h2>
+        <img src="http://7xriy2.com1.z0.glb.clouddn.com/leocook.jpg" /><br />
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//leocook.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/scroll.min.js " charset="utf-8"></script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+  <div class="wrapper">
+      <p class="description">
+          
+          小鸟的成长记录.
+          
+      </p>
+        <p class="contact">
+            Contact me at:
+            
+            <a href="https://github.com/leocook"><i class="fa fa-github" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="mailto:leocook@163.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+            
+
+            
+            <a href="http://weibo.com/wulinjq"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/Gaohaoyang">HyG</a>.
+            </span>
+        </p>
+
+  </div>
+</footer>
+<script src="/js/main.js " charset="utf-8"></script>
+
+
+  </body>
+
+</html>
