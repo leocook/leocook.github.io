@@ -5,9 +5,121 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Jul 2017 11:26:10 +0800</pubDate>
-    <lastBuildDate>Thu, 13 Jul 2017 11:26:10 +0800</lastBuildDate>
+    <pubDate>Fri, 14 Jul 2017 17:39:55 +0800</pubDate>
+    <lastBuildDate>Fri, 14 Jul 2017 17:39:55 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Cap理论</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#cap&quot; id=&quot;markdown-toc-cap&quot;&gt;CAP理论的起源&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#cap-1&quot; id=&quot;markdown-toc-cap-1&quot;&gt;CAP三选二&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cap-2&quot; id=&quot;markdown-toc-cap-2&quot;&gt;CAP理论的确定&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cap-3&quot; id=&quot;markdown-toc-cap-3&quot;&gt;对CAP理论的质疑&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;作者的回应&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：CAP、可用性、分区容错性、强一致性、弱一致性、最终一致性&lt;/p&gt;
+
+&lt;p&gt;CAP理论在互联网的知名度挺高，有些开发在设计分布式系统的时候甚至会把它作为衡量系统设计的标准。CAP理论指出任何分布式系统在可用性、一致性、分区容错性这3个点上最多只能同时满足2点。但事实上，CAP理论在被人称之为定理的同时，也伴随着很多争议。其实我个人并不觉得它是一个定理。&lt;/p&gt;
+
+&lt;h3 id=&quot;cap&quot;&gt;CAP理论的起源&lt;/h3&gt;
+&lt;p&gt;CAP理论起源于伯克莱加州大学的计算机科学家Eric Brewer在2000年的分布式计算原则研讨会（PODC）上提出的猜想：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）三者无法在分布式系统中同时满足。其实Eric Brewer教授当时的猜想是建立在webservice集群场景上的，并对CAP理论进行定义：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;C(一致性)&lt;br /&gt;
+系统在执行过某项操作后，仍处于状态一致。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A(可用性)&lt;br /&gt;
+分布式系统中的每个节点都能响应客户端的请求，数据可以不是最新的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;P(分区容错性)&lt;br /&gt;
+当分布式系统遇到节点故障、网络分区故障的时候，仍然能够提供一致性和可用性保障。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;单看上面的理论，很抽象。下面简单聊聊我对它的理解：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;C(一致性)&lt;br /&gt;
+一致性可以从客户端和服务端两个角度来看。从服务端来说，一致性就是指在分布式系统中修改了某个值之后，该值在其它节点上的副本也能立马更新到最新的值，并且客户端写、各分区数据更新到最新这一系列的操作组合是原子的。从客户端来说，当修改了某条记录之后，后续的所有请求都能够返回到更新后的新数据。
+为此又衍生出了三个概念：
+    &lt;ul&gt;
+      &lt;li&gt;强一致性&lt;br /&gt;
+  分布式系统中某个值发生了变化后，必须要保证节点的副本值同时更新到最新值。保证该值在更新后，后续所有访问都能访问到返回最新的值。&lt;/li&gt;
+      &lt;li&gt;弱一致性&lt;br /&gt;
+  分布式系统中某个值发生了变化后，不能保证部分和所有的数据的副本能立马被更新到最新状态。后续的访问可能部分请求不能返回最新的值，可能所有请求都不能返回最新的值，但经过“不一致时间窗口”这段时间后，所有数据的副本都更新到了最新状态，客户端后续的访问也都会返回最新的数值。&lt;/li&gt;
+      &lt;li&gt;最终一致性&lt;br /&gt;
+  最终一致性是弱一致性的特殊形式，系统保证数据在后续没有再次被更新的前提下，该数据的所有副本最终都将会变为最新的数据，且客户端对它后续的所有访问返回的都是最新的数据。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A(可用性)&lt;br /&gt;
+这里的可用性指的不是分布式环境的可用性，这里的可以性是指分布式中单个节点可响应客户端的请求，响应返回的数据可以是最新状态，也可以不是最新状态，只要客户端的请求能被响应，就算该节点是可用的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;P(分区容错性)&lt;br /&gt;
+当分布式系统遇到节点故障、网络分区故障的时候，分布式系统仍然能够给客户端提供服务。其实，就是客户端在请求到故障节点时，会跳过该节点，并继续请求其它正常的节点。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;cap-1&quot;&gt;CAP三选二&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;CA without P（一致性、可用性）&lt;br /&gt;
+如果同时满足了一致性和可用性，那么存在两种情况：第一种是单机环境，这样就可以保证C和A了；第二种是分布式环境，每次数据修改时都对分区中对这条数据的副本加锁，不给其它操作来修改它，当所有副本数据都是最新之后，再释放锁，但是这些设计出来的系统效率极为低下，甚至还不如单机环境。所以无法满足P。&lt;/li&gt;
+  &lt;li&gt;CP without A（一致性、分区容错性）&lt;br /&gt;
+如果要保证在多个节点环境下，每个节点之间都是强一致的，那么肯定会导致分区之间存在同步时间，当并发高的时候，同步时间可能会延长很多，这样就不能保证每个节点的数据都是最新的了。但是可以通过P保证用户请求指向更新后的那些节点，以此来保障整个系统可以正常工作。&lt;/li&gt;
+  &lt;li&gt;AP without C（可用性、分区容错性）&lt;br /&gt;
+如果保证了可用性、以及分区容错性，那就必须要放弃一致性，例如某个节点故障了，这时候该节点将会被划分到“故障分区”进行隔离，隔离后节点将接收不到请求，自然就失去了一致性。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cap-2&quot;&gt;CAP理论的确定&lt;/h3&gt;
+&lt;p&gt;2002年，麻省理工学院的Lynch和Gilbert证明了Eric Brewer对CAP的猜想，并发表了论文。从此CAP理论成为了定理。&lt;/p&gt;
+
+&lt;h3 id=&quot;cap-3&quot;&gt;对CAP理论的质疑&lt;/h3&gt;
+&lt;p&gt;其实初看CAP理论的人都会对此表示一头雾水，很难用一两句简洁的语言来把它描述清楚。业界对它的质疑还是比较多的，下面简单的列两个：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;质疑1&lt;br /&gt;
+不适合用于数据库事务架构。&lt;/li&gt;
+  &lt;li&gt;质疑2&lt;br /&gt;
+使用不可变模型来降低CAP的复杂性，传统的CURD变为CR，例如Hadoop中HDFS的设计，以及Hbase的WAL Log设计。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;还有其他质疑就不列举了。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;作者的回应&lt;/h3&gt;
+&lt;p&gt;作者的回应主要是明确、缩小CAP理论的使用场景，例如CAP理论只局限在原子读写的场景，并申明不支持数据库事务等的场景。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;总结&lt;/h3&gt;
+&lt;p&gt;个人觉得学习CAP理论，当做了解分布式中几个重要场景就可以了，例如：如何保障数据多副本同步问题；故障转移的实现等。
+除此以外，在查看一些并发资料的时候，会经常遇到强一致性、弱一致性、最终一致性这些词，这些名词的意义，以及这几种一致性场景在不同技术中的设计思想，是需要我们去留意的。最后，相信技术但不迷信技术！&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 24 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/06/24/CAP%E7%90%86%E8%AE%BA/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/24/CAP%E7%90%86%E8%AE%BA/</guid>
+        
+        <category>CAP</category>
+        
+        <category>可用性</category>
+        
+        <category>分区容错性</category>
+        
+        <category>强一致性</category>
+        
+        <category>弱一致性</category>
+        
+        <category>最终一致性</category>
+        
+        
+        <category>编程思想</category>
+        
+      </item>
     
       <item>
         <title>Java并发：unsafe和cas</title>
@@ -91,6 +203,7 @@ JVM中存在&lt;code&gt;sun.misc.Unsafe&lt;/code&gt;这样的一个类，该类�
 
 &lt;h4 id=&quot;unsafe&quot;&gt;Unsafe类是单例的&lt;/h4&gt;
 &lt;p&gt;从下面的代码中，我们可以看出Unsafe是单例的。且只能通过类加载器来获取，不能直接使用new来创建。&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private static final Unsafe theUnsafe;
 
 private Unsafe() {
@@ -334,7 +447,9 @@ Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数�
         <link>http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</link>
         <guid isPermaLink="true">http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</guid>
         
-        <category>CAS、Unsafe</category>
+        <category>CAS</category>
+        
+        <category>Unsafe</category>
         
         
         <category>java</category>
@@ -829,7 +944,11 @@ synchronized关键字是同时具备原子性、可见性和有序性；而volat
         <link>http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</link>
         <guid isPermaLink="true">http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
         
-        <category>volatile、happen-before、内存屏障</category>
+        <category>volatile</category>
+        
+        <category>happen-before</category>
+        
+        <category>内存屏障</category>
         
         
         <category>java</category>
@@ -981,7 +1100,15 @@ doSomethingwithconfig(context);
         <link>http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</link>
         <guid isPermaLink="true">http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</guid>
         
-        <category>原子性、可见性、有序性、volatile、happen-before</category>
+        <category>原子性</category>
+        
+        <category>可见性</category>
+        
+        <category>有序性</category>
+        
+        <category>volatile</category>
+        
+        <category>happen-before</category>
         
         
         <category>java</category>
@@ -2125,210 +2252,6 @@ d.配置所有NodeManager的yarn-site.xml文件如下：&lt;/version&gt;&lt;/ver
         
         
         <category>spark</category>
-        
-      </item>
-    
-      <item>
-        <title>Lua_on_nginx</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.系统环境&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#lua&quot; id=&quot;markdown-toc-lua&quot;&gt;2.Lua的运行时环境配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#lua-1&quot; id=&quot;markdown-toc-lua-1&quot;&gt;2.1.下载Lua的运行环境&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;2.2.编译安装&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#nginxlua&quot; id=&quot;markdown-toc-nginxlua&quot;&gt;3.下载Nginx的lua模块&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#nginx&quot; id=&quot;markdown-toc-nginx&quot;&gt;4.Nginx配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#nginx-1&quot; id=&quot;markdown-toc-nginx-1&quot;&gt;4.1.下载nginx&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;4.2.编译安装&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;4.3.配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#nginx-2&quot; id=&quot;markdown-toc-nginx-2&quot;&gt;4.4.启动nginx&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;4.5.验证&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#faq&quot; id=&quot;markdown-toc-faq&quot;&gt;5.FAQ&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#pcre3&quot; id=&quot;markdown-toc-pcre3&quot;&gt;5.1.缺少pcre3&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#libssl&quot; id=&quot;markdown-toc-libssl&quot;&gt;5.2.缺少libssl&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。
-Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。&lt;/p&gt;
-
-&lt;p&gt;nginx  地址：http://www.nginx.org&lt;/p&gt;
-
-&lt;p&gt;luajit 地址：http://luajit.org/download.html&lt;/p&gt;
-
-&lt;p&gt;HttpLuaModule 地址：http://wiki.nginx.org/HttpLuaModule&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.系统环境&lt;/h2&gt;
-
-&lt;p&gt;必须的编译环境，需要提前准备好。我这里的环境是ubuntu14.04，用的apt source是官方的源，使用163 source的时候有问题。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install make
-apt-get install gcc
-apt-get install libpcre3 libpcre3-dev
-apt-get install libssl-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;lua&quot;&gt;2.Lua的运行时环境配置&lt;/h2&gt;
-
-&lt;h3 id=&quot;lua-1&quot;&gt;2.1.下载Lua的运行环境&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
-
-wget http://luajit.org/download/LuaJIT-2.0.4.tar.gz
-
-tar zxvf LuaJIT-2.0.4.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;2.2.编译安装&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/LuaJIT-2.0.4
-make
-make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;nginxlua&quot;&gt;3.下载Nginx的lua模块&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
-
-wget https://github.com/openresty/lua-nginx-module/archive/v0.10.5.tar.gz
-
-tar zxvf v0.10.5.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;nginx&quot;&gt;4.Nginx配置&lt;/h2&gt;
-
-&lt;h3 id=&quot;nginx-1&quot;&gt;4.1.下载nginx&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /opt/
-
-wget http://nginx.org/download/nginx-1.10.1.tar.gz
-
-tar zxvf nginx-1.10.1.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;4.2.编译安装&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 导入环境变
-export LUAJIT_LIB=/usr/local/lib
-export LUAJIT_INC=/usr/local/include/luajit-2.0
-
-# 安装到/usr/local/nginx-1.10.1目录下
-./configure --prefix=/usr/local/nginx-1.10.1 --add-module=../lua-nginx-module-0.10.5
-
-make -j2
-make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;4.3.配置&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /usr/local/nginx-1.10.1
-vi conf/nginx.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然后在http -&amp;gt; server下加入配置：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;location /lua_test {
-    default_type 'text/plain';
-    content_by_lua 'ngx.say(&quot;hello, ttlsa lua&quot;)';
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这个配置后，访问http://[hostname]:[port]/lua_test，就能访问你所定义的代码块了。&lt;/p&gt;
-
-&lt;p&gt;如果你还想修改nginx的http端口，修改一下&lt;strong&gt;http.server&lt;/strong&gt;中的&lt;strong&gt;listen&lt;/strong&gt;值，就可以了。&lt;/p&gt;
-
-&lt;h3 id=&quot;nginx-2&quot;&gt;4.4.启动nginx&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/local/nginx-1.10.1/sbin/nginx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-4&quot;&gt;4.5.验证&lt;/h3&gt;
-
-&lt;p&gt;查看端口的运行情况：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@ubuntu:~# netstat -anp|grep 4002
-tcp        0      0 0.0.0.0:4002            0.0.0.0:*               LISTEN      1736/nginx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;或者直接请求4002端口。（我这里使用的是4002端口，你可以根据需要，设置为你需要的。）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-`&quot;&gt;root@ubuntu:/usr/local/nginx-1.10.1/sbin# curl http://192.168.1.160:4002/lua_test
-hello, ttlsa lua
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;faq&quot;&gt;5.FAQ&lt;/h2&gt;
-
-&lt;h3 id=&quot;pcre3&quot;&gt;5.1.缺少pcre3&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;错误log&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure: error: the HTTP rewrite module requires the PCRE library.
-You can either disable the module by using --without-http_rewrite_module
-option, or install the PCRE library into the system, or build the PCRE library
-statically from the source with nginx by using --with-pcre=&amp;lt;path&amp;gt; option.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解决办法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libpcre3 libpcre3-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;libssl&quot;&gt;5.2.缺少libssl&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;错误log&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure: error: the HTTP gzip module requires the zlib library.
-You can either disable the module by using --without-http_gzip_module
-option, or install the zlib library into the system, or build the zlib library
-statically from the source with nginx by using --with-zlib=&amp;lt;path&amp;gt; option.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解决办法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install libssl-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;参考地址：
-http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 26 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/07/26/Lua_on_Nginx/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/07/26/Lua_on_Nginx/</guid>
-        
-        <category>nginx</category>
-        
-        <category>lua</category>
-        
-        
-        <category>nginx</category>
         
       </item>
     

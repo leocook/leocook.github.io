@@ -3,7 +3,7 @@ layout: post
 comments: true
 date: 2017-06-17
 categories: java
-tags: volatile、happen-before、内存屏障
+tags: volatile happen-before 内存屏障
 ---
 
 * content

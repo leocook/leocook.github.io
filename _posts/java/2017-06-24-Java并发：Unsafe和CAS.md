@@ -3,7 +3,7 @@ layout: post
 comments: true
 date: 2017-06-24
 categories: java
-tags: CAS、Unsafe
+tags: CAS Unsafe
 ---
 
 * content
@@ -71,6 +71,7 @@ JVM中存在<code>sun.misc.Unsafe</code>这样的一个类，该类中提供了�
 
 #### Unsafe类是单例的
 从下面的代码中，我们可以看出Unsafe是单例的。且只能通过类加载器来获取，不能直接使用new来创建。
+
 ```
 private static final Unsafe theUnsafe;
 
