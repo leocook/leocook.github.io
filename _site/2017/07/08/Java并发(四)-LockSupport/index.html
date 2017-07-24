@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Hadoop优化 Yarn</title>
-    <meta name="description" content="集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。">
+    <title>Java并发(四)：locksupport</title>
+    <meta name="description" content="关键词：LockSupport前面我们讨论了sun.misc.Unsafe类，该类提供了面向操作系统直接操作内存和CPU的方法，例如分配内心和阻塞线程等等。但是该类在使用时是不安全的，所以jdk在不同的场景下对它做了不同的包装。java.util.concurrent.locks.LockSupport类就是对s...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/">
+    <link rel="canonical" href="http://leocook.github.io/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -152,11 +152,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Hadoop优化 Yarn</h1>
+        <h1>Java并发(四)：locksupport</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-03-13
+                <i class="fa fa-calendar"></i>2017-07-08
             </div>
 
             <div class="label-card">
@@ -176,7 +176,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#hadoop" title="Category: hadoop" rel="category">hadoop</a>
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
     
   
 
@@ -193,11 +193,8 @@
   <i class="fa fa-tags"></i>
   
     
-        <!--a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a-->
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <!--a href="/tag/#%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96" title="Tag: 集群优化" rel="tag">集群优化</a-->
-        <a href="/tag/#集群优化" title="Tag: 集群优化" rel="tag">集群优化</a>
+        <!--a href="/tag/#LockSupport" title="Tag: LockSupport" rel="tag">LockSupport</a-->
+        <a href="/tag/#LockSupport" title="Tag: LockSupport" rel="tag">LockSupport</a>
     
   
 
@@ -209,142 +206,124 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.之前的集群存在的问题</a>    <ul>
-      <li><a href="#section-1" id="markdown-toc-section-1">1.1.问题一：作业的执行速率不同步</a></li>
-      <li><a href="#section-2" id="markdown-toc-section-2">1.2.问题二：资源利用倾斜</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">1.3.问题三：集群资源并没有真正的参与计算</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-4" id="markdown-toc-section-4">2.集群资源重新划分的过程</a>    <ul>
-      <li><a href="#section-5" id="markdown-toc-section-5">2.1.拿到集群中所有机器的硬件资源列表</a></li>
-      <li><a href="#section-6" id="markdown-toc-section-6">2.2.根据集群资源，分组的大概情况如截图：</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">2.3.资源划分的策略</a></li>
-      <li><a href="#section-8" id="markdown-toc-section-8">2.4.具体的划分策略</a>        <ul>
-          <li><a href="#section-9" id="markdown-toc-section-9">2.4.1.内存划分策略</a></li>
-          <li><a href="#section-10" id="markdown-toc-section-10">2.4.2.内存划分策略</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#mysql" id="markdown-toc-mysql">3.mysql调优的过程</a></li>
-  <li><a href="#section-11" id="markdown-toc-section-11">4.成果</a>    <ul>
-      <li><a href="#section-12" id="markdown-toc-section-12">4.1.集群表现情况</a></li>
-      <li><a href="#mysql-1" id="markdown-toc-mysql-1">4.2.mysql表现情况</a></li>
-    </ul>
-  </li>
-  <li><a href="#section-13" id="markdown-toc-section-13">5.总结</a></li>
+  <li><a href="#locksupport" id="markdown-toc-locksupport">LockSupport类的核心字段</a></li>
+  <li><a href="#locksupport-1" id="markdown-toc-locksupport-1">LockSupport类的核心方法</a></li>
+  <li><a href="#threadinterrupt" id="markdown-toc-threadinterrupt">Thread.interrupt()方法</a></li>
+  <li><a href="#section" id="markdown-toc-section">总结</a></li>
 </ul>
 
-<p>集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。</p>
+<p>关键词：LockSupport</p>
 
-<h1 id="section">1.之前的集群存在的问题</h1>
+<p>前面我们讨论了<code>sun.misc.Unsafe</code>类，该类提供了面向操作系统直接操作内存和CPU的方法，例如分配内心和阻塞线程等等。但是该类在使用时是不安全的，所以jdk在不同的场景下对它做了不同的包装。</p>
 
-<h2 id="section-1">1.1.问题一：作业的执行速率不同步</h2>
+<p><code>java.util.concurrent.locks.LockSupport</code>类就是对<code>sun.misc.Unsafe</code>类进行了一些封装，主要提供一些锁的基础操作。</p>
+
+<p>LockSupport阻塞线程的机制与<code>Object</code>的wait和notify是不一样的：</p>
+
 <ul>
-  <li>问题表现
-部分任务跑的慢，部分任务跑得快。</li>
-  <li>问题的原因
-集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。</li>
-  <li>解决办法
-重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。</li>
+  <li>调用API层面的区别<br />
+<code>LockSupport</code>的park和unpark可以用“线程”作为该方法的参数，语义更合乎逻辑。
+<code>Object</code>的wait和notify是由<code>监视器对象</code>来调用的，对线程来说，它的阻塞和唤醒是被动的，不能准确的控制某个指定的线程，要么随机唤醒（notify）、要么唤醒全部（notifyAll）。</li>
+  <li>实现原理的区别<br />
+<code>Object</code>的wait和notify以及<code>synchronized</code>都是通过占用和释放该<code>对象的监视器</code>来实现锁的获取和释放。
+<code>LockSupport</code>不使用对象的监视器，每次执行<code>park</code>时会消耗1个<code>许可</code>，每次执行<code>unpark</code>时会获得1个<code>许可</code>。</li>
 </ul>
-
-<h2 id="section-2">1.2.问题二：资源利用倾斜</h2>
-<ul>
-  <li>问题表现
-部分机器资源利用率极高，部分机器资源利用率级低；</li>
-  <li>问题的原因
-<strong>同【问题一】</strong></li>
-  <li>解决办法
-<strong>同【问题一】</strong></li>
-</ul>
-
-<h2 id="section-3">1.3.问题三：集群资源并没有真正的参与计算</h2>
-<ul>
-  <li>问题表现
-作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。</li>
-  <li>问题的原因
-咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。</li>
-  <li>解决办法
-a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。
-b). 减少单个任务的资源占用，提高集群的并行度。</li>
-</ul>
-
-<h1 id="section-4">2.集群资源重新划分的过程</h1>
-
-<h2 id="section-5">2.1.拿到集群中所有机器的硬件资源列表</h2>
-<p>感谢运维同学的帮助！</p>
-
-<h2 id="section-6">2.2.根据集群资源，分组的大概情况如截图：</h2>
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png" alt="服务器分组情况" title="根据机器硬件资源情况，服务器分组情况" />
-分组命名规则：
-<strong><em>NM</em></strong>: NodeManager；  <br />
-<strong><em>G01</em></strong>: Group01；  <br />
-<strong><em>C08</em></strong>: cpu是8核；  <br />
-<strong><em>M48</em></strong>: 内存是48GB。  <br />
-<strong><em>ZK</em></strong>: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）</p>
-
-<h2 id="section-7">2.3.资源划分的策略</h2>
-<p>根据机器上安装的服务，大概给服务做了如下的划分：</p>
-<ul>
-  <li>
-    <p>安装有重要服务的机器，可参与计算
-例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
-  </li>
-  <li>
-    <p>安装有重要服务的机器，不参与计算
-例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。</p>
-  </li>
-  <li>
-    <p>只安装了存储和计算的机器
-例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。</p>
-  </li>
-</ul>
-
-<h2 id="section-8">2.4.具体的划分策略</h2>
-
-<h3 id="section-9">2.4.1.内存划分策略</h3>
-<ul>
-  <li>yarn容器可直接管理的资源
-主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。</li>
-  <li>单个任务可使用的任务资源
-map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。
-    <h3 id="section-10">2.4.2.内存划分策略</h3>
-  </li>
-  <li>yarn容器可直接管理的资源
-对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。</li>
-  <li>单个任务可使用的任务资源
-1个vcore。
-    <h1 id="mysql">3.mysql调优的过程</h1>
-    <p>不同的库，挂载在不同的磁盘上，减小单块盘的压力。</p>
-  </li>
-</ul>
-
-<h1 id="section-11">4.成果</h1>
-
-<h2 id="section-12">4.1.集群表现情况</h2>
-<p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。</p>
-<h2 id="mysql-1">4.2.mysql表现情况</h2>
-<p>优化前的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png" alt="优化前" title="优化前负载情况" />
-优化后的负载情况入下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/mysql.png" alt="优化后" title="优化后负载情况" /></p>
 
 <blockquote>
-  <p>后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。</p>
+  <p>如果查看Unsafe的C++<a href="http://hg.openjdk.java.net/jdk7/jdk7/hotspot/file/81d815b05abb/src/os/linux/vm/os_linux.cpp">源码</a>会发现，这个<code>许可</code>，其实就是一个<code>_counter</code>变量。
+当执行<code>park</code>的时候，若<code>_counter</code>值大于0则立马返回并把<code>_counter</code>的值设置为0，线程不会阻塞；若<code>_counter</code>值等于0，则阻塞当前线程。可以理解这个过程将会消耗一个许可，若没有许可被消耗，则阻塞。
+当执行<code>unpark</code>的时候，将会把<code>_counter</code>的值设置为1。可以理解这个过程是是给线程添加一个许可，且多次调用也只会添加一个许可。
+<code>_counter</code>为1的时候表示许可可用，为0的时候表示许可不可用。如果能够很好的理解这个“许可”的设计，在查看LockSupport类源码的时候，将会轻松很多。</p>
 </blockquote>
 
-<h1 id="section-13">5.总结</h1>
-<p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：</p>
+<h4 id="locksupport">LockSupport类的核心字段</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//unsafe，用于CAS操作
+private static final Unsafe unsafe = Unsafe.getUnsafe();
+
+//Thread中parkBlocker的内存偏移量
+private static final long parkBlockerOffset;
+</code></pre>
+</div>
+
+<p>在<code>java.lang.Thread</code>类中有个字段<code>parkBlocker</code>用来存放该线程阻塞时是被哪个对象阻塞的。</p>
+
+<h4 id="locksupport-1">LockSupport类的核心方法</h4>
+
 <ul>
-  <li>Impala的资源管理未使用yarn，所以一直还没有开始使用；</li>
-  <li>OOZIE未做HA配置；</li>
-  <li>HDFS数据平衡效果不是很好；</li>
-  <li>CPU一个线程做两个vcore使用，压力还是比较大的。</li>
+  <li>
+    <p>public static void park()<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程。</p>
+  </li>
+  <li>
+    <p>public static void park(Object blocker)<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程，并告诉线程是谁阻塞了它。</p>
+  </li>
+  <li>
+    <p>public static void parkNanos(long nanos)<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒。</p>
+  </li>
+  <li>
+    <p>public static void parkNanos(Object blocker, long nanos)<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒，并告诉线程是谁阻塞了它。</p>
+  </li>
+  <li>
+    <p>public static void parkUntil(long deadline)<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline。与parkNanos相比，这里的时间是绝对时间戳。</p>
+  </li>
+  <li>
+    <p>public static void parkUntil(Object blocker, long deadline)<br />
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline，并告诉线程是谁阻塞了它。</p>
+  </li>
+  <li>
+    <p>public static void unpark(Thread thread)<br />
+若许可不可用，则使许可可用。若线程因为调用了park而阻塞，则它将解除阻塞状态。否则保证下一次调用park不会受阻。</p>
+  </li>
+  <li>
+    <p>private static void setBlocker(Thread t, Object arg)<br />
+给线程t设置阻塞对象，告诉t是谁阻塞了它。</p>
+  </li>
+  <li>
+    <p>public static Object getBlocker(Thread t)<br />
+获取是谁阻塞了线程t</p>
+  </li>
 </ul>
 
-<p>在接下，将会按照优先级逐一解决。</p>
+<h4 id="threadinterrupt">Thread.interrupt()方法</h4>
 
+<p>Thread.interrupt()方法不会中断一个正在运行的线程。当线程被Object.wait、Thread.join和Thread.sleep三种方法阻塞时，若调用了Thread.interrupt()方法，线程将退出阻塞状态，并会抛出一个<code>InterruptedException</code>中断异常。</p>
+
+<blockquote>
+  <p><code>LockSupport.park()</code>也能够响应中断信号，但是它不会抛出<code>InterruptedException</code>中断异常。</p>
+</blockquote>
+
+<ul>
+  <li>Thread.interrupted() &amp; Thread.isInterrupted()方法<br />
+测试线程是否已经中断。前者是静态方法，后者不是。当我们需要停止一个线程的时候，一般有两种方式：
+    <ul>
+      <li>通过共享变量；</li>
+      <li>通过调用线程的<code>interrupt</code>方法。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>前者在线程阻塞的时候不能够被中断，只有当线程执行的时候才可以;而后者只能在线程处于阻塞的时候才能够被中断，线程执行时不可以中断。</p>
+
+<ul>
+  <li>interrupted status<br />
+<code>interrupted status</code>是线程的中断状态，被JVM的C++代码维护着。
+    <ul>
+      <li>在调用Thread.join和Thread.sleep之后，将会设置interrupted status；</li>
+      <li>当退出阻塞、抛出<code>InterruptedException</code>异常的时候，interrupted status将会被清除；</li>
+      <li>调用<code>public static boolean interrupted()</code>方法后，会清除interrupted status</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="section">总结</h4>
+
+<p><code>java.util.concurrent.locks.LockSupport</code>类是对<code>sun.misc.Unsafe</code>类的二次封装，主要提供了一些线程阻塞的工具。
+该类在AQS中被大量的运用，在阅读AQS的源码时，需要对该类有所了解。</p>
 
         </article>
 
@@ -357,8 +336,6 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
         
             
@@ -366,14 +343,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-        
-            
-            
-                
-                    
                 
                     
                 
@@ -381,17 +351,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -399,11 +359,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
                 
                     
                 
@@ -414,11 +370,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
                 
                     
                 
@@ -429,17 +381,11 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
                 
                     
                 
-                    
-                
             
-                
-                    
                 
                     
                 
@@ -450,17 +396,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -468,11 +404,11 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
                 
                     
+                
+            
                 
                     
                 
@@ -483,8 +419,6 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
         
             
@@ -492,17 +426,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -510,17 +434,7 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
-                
-                    
-                
-                    
-                
-            
-                
-                    
                 
                     
                 
@@ -528,17 +442,19 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
+            
+                
                     
                 
             
                 
                     
                 
-                    
-                
             
                 
                     
+                
+            
                 
                     
                 
@@ -549,14 +465,17 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
                 
                     
                 
-                    
-                
             
         
             
             
                 
                     
+                
+            
+        
+            
+            
                 
                     
                 
@@ -581,8 +500,8 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://leocook.github.io/2016/03/13/hadoop%E4%BC%98%E5%8C%96-yarn/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://leocook.github.io/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

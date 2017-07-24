@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Java并发：unsafe和cas</title>
+    <title>Java并发(三)：unsafe和cas</title>
     <meta name="description" content="关键词：CAS、UnsafeCAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。在学习CAS、sun.misc....">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">
+    <link rel="canonical" href="http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -127,6 +127,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -150,7 +152,7 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Java并发：unsafe和cas</h1>
+        <h1>Java并发(三)：unsafe和cas</h1>
         <div class="label">
 
             <div class="label-card">
@@ -540,6 +542,24 @@ Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们�
                     
                 
             
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
                 
                     
                 
@@ -710,30 +730,6 @@ Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们�
             
         
             
-            
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-                    
-                
             
                 
                     
@@ -761,8 +757,8 @@ Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们�
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

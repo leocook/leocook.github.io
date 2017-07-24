@@ -127,6 +127,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -154,6 +156,133 @@
         <small>这里将会记录着我在互联网行业里走过的每一步。</small>
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-13
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
+
+<p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong>
+<img src="http://7xriy2.com1.z0.glb.clouddn.com/spark%20m.png" alt="spark mem" title="spark mem" /></p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
+
+<p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -355,168 +484,6 @@ Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内�
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/">Tez系列第三篇 Tez和oozie整合</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-05-17
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <a href="/tag/#oozie" title="Tag: oozie" rel="tag">oozie</a>&nbsp;
-    
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#section" id="markdown-toc-section">1.完成上一篇的基础的相关配置</a></li>
-  <li><a href="#tezjarooziehdfs" id="markdown-toc-tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</a></li>
-</ul>
-
-<h2 id="section">1.完成上一篇的基础的相关配置</h2>
-
-<h2 id="tezjarooziehdfs">2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/
-hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/
-</code></pre>
-</div>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/05/17/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%B8%89%E7%AF%87-Tez%E5%92%8Coozie%E6%95%B4%E5%90%88/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/">Tez系列第二篇 Hive_on_tez</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-05-09
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#tez" title="Category: tez" rel="category">tez</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#hadoop" title="Tag: hadoop" rel="tag">hadoop</a>&nbsp;
-    
-        <a href="/tag/#tez" title="Tag: tez" rel="tag">tez</a>&nbsp;
-    
-        <a href="/tag/#hive" title="Tag: hive" rel="tag">hive</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    <ul id="markdown-toc">
-  <li><a href="#tez" id="markdown-toc-tez">1.安装配置Tez</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">1.1.环境要求</a></li>
-    </ul>
-  </li>
-</ul>
-
-<p>本文主要描述Tez的安装配置，以及使用Tez作为Hive的计算引擎时的相关配置。</p>
-
-<h2 id="tez">1.安装配置Tez</h2>
-
-<h3 id="section">1.1.环境要求</h3>
-
-<ul>
-  <li>CDH5.4.4(hadoop2.6.0)</li>
-  <li>编译环境：gcc, gcc-c++, make, build</li>
-  <li>Nodejs、npm (Tez-ui需要)</li>
-  <li>Git</li>
-  <li>pb2.5.0</li>
-  <li>maven3</li>
-  <li>Tez0.8.2</li>
-</ul>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/05/09/Tez%E7%B3%BB%E5%88%97%E7%AC%AC%E4%BA%8C%E7%AF%87-hive_on_tez/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -527,10 +494,10 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/page2" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">3/4</span>
+          <span class="page_number ">3/5</span>
           
             <a href="/page4" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page4" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page5" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -622,7 +589,7 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                             <span class="name">
                                 java
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">7</span>
                         </a>
                     </li>
                     
@@ -956,6 +923,20 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                       
                       <a href="/tag/#最终一致性" style="font-size: 9pt; color: #999;">最终一致性</a>
                     
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#LockSupport" style="font-size: 9pt; color: #999;">LockSupport</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#AQS" style="font-size: 9pt; color: #999;">AQS</a>
+                    
                 </div>
             </div>
             <!-- Recent Posts -->
@@ -966,13 +947,17 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/">Java并发(五)：aqs框架</a></li>
+                    
+                        <li><a href="/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/">Java并发(四)：locksupport</a></li>
+                    
                         <li><a href="/2017/06/24/CAP%E7%90%86%E8%AE%BA/">Cap理论</a></li>
                     
-                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a></li>
+                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/">Java并发(三)：unsafe和cas</a></li>
                     
-                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发(二)：volatile关键字</a></li>
                     
-                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发(一)：原子性、可见性、有序性</a></li>
                     
                         <li><a href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a></li>
                     
@@ -981,10 +966,6 @@ hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_201507
                         <li><a href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Jvm内存模型</a></li>
                     
                         <li><a href="/2016/12/30/2016%E4%B9%A6%E5%8D%95/">2016书单</a></li>
-                    
-                        <li><a href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a></li>
-                    
-                        <li><a href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a></li>
                     
                 </ul>
             </div>

@@ -5,9 +5,649 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 14 Jul 2017 17:39:55 +0800</pubDate>
-    <lastBuildDate>Fri, 14 Jul 2017 17:39:55 +0800</lastBuildDate>
+    <pubDate>Mon, 24 Jul 2017 18:15:57 +0800</pubDate>
+    <lastBuildDate>Mon, 24 Jul 2017 18:15:57 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Java并发(五)：aqs框架</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#aqs&quot; id=&quot;markdown-toc-aqs&quot;&gt;AQS概括&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#aqs-1&quot; id=&quot;markdown-toc-aqs-1&quot;&gt;AQS的关键点有三个&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#aqs-2&quot; id=&quot;markdown-toc-aqs-2&quot;&gt;AQS中的关键字段&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#aqs-3&quot; id=&quot;markdown-toc-aqs-3&quot;&gt;AQS中的关键方法&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#clh-lock-queue&quot; id=&quot;markdown-toc-clh-lock-queue&quot;&gt;CLH lock queue和自旋锁&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#clh-lock-queue-1&quot; id=&quot;markdown-toc-clh-lock-queue-1&quot;&gt;CLH lock queue&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#spin-lock&quot; id=&quot;markdown-toc-spin-lock&quot;&gt;Spin Lock（自旋锁）&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#javautilconcurrentlocksabstractqueuedsynchronizernode&quot; id=&quot;markdown-toc-javautilconcurrentlocksabstractqueuedsynchronizernode&quot;&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer.Node类&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#aqs-4&quot; id=&quot;markdown-toc-aqs-4&quot;&gt;AQS详解&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#clh-lock-queue-2&quot; id=&quot;markdown-toc-clh-lock-queue-2&quot;&gt;CLH lock queue的维护&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;独占模式的实现&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;独占模式的获取&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;独占模式的释放&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;共享模式的实现&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;共享模式的获取&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：AQS CLH&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;AQS&lt;/code&gt;指的是&lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;这个类，在阅读Jdk源码时，你会发现这个类是&lt;code&gt;java.util.concurrent&lt;/code&gt;包的核心。
+例如在&lt;code&gt;ReentrantLock&lt;/code&gt;、&lt;code&gt;ReentrantReadWriteLock&lt;/code&gt;、&lt;code&gt;CountDownLatch&lt;/code&gt;等类中存在内部类&lt;code&gt;Sync&lt;/code&gt;，都是用了AQS。如果想清楚整个Java的并发体系，这个类必读不可。&lt;/p&gt;
+
+&lt;h3 id=&quot;aqs&quot;&gt;AQS概括&lt;/h3&gt;
+
+&lt;p&gt;先说说几个概念&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;独占锁&amp;amp;共享共享锁
+    &lt;ul&gt;
+      &lt;li&gt;独占锁&lt;br /&gt;
+  资源最多同时只能被一个线程占用&lt;/li&gt;
+      &lt;li&gt;共享共享锁&lt;br /&gt;
+  资源同时可以被多个线程占用&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;公平锁&amp;amp;非公平锁
+    &lt;ul&gt;
+      &lt;li&gt;公平锁&lt;br /&gt;
+  线程按照提交的顺序依次去获取资源，按照一定的优先级来，FIFO&lt;/li&gt;
+      &lt;li&gt;非公平锁&lt;br /&gt;
+  线程获取资源的顺序是无序的&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;AQS中的线程阻塞队列是基于&lt;code&gt;CLH lock queue&lt;/code&gt;来实现的，后边会重点说明一下。&lt;/p&gt;
+
+&lt;h4 id=&quot;aqs-1&quot;&gt;AQS的关键点有三个&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;提供变量&lt;code&gt;state&lt;/code&gt;来同步状态&lt;/li&gt;
+  &lt;li&gt;维护线程阻塞队列&lt;/li&gt;
+  &lt;li&gt;阻塞和唤醒线程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;aqs-2&quot;&gt;AQS中的关键字段&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;private volatile int state;&lt;br /&gt;
+同步状态，通过设置status来达到同步的效果&lt;/li&gt;
+  &lt;li&gt;private transient volatile Node tail;&lt;br /&gt;
+线程等待队列的尾部，只有&lt;code&gt;enq&lt;/code&gt;方法在向队列添加新线程时，才会修改该值&lt;/li&gt;
+  &lt;li&gt;private transient volatile Node head;&lt;br /&gt;
+线程等待队列的头部&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是offset相关的变量，主要是为了提供CAS操作而设立的变量：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;private static final long stateOffset;&lt;br /&gt;
+同步状态的offset&lt;/li&gt;
+  &lt;li&gt;private static final long headOffset;&lt;br /&gt;
+等待队列头的offset&lt;/li&gt;
+  &lt;li&gt;private static final long tailOffset;&lt;br /&gt;
+等待队列尾的offset&lt;/li&gt;
+  &lt;li&gt;private static final long waitStatusOffset;&lt;br /&gt;
+当前节点的等待状态的offset&lt;/li&gt;
+  &lt;li&gt;private static final long nextOffset;&lt;br /&gt;
+当前节点的下一个节点offset&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;aqs-3&quot;&gt;AQS中的关键方法&lt;/h4&gt;
+&lt;p&gt;已经实现的方法如下&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;public final void acquire(int arg)&lt;br /&gt;
+获取锁，一般会调用acquire(1)来获取。&lt;/li&gt;
+  &lt;li&gt;public final boolean release(int arg)&lt;br /&gt;
+释放锁，一般会调用release(1)来释放。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;需要被子类实现的方法&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;protected boolean tryAcquire(int arg)&lt;br /&gt;
+尝试获取独占锁,在获取前会检查同步状态是否允许获取独占锁。获取成功则返回true，返回false则把线程加入到等待队列。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;protected boolean tryRelease(int arg)&lt;br /&gt;
+尝试通过设置同步状态，来释放独占锁。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;protected int tryAcquireShared(int arg)&lt;br /&gt;
+尝试获取共享锁,在获取前会检查同步状态是否允许获取共享锁。获取成功则返回true，返回false则把线程加入到等待队列。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;protected boolean tryReleaseShared(int arg)&lt;br /&gt;
+尝试通过设置同步状态，来释放共享锁。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;clh-lock-queue&quot;&gt;CLH lock queue和自旋锁&lt;/h3&gt;
+
+&lt;h4 id=&quot;clh-lock-queue-1&quot;&gt;CLH lock queue&lt;/h4&gt;
+&lt;p&gt;CLH lock queue是一个存放线程的FIFO队列，队列中的每个线程都在等待它前一个线程释放锁，前面的线程释放了锁之后，该线程将会开始回解除锁并开始执行线程。&lt;/p&gt;
+
+&lt;h4 id=&quot;spin-lock&quot;&gt;Spin Lock（自旋锁）&lt;/h4&gt;
+&lt;p&gt;是线程通过循环来等待而不是睡眠。&lt;/p&gt;
+
+&lt;h4 id=&quot;javautilconcurrentlocksabstractqueuedsynchronizernode&quot;&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer.Node类&lt;/h4&gt;
+
+&lt;p&gt;该类实现了&lt;code&gt;CLH lock queue&lt;/code&gt;的一个变种，它的数据结构大致如下：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;      +------+  prev +-----+       +-----+
+ head |      | &amp;lt;---- |     | &amp;lt;---- |     |  tail
+      +------+       +-----+       +-----+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;图中没有把next指向描述出来。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关键字段
+    &lt;ul&gt;
+      &lt;li&gt;SHARED&lt;br /&gt;
+  共享模式的节点常量，供其方式使用&lt;/li&gt;
+      &lt;li&gt;EXCLUSIVE&lt;br /&gt;
+  独占模式的节点常量，供其方式使用&lt;/li&gt;
+      &lt;li&gt;waitStatus&lt;br /&gt;
+  当前节点/线程的等待状态,该变量会有下面几个值：CANCELLED/SIGNAL/CONDITION/PROPAGATE&lt;/li&gt;
+      &lt;li&gt;CANCELLED&lt;br /&gt;
+  由于超时或者中断线程被中断，节点/线程的状态变为该值时，状态将不会发生变化，可以理解线程被中断之后，就停止了，状态自然不会发生什么变化了。&lt;/li&gt;
+      &lt;li&gt;SIGNAL&lt;br /&gt;
+  表示当前节点以及成功执行,等待unpark&lt;/li&gt;
+      &lt;li&gt;CONDITION&lt;br /&gt;
+  标识线程在condition queue中处于等待状态,等待某一个条件&lt;/li&gt;
+      &lt;li&gt;PROPAGATE&lt;br /&gt;
+  后续结点会传播唤醒的操作，共享锁可执行,独占锁不可&lt;/li&gt;
+      &lt;li&gt;prev&lt;br /&gt;
+  等待队列中，该节点的上一个节点&lt;/li&gt;
+      &lt;li&gt;next&lt;br /&gt;
+  等待队列中，该节点的下一个节点&lt;/li&gt;
+      &lt;li&gt;thread&lt;br /&gt;
+  当前的线程&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;关键方法&lt;br /&gt;
+其实没有什么重要的方法需要在这里提，&lt;code&gt;Node&lt;/code&gt;这个类就是个用来实现双向队列的数据结构，它是双向队列中的一个节点。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;aqs-4&quot;&gt;AQS详解&lt;/h3&gt;
+&lt;p&gt;在“AQS概括”中已经简单的描述了一些关键的字段和方法，相信在了解了&lt;code&gt;CLH lock queue&lt;/code&gt;、&lt;code&gt;自旋锁&lt;/code&gt;，以及&lt;code&gt;LockSupport&lt;/code&gt;类的设计和实现之后，再回过头来查看AQS内部的实现细节将会很轻松。
+AQS重要实现了这几个重要的功能，CLH lock queue的维护、独占模式的获取/释放、共享模式的获取/释放。&lt;/p&gt;
+
+&lt;h4 id=&quot;clh-lock-queue-2&quot;&gt;CLH lock queue的维护&lt;/h4&gt;
+&lt;p&gt;我们知道AQS维护了一个FIFO的队列，那肯定就有入队和出队的操作。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;CLH lock queue入队&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private Node addWaiter(Node mode) {
+    Node node = new Node(Thread.currentThread(), mode);
+    // Try the fast path of enq; backup to full enq on failure
+    Node pred = tail;
+    if (pred != null) {
+        node.prev = pred;
+        if (compareAndSetTail(pred, node)) {
+            pred.next = node;
+            return node;
+        }
+    }
+    enq(node); //把节点放入队列
+    return node;
+}
+
+private Node enq(final Node node) {
+    for (;;) {
+        Node t = tail;
+        if (t == null) { // Must initialize
+            if (compareAndSetHead(new Node()))
+                tail = head;
+        } else {
+            node.prev = t;
+            if (compareAndSetTail(t, node)) {
+                t.next = node;
+                return t;
+            }
+        }
+    }
+}
+
+private final boolean compareAndSetTail(Node expect, Node update) {
+    return unsafe.compareAndSwapObject(this, tailOffset, expect, update);
+}
+
+private final boolean compareAndSetHead(Node update) {
+    return unsafe.compareAndSwapObject(this, headOffset, null, update);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当队列不为空时，节点添加到队列前，队列状态如下图所示：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-notnull-before.png&quot; alt=&quot;queue-notnull-before&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;节点加入队列的过程如下图所示：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-notnull-after.png&quot; alt=&quot;queue-notnull-after&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当队列为空时，首次加入节点会进行一些初始化，具体的操作过程可以看下图：
+&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-null-init.png&quot; alt=&quot;queue-null-init&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;CLH lock queue出队&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private void setHead(Node node) {
+    head = node;
+    node.thread = null;
+    node.prev = null;
+} 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;独占模式的实现&lt;/h4&gt;
+
+&lt;h5 id=&quot;section-1&quot;&gt;独占模式的获取&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public final void acquire(int arg) {
+    if (!tryAcquire(arg)/*尝试获取锁*/ &amp;amp;&amp;amp;
+        acquireQueued(addWaiter(Node.EXCLUSIVE/*设置为独占锁状态,并把当前线程放入了队列中*/), arg)/*放入队列后,阻塞该线程*/)
+        selfInterrupt(); //若park的原因是线程被interrupt掉了,则中断线程
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这块的原理大概如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;先通过&lt;code&gt;tryAcquire&lt;/code&gt;来尝试获取锁，如果能获取到锁的话就返回；否则加入到队列，并阻塞线程；&lt;/li&gt;
+  &lt;li&gt;线程退出阻塞的时候，通过&lt;code&gt;Thread.interrupted()&lt;/code&gt;来判断线程是否是因为被中断才退出park的，若是的话，则中断当前线程。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体我们可以查阅下面这几个方法的源码：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;acquireQueued&lt;br /&gt;
+线程节点之前以及加入到队列中了，该方法将要阻塞该线程，在退出阻塞的时候，返回该线程是否是被中断退出的。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;final boolean acquireQueued(final Node node, int arg) {
+  boolean failed = true;
+  try {
+      boolean interrupted = false;
+
+      //自旋锁,double check
+      //等待前面的节点释放锁
+      for (;;) {
+          final Node p = node.predecessor(); //获取该节点的上一个节点
+
+          //如果前继节点就是head,现在就可以直接去尝试获取锁,如果没有其它线程的干扰,肯定是能够获取到的
+          if (p == head/*前继节点就是head*/ &amp;amp;&amp;amp; tryAcquire(arg)/*尝试获取锁*/) {
+
+              //前继节点出队,当前的node设置为head
+              setHead(node);
+              p.next = null; // help GC
+              failed = false;
+              return interrupted;
+          }
+
+          //去除前面被取消的(CANCELLED)的线程
+          //若前继节点没有没被取消,则表示当前线程可以被park
+          //park当前线程,park结束时检查是否被interrupt,若是则设置interrupted为true,跳出循环后中断线程
+          if (shouldParkAfterFailedAcquire(p, node) &amp;amp;&amp;amp; parkAndCheckInterrupt())
+              interrupted = true;
+      }
+  } finally {
+      //若线程失败,则取消获取锁
+      if (failed)
+          cancelAcquire(node);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;shouldParkAfterFailedAcquire&lt;br /&gt;
+去除前面被取消的(CANCELLED)的线程,若前继节点没有没被取消,则表示当前线程可以被park
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+  int ws = pred.waitStatus;
+  if (ws == Node.SIGNAL)
+      /*
+       * 前继节点已经成功执行,等待释放锁,所以当前的线程可以安全的park。
+       */
+      return true;
+  if (ws &amp;gt; 0) {
+      /*
+       * 前继节点的线程已经被取消,所以跳过已经被取消的节点,并一直往前跳过所有连续的CANCELLED节点
+       *
+       */
+      do {
+          node.prev = pred = pred.prev;
+      } while (pred.waitStatus &amp;gt; 0);
+      pred.next = node;
+  } else {
+      /*
+       * 当前继节点的waitStatus非SIGNAL &amp;amp; 非CANCELLED,需要设置waitStatus的值为SIGNAL,并返回false,继续自旋
+       */
+      compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
+  }
+  return false;
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;parkAndCheckInterrupt&lt;br /&gt;
+park当前线程,并返回线程是否被中断
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private final boolean parkAndCheckInterrupt() {
+  LockSupport.park(this);
+
+  //阻塞结束时,调用Thread.interrupted()来检查结束阻塞的原因是什么
+  return Thread.interrupted();
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;section-2&quot;&gt;独占模式的释放&lt;/h5&gt;
+&lt;p&gt;释放独占模式，解除线程阻塞；该过程中会唤醒队列中后继节点的线程。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;release&lt;br /&gt;
+该方法一般会被子类调用，例如&lt;code&gt;java.util.concurrent.locks.ReentrantLock#unlock&lt;/code&gt;这个方法，release的实现如下：
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public final boolean release(int arg) {
+  if (tryRelease(arg)/*该方法被子类实现*/) {
+      Node h = head;
+      if (h != null &amp;amp;&amp;amp; h.waitStatus != 0)
+          unparkSuccessor(h)/*唤醒后继节点的线程*/;
+      return true;
+  }
+  return false;
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;unparkSuccessor&lt;br /&gt;
+唤醒后继节点的线程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private void unparkSuccessor(Node node) {
+    /*
+     * node节点以及执行完成,不用加锁了,所以可以把等待状态设置为0。
+     */
+    int ws = node.waitStatus;
+    if (ws &amp;lt; 0)
+        compareAndSetWaitStatus(node, ws, 0);
+
+    /*
+     * 唤醒node节点的后继节点线程。
+     */
+    Node s = node.next;
+    if (s == null || s.waitStatus &amp;gt; 0) {
+        s = null;
+        for (Node t = tail; t != null &amp;amp;&amp;amp; t != node; t = t.prev)
+            if (t.waitStatus &amp;lt;= 0)
+                s = t;
+    }
+    if (s != null)
+        LockSupport.unpark(s.thread);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;共享模式的实现&lt;/h4&gt;
+
+&lt;h5 id=&quot;section-4&quot;&gt;共享模式的获取&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;acquireShared
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public final void acquireShared(int arg) {
+  if (tryAcquireShared(arg)/*尝试获取共享模式,若无许可则进入等待*/ &amp;lt; 0)
+      doAcquireShared(arg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;doAcquireShared&lt;br /&gt;
+该方法和独占模式的&lt;code&gt;acquireQueued&lt;/code&gt;方法很像，主要的区别就是在&lt;code&gt;setHeadAndPropagate&lt;/code&gt;中，如果当前节点获取到了许可，且还有多余的许可，则继续让后继节点获取许可并唤醒他们，并一直往后传递下去。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private void doAcquireShared(int arg) {
+    final Node node = addWaiter(Node.SHARED)/*添加节点到队列*/;
+    boolean failed = true;
+    try {
+        boolean interrupted = false;
+        for (;;) {
+            //获取到前继节点
+            final Node p = node.predecessor();
+            if (p == head) { //如果前继节点就是head节点的话
+                int r = tryAcquireShared(arg);//尝试获取共享模式
+                if (r &amp;gt;= 0) {
+                    setHeadAndPropagate(node, r); //设置当前节点为head节点
+                    p.next = null; // help GC
+                    if (interrupted)    //判断退出xxxx的时候,是否是被interrupt掉的
+                        selfInterrupt();
+                    failed = false;
+                    return;
+                }
+            }
+
+            //去除前面被取消的(CANCELLED)的线程
+            //若前继节点没有没被取消,则表示当前线程可以被park
+            //park当前线程,park结束时检查是否被interrupt,若是则设置interrupted为true,跳出循环后中断线程
+            if (shouldParkAfterFailedAcquire(p, node) &amp;amp;&amp;amp; parkAndCheckInterrupt())
+                interrupted = true;
+        }
+    } finally {
+        if (failed)
+            cancelAcquire(node);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;setHeadAndPropagate&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private void doReleaseShared() {
+    for (;;) {
+        Node h = head;
+        if (h != null &amp;amp;&amp;amp; h != tail) { //若队列里有线程节点
+            int ws = h.waitStatus;
+
+            //线程状态为SIGNAL的时候,才可以唤醒后继节点的线程
+            if (ws == Node.SIGNAL) {
+
+                //重置Node的状态为0,unpark该节点
+                if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
+                    continue;            // loop to recheck cases
+                unparkSuccessor(h); //unpark
+            }
+            else if (ws == 0 &amp;amp;&amp;amp;
+                     !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
+                //如果线程状态为0则更新状态为PROPAGATE，让后继节点传播唤醒操作,失败重试
+                continue;                // loop on failed CAS
+        }
+
+        //head变化了,说明该节点被唤醒了,则继续唤醒后边的节点
+        if (h == head)                   // loop if head changed
+            break;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;共享模式的释放&lt;br /&gt;
+当tryReleaseShared返回true的时候,会把一个或多个线程从共享模式中唤醒。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public final boolean releaseShared(int arg) {
+    if (tryReleaseShared(arg)/*该方法由子类实现*/) {
+        doReleaseShared();
+        return true;
+    }
+    return false;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;总结&lt;/h4&gt;
+&lt;p&gt;AQS是&lt;code&gt;java.util.concurrent&lt;/code&gt;中的核心，它的内部类&lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer.Node&lt;/code&gt;通过实现&lt;code&gt;CLH lock queue&lt;/code&gt;的一个变种来轮询执行CAS操作来调用&lt;code&gt;Unsafe.park()&lt;/code&gt;获取锁。
+AQS理解了，下一篇会聊聊它的一个具体的实现&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;类，这样会更直观的展现AQS的精妙。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 15 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/</guid>
+        
+        <category>AQS</category>
+        
+        
+        <category>java</category>
+        
+      </item>
+    
+      <item>
+        <title>Java并发(四)：locksupport</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#locksupport&quot; id=&quot;markdown-toc-locksupport&quot;&gt;LockSupport类的核心字段&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#locksupport-1&quot; id=&quot;markdown-toc-locksupport-1&quot;&gt;LockSupport类的核心方法&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#threadinterrupt&quot; id=&quot;markdown-toc-threadinterrupt&quot;&gt;Thread.interrupt()方法&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关键词：LockSupport&lt;/p&gt;
+
+&lt;p&gt;前面我们讨论了&lt;code&gt;sun.misc.Unsafe&lt;/code&gt;类，该类提供了面向操作系统直接操作内存和CPU的方法，例如分配内心和阻塞线程等等。但是该类在使用时是不安全的，所以jdk在不同的场景下对它做了不同的包装。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;类就是对&lt;code&gt;sun.misc.Unsafe&lt;/code&gt;类进行了一些封装，主要提供一些锁的基础操作。&lt;/p&gt;
+
+&lt;p&gt;LockSupport阻塞线程的机制与&lt;code&gt;Object&lt;/code&gt;的wait和notify是不一样的：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;调用API层面的区别&lt;br /&gt;
+&lt;code&gt;LockSupport&lt;/code&gt;的park和unpark可以用“线程”作为该方法的参数，语义更合乎逻辑。
+&lt;code&gt;Object&lt;/code&gt;的wait和notify是由&lt;code&gt;监视器对象&lt;/code&gt;来调用的，对线程来说，它的阻塞和唤醒是被动的，不能准确的控制某个指定的线程，要么随机唤醒（notify）、要么唤醒全部（notifyAll）。&lt;/li&gt;
+  &lt;li&gt;实现原理的区别&lt;br /&gt;
+&lt;code&gt;Object&lt;/code&gt;的wait和notify以及&lt;code&gt;synchronized&lt;/code&gt;都是通过占用和释放该&lt;code&gt;对象的监视器&lt;/code&gt;来实现锁的获取和释放。
+&lt;code&gt;LockSupport&lt;/code&gt;不使用对象的监视器，每次执行&lt;code&gt;park&lt;/code&gt;时会消耗1个&lt;code&gt;许可&lt;/code&gt;，每次执行&lt;code&gt;unpark&lt;/code&gt;时会获得1个&lt;code&gt;许可&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果查看Unsafe的C++&lt;a href=&quot;http://hg.openjdk.java.net/jdk7/jdk7/hotspot/file/81d815b05abb/src/os/linux/vm/os_linux.cpp&quot;&gt;源码&lt;/a&gt;会发现，这个&lt;code&gt;许可&lt;/code&gt;，其实就是一个&lt;code&gt;_counter&lt;/code&gt;变量。
+当执行&lt;code&gt;park&lt;/code&gt;的时候，若&lt;code&gt;_counter&lt;/code&gt;值大于0则立马返回并把&lt;code&gt;_counter&lt;/code&gt;的值设置为0，线程不会阻塞；若&lt;code&gt;_counter&lt;/code&gt;值等于0，则阻塞当前线程。可以理解这个过程将会消耗一个许可，若没有许可被消耗，则阻塞。
+当执行&lt;code&gt;unpark&lt;/code&gt;的时候，将会把&lt;code&gt;_counter&lt;/code&gt;的值设置为1。可以理解这个过程是是给线程添加一个许可，且多次调用也只会添加一个许可。
+&lt;code&gt;_counter&lt;/code&gt;为1的时候表示许可可用，为0的时候表示许可不可用。如果能够很好的理解这个“许可”的设计，在查看LockSupport类源码的时候，将会轻松很多。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;locksupport&quot;&gt;LockSupport类的核心字段&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//unsafe，用于CAS操作
+private static final Unsafe unsafe = Unsafe.getUnsafe();
+
+//Thread中parkBlocker的内存偏移量
+private static final long parkBlockerOffset;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在&lt;code&gt;java.lang.Thread&lt;/code&gt;类中有个字段&lt;code&gt;parkBlocker&lt;/code&gt;用来存放该线程阻塞时是被哪个对象阻塞的。&lt;/p&gt;
+
+&lt;h4 id=&quot;locksupport-1&quot;&gt;LockSupport类的核心方法&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void park()&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void park(Object blocker)&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程，并告诉线程是谁阻塞了它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void parkNanos(long nanos)&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void parkNanos(Object blocker, long nanos)&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒，并告诉线程是谁阻塞了它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void parkUntil(long deadline)&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline。与parkNanos相比，这里的时间是绝对时间戳。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void parkUntil(Object blocker, long deadline)&lt;br /&gt;
+如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline，并告诉线程是谁阻塞了它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static void unpark(Thread thread)&lt;br /&gt;
+若许可不可用，则使许可可用。若线程因为调用了park而阻塞，则它将解除阻塞状态。否则保证下一次调用park不会受阻。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;private static void setBlocker(Thread t, Object arg)&lt;br /&gt;
+给线程t设置阻塞对象，告诉t是谁阻塞了它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;public static Object getBlocker(Thread t)&lt;br /&gt;
+获取是谁阻塞了线程t&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;threadinterrupt&quot;&gt;Thread.interrupt()方法&lt;/h4&gt;
+
+&lt;p&gt;Thread.interrupt()方法不会中断一个正在运行的线程。当线程被Object.wait、Thread.join和Thread.sleep三种方法阻塞时，若调用了Thread.interrupt()方法，线程将退出阻塞状态，并会抛出一个&lt;code&gt;InterruptedException&lt;/code&gt;中断异常。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code&gt;LockSupport.park()&lt;/code&gt;也能够响应中断信号，但是它不会抛出&lt;code&gt;InterruptedException&lt;/code&gt;中断异常。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Thread.interrupted() &amp;amp; Thread.isInterrupted()方法&lt;br /&gt;
+测试线程是否已经中断。前者是静态方法，后者不是。当我们需要停止一个线程的时候，一般有两种方式：
+    &lt;ul&gt;
+      &lt;li&gt;通过共享变量；&lt;/li&gt;
+      &lt;li&gt;通过调用线程的&lt;code&gt;interrupt&lt;/code&gt;方法。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;前者在线程阻塞的时候不能够被中断，只有当线程执行的时候才可以;而后者只能在线程处于阻塞的时候才能够被中断，线程执行时不可以中断。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;interrupted status&lt;br /&gt;
+&lt;code&gt;interrupted status&lt;/code&gt;是线程的中断状态，被JVM的C++代码维护着。
+    &lt;ul&gt;
+      &lt;li&gt;在调用Thread.join和Thread.sleep之后，将会设置interrupted status；&lt;/li&gt;
+      &lt;li&gt;当退出阻塞、抛出&lt;code&gt;InterruptedException&lt;/code&gt;异常的时候，interrupted status将会被清除；&lt;/li&gt;
+      &lt;li&gt;调用&lt;code&gt;public static boolean interrupted()&lt;/code&gt;方法后，会清除interrupted status&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;总结&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;类是对&lt;code&gt;sun.misc.Unsafe&lt;/code&gt;类的二次封装，主要提供了一些线程阻塞的工具。
+该类在AQS中被大量的运用，在阅读AQS的源码时，需要对该类有所了解。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 08 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/</guid>
+        
+        <category>LockSupport</category>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Cap理论</title>
@@ -122,7 +762,7 @@
       </item>
     
       <item>
-        <title>Java并发：unsafe和cas</title>
+        <title>Java并发(三)：unsafe和cas</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#cas&quot; id=&quot;markdown-toc-cas&quot;&gt;CAS&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#cas-1&quot; id=&quot;markdown-toc-cas-1&quot;&gt;CAS原理&lt;/a&gt;&lt;/li&gt;
@@ -444,8 +1084,8 @@ Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数�
 &lt;p&gt;学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。&lt;/p&gt;
 </description>
         <pubDate>Sat, 24 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/</guid>
+        <link>http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/</guid>
         
         <category>CAS</category>
         
@@ -457,7 +1097,7 @@ Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数�
       </item>
     
       <item>
-        <title>Java并发：volatile关键字</title>
+        <title>Java并发(二)：volatile关键字</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#cpu&quot; id=&quot;markdown-toc-cpu&quot;&gt;CPU读取值的过程&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#volatile&quot; id=&quot;markdown-toc-volatile&quot;&gt;volatile变量具有可见性&lt;/a&gt;&lt;/li&gt;
@@ -941,8 +1581,8 @@ synchronized关键字是同时具备原子性、可见性和有序性；而volat
 
 </description>
         <pubDate>Sat, 17 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
+        <link>http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
         
         <category>volatile</category>
         
@@ -956,7 +1596,7 @@ synchronized关键字是同时具备原子性、可见性和有序性；而volat
       </item>
     
       <item>
-        <title>Java并发：原子性、可见性、有序性</title>
+        <title>Java并发(一)：原子性、可见性、有序性</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;原子性&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;可见性&lt;/a&gt;&lt;/li&gt;
@@ -1097,8 +1737,8 @@ doSomethingwithconfig(context);
 
 </description>
         <pubDate>Mon, 12 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</guid>
+        <link>http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/</guid>
         
         <category>原子性</category>
         
@@ -2026,232 +2666,6 @@ theano                       0.8.2                    py35_0  defaults
         
         
         <category>书单</category>
-        
-      </item>
-    
-      <item>
-        <title>Spark内存管理</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#reserved-memory&quot; id=&quot;markdown-toc-reserved-memory&quot;&gt;1.Reserved Memory&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#user-memory&quot; id=&quot;markdown-toc-user-memory&quot;&gt;2.User Memory&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#spark-memory&quot; id=&quot;markdown-toc-spark-memory&quot;&gt;3.Spark Memory&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#storage-memory&quot; id=&quot;markdown-toc-storage-memory&quot;&gt;3.1.Storage Memory&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#execution-memory&quot; id=&quot;markdown-toc-execution-memory&quot;&gt;3.2.Execution Memory&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#storage-memoryexecution-memory&quot; id=&quot;markdown-toc-storage-memoryexecution-memory&quot;&gt;3.3.Storage Memory和Execution Memory共享规则&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。&lt;/p&gt;
-
-&lt;p&gt;Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。&lt;strong&gt;而本文介绍的就是1.6版本开始之后内存管理机制。&lt;/strong&gt;
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/spark%20m.png&quot; alt=&quot;spark mem&quot; title=&quot;spark mem&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;本文在描述spark各个部分内存的时候，大概从三个方面介绍：概念描述、该内存参数怎么配置，内存不够的时候会发生什么情况。&lt;/p&gt;
-
-&lt;h2 id=&quot;reserved-memory&quot;&gt;1.Reserved Memory&lt;/h2&gt;
-
-&lt;p&gt;系统预留内存，用于存储Spark内部对象。它的大小是300MB，不能通过参数修改，如果真的需要修改，需要重新编译（spark.testing.reservedMemory参数可以使用，但是不推荐在线上环境中使用）。&lt;/p&gt;
-
-&lt;p&gt;当executor分配的内存小于1.5*Reserved Memory的时候，将会报“please use larger heap size”错误。&lt;/p&gt;
-
-&lt;h2 id=&quot;user-memory&quot;&gt;2.User Memory&lt;/h2&gt;
-
-&lt;p&gt;用户内存，用于存储RDD转换操作所需要的数据，例如RDD依赖等信息。
-这个内存大小为(“Java Heap” – “Reserved Memory”) * (1.0 – spark.memory.fraction)，默认是(“Java Heap” – 300MB) * 0.25。如果用户使用的内存大于这个值，将会导致OOM。&lt;/p&gt;
-
-&lt;h2 id=&quot;spark-memory&quot;&gt;3.Spark Memory&lt;/h2&gt;
-
-&lt;p&gt;这部分内存是归Spark自身管理的，大小为(“Java Heap” – “Reserved Memory”) * spark.memory.fraction，默认为(“Java Heap” – 300MB) * 0.75。Spark Memory又被分为Storage Memory和Execution Memory，下面详细说明。&lt;/p&gt;
-
-&lt;h3 id=&quot;storage-memory&quot;&gt;3.1.Storage Memory&lt;/h3&gt;
-
-&lt;p&gt;用来存储spark的cache数据，例如RDD的缓存、unroll数据。当缓存数据的持久化level达到一定的时候，spark将会把它存到磁盘中，例如广播变量的数据持久化级别都是“MEMORY_AND_DISK”，所以所有的广播变量数据大小达到一定量的时候，都会存到磁盘中的。默认大小是Spark Memory的0.5，可用过参数spark.memory.storageFraction来配置（spark.memory.storageFraction=0.5）。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Unroll Memory&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;“Unroll Memory”是”Storage Memory”的一部分，在Spark中数据可以以序列化和反序列化的形式存储，序列化后的数据是无法直接被访问的，只有反序列化后才能被使用，反序列化过程中用到的RAM就是Unroll Memory。Spark中的大部分数据都是以序列化的形式传输的。&lt;/p&gt;
-
-&lt;h3 id=&quot;execution-memory&quot;&gt;3.2.Execution Memory&lt;/h3&gt;
-
-&lt;p&gt;用于存储spark的buffer部分，例如task运行过程中产生的一些对象，shuffle过程中map的输出，在内存不够的时候，支持写到磁盘上。Spark Memory中能被应用使用的内存中，除了Storage Memory剩余内存都是Execution Memory的了。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Shuffle Memory&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;shuffle阶段使用的内存，主要是使用在sort上。如果这一块没有足够的内存来用作shuffle，将会内存溢出失败。
-当然，在内存不足的时候，也可以使用spark的外部排序（spark.shuffle.spill=true），但是性能将会有些折扣。&lt;/p&gt;
-
-&lt;h3 id=&quot;storage-memoryexecution-memory&quot;&gt;3.3.Storage Memory和Execution Memory共享规则&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;一方空闲，一方内存不足的时候，内存不足的一方可以借用另一方的内存。&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Storage Memory占用了Execution Memory的内存，当Execution Memory内存不够用时&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;强制释放Storage Memory中属于Execution Memory的那部分内存，释放后的内存被Execution Memory使用。Storage Memory丢失的数据在下次使用的时候会被重新计算。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Execution Memory占用了Storage Memory的内存，当Storage Memory内存不够用时&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;不强制释放Execution Memory中属于Storage Memory的那部分内存，Storage Memory会一直等待，直到Execution Memory主动释放属于Storage Memory的那部分内存。因为强制释放Execution Memory会导致任务失败。&lt;/p&gt;
-
-&lt;p&gt;（PS：感觉Execution Memory在欺负Storage Memory，有木有~~~）&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 13 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</guid>
-        
-        <category>spark</category>
-        
-        
-        <category>spark</category>
-        
-      </item>
-    
-      <item>
-        <title>Spark streaming最佳实践 概述</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.内存溢出&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;2.外部系统连接数过多&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;3.资源分配的浪费&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。&lt;/p&gt;
-
-&lt;p&gt;Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.内存溢出&lt;/h2&gt;
-
-&lt;p&gt;Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。&lt;/p&gt;
-
-&lt;p&gt;我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;a).数据倾斜引；&lt;/li&gt;
-  &lt;li&gt;b).数据未倾斜，分区数过少；&lt;/li&gt;
-  &lt;li&gt;c).某个分区中产生了一个较大的内存集合，例如大的List、Set，或者Map。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这类问题在spark core中也是经常会出现的，关于数据倾斜的问题以后会详细讲解。入手一个新的业务时，应该对该业务的数据量有个大概的预估，这样给这个应用分配多少节点，每个节点会处理多大的数据量，这样就能很好的预估出每个节点分配多少资源比较合理了。&lt;/p&gt;
-
-&lt;p&gt;为了避免内存溢出，可以从下面几个方向来做：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;a).避免数据倾斜；&lt;/li&gt;
-  &lt;li&gt;b).评估每个分区的数据量，给每个分区分配合理的资源；&lt;/li&gt;
-  &lt;li&gt;c).控制好List、Set等集合的大小；&lt;/li&gt;
-  &lt;li&gt;d).控制Spark streaming读取源数据的最大速度（spark.streaming.kafka.maxRatePerPartition），实时数据流量有高峰和低谷，不同时间处理的数据量是不一样的，为防止数据高峰的时候内存溢出，这里有必要做配置；&lt;/li&gt;
-  &lt;li&gt;e).配置Spark streaming可动态控制读取数据源的速度（spark.streaming.backpressure.enabled）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;2.外部系统连接数过多&lt;/h2&gt;
-
-&lt;p&gt;在使用spark streaming解决问题的时候，经常会对外部数据源进行读写操作，切记每次读写完成之后需要关闭网络连接。在我们以往的编程经验中，这些思维都是一直持有的。 &lt;br /&gt;
-在往hbase写入数据的时候，如果你使用了RDD.saveAsHadoopDataset方法，就需要注意了，org.apache.hadoop.hbase.mapred.TableOutputFormat类存在bug：不能释放zookeeper连接，导致在往hbase写数据的时候，zookeeper的连接数不停得增长。&lt;/p&gt;
-
-&lt;p&gt;推荐使用下面这种写法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-import org.apache.hadoop.mapreduce.Job
-import org.apache.hadoop.hbase.mapreduce.TableOutputFormat
-
-val conf = HBaseConfiguration.create()
-conf.set(&quot;hbase.zookeeper.quorum&quot;, zk_hosts)
-conf.set(&quot;hbase.zookeeper.property.clientPort&quot;, zk_port)
-
-conf.set(TableOutputFormat.OUTPUT_TABLE, &quot;TABLE_NAME&quot;)
-val job = Job.getInstance(conf)
-job.setOutputFormatClass(classOf[TableOutputFormat[String]])
-
-formatedLines.map{
-  case (a,b, c) =&amp;gt; {
-    val row = Bytes.toBytes(a)
-
-    val put = new Put(row)
-    put.setDurability(Durability.SKIP_WAL)
-
-    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;node&quot;), Bytes.toBytes(b))
-    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;topic&quot;), Bytes.toBytes(c))
-
-    (new ImmutableBytesWritable(row), put)
-  }
-}.saveAsNewAPIHadoopDataset(job.getConfiguration)
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;3.资源分配的浪费&lt;/h2&gt;
-
-&lt;p&gt;如果实时数据在每天的某个时间点有着平时的几倍的数据量，如果给该作业分配过多的资源，那么在绝大多数，这些资源都是闲置浪费的。这里可以启用动态资源分配。&lt;/p&gt;
-
-&lt;p&gt;关于配置介绍可以查看官方文档：http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation&lt;/p&gt;
-
-&lt;p&gt;如果启用该配置，需要做如下配置：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;1.在spark应用中配置spark.dynamicAllocation.enabled=true &lt;br /&gt;
-2.每个节点启动外部shuffle服务，并在spark应用中配置spark.shuffle.service.enabled=true&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;关于外部shuffle服务，在standalone、Mesos，yarn中的配置是不一样的。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;standalone&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;启动worker的时候指定spark.shuffle.service.enabled=true&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Mesos&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在所有节点上配置spark.shuffle.service.enabled=true，然后执行$SPARK_HOME/sbin/start-mesos-shuffle-service.sh&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;yarn&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;a.添加yarn的配置文件，重新编译spark。如果使用官方编译好的安装包，可以忽略这一步。
-b.找到spark-&lt;version&gt;-yarn-shuffle.jar。如果自己编译spark的话，在目录$SPARK_HOME/common/network-yarn/target/scala-&lt;version&gt;下；如果是使用官方编译好的spark，在lib目录下寻找。
-c.添加到spark-&lt;version&gt;-yarn-shuffle.jar到yarn所有NodeManager的classpath下。
-d.配置所有NodeManager的yarn-site.xml文件如下：&lt;/version&gt;&lt;/version&gt;&lt;/version&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&amp;lt;property&amp;gt;
-  &amp;lt;name&amp;gt;yarn.nodemanager.aux-services&amp;lt;/name&amp;gt;
-  &amp;lt;value&amp;gt;spark_shuffle&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-&amp;lt;property&amp;gt;
-  &amp;lt;name&amp;gt;yarn.nodemanager.aux-services.spark_shuffle.class&amp;lt;/name&amp;gt;
-  &amp;lt;value&amp;gt;org.apache.spark.network.yarn.YarnShuffleService&amp;lt;/value&amp;gt;
-&amp;lt;/property&amp;gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;e.重启所有的NodeManager&lt;/p&gt;
-
-&lt;p&gt;spark on yarn配置了外部shuffle之后，&lt;code&gt;--num-executors&lt;/code&gt;配置将不再生效。&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 12 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/</guid>
-        
-        <category>spark</category>
-        
-        
-        <category>spark</category>
         
       </item>
     

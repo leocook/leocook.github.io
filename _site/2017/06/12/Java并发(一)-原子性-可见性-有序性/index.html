@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Java并发：原子性、可见性、有序性</title>
+    <title>Java并发(一)：原子性、可见性、有序性</title>
     <meta name="description" content="关键词：原子性、可见性、有序性、volatile、happen-before并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：Java并发：volatile关键字">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">
+    <link rel="canonical" href="http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -127,6 +127,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -150,7 +152,7 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Java并发：原子性、可见性、有序性</h1>
+        <h1>Java并发(一)：原子性、可见性、有序性</h1>
         <div class="label">
 
             <div class="label-card">
@@ -374,6 +376,36 @@ doSomethingwithconfig(context);
                     
                 
             
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
                 
                     
                 
@@ -477,7 +509,7 @@ doSomethingwithconfig(context);
                         <ul>
                         
                         <li class="relatedPost">
-                            <a href="http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字
+                            <a href="http://leocook.github.io/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发(二)：volatile关键字
                             
                             </a>
                         </li>
@@ -684,48 +716,6 @@ doSomethingwithconfig(context);
                 
             
         
-            
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-                    
-                
-            
-        
         
             </ul>
         
@@ -747,8 +737,8 @@ doSomethingwithconfig(context);
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

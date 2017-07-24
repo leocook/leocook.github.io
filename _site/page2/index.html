@@ -127,6 +127,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -154,6 +156,167 @@
         <small>这里将会记录着我在互联网行业里走过的每一步。</small>
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发(一)：原子性、可见性、有序性</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-06-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#原子性" title="Tag: 原子性" rel="tag">原子性</a>&nbsp;
+    
+        <a href="/tag/#可见性" title="Tag: 可见性" rel="tag">可见性</a>&nbsp;
+    
+        <a href="/tag/#有序性" title="Tag: 有序性" rel="tag">有序性</a>&nbsp;
+    
+        <a href="/tag/#volatile" title="Tag: volatile" rel="tag">volatile</a>&nbsp;
+    
+        <a href="/tag/#happen-before" title="Tag: happen-before" rel="tag">happen-before</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
+
+<p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-06-05
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#java" title="Tag: java" rel="tag">java</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>在Java中，集合也就是可以装载多个<strong>Java对象</strong>的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。</p>
+
+<p>在学习JCF之前，我们先回顾一下，在计算机编程中我们期望<strong>集合能有哪些能力？</strong></p>
+
+<ul>
+  <li>可以遍历集合全部的元素</li>
+  <li>关于集合类部元素的顺序
+    <ul>
+      <li>保留写入集合的顺序</li>
+      <li>可根据元素的大小自动排序</li>
+    </ul>
+  </li>
+  <li>能快速查找出集合中的某个元素</li>
+  <li>可以根据位置来快速的修改元素</li>
+  <li>能高效的增加、删除集合中元素</li>
+  <li>集合内的元素可以快速去重</li>
+</ul>
+
+<p>聊到集合，那肯定少不了下面几种基础的数据结构：</p>
+
+<ul>
+  <li>线性存储
+    <ul>
+      <li>（可变）数组</li>
+      <li>链表</li>
+    </ul>
+  </li>
+  <li>Hash散列表</li>
+  <li>平衡树</li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -362,133 +525,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-13
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
-
-<p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong>
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/spark%20m.png" alt="spark mem" title="spark mem" /></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-12
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#spark" title="Category: spark" rel="category">spark</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#spark" title="Tag: spark" rel="tag">spark</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
-
-<p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -499,10 +535,10 @@
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">2/4</span>
+          <span class="page_number ">2/5</span>
           
             <a href="/page3" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page4" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page5" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -594,7 +630,7 @@
                             <span class="name">
                                 java
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">7</span>
                         </a>
                     </li>
                     
@@ -928,6 +964,20 @@
                       
                       <a href="/tag/#最终一致性" style="font-size: 9pt; color: #999;">最终一致性</a>
                     
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#LockSupport" style="font-size: 9pt; color: #999;">LockSupport</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#AQS" style="font-size: 9pt; color: #999;">AQS</a>
+                    
                 </div>
             </div>
             <!-- Recent Posts -->
@@ -938,13 +988,17 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/">Java并发(五)：aqs框架</a></li>
+                    
+                        <li><a href="/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/">Java并发(四)：locksupport</a></li>
+                    
                         <li><a href="/2017/06/24/CAP%E7%90%86%E8%AE%BA/">Cap理论</a></li>
                     
-                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a></li>
+                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/">Java并发(三)：unsafe和cas</a></li>
                     
-                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发(二)：volatile关键字</a></li>
                     
-                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发(一)：原子性、可见性、有序性</a></li>
                     
                         <li><a href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a></li>
                     
@@ -953,10 +1007,6 @@
                         <li><a href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Jvm内存模型</a></li>
                     
                         <li><a href="/2016/12/30/2016%E4%B9%A6%E5%8D%95/">2016书单</a></li>
-                    
-                        <li><a href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a></li>
-                    
-                        <li><a href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a></li>
                     
                 </ul>
             </div>

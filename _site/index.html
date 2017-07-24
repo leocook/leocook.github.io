@@ -127,6 +127,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -154,6 +156,135 @@
         <small>这里将会记录着我在互联网行业里走过的每一步。</small>
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/">Java并发(五)：aqs框架</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-07-15
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#AQS" title="Tag: AQS" rel="tag">AQS</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：AQS CLH</p>
+
+<p><code>AQS</code>指的是<code>java.util.concurrent.locks.AbstractQueuedSynchronizer</code>这个类，在阅读Jdk源码时，你会发现这个类是<code>java.util.concurrent</code>包的核心。
+例如在<code>ReentrantLock</code>、<code>ReentrantReadWriteLock</code>、<code>CountDownLatch</code>等类中存在内部类<code>Sync</code>，都是用了AQS。如果想清楚整个Java的并发体系，这个类必读不可。</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/">Java并发(四)：locksupport</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-07-08
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                    <div class="label-card">
+                    
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <a href="/tag/#LockSupport" title="Tag: LockSupport" rel="tag">LockSupport</a>
+    
+  
+
+</span>
+
+                    </div>
+                </div>
+                <div class="excerpt">
+                    
+<p>关键词：LockSupport</p>
+
+<p>前面我们讨论了<code>sun.misc.Unsafe</code>类，该类提供了面向操作系统直接操作内存和CPU的方法，例如分配内心和阻塞线程等等。但是该类在使用时是不安全的，所以jdk在不同的场景下对它做了不同的包装。</p>
+
+<p><code>java.util.concurrent.locks.LockSupport</code>类就是对<code>sun.misc.Unsafe</code>类进行了一些封装，主要提供一些锁的基础操作。</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -230,7 +361,7 @@
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a>
+                  <a class="post-link" href="/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/">Java并发(三)：unsafe和cas</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
@@ -296,14 +427,14 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a>
+                  <a class="post-link" href="/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发(二)：volatile关键字</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
@@ -368,168 +499,7 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-06-12
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#java" title="Category: java" rel="category">java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#原子性" title="Tag: 原子性" rel="tag">原子性</a>&nbsp;
-    
-        <a href="/tag/#可见性" title="Tag: 可见性" rel="tag">可见性</a>&nbsp;
-    
-        <a href="/tag/#有序性" title="Tag: 有序性" rel="tag">有序性</a>&nbsp;
-    
-        <a href="/tag/#volatile" title="Tag: volatile" rel="tag">volatile</a>&nbsp;
-    
-        <a href="/tag/#happen-before" title="Tag: happen-before" rel="tag">happen-before</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
-
-<p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-06-05
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#java" title="Category: java" rel="category">java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                    <div class="label-card">
-                    
-<!-- <span class="point">•</span> -->
-<span class="pageTag">
-  <i class="fa fa-tags"></i>
-  
-    
-        <a href="/tag/#java" title="Tag: java" rel="tag">java</a>
-    
-  
-
-</span>
-
-                    </div>
-                </div>
-                <div class="excerpt">
-                    
-<p>在Java中，集合也就是可以装载多个<strong>Java对象</strong>的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。</p>
-
-<p>在学习JCF之前，我们先回顾一下，在计算机编程中我们期望<strong>集合能有哪些能力？</strong></p>
-
-<ul>
-  <li>可以遍历集合全部的元素</li>
-  <li>关于集合类部元素的顺序
-    <ul>
-      <li>保留写入集合的顺序</li>
-      <li>可根据元素的大小自动排序</li>
-    </ul>
-  </li>
-  <li>能快速查找出集合中的某个元素</li>
-  <li>可以根据位置来快速的修改元素</li>
-  <li>能高效的增加、删除集合中元素</li>
-  <li>集合内的元素可以快速去重</li>
-</ul>
-
-<p>聊到集合，那肯定少不了下面几种基础的数据结构：</p>
-
-<ul>
-  <li>线性存储
-    <ul>
-      <li>（可变）数组</li>
-      <li>链表</li>
-    </ul>
-  </li>
-  <li>Hash散列表</li>
-  <li>平衡树</li>
-</ul>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
@@ -544,10 +514,10 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
             <span class="previous disable"><i class="fa fa-angle-double-left"></i></span>
             <span class="previous disable"><i class="fa fa-angle-left"></i></span>
           
-          <span class="page_number ">1/4</span>
+          <span class="page_number ">1/5</span>
           
             <a href="/page2" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page4" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page5" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -639,7 +609,7 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
                             <span class="name">
                                 java
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">7</span>
                         </a>
                     </li>
                     
@@ -973,6 +943,20 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
                       
                       <a href="/tag/#最终一致性" style="font-size: 9pt; color: #999;">最终一致性</a>
                     
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#LockSupport" style="font-size: 9pt; color: #999;">LockSupport</a>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <a href="/tag/#AQS" style="font-size: 9pt; color: #999;">AQS</a>
+                    
                 </div>
             </div>
             <!-- Recent Posts -->
@@ -983,13 +967,17 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/07/15/Java%E5%B9%B6%E5%8F%91(%E4%BA%94)-AQS%E6%A1%86%E6%9E%B6/">Java并发(五)：aqs框架</a></li>
+                    
+                        <li><a href="/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B)-LockSupport/">Java并发(四)：locksupport</a></li>
+                    
                         <li><a href="/2017/06/24/CAP%E7%90%86%E8%AE%BA/">Cap理论</a></li>
                     
-                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91-Unsafe%E5%92%8CCAS/">Java并发：unsafe和cas</a></li>
+                        <li><a href="/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/">Java并发(三)：unsafe和cas</a></li>
                     
-                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
+                        <li><a href="/2017/06/17/Java%E5%B9%B6%E5%8F%91(%E4%BA%8C)-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发(二)：volatile关键字</a></li>
                     
-                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+                        <li><a href="/2017/06/12/Java%E5%B9%B6%E5%8F%91(%E4%B8%80)-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发(一)：原子性、可见性、有序性</a></li>
                     
                         <li><a href="/2017/06/05/JCF-Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6-%E6%A6%82%E6%8B%AC/">Jcf（java集合框架）概括</a></li>
                     
@@ -998,10 +986,6 @@ Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS�
                         <li><a href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Jvm内存模型</a></li>
                     
                         <li><a href="/2016/12/30/2016%E4%B9%A6%E5%8D%95/">2016书单</a></li>
-                    
-                        <li><a href="/2016/10/13/spark%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Spark内存管理</a></li>
-                    
-                        <li><a href="/2016/10/12/spark-streaming%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-%E6%A6%82%E8%BF%B0/">Spark streaming最佳实践 概述</a></li>
                     
                 </ul>
             </div>
