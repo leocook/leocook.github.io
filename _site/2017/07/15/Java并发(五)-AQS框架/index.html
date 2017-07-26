@@ -267,7 +267,7 @@
 <h4 id="aqs-1">AQS的关键点有三个</h4>
 
 <ul>
-  <li>提供变量<code>state</code>来同步状态</li>
+  <li>提供变量<code>state</code>来维护状态</li>
   <li>维护线程阻塞队列</li>
   <li>阻塞和唤醒线程</li>
 </ul>
@@ -276,7 +276,7 @@
 
 <ul>
   <li>private volatile int state;<br />
-同步状态，通过设置status来达到同步的效果</li>
+同步状态，通过设置state来达到同步的效果.<code>该字段在不同的子类中，代表的意义是不同的</code></li>
   <li>private transient volatile Node tail;<br />
 线程等待队列的尾部，只有<code>enq</code>方法在向队列添加新线程时，才会修改该值</li>
   <li>private transient volatile Node head;<br />
@@ -711,78 +711,6 @@ AQS理解了，下一篇会聊聊它的一个具体的实现<code>java.util.conc
                     
                 
             
-        
-            
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-        
-            
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
-                
-                    
-                
-            
                 
                     
                 
@@ -821,6 +749,20 @@ AQS理解了，下一篇会聊聊它的一个具体的实现<code>java.util.conc
                     
                 
             
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
                 
                     
                 
@@ -835,6 +777,68 @@ AQS理解了，下一篇会聊聊它的一个具体的实现<code>java.util.conc
             
         
             
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
             
                 
                     
