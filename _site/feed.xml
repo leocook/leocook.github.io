@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 01 Aug 2017 11:14:21 +0800</pubDate>
-    <lastBuildDate>Tue, 01 Aug 2017 11:14:21 +0800</lastBuildDate>
+    <pubDate>Tue, 01 Aug 2017 13:48:55 +0800</pubDate>
+    <lastBuildDate>Tue, 01 Aug 2017 13:48:55 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -185,7 +185,7 @@
     &lt;ul&gt;
       &lt;li&gt;Executor框架：线程池&lt;/li&gt;
       &lt;li&gt;TimerTask类：定时器&lt;/li&gt;
-      &lt;li&gt;Semaphore类：资源技术器&lt;/li&gt;
+      &lt;li&gt;Semaphore类：资源计数器&lt;/li&gt;
       &lt;li&gt;CountdownLatch类：倒计时计数器&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
