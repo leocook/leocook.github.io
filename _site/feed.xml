@@ -5,13 +5,14 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 01 Aug 2017 15:06:43 +0800</pubDate>
-    <lastBuildDate>Tue, 01 Aug 2017 15:06:43 +0800</lastBuildDate>
+    <pubDate>Tue, 01 Aug 2017 15:17:10 +0800</pubDate>
+    <lastBuildDate>Tue, 01 Aug 2017 15:17:10 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>Java并发(七)：jcf线程安全问题</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;什么是线程安全&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#fail-fast&quot; id=&quot;markdown-toc-fail-fast&quot;&gt;fail-fast机制&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#collectionssynchronizedxxx&quot; id=&quot;markdown-toc-collectionssynchronizedxxx&quot;&gt;Collections.synchronizedXXX&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#javautilconcurrent&quot; id=&quot;markdown-toc-javautilconcurrent&quot;&gt;java.util.concurrent概述&lt;/a&gt;    &lt;ul&gt;
@@ -21,14 +22,39 @@
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#concurrenthashmap&quot; id=&quot;markdown-toc-concurrenthashmap&quot;&gt;ConcurrentHashMap&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;原理相关&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;内部类&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;原理相关&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;内部类&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Jdk本身给我实现了很多数据结构，例如List、Set、Queue以及Map等。但是这些类都不是线程安全的，在Jdk1.0的时候提供了&lt;code&gt;Hashtable&lt;/code&gt;、&lt;code&gt;Vector&lt;/code&gt;以及&lt;code&gt;Stack&lt;/code&gt;这些线程安全集合，但由于它们只是在原来集合的基础上通过关键字&lt;code&gt;synchronized&lt;/code&gt;来保证功能的&lt;strong&gt;原子性和可见性&lt;/strong&gt;，这样做的缺点就是效率地下，当有一个线程执行get的时候，其它所有线程都被阻塞。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;什么是线程安全&lt;/h3&gt;
+
+&lt;p&gt;线程安全是一个很难一言表达清楚的，通俗的说就是：一个程序在单线程的环境下可以正常运行，在多线程环境下也能正确的运行，并且可以返回确定的结果，那么这个程序就是线程安全的。
+一个线程安全的类，在多线程环境下不会因为执行的顺序导致对象成为无效状态，同样也不会违反任何先验条件和后验条件。&lt;/p&gt;
+
+&lt;p&gt;关于无效状态、先验条件、后验条件，下面是一些说明：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;无效状态&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在做选择排序的过程中，前边已经排序好的那段数据顺序被其它线程给打乱了，这时候就可以说这个被排序的类处于无效状态。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;先验条件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在做二分查找的时候，被查找的集合必须是已经排好序的，这就是执行二份查找的条件，也就是先验条件。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;后验条件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;指的代码的业务目标是否正确。&lt;/p&gt;
 
 &lt;h3 id=&quot;fail-fast&quot;&gt;fail-fast机制&lt;/h3&gt;
 
@@ -279,7 +305,7 @@
 
 &lt;p&gt;默认情况下Segment数组的大小是16(DEFAULT_INITIAL_CAPACITY),Segment下的HashEntry数组的默认大小是2(MIN_SEGMENT_TABLE_CAPACITY)。&lt;/p&gt;
 
-&lt;h4 id=&quot;section&quot;&gt;原理相关&lt;/h4&gt;
+&lt;h4 id=&quot;section-1&quot;&gt;原理相关&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -297,7 +323,7 @@ ConcurrentHashMap的get是没有锁的，但是put是有锁的。可能会出现
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;section-1&quot;&gt;内部类&lt;/h4&gt;
+&lt;h4 id=&quot;section-2&quot;&gt;内部类&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;HashEntry&lt;br /&gt;
@@ -517,7 +543,7 @@ public V get(Object key) {
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;总结&lt;/h3&gt;
+&lt;h3 id=&quot;section-3&quot;&gt;总结&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;老的线程安全集合是基于&lt;code&gt;synchronized&lt;/code&gt;关键字实现的，效率低下，但是具备强一致性的特性；&lt;/li&gt;
   &lt;li&gt;基于AQS实现的新版线程安全集合效率较高，强一致性和弱一致性的集合都有部分的实现；&lt;/li&gt;
@@ -759,6 +785,17 @@ synchronized(count){
 public synchronized static void method(){
     //...
 }
+
+//类加载器
+synchronized(Demo2.class){
+    //...
+}
+//或者
+synchronized(this.getClass()){
+    //...
+}
+
+
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -772,18 +809,13 @@ synchronized(count){
     //...
 }
 
-//类加载器
-synchronized(Demo2.class){
-    //...
-}
-//或者
-synchronized(this.getClass()){
-    //...
-}
-
 //方法
 public synchronized void method(){
     //...
+}
+
+synchronized(this){
+    ...
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;

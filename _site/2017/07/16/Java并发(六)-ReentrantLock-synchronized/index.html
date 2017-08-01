@@ -428,6 +428,17 @@ synchronized(count){
 public synchronized static void method(){
     //...
 }
+
+//类加载器
+synchronized(Demo2.class){
+    //...
+}
+//或者
+synchronized(this.getClass()){
+    //...
+}
+
+
 </code></pre>
 </div>
 
@@ -441,18 +452,13 @@ synchronized(count){
     //...
 }
 
-//类加载器
-synchronized(Demo2.class){
-    //...
-}
-//或者
-synchronized(this.getClass()){
-    //...
-}
-
 //方法
 public synchronized void method(){
     //...
+}
+
+synchronized(this){
+    ...
 }
 </code></pre>
 </div>

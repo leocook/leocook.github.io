@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Java并发(七)：jcf线程安全问题</title>
-    <meta name="description" content="Jdk本身给我实现了很多数据结构，例如List、Set、Queue以及Map等。但是这些类都不是线程安全的，在Jdk1.0的时候提供了Hashtable、Vector以及Stack这些线程安全集合，但由于它们只是在原来集合的基础上通过关键字synchronized来保证功能的原子性和可见性，这样做的缺点就是效率地...">
+    <meta name="description" content="  什么是线程安全  fail-fast机制  Collections.synchronizedXXX  java.util.concurrent概述          ConcurrentXXX      CopyOnWriteArrayXXX      BlockingXXX        Concurren...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -206,6 +206,7 @@
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
         <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">什么是线程安全</a></li>
   <li><a href="#fail-fast" id="markdown-toc-fail-fast">fail-fast机制</a></li>
   <li><a href="#collectionssynchronizedxxx" id="markdown-toc-collectionssynchronizedxxx">Collections.synchronizedXXX</a></li>
   <li><a href="#javautilconcurrent" id="markdown-toc-javautilconcurrent">java.util.concurrent概述</a>    <ul>
@@ -215,14 +216,39 @@
     </ul>
   </li>
   <li><a href="#concurrenthashmap" id="markdown-toc-concurrenthashmap">ConcurrentHashMap</a>    <ul>
-      <li><a href="#section" id="markdown-toc-section">原理相关</a></li>
-      <li><a href="#section-1" id="markdown-toc-section-1">内部类</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">原理相关</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">内部类</a></li>
     </ul>
   </li>
-  <li><a href="#section-2" id="markdown-toc-section-2">总结</a></li>
+  <li><a href="#section-3" id="markdown-toc-section-3">总结</a></li>
 </ul>
 
 <p>Jdk本身给我实现了很多数据结构，例如List、Set、Queue以及Map等。但是这些类都不是线程安全的，在Jdk1.0的时候提供了<code>Hashtable</code>、<code>Vector</code>以及<code>Stack</code>这些线程安全集合，但由于它们只是在原来集合的基础上通过关键字<code>synchronized</code>来保证功能的<strong>原子性和可见性</strong>，这样做的缺点就是效率地下，当有一个线程执行get的时候，其它所有线程都被阻塞。</p>
+
+<h3 id="section">什么是线程安全</h3>
+
+<p>线程安全是一个很难一言表达清楚的，通俗的说就是：一个程序在单线程的环境下可以正常运行，在多线程环境下也能正确的运行，并且可以返回确定的结果，那么这个程序就是线程安全的。
+一个线程安全的类，在多线程环境下不会因为执行的顺序导致对象成为无效状态，同样也不会违反任何先验条件和后验条件。</p>
+
+<p>关于无效状态、先验条件、后验条件，下面是一些说明：</p>
+
+<ul>
+  <li>无效状态</li>
+</ul>
+
+<p>在做选择排序的过程中，前边已经排序好的那段数据顺序被其它线程给打乱了，这时候就可以说这个被排序的类处于无效状态。</p>
+
+<ul>
+  <li>先验条件</li>
+</ul>
+
+<p>在做二分查找的时候，被查找的集合必须是已经排好序的，这就是执行二份查找的条件，也就是先验条件。</p>
+
+<ul>
+  <li>后验条件</li>
+</ul>
+
+<p>指的代码的业务目标是否正确。</p>
 
 <h3 id="fail-fast">fail-fast机制</h3>
 
@@ -473,7 +499,7 @@
 
 <p>默认情况下Segment数组的大小是16(DEFAULT_INITIAL_CAPACITY),Segment下的HashEntry数组的默认大小是2(MIN_SEGMENT_TABLE_CAPACITY)。</p>
 
-<h4 id="section">原理相关</h4>
+<h4 id="section-1">原理相关</h4>
 
 <ul>
   <li>
@@ -491,7 +517,7 @@ ConcurrentHashMap的get是没有锁的，但是put是有锁的。可能会出现
   </li>
 </ul>
 
-<h4 id="section-1">内部类</h4>
+<h4 id="section-2">内部类</h4>
 
 <ul>
   <li>HashEntry<br />
@@ -711,7 +737,7 @@ public V get(Object key) {
   </li>
 </ul>
 
-<h3 id="section-2">总结</h3>
+<h3 id="section-3">总结</h3>
 <ol>
   <li>老的线程安全集合是基于<code>synchronized</code>关键字实现的，效率低下，但是具备强一致性的特性；</li>
   <li>基于AQS实现的新版线程安全集合效率较高，强一致性和弱一致性的集合都有部分的实现；</li>

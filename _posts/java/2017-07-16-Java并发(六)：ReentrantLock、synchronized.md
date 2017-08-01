@@ -200,6 +200,17 @@ synchronized(count){
 public synchronized static void method(){
     //...
 }
+
+//类加载器
+synchronized(Demo2.class){
+    //...
+}
+//或者
+synchronized(this.getClass()){
+    //...
+}
+
+
 ```
 
 - 对象级别的锁  
@@ -211,18 +222,13 @@ synchronized(count){
     //...
 }
 
-//类加载器
-synchronized(Demo2.class){
-    //...
-}
-//或者
-synchronized(this.getClass()){
-    //...
-}
-
 //方法
 public synchronized void method(){
     //...
+}
+
+synchronized(this){
+    ...
 }
 ```
 
