@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Jvm内存模型</title>
-    <meta name="description" content="Java开发人员无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。JVM的运行时内存共...">
+    <title>Jvm内存模型基础</title>
+    <meta name="description" content="Java内存模型也被称为JMM，开发人员在使用时无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href=" /css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href=" /css/main.css ">
-    <link rel="canonical" href="http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+    <link rel="canonical" href="http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">
     <link rel="alternate" type="application/rss+xml" title="leocook" href="http://leocook.github.io /feed.xml ">
 
 
@@ -152,7 +152,7 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Jvm内存模型</h1>
+        <h1>Jvm内存模型基础</h1>
         <div class="label">
 
             <div class="label-card">
@@ -214,12 +214,29 @@
       <li><a href="#section-3" id="markdown-toc-section-3">5.1.运行时常量池</a></li>
     </ul>
   </li>
+  <li><a href="#hotspot" id="markdown-toc-hotspot">HotSpot虚拟机</a></li>
 </ul>
 
-<p>Java开发人员无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
+<p>Java内存模型也被称为JMM，开发人员在使用时无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/JVM%20mem%20model.png" alt="JVM mem model" title="JVM mem model" /></p>
 
 <p>JVM的运行时内存共有5块区域，其中有3个是线程间隔离的，有2个是线程间共享的。</p>
+
+<ul>
+  <li>线程间隔离（线程私有区）
+    <ul>
+      <li>程序计数器</li>
+      <li>JVM栈</li>
+      <li>本地方法栈</li>
+    </ul>
+  </li>
+  <li>线程间共享
+    <ul>
+      <li>Java堆</li>
+      <li>方法区</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="section">1.程序计数器</h2>
 <p>它是线程间隔离的。字节码的行号指示器，用来标记当前线程所执行的字节码的行号。</p>
@@ -231,23 +248,60 @@
 
 <h2 id="jvm">2.JVM栈</h2>
 
-<p>它是线程间隔离的，也就是常说到的“栈内存”。每个方法执行的时候都会创建一个栈桢，用来存放局部变量表用来存放该方法内使用到的局部变量表、操作数栈、动态链接、方法出口灯信息。一个方法从调用到执行完成的过程也就对应着一个栈桢在JVM栈中入栈到出栈的过程。
+<p>它是线程间隔离的，也就是常说到的“栈内存”。每个方法执行的时候都会创建一个栈桢，用来存放局部变量表用来存放该方法内使用到的局部变量表、操作数栈、动态链接、方法出口灯信息。</p>
+
+<p>一个方法从调用到执行完成的过程也就对应着一个栈桢在JVM栈中入栈到出栈的过程。
 局部变量表中存放了编译器可确定的各种基本数据类型（例如：boolean、byte、char、short等等），以及对象的引用。</p>
+
+<p>使用<code>-Xss</code>参数设置栈容量 例： <code>-Xss128k</code></p>
+
+<blockquote>
+  <p>JVM规范规定该区域会抛出两种异常：</p>
+  <ol>
+    <li>StackOverFlowError：当线程请求栈深度超出虚拟机栈所允许的深度时,抛出该异常</li>
+    <li>OutOfMemoryError：当Java虚拟机扩展到无法申请足够内存时,抛出该异常</li>
+  </ol>
+</blockquote>
 
 <h2 id="section-1">3.本地方法栈</h2>
 
 <p>它是线程间隔离的，和“JVM栈”的区别是：“JVM栈”是执行Java方法时所使用到的内存；“本地方法栈”是JVM执行Native方法时所使用到的内存存。
 这一块内存在JVM规范中没有强制指定，所以不同的虚拟机实现它的方法可能不一样。Sum HotSpot虚拟机是把“JVM栈”和“本地方法栈”合二为一的。</p>
 
+<blockquote>
+  <p>JVM规范规定该区域可抛出StackOverFlowError和OutOfMemoryError异常。</p>
+</blockquote>
+
 <h2 id="java">4.Java堆</h2>
 <p>它是线程间共享的，存放JVM对象实例，也是GC发生的主要区域，所以也被称为GC堆。
 关于GC算法垃圾回收器，后边会介绍。</p>
 
+<blockquote>
+  <p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
+</blockquote>
+
+<p><code>-Xms</code>参数设置最小值，<code>-Xmx</code>参数设置最大值，可以指定参数<code>-XX:+HeapDumpOnOutOfMemoryError</code>，使得JVM在出现OutOfMemoryError异常异常时能够dump出Java堆的快照。</p>
+
 <h2 id="section-2">5.方法区</h2>
-<p>它是线程间共享的，存放已被JVM加载的类信息、常量、静态变量、即时编译器编译后的代码等。</p>
+<p>它是线程间共享的，存放已被JVM加载的类信息、常量、静态变量、即时编译器编译后的代码等。它还有个别名叫做Non-Heap（非堆）。</p>
+
+<p><code>-XX:MaxPermSize</code>可以设置方法区的最大值，<code>-XX:PermSize</code>设置方法区的最小值。</p>
+
+<blockquote>
+  <p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
+</blockquote>
 
 <h3 id="section-3">5.1.运行时常量池</h3>
-<p>它是方法区的一部分，存放编译器生成的各种常量值。</p>
+<p>它是方法区的一部分，存放编译器生成的各种编译期生成的字面量和符号引用。</p>
+
+<h2 id="hotspot">HotSpot虚拟机</h2>
+<p>HotSpot虚拟机中有两个比较特别的地方：</p>
+
+<ul>
+  <li>本地方法栈和虚拟机栈合二为一了；</li>
+  <li>在分代垃圾回收器中，把方法区称为永久代，但它们不是等价的。这里准确的说是使用永久代来实现了方法区。</li>
+</ul>
+
 
         </article>
 
@@ -428,8 +482,8 @@
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

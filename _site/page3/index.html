@@ -159,7 +159,7 @@
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Jvm内存模型</a>
+                  <a class="post-link" href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">Jvm内存模型基础</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
@@ -208,15 +208,31 @@
                 </div>
                 <div class="excerpt">
                     
-<p>Java开发人员无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
+<p>Java内存模型也被称为JMM，开发人员在使用时无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
 <img src="http://7xriy2.com1.z0.glb.clouddn.com/JVM%20mem%20model.png" alt="JVM mem model" title="JVM mem model" /></p>
 
 <p>JVM的运行时内存共有5块区域，其中有3个是线程间隔离的，有2个是线程间共享的。</p>
 
+<ul>
+  <li>线程间隔离（线程私有区）
+    <ul>
+      <li>程序计数器</li>
+      <li>JVM栈</li>
+      <li>本地方法栈</li>
+    </ul>
+  </li>
+  <li>线程间共享
+    <ul>
+      <li>Java堆</li>
+      <li>方法区</li>
+    </ul>
+  </li>
+</ul>
+
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
