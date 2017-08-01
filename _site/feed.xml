@@ -5,9 +5,537 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Jul 2017 16:55:49 +0800</pubDate>
-    <lastBuildDate>Wed, 26 Jul 2017 16:55:49 +0800</lastBuildDate>
+    <pubDate>Tue, 01 Aug 2017 11:14:21 +0800</pubDate>
+    <lastBuildDate>Tue, 01 Aug 2017 11:14:21 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Java并发(七)：jcf线程安全问题</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#fail-fast&quot; id=&quot;markdown-toc-fail-fast&quot;&gt;fail-fast机制&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#collectionssynchronizedxxx&quot; id=&quot;markdown-toc-collectionssynchronizedxxx&quot;&gt;Collections.synchronizedXXX&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#javautilconcurrent&quot; id=&quot;markdown-toc-javautilconcurrent&quot;&gt;java.util.concurrent概述&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#concurrentxxx&quot; id=&quot;markdown-toc-concurrentxxx&quot;&gt;ConcurrentXXX&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#copyonwritearrayxxx&quot; id=&quot;markdown-toc-copyonwritearrayxxx&quot;&gt;CopyOnWriteArrayXXX&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#blockingxxx&quot; id=&quot;markdown-toc-blockingxxx&quot;&gt;BlockingXXX&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#concurrenthashmap&quot; id=&quot;markdown-toc-concurrenthashmap&quot;&gt;ConcurrentHashMap&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;原理相关&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;内部类&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Jdk本身给我实现了很多数据结构，例如List、Set、Queue以及Map等。但是这些类都不是线程安全的，在Jdk1.0的时候提供了&lt;code&gt;Hashtable&lt;/code&gt;、&lt;code&gt;Vector&lt;/code&gt;以及&lt;code&gt;Stack&lt;/code&gt;这些线程安全集合，但由于它们只是在原来集合的基础上通过关键字&lt;code&gt;synchronized&lt;/code&gt;来保证功能的&lt;strong&gt;原子性和可见性&lt;/strong&gt;，这样做的缺点就是效率地下，当有一个线程执行get的时候，其它所有线程都被阻塞。&lt;/p&gt;
+
+&lt;h3 id=&quot;fail-fast&quot;&gt;fail-fast机制&lt;/h3&gt;
+
+&lt;p&gt;当迭代器实现了fail-fast机制，创建了该集合的迭代器后，使用该集合迭代器遍历或者修改集合元素的之前，若该集合被直接调用方法并产生了修改（size的变化），那么将会抛出&lt;code&gt;java.util.ConcurrentModificationException&lt;/code&gt;异常。&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;例如&lt;code&gt;ArrayList&lt;/code&gt;对象，线程1在用迭代器遍历里边元素的同时，线程2put了一个新的元素，那么就会抛出异常&lt;code&gt;java.util.ConcurrentModificationException&lt;/code&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;fail-fast机制是使用了&lt;code&gt;modCount&lt;/code&gt;变量（集合类持有的字段）和&lt;code&gt;expectedModCount&lt;/code&gt;（迭代器持有的字段）来实现。
+在迭代器创建的时候将exceptedModCount被初始化为modCount的值，任何对集合的修改都会改变modCount的值.每当调用next等方法的时候，会判断expectedModCount和当前的modCount是否相等，不相等的话则抛出CME异常.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;modCount&lt;br /&gt;
+&lt;code&gt;modCount变量是集合类中的变量&lt;/code&gt;，在集合被修改时，modCount变量将会加1；当调用迭代器的方法改变了集合size的方法时，modCount变量也会加1。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;expectedModCount&lt;br /&gt;
+&lt;code&gt;expectedModCount变量是迭代器类中的变量&lt;/code&gt;，在创建的迭代器对象时，会使用modCount的值来对其进行初始化。只有在调用迭代器改变了集合size的时候，才会加1。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ArrayList、LikedList&lt;br /&gt;
+它们都是AbstractList的子类，它们的modCount都是从AbstractList类中继承来的，当执行会使集合size发生变化的方法时，例如：add、remove等，modCount会加1。执行set、get操作不会使modCount发生变化，因为他们没有使集合的size发生变化。
+当调用迭代器的next、add、remove、previous、set等访问集合元素的方法时，都会校验exceptedModCount和modCount是否相等，如果不相等，则抛出CME异常。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;HashMap、LinkedHashMap&lt;br /&gt;
+当调用Map的方法或者Map的迭代器使得Map集合被修改（值被修改，或者顺序发生变化）时，modCount加1。
+在调用Map的迭代器访问、修改Map集合元素的时候，都会判断expectedModCount和当前的modCount是否相等，不相等的话则抛出CME异常.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;很显然，只使用modCount和expectedModCount并不能保证集合的线程安全。&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;modCount是集合类的成员变量，expectedModCount是迭代器的成员变量&lt;/li&gt;
+    &lt;li&gt;在使用迭代器遍历集合元素时，会判断modCount和expectedModCount是否相等来校验集合是否被修改过，很显然这个办法是存在bug的。&lt;/li&gt;
+    &lt;li&gt;对于Map结构，数据只要变化modCount就会加1；对于List结构，当集合size变化时，modCount才会加1。&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;p&gt;这些规则表述的可能不是很准确，具体可以查看相关源码。Set结构是什么样的呢？留给读者自己查看源码吧！&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;collectionssynchronizedxxx&quot;&gt;Collections.synchronizedXXX&lt;/h3&gt;
+
+&lt;p&gt;发展到Jdk1.2时，Jdk提供了&lt;code&gt;Collections.synchronizedXXX&lt;/code&gt;系列的方法：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Collections.synchronizedCollection&lt;br /&gt;
+包装Collection接口的实现类，使其具备线程安全&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Collections.synchronizedList&lt;br /&gt;
+包装List接口的实现类，使其具备线程安全&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Collections.synchronizedMap&lt;br /&gt;
+包装Map接口的实现类，使其具备线程安全&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Collections.synchronizedSet&lt;br /&gt;
+包装Set接口的实现类，使其具备线程安全&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里我们查看&lt;code&gt;java.util.Collections.SynchronizedCollection&lt;/code&gt;类的源码，可以看出，这也是在原来集合的基础上包装了一层&lt;code&gt;synchronized&lt;/code&gt;关键字，只是提供了并发集合使用的便利性，并没有从本质上提高并发集合的效率！&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;static class SynchronizedCollection&amp;lt;E&amp;gt; implements Collection&amp;lt;E&amp;gt;, Serializable {
+    private static final long serialVersionUID = 3053995032091335093L;
+
+    final Collection&amp;lt;E&amp;gt; c;  // Backing Collection
+    final Object mutex;     // Object on which to synchronize
+
+    SynchronizedCollection(Collection&amp;lt;E&amp;gt; c) {
+        if (c==null)
+            throw new NullPointerException();
+        this.c = c;
+        mutex = this;
+    }
+    SynchronizedCollection(Collection&amp;lt;E&amp;gt; c, Object mutex) {
+        this.c = c;
+        this.mutex = mutex;
+    }
+
+    public int size() {
+        synchronized (mutex) {return c.size();}
+    }
+    public boolean isEmpty() {
+        synchronized (mutex) {return c.isEmpty();}
+    }
+    public boolean contains(Object o) {
+        synchronized (mutex) {return c.contains(o);}
+    }
+    public Object[] toArray() {
+        synchronized (mutex) {return c.toArray();}
+    }
+    public &amp;lt;T&amp;gt; T[] toArray(T[] a) {
+        synchronized (mutex) {return c.toArray(a);}
+    }
+
+    public Iterator&amp;lt;E&amp;gt; iterator() {
+        return c.iterator(); // Must be manually synched by user!
+    }
+
+    public boolean add(E e) {
+        synchronized (mutex) {return c.add(e);}
+    }
+    public boolean remove(Object o) {
+        synchronized (mutex) {return c.remove(o);}
+    }
+
+    public boolean containsAll(Collection&amp;lt;?&amp;gt; coll) {
+        synchronized (mutex) {return c.containsAll(coll);}
+    }
+    public boolean addAll(Collection&amp;lt;? extends E&amp;gt; coll) {
+        synchronized (mutex) {return c.addAll(coll);}
+    }
+    public boolean removeAll(Collection&amp;lt;?&amp;gt; coll) {
+        synchronized (mutex) {return c.removeAll(coll);}
+    }
+    public boolean retainAll(Collection&amp;lt;?&amp;gt; coll) {
+        synchronized (mutex) {return c.retainAll(coll);}
+    }
+    public void clear() {
+        synchronized (mutex) {c.clear();}
+    }
+    public String toString() {
+        synchronized (mutex) {return c.toString();}
+    }
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        synchronized (mutex) {s.defaultWriteObject();}
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;javautilconcurrent&quot;&gt;java.util.concurrent概述&lt;/h3&gt;
+&lt;p&gt;Jdk1.5开始，Java的并发模型发生了翻天覆地的变化,具体可以查看&lt;code&gt;java.util.concurrent&lt;/code&gt;包下的类。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;CAS的实现&lt;br /&gt;
+目前大多数CPU硬件级别都只是CAS了，jdk1.5后封装了CAS的实现，并以Unsafe类供jdk中其它类调用。这个设计的初衷是给Jdk的类库使用，都不是给开发人员。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;锁和原子类&lt;br /&gt;
+在CAS的基础上，实现了AQS，并实现了ReentrantLock锁，一般很少创建ReentrantLock对象，而是继承ReentrantLock类并在此基础上构建。
+&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;包下提供了一系列的原子变量，例如在并发环境下计算自增值，就可以使用该包下面的类。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;高级的工具类&lt;br /&gt;
+例如下面三个：&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Executor框架：线程池&lt;/li&gt;
+      &lt;li&gt;TimerTask类：定时器&lt;/li&gt;
+      &lt;li&gt;Semaphore类：资源技术器&lt;/li&gt;
+      &lt;li&gt;CountdownLatch类：倒计时计数器&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上面简单的介绍了&lt;code&gt;java.util.concurrent&lt;/code&gt;包，那么该包下关于集合线程安全的实现体现在哪些方面呢？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;阻塞的线程安全集合&lt;br /&gt;
+集合被其它线程访问时，例如使用迭代器迭代、get或者put的时候，当其它线程在访问该资源时，会进入阻塞状态。这种集合在并发执行时，可以保证数据的强一致性。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;非阻塞的线程安全集合&lt;br /&gt;
+集合被其它线程访问时，例如使用迭代器迭代、get或者put的时候，当其它线程在访问该资源时，不会进入阻塞状态。这种集合在并发执行时，可以保证数据的弱强一致性，更新的数据在经过某一段时间之后才会被访问到。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;concurrentxxx&quot;&gt;ConcurrentXXX&lt;/h4&gt;
+&lt;p&gt;以&lt;code&gt;Concurrent&lt;/code&gt;开头的集合类，都是&lt;code&gt;非阻塞的线程安全类&lt;/code&gt;。
+非阻塞的线程安全集合在使用时只能保证数据的弱一致性，无法保证数据的强一致性。如果必须要保证数据的强一致性，可以使用阻塞的线程安全类。前边提到的使用synchronized来保证线程安全的集合类，就是阻塞的线程安全类。&lt;/p&gt;
+
+&lt;p&gt;这里号称是非阻塞的线程安全类，只是理想状态下非阻塞，使用时阻塞的概率较低，效率较高，但还是会可能线程被阻塞的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;ConcurrentHashMap&lt;br /&gt;
+非阻塞线程安全的HashMap&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ConcurrentLinkedDeque&lt;br /&gt;
+非阻塞线程安全的双端队列&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ConcurrentLinkedQueue&lt;br /&gt;
+非阻塞线程安全的队列&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ConcurrentSkipListMap&lt;br /&gt;
+非阻塞线程安全的TreeMap（有序）&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ConcurrentSkipListSet&lt;br /&gt;
+非阻塞线程安全的TreeSet（有序）&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;copyonwritearrayxxx&quot;&gt;CopyOnWriteArrayXXX&lt;/h4&gt;
+&lt;p&gt;这一类集合在数据发生变化时，会通过内存拷贝来创建一个新的集合。若在迭代器遍历过程中集合的元素发生变化，迭代器会继续遍历“老”的集合，其它操作会访问“新”的集合。&lt;br /&gt;
+这类集合适合“数据量小”、“读多写少”的场景。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;CopyOnWriteArrayList&lt;br /&gt;
+线程安全的ArrayList，基于内存拷贝实现的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CopyOnWriteArraySet&lt;br /&gt;
+线程安全的ArrayList，基于内存拷贝实现的。其实就是对CopyOnWriteArrayList的包装，调用add方法的时候会调用CopyOnWriteArrayList类的addIfAbsent方法，当元素不存在的时候才会被加入到集合中。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;blockingxxx&quot;&gt;BlockingXXX&lt;/h4&gt;
+&lt;p&gt;阻塞线程安全类，其中BlockingDeque接口继承了BlockingQueue接口。这一类集合在并发过程中，可以保证数据的强一致性。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;ArrayBlockingQueue&lt;br /&gt;
+阻塞的线程安全队列，它是基于数组实现的，创建的时候就需要指定队列的长度。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;LinkedBlockingQueue&lt;br /&gt;
+阻塞的线程安全队列，是基于链表实现的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;LinkedBlockingDeque&lt;br /&gt;
+阻塞的线程安全双端队列，是基于链表实现的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;PriorityBlockingQueue&lt;br /&gt;
+阻塞的线程安全优先队列，队列中的元素必须实现Comparable接口，在插入元素时，会调用接口的&lt;code&gt;compareTo&lt;/code&gt;方法来判断元素的大小，从而确定元素的位置。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;concurrenthashmap&quot;&gt;ConcurrentHashMap&lt;/h3&gt;
+&lt;p&gt;这里把&lt;code&gt;ConcurrentHashMap&lt;/code&gt;单独拿出来说一下，因为ConcurrentXXX系列集合实现的核心思想和它基本上一样。CopyOnWriteArray系列和BlockingXXX系列实现手法比较简单，自己浏览一下源码就可以了。&lt;/p&gt;
+
+&lt;p&gt;ConcurrentHashMap的类部结构大概如下图这样：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/ConcurrentHashMap.png&quot; alt=&quot;结构&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;默认情况下Segment数组的大小是16(DEFAULT_INITIAL_CAPACITY),Segment下的HashEntry数组的默认大小是2(MIN_SEGMENT_TABLE_CAPACITY)。&lt;/p&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;原理相关&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;锁的范围&lt;br /&gt;
+ConcurrentHashMap中读数据是没有锁的，写数据时会有锁。在向同一个Segment元素下写数据时，会使用同一把锁。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;非阻塞锁&lt;br /&gt;
+这里号称是非阻塞的线程安全类，只是理想状态下非阻塞，使用时阻塞的概率较低，效率较高，但还是会可能线程被阻塞的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;弱一致性原理&lt;br /&gt;
+ConcurrentHashMap的get是没有锁的，但是put是有锁的。可能会出现一种情况是：线程1先执行了put，但是在数据没还没完全写入时，线程2读取了集合里的数据，此时是读取不到线程1刚刚执行写操作写入的数据，但是在很短暂的一个时间段后，线程2就能读到线程1写入的数了。
+这就是读写分离产生的弱一致性。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;内部类&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HashEntry&lt;br /&gt;
+该类实现的就是单纯的单向链表结构，和HashMap中的Entry类似。
+    &lt;ul&gt;
+      &lt;li&gt;关键字段&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * hash值
+ */
+final int hash;
+final K key;
+volatile V value;
+
+/**
+ * 下一个节点
+ */
+volatile HashEntry&amp;lt;K,V&amp;gt; next;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;关键方法&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 使用UNSAFE来设置next节点
+ */
+final void setNext(HashEntry&amp;lt;K,V&amp;gt; n) {
+    UNSAFE.putOrderedObject(this, nextOffset, n);
+}
+
+// Unsafe相关的初始化
+static final sun.misc.Unsafe UNSAFE;
+static final long nextOffset;
+static {
+    try {
+        UNSAFE = sun.misc.Unsafe.getUnsafe();
+        Class k = HashEntry.class;
+        nextOffset = UNSAFE.objectFieldOffset
+            (k.getDeclaredField(&quot;next&quot;));
+    } catch (Exception e) {
+        throw new Error(e);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Segment&lt;br /&gt;
+该类就是ConcurrentHashMap中分桶的实现。
+    &lt;ul&gt;
+      &lt;li&gt;关键字段&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 处理器个数
+ */
+static final int MAX_SCAN_RETRIES =
+    Runtime.getRuntime().availableProcessors() &amp;gt; 1 ? 64 : 1;
+      
+/**
+ * 基于数组实现的Hash表
+ */
+transient volatile HashEntry&amp;lt;K,V&amp;gt;[] table;
+  
+/**
+ * 分桶内的元素个数。
+ */
+transient int count;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;关键方法&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;final V put(K key, int hash, V value, boolean onlyIfAbsent) {
+    /**
+     * 1. 写数据前,先拿到当前的节点元素,并执行park
+     */
+    HashEntry&amp;lt;K,V&amp;gt; node = tryLock() ? null :
+        scanAndLockForPut(key, hash, value);
+    V oldValue;
+    try {
+        //拿到分桶数组
+        HashEntry&amp;lt;K,V&amp;gt;[] tab = table;
+
+        //拿到该节点应该在的哪个
+        int index = (tab.length - 1) &amp;amp; hash;
+
+        //拿到分桶中HashEntry的起始位置HashEntry链表下
+        HashEntry&amp;lt;K,V&amp;gt; first = entryAt(tab, index);
+
+        //往下迭代
+        for (HashEntry&amp;lt;K,V&amp;gt; e = first;;) {
+
+            // 当分桶不为空时,持续遍历,找到节点,并修改它的value
+            if (e != null) {
+                K k;
+                if ((k = e.key) == key/*基本类型,或同一对象*/ ||
+                    (e.hash == hash &amp;amp;&amp;amp; key.equals(k))/*+自定义对象*/) {
+                    oldValue = e.value;
+                    if (!onlyIfAbsent) {
+                        e.value = value;
+                        ++modCount;
+                    }
+                    break;
+                }
+                e = e.next;
+            }
+            //当分桶非空的时候
+            else {
+
+                //若node已经获取到了,设置node为first元素
+                if (node != null)
+                    node.setNext(first);
+                else
+                    node = new HashEntry&amp;lt;K,V&amp;gt;(hash, key, value, first);
+                int c = count + 1;
+
+                //集合元素超过阈值后,扩充
+                if (c &amp;gt; threshold &amp;amp;&amp;amp; tab.length &amp;lt; MAXIMUM_CAPACITY)
+                    rehash(node);
+                else
+                    //否则直接把节点的值放在分桶的第一个位置
+                    setEntryAt(tab, index, node);
+                ++modCount;
+                count = c;
+                oldValue = null;
+                break;
+            }
+        }
+    } finally {
+        unlock();
+    }
+    return oldValue;
+}
+  
+/**
+ * 获取锁,并返回对应的 HashEntry 节点。
+ *
+ * 1.若对应的分桶数组不存在,表示该hash值还未出现过,则直接创建出一个node,并在尝试次数达到MAX_SCAN_RETRIES时,阻塞
+ * 2.若对应的分桶数组存在,则阻塞,接触阻塞后返回节点
+ *
+ * @return a new node if key not found, else null
+ */
+private HashEntry&amp;lt;K,V&amp;gt; scanAndLockForPut(K key, int hash, V value) {
+    //拿到分桶数组的首元素
+    HashEntry&amp;lt;K,V&amp;gt; first = entryForHash(this, hash);
+    HashEntry&amp;lt;K,V&amp;gt; e = first;
+    HashEntry&amp;lt;K,V&amp;gt; node = null;
+
+    int retries = -1; // negative while locating node
+
+    //尝试获取锁,若获取不到锁,就一直轮询下去
+    while (!tryLock()) {
+        HashEntry&amp;lt;K,V&amp;gt; f; // to recheck first below
+        if (retries &amp;lt; 0) {
+            if (e == null) {    //首元素不存在,意思是hash还没有碰撞过
+                if (node == null) // speculatively create node
+                    node = new HashEntry&amp;lt;K,V&amp;gt;(hash, key, value, null);
+                retries = 0;
+            }
+            else if (key.equals(e.key)) //查看key和首元素的key是否相等
+                retries = 0;
+            else
+                //如果key的位置不在首元素出
+                e = e.next;
+        }
+        else if (++retries &amp;gt; MAX_SCAN_RETRIES) {
+            lock(); //独占
+            break;
+        }
+        else if ((retries &amp;amp; 1) == 0/*retries为偶数时*/ &amp;amp;&amp;amp;
+                 (f = entryForHash(this, hash)) != first) {
+            /**
+             * 如果在次过程中HashEntry数组的first节点发生了变化,则重新遍历
+             */
+            e = first = f; // re-traverse if entry changed
+            retries = -1;
+        }
+    }
+    return node;
+}
+  
+/**
+ * 获取数据，key不能为null
+ */
+public V get(Object key) {
+    Segment&amp;lt;K,V&amp;gt; s; // manually integrate access methods to reduce overhead
+    HashEntry&amp;lt;K,V&amp;gt;[] tab;
+    int h = hash(key);
+
+    //确定数据是在哪个分桶中的
+    long u = (((h &amp;gt;&amp;gt;&amp;gt; segmentShift) &amp;amp; segmentMask) &amp;lt;&amp;lt; SSHIFT) + SBASE;
+
+    //确定数据是在哪个分桶中的
+    if ((s = (Segment&amp;lt;K,V&amp;gt;)UNSAFE.getObjectVolatile(segments, u)) != null &amp;amp;&amp;amp;
+        (tab = s.table) != null) {
+
+        /**
+         * 1.先确定数据是在哪个链表中
+         * 2.遍历下去,直到读到对应的key的值
+         */
+        for (HashEntry&amp;lt;K,V&amp;gt; e = (HashEntry&amp;lt;K,V&amp;gt;) UNSAFE.getObjectVolatile
+                 (tab, ((long)(((tab.length - 1) &amp;amp; h)) &amp;lt;&amp;lt; TSHIFT) + TBASE);
+             e != null; e = e.next) {
+            K k;
+            if ((k = e.key) == key || (e.hash == h &amp;amp;&amp;amp; key.equals(k)))
+                return e.value;
+        }
+    }
+    return null;
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;总结&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;老的线程安全集合是基于&lt;code&gt;synchronized&lt;/code&gt;关键字实现的，效率低下，但是具备强一致性的特性；&lt;/li&gt;
+  &lt;li&gt;基于AQS实现的新版线程安全集合效率较高，强一致性和弱一致性的集合都有部分的实现；&lt;/li&gt;
+  &lt;li&gt;个人觉得&lt;code&gt;ConcurrentHashMap&lt;/code&gt;这个类源码研究透了，整个Java集合并发这部分知识就很好理解了；&lt;/li&gt;
+  &lt;li&gt;原理级别的东西看下源码就知道了，不用每一步都刻意去记忆，理解并记住其中的设计思想就可以了。&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Sat, 22 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/07/22/Java%E5%B9%B6%E5%8F%91(%E4%B8%83)-JCF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/07/22/Java%E5%B9%B6%E5%8F%91(%E4%B8%83)-JCF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/</guid>
+        
+        <category>ConcurrentHashMap</category>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Java并发(六)：reentrantlock、synchronized</title>
@@ -2985,63 +3513,6 @@ theano                       0.8.2                    py35_0  defaults
         <category>python</category>
         
         <category>SciPy</category>
-        
-      </item>
-    
-      <item>
-        <title>Jvm内存模型</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;1.程序计数器&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#jvm&quot; id=&quot;markdown-toc-jvm&quot;&gt;2.JVM栈&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;3.本地方法栈&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#java&quot; id=&quot;markdown-toc-java&quot;&gt;4.Java堆&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;5.方法区&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;5.1.运行时常量池&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Java开发人员无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/JVM%20mem%20model.png&quot; alt=&quot;JVM mem model&quot; title=&quot;JVM mem model&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;JVM的运行时内存共有5块区域，其中有3个是线程间隔离的，有2个是线程间共享的。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;1.程序计数器&lt;/h2&gt;
-&lt;p&gt;它是线程间隔离的。字节码的行号指示器，用来标记当前线程所执行的字节码的行号。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Q1. 为什么每个线程都需要一个独立的计数器呢？
-因为JVM的多线程是轮询在CPU上执行的，任何一个时间点，一个处理器上最多只有一条指定在执行。为保证线程切换后，能恢复从正确的执行位置执行指令，所以给每个线程都独立的使用一块空间作为程序计数器，使得多线程之间计数器互不影响。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;jvm&quot;&gt;2.JVM栈&lt;/h2&gt;
-
-&lt;p&gt;它是线程间隔离的，也就是常说到的“栈内存”。每个方法执行的时候都会创建一个栈桢，用来存放局部变量表用来存放该方法内使用到的局部变量表、操作数栈、动态链接、方法出口灯信息。一个方法从调用到执行完成的过程也就对应着一个栈桢在JVM栈中入栈到出栈的过程。
-局部变量表中存放了编译器可确定的各种基本数据类型（例如：boolean、byte、char、short等等），以及对象的引用。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;3.本地方法栈&lt;/h2&gt;
-
-&lt;p&gt;它是线程间隔离的，和“JVM栈”的区别是：“JVM栈”是执行Java方法时所使用到的内存；“本地方法栈”是JVM执行Native方法时所使用到的内存存。
-这一块内存在JVM规范中没有强制指定，所以不同的虚拟机实现它的方法可能不一样。Sum HotSpot虚拟机是把“JVM栈”和“本地方法栈”合二为一的。&lt;/p&gt;
-
-&lt;h2 id=&quot;java&quot;&gt;4.Java堆&lt;/h2&gt;
-&lt;p&gt;它是线程间共享的，存放JVM对象实例，也是GC发生的主要区域，所以也被称为GC堆。
-关于GC算法垃圾回收器，后边会介绍。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;5.方法区&lt;/h2&gt;
-&lt;p&gt;它是线程间共享的，存放已被JVM加载的类信息、常量、静态变量、即时编译器编译后的代码等。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;5.1.运行时常量池&lt;/h3&gt;
-&lt;p&gt;它是方法区的一部分，存放编译器生成的各种常量值。&lt;/p&gt;
-</description>
-        <pubDate>Wed, 05 Apr 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/04/05/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</guid>
-        
-        <category>jvm</category>
-        
-        
-        <category>java</category>
         
       </item>
     
