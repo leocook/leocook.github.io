@@ -19,8 +19,8 @@ icon: heart
 
 ## 联系我
 
+* **个人微信**：leocook，请备注：博客
 * GitHub：[leocook](https://github.com/leocook)
-* email：leocook@163.com
 * 微信公众号: 
 
 ![公众号](http://7xriy2.com1.z0.glb.clouddn.com/leocook.jpg)
