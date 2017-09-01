@@ -5,9 +5,449 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 28 Aug 2017 15:50:19 +0800</pubDate>
-    <lastBuildDate>Mon, 28 Aug 2017 15:50:19 +0800</lastBuildDate>
+    <pubDate>Fri, 01 Sep 2017 17:24:42 +0800</pubDate>
+    <lastBuildDate>Fri, 01 Sep 2017 17:24:42 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Servlet的那些二三事儿</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet&quot; id=&quot;markdown-toc-servlet&quot;&gt;servlet的生命周期&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-1&quot; id=&quot;markdown-toc-servlet-1&quot;&gt;如何去实现一个Servlet&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#javaxservletservlet&quot; id=&quot;markdown-toc-javaxservletservlet&quot;&gt;javax.servlet.Servlet接口&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#javaxservlethttphttpservlet&quot; id=&quot;markdown-toc-javaxservlethttphttpservlet&quot;&gt;javax.servlet.http.HttpServlet类&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#jspservlet&quot; id=&quot;markdown-toc-jspservlet&quot;&gt;JSP和Servlet的关系&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;四种会话作用域&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#jsp&quot; id=&quot;markdown-toc-jsp&quot;&gt;Jsp的九个内置对象&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;内置对象和作用域的对照&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;转发和重定向&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;什么是转发和重定向&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#servlet-2&quot; id=&quot;markdown-toc-servlet-2&quot;&gt;Servlet中如何实现转发和重定向&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#jsp-1&quot; id=&quot;markdown-toc-jsp-1&quot;&gt;JSP中如何实现转发和重定向&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;如何选择转发和重定向&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-3&quot; id=&quot;markdown-toc-servlet-3&quot;&gt;Servlet中的过滤器&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;为什么需要过滤器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;什么是过滤器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;如何使用过滤器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;过滤器链&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-4&quot; id=&quot;markdown-toc-servlet-4&quot;&gt;Servlet中的监听器&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;官方提供的几个监听器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#session&quot; id=&quot;markdown-toc-session&quot;&gt;Session级别的监听&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#httpsessionlistener&quot; id=&quot;markdown-toc-httpsessionlistener&quot;&gt;HttpSessionListener&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#httpsessionbindinglistener&quot; id=&quot;markdown-toc-httpsessionbindinglistener&quot;&gt;HttpSessionBindingListener&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#httpsessionattributelistener&quot; id=&quot;markdown-toc-httpsessionattributelistener&quot;&gt;HttpSessionAttributeListener&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#httpsessionactivationlistener&quot; id=&quot;markdown-toc-httpsessionactivationlistener&quot;&gt;HttpSessionActivationListener&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#servletcontext&quot; id=&quot;markdown-toc-servletcontext&quot;&gt;ServletContext级别的监听&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#servletcontextattributelistener&quot; id=&quot;markdown-toc-servletcontextattributelistener&quot;&gt;ServletContextAttributeListener&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#servletcontextlistener&quot; id=&quot;markdown-toc-servletcontextlistener&quot;&gt;ServletContextListener&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#request&quot; id=&quot;markdown-toc-request&quot;&gt;request级别的监听&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#servletrequestattributelistener&quot; id=&quot;markdown-toc-servletrequestattributelistener&quot;&gt;ServletRequestAttributeListener&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#servletrequestlistener&quot; id=&quot;markdown-toc-servletrequestlistener&quot;&gt;ServletRequestListener&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-5&quot; id=&quot;markdown-toc-servlet-5&quot;&gt;servlet的单例与多线程问题&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-6&quot; id=&quot;markdown-toc-servlet-6&quot;&gt;servlet的单线程模式&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Servlet（Server Applet），全称Java Servlet。主要是使用Java来开发一些web应用，例如网站、web service等等。下面就从几个方面来总结一下servlet的关键点，当然也会提及到jsp、http等。&lt;/p&gt;
+
+&lt;h2 id=&quot;servlet&quot;&gt;servlet的生命周期&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;初始阶段&lt;br /&gt;
+Web容器加载servlet，调用init()方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;运行阶段&lt;br /&gt;
+当请求到达时，运行其service()方法。service()识别请求类型，并调用相对应的doGet、doPost方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;销毁阶段&lt;br /&gt;
+服务结束，web容器会调用servlet的distroy()方法销毁servlet。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;servlet-1&quot;&gt;如何去实现一个Servlet&lt;/h2&gt;
+
+&lt;p&gt;先了解一下Servlet API的两个包：&lt;code&gt;javax.servlet.*&lt;/code&gt;和&lt;code&gt;javax.servlet.http.*&lt;/code&gt;。&lt;code&gt;javax.servlet.*&lt;/code&gt;包下放的主要是一些接口，&lt;code&gt;javax.servlet.http.*&lt;/code&gt;包下方的主要是上述接口在http协议中的实现。
+目前网络数据交互式传输中，http协议占据这主导的地位，说不准哪天出现一个新的协议，那时servlet可能还会对新协议做支持。
+实现一个Servlet目前有两种方式，一种是直接实现最底层的Servlet接口；第二种则是实现继承HttpServlet类。&lt;/p&gt;
+
+&lt;h3 id=&quot;javaxservletservlet&quot;&gt;javax.servlet.Servlet接口&lt;/h3&gt;
+
+&lt;p&gt;有下面这几个方法&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;init&lt;br /&gt;
+在servlet初始化时，会调用它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;service&lt;br /&gt;
+在servlet处理请求的时候，会调用它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;destroy&lt;br /&gt;
+在服务结束时，销毁servlet的时候，会调用它。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;getServletConfig&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;servlet&amp;gt;
+    &amp;lt;servlet-name&amp;gt;ServletConfigTest&amp;lt;/servlet-name&amp;gt;
+    &amp;lt;servlet-class&amp;gt;com.vae.servlet.ServletConfigTest&amp;lt;/servlet-class&amp;gt;
+    &amp;lt;init-param&amp;gt;
+        &amp;lt;param-name&amp;gt;name1&amp;lt;/param-name&amp;gt;
+        &amp;lt;param-value&amp;gt;value1&amp;lt;/param-value&amp;gt;
+    &amp;lt;/init-param&amp;gt;
+    &amp;lt;init-param&amp;gt;
+        &amp;lt;param-name&amp;gt;encode&amp;lt;/param-name&amp;gt;
+        &amp;lt;param-value&amp;gt;utf-8&amp;lt;/param-value&amp;gt;
+    &amp;lt;/init-param&amp;gt;
+&amp;lt;/servlet&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;获取servlet的配置信息,&lt;code&gt;init-param&lt;/code&gt;标签下的内容。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;getServletInfo&lt;br /&gt;
+获取servlet信息，&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;javaxservlethttphttpservlet&quot;&gt;javax.servlet.http.HttpServlet类&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;doGet&lt;br /&gt;
+处理get请求时，会执行该方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;doPost&lt;br /&gt;
+处理post请求时，会执行该方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;init&lt;br /&gt;
+在servlet初始化时，会调用它。相当于Servlet接口中的init方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;destroy&lt;br /&gt;
+在servlet初始化时，会调用它。相当于Servlet接口中的init方法。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;jspservlet&quot;&gt;JSP和Servlet的关系&lt;/h2&gt;
+&lt;p&gt;这里说明一下，JSP在被编译后生成的就是Servlet，所以访问jsp，其实访问的也就是其对于的Servlet。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;四种会话作用域&lt;/h3&gt;
+&lt;p&gt;由于在web开发中，数据传输的范围是不同的，所以产生了&lt;code&gt;四种会话作用域&lt;/code&gt;，其实就是提供了4种生命周期的对象，用于存储数据使用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;page&lt;br /&gt;
+单个页面级别&lt;/li&gt;
+  &lt;li&gt;request&lt;br /&gt;
+单个请求级别&lt;/li&gt;
+  &lt;li&gt;session&lt;br /&gt;
+单个session级别&lt;/li&gt;
+  &lt;li&gt;application&lt;br /&gt;
+服务器从启动到停止&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;jsp&quot;&gt;Jsp的九个内置对象&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;page&lt;br /&gt;
+指JSP也变本身，代表的是java.lang.Object类的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;request&lt;br /&gt;
+包含了客户端请求的信息，代表的是javax.servlet.HttpServletRequest类的对象&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;session&lt;br /&gt;
+包含了当前会话的信息，代表的是javax.servlet.http.HttpSession类的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;application&lt;br /&gt;
+包含了当前服务器全局的信息，重启后失效。代表的是javax.servlet.ServletContext类的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;response&lt;br /&gt;
+包含了服务端返回客户端的响应信息，代表的是javax.servlet.HttpServletResponse类的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;out&lt;br /&gt;
+向客户端输出数据。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;config&lt;br /&gt;
+ServletConfig类的一个实例，&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;pageContext&lt;br /&gt;
+包含了当前页面的信息&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;exception&lt;br /&gt;
+处理异常使用&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;内置对象和作用域的对照&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;内置对象名&lt;/th&gt;
+      &lt;th&gt;对应的Java类&lt;/th&gt;
+      &lt;th&gt;作用域&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;page&lt;/td&gt;
+      &lt;td&gt;java.lang.Object&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;request&lt;/td&gt;
+      &lt;td&gt;javax.servlet.http.HttpServletRequest&lt;/td&gt;
+      &lt;td&gt;Request&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;session&lt;/td&gt;
+      &lt;td&gt;javax.servlet.http.HttpSession&lt;/td&gt;
+      &lt;td&gt;Session&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;application&lt;/td&gt;
+      &lt;td&gt;javax.servlet.ServletContext&lt;/td&gt;
+      &lt;td&gt;Application&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;response&lt;/td&gt;
+      &lt;td&gt;javax.servlet.http.HttpServletResponse&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;out&lt;/td&gt;
+      &lt;td&gt;javax.servlet.jsp.JspWriter&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;config&lt;/td&gt;
+      &lt;td&gt;javax.servlet.ServletConfig&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pageContext&lt;/td&gt;
+      &lt;td&gt;javax.servlet.jsp.PageContext&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;exception&lt;/td&gt;
+      &lt;td&gt;java.lang.Throwable&lt;/td&gt;
+      &lt;td&gt;Page&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;转发和重定向&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;什么是转发和重定向&lt;/h3&gt;
+&lt;p&gt;从体验上来说，转发后浏览器的URL不会变，而重定向时URL会变。从执行的原理上来说，转发是服务端的行为，期间request域共享；重定向是客户端的行为，客户端发现返回的http状态码是302时，将会向新的URL发送&lt;/p&gt;
+
+&lt;h3 id=&quot;servlet-2&quot;&gt;Servlet中如何实现转发和重定向&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;转发&lt;br /&gt;
+request.getRequestDispatcher(“目标文件”).forward(request,response)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;重定向&lt;br /&gt;
+response.sendRedirect(“目标文件”)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;jsp-1&quot;&gt;JSP中如何实现转发和重定向&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;转发&lt;br /&gt;
+&lt;code&gt; &amp;lt;jsp:forward page=&quot;目标文件&quot; /&amp;gt; &lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;重定向&lt;br /&gt;
+&lt;code&gt;&amp;lt;%response.sendRedirect(&quot;目标文件&quot;);//重定向到new.jsp%&amp;gt;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;如何选择转发和重定向&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;何时选择转发
+    &lt;ul&gt;
+      &lt;li&gt;当需要隐藏地址的时候，选用转发；&lt;/li&gt;
+      &lt;li&gt;当需要共享request域数据时，选用转发。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;何时选择重定向&lt;br /&gt;
+当不需要隐藏地址的时候，且不需要共享request域数据时，选用重定向。重定向只是单纯的重新访问一个新的地址。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;servlet-3&quot;&gt;Servlet中的过滤器&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;为什么需要过滤器&lt;/h3&gt;
+&lt;p&gt;在web开发中，我们可能需要对所有的请求都做一层过滤，例如权限验证这些操作等等。此时我们就需要一种技术，所有或者一类请求在处理前都会经过这个技术来进行一次预处理。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;什么是过滤器&lt;/h3&gt;
+&lt;p&gt;过滤器就是在请求到达Servlet之前会经过的一层，在过滤器这一层我们可以检查权限、可以对所有或者部分请求做统一的处理。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;如何使用过滤器&lt;/h3&gt;
+&lt;p&gt;过滤器类一般都会实现&lt;code&gt;javax.servlet.Filter&lt;/code&gt;这个接口。然后在web.xml中进行配置，下面是一个例子：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;filter&amp;gt;
+    &amp;lt;filter-name&amp;gt;filter01&amp;lt;/filter-name&amp;gt; &amp;lt;!-- filter的名字，自定义 --&amp;gt;
+    &amp;lt;filter-class&amp;gt;filter.class&amp;lt;/filter-class&amp;gt; &amp;lt;!-- filter类，可以是自己实现的，也可以使用默认的 --&amp;gt;
+    &amp;lt;init-param&amp;gt;
+        &amp;lt;param-name&amp;gt;key&amp;lt;/param-name&amp;gt;&amp;lt;!-- 初始化参数，可选配置 --&amp;gt;
+        &amp;lt;param-value&amp;gt;value&amp;lt;/param-value&amp;gt;
+    &amp;lt;/init-param&amp;gt;
+&amp;lt;/filter&amp;gt;
+&amp;lt;filter-mapping&amp;gt; &amp;lt;!-- 配置filter生效的url，当访问这些url时，都会执行该filter --&amp;gt;
+    &amp;lt;filter-name&amp;gt;filter01&amp;lt;/filter-name&amp;gt; &amp;lt;!-- filter的名字，自定义 --&amp;gt;
+    &amp;lt;url-pattern&amp;gt;/*&amp;lt;/url-pattern&amp;gt; &amp;lt;!-- 这里可以精确匹配，也可以模糊匹配，例如匹配所有的url就是“/*”，匹配所有的jsp，就是“*.jsp”.注意，路径和扩展名匹配不可以同时使用 --&amp;gt;
+&amp;lt;/filter-mapping&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;过滤器链&lt;/h3&gt;
+
+&lt;h2 id=&quot;servlet-4&quot;&gt;Servlet中的监听器&lt;/h2&gt;
+
+&lt;p&gt;Servlet的监听器是实现了javax.servlet.ServletContextListener接口的服务端程序，它随web的启动而启动，在启动期间可以监听web应用内部发生的一系列事件。可以对不同域的不同事件设置监听，例如域内部属性的变化，request、session和application的创建和销毁等等。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;官方提供的几个监听器&lt;/h3&gt;
+
+&lt;p&gt;Servlet监听器对特定的事件进行监听，当产生这些事件的时候，会执行监听器的代码。可以对应用的加载、卸载，对session的初始化、销毁，对session中值变化等事件进行监听。官方提供了一些对ServletContext、session、request的监听。&lt;/p&gt;
+
+&lt;h3 id=&quot;session&quot;&gt;Session级别的监听&lt;/h3&gt;
+&lt;h4 id=&quot;httpsessionlistener&quot;&gt;HttpSessionListener&lt;/h4&gt;
+&lt;p&gt;全局监听session的创建和销毁，在XML中配置监听，全局的。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;sessionCreated&lt;br /&gt;
+有新的session创建时，会出发执行这个方法&lt;/li&gt;
+  &lt;li&gt;sessionDestroyed&lt;br /&gt;
+执行session.invalidate()方法时，或者session超时（默认30分钟）会执行该方法。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;httpsessionbindinglistener&quot;&gt;HttpSessionBindingListener&lt;/h4&gt;
+&lt;p&gt;实例化后设置为session的属性，绑定到单个session。只能监听单个session，一个session对应一个HttpSessionBindingListener对象的实例。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;valueBound&lt;br /&gt;
+当对象被绑定到session上时，例如：application.setAttribute(“onlineUserList”, onlineUserList);&lt;/li&gt;
+  &lt;li&gt;valueUnbound&lt;br /&gt;
+执行方法session.invalidate()；或者session超时；或者修改了session域的属性，例如：session.setAttribute(“onlineUserListener”, “其他对象”);或者删除了某一个属性，例如：session.removeAttribute(“onlineUserListener”)。都会触发valueUnbound方法的执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;httpsessionattributelistener&quot;&gt;HttpSessionAttributeListener&lt;/h4&gt;
+&lt;p&gt;监听session的属性变化&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;attributeAdded&lt;br /&gt;
+当有新的属性添加时，将会将会触发&lt;/li&gt;
+  &lt;li&gt;attributeRemoved&lt;br /&gt;
+当有属性移除时，将会触发&lt;/li&gt;
+  &lt;li&gt;attributeReplaced&lt;br /&gt;
+当有属性被覆盖时，将会触发&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;httpsessionactivationlistener&quot;&gt;HttpSessionActivationListener&lt;/h4&gt;
+&lt;p&gt;和HttpSessionBindingListener一样，需要绑定到session上，是对单个session的监听。有的时候需要对session做持久化，即将session持久化写到磁盘上，当服务器挂了重启后，还能恢复session中的信息。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;sessionWillPassivate&lt;br /&gt;
+当执行这个方法的时候，可以把session保存到硬盘上&lt;/li&gt;
+  &lt;li&gt;sessionDidActivate&lt;br /&gt;
+当执行这个方法的时候，就是把session从硬盘读取出来，并使用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;servletcontext&quot;&gt;ServletContext级别的监听&lt;/h3&gt;
+&lt;h4 id=&quot;servletcontextattributelistener&quot;&gt;ServletContextAttributeListener&lt;/h4&gt;
+&lt;p&gt;ServletContext上存在属性变化时，将会出发此类监听。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;attributeAdded&lt;br /&gt;
+ServletContext上添加属性时触发。&lt;/li&gt;
+  &lt;li&gt;attributeRemoved&lt;br /&gt;
+ServletContext上删除属性时触发。&lt;/li&gt;
+  &lt;li&gt;attributeReplaced&lt;br /&gt;
+ServletContext上添加属性值被修改时触发。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;servletcontextlistener&quot;&gt;ServletContextListener&lt;/h4&gt;
+&lt;p&gt;监听ServletContext的创建和销毁&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;contextInitialized&lt;br /&gt;
+初始化ServletContext对象&lt;/li&gt;
+  &lt;li&gt;contextDestroyed&lt;br /&gt;
+销毁ServletContext对象&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;request&quot;&gt;request级别的监听&lt;/h3&gt;
+&lt;h4 id=&quot;servletrequestattributelistener&quot;&gt;ServletRequestAttributeListener&lt;/h4&gt;
+&lt;p&gt;监听request属性变化事件&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;attributeAdded&lt;br /&gt;
+当request域有新的属性添加时，触发事件&lt;/li&gt;
+  &lt;li&gt;attributeRemoved&lt;br /&gt;
+当request域有属性移除时，触发事件&lt;/li&gt;
+  &lt;li&gt;attributeReplaced&lt;br /&gt;
+当request域有属性被覆盖时，触发事件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;servletrequestlistener&quot;&gt;ServletRequestListener&lt;/h4&gt;
+&lt;p&gt;监听request生命周期的变化&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;requestDestroyed&lt;br /&gt;
+当request销毁时，触发该事件&lt;/li&gt;
+  &lt;li&gt;requestInitialized&lt;br /&gt;
+当request初始化时，触发该事件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;servlet-5&quot;&gt;servlet的单例与多线程问题&lt;/h2&gt;
+&lt;p&gt;servlet是单例，多线程的。servlet类在web容器中只会被创建一个实例。但是多线程环境下，多个线程可以同时调用同一个Servlet的service方法。
+所以在Servlet对象中使用共享变量的时候要小心，很容易出现线程安全问题。&lt;/p&gt;
+
+&lt;h2 id=&quot;servlet-6&quot;&gt;servlet的单线程模式&lt;/h2&gt;
+&lt;p&gt;默认Jsp的Servlet是单例、多线程的。但也可以在Jsp页面里声明&lt;code&gt; &amp;lt;%@page isThreadSafe=&quot;false&quot;%&amp;gt; &lt;/code&gt;，表示Jsp的Servlet类将以Singleton模式来运行。即：Jsp对应的Servlet实例将不会同时被多个线程调用，一个请求创建一个Servlet实例。&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Jsp的Servlet里一般不会有很复杂的业务逻辑，更多的是页面展示，以及一些简单的数据处理，所以一般情况下不用配置&lt;code&gt;isThreadSafe=false&lt;/code&gt;的，推荐配置为true.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        <pubDate>Thu, 31 Aug 2017 00:00:00 +0800</pubDate>
+        <link>http://leocook.github.io/2017/08/31/Servlet%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8C%E4%B8%89%E4%BA%8B%E5%84%BF/</link>
+        <guid isPermaLink="true">http://leocook.github.io/2017/08/31/Servlet%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8C%E4%B8%89%E4%BA%8B%E5%84%BF/</guid>
+        
+        <category>Servlet</category>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Java并发(七)：jcf线程安全问题</title>
@@ -3063,488 +3503,6 @@ http://www.jianshu.com/p/63e76826e852&lt;/p&gt;
         
         
         <category>java</category>
-        
-      </item>
-    
-      <item>
-        <title>Scipy生态系统初探</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#scipy&quot; id=&quot;markdown-toc-scipy&quot;&gt;1.SciPy技术栈的安装&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#numpyscipy&quot; id=&quot;markdown-toc-numpyscipy&quot;&gt;2.NumPy&amp;amp;scipy测试&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#matplotlib&quot; id=&quot;markdown-toc-matplotlib&quot;&gt;2.Matplotlib测试&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#ipython&quot; id=&quot;markdown-toc-ipython&quot;&gt;3.IPython&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#scipy-1&quot; id=&quot;markdown-toc-scipy-1&quot;&gt;4.关于SciPy技术栈的发行版&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#anaconda&quot; id=&quot;markdown-toc-anaconda&quot;&gt;5.使用Anaconda管理软件包&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#theano&quot; id=&quot;markdown-toc-theano&quot;&gt;5.1. 安装Theano&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tensorflow&quot; id=&quot;markdown-toc-tensorflow&quot;&gt;5.2 安装Tensorflow&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;SciPy是一个基于Python的开源生态系统，也称为&lt;code&gt;SciPy技术栈&lt;/code&gt;，主要为数学计算、科学研究以及工程计算提供服务。&lt;/p&gt;
-
-&lt;p&gt;Anaconda则是SciPy技术栈的发行版，它解决了SciPy技术栈各个组件之间的兼容、以及管理工作。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/SciPy%20stack.png&quot; alt=&quot;SciPy stack&quot; title=&quot;SciPy stack&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;下面是SciPy生态圈中一些常用的包：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;NumPy&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;NumPy是Python科学计算中的一个比较基础的包，它主要有下面几项功能：&lt;/p&gt;
-
-&lt;p&gt;a.强大的矩阵计算能力&lt;/p&gt;
-
-&lt;p&gt;b.用于整合C/C++和Fortran代码的工具包&lt;/p&gt;
-
-&lt;p&gt;c.比较成熟的（广播）函数库&lt;/p&gt;
-
-&lt;p&gt;d.支持线性代数求解、傅里叶变换，以及随机数处理&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;SciPy library&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;SciPy是组成SciPy技术栈的核心包之一，它的相关API使用起来都比较友好，且执行效率高。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Matplotlib&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Matplotlib是一个基于Python的2D绘图库，能绘制出出版社级别的高质量图。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;IPython&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;一个功能强大的Python命令行，也是Jupyter的内核。
-关于Jupyter，被人们广为熟知的有Jupyter Notebook，之前的名字叫IPython Notebook，是一个交互式笔记本，可以运行几十种语言。在Jupyter Notebook中，代码可以实时的生成图像、视频等。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Sympy&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;基于Python的符号计算包。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;pandas&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;pandas提供一些高效、易用的数据结构，以及数据分析工具。&lt;/p&gt;
-
-&lt;h2 id=&quot;scipy&quot;&gt;1.SciPy技术栈的安装&lt;/h2&gt;
-
-&lt;p&gt;直接使用pip安装&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;numpyscipy&quot;&gt;2.NumPy&amp;amp;scipy测试&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import numpy as np
-&amp;gt;&amp;gt;&amp;gt; a = np.arange(15).reshape(3, 5)
-&amp;gt;&amp;gt;&amp;gt; a
-array([[ 0,  1,  2,  3,  4],
-       [ 5,  6,  7,  8,  9],
-       [10, 11, 12, 13, 14]])
-&amp;gt;&amp;gt;&amp;gt; a.shape
-(3, 5)
-&amp;gt;&amp;gt;&amp;gt; a.ndim
-2
-&amp;gt;&amp;gt;&amp;gt; a.dtype.name
-'int64'
-&amp;gt;&amp;gt;&amp;gt; a.itemsize
-8
-&amp;gt;&amp;gt;&amp;gt; a.size
-15
-&amp;gt;&amp;gt;&amp;gt; type(a)
-&amp;lt;type 'numpy.ndarray'&amp;gt;
-&amp;gt;&amp;gt;&amp;gt; b = np.array([6, 7, 8])
-&amp;gt;&amp;gt;&amp;gt; b
-array([6, 7, 8])
-&amp;gt;&amp;gt;&amp;gt; type(b)
-&amp;lt;type 'numpy.ndarray'&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python
-&amp;gt;&amp;gt;&amp;gt; import numpy as np
-&amp;gt;&amp;gt;&amp;gt; np.test('full')
-&amp;gt;&amp;gt;&amp;gt; import scipy
-&amp;gt;&amp;gt;&amp;gt; scipy.test()
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;matplotlib&quot;&gt;2.Matplotlib测试&lt;/h2&gt;
-
-&lt;p&gt;关于matplotlib的例子，在http://matplotlib.org/examples/index.html这里有很多，下面随机选了两个运行一下作为例子让大家看下。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;animate_decay&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python animate_decay.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/animate_decay.gif&quot; alt=&quot;animate_decay&quot; title=&quot;animate_decay&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;dynamic_image&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python dynamic_image.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/dynamic_image.gif&quot; alt=&quot;dynamic_image&quot; title=&quot;dynamic_image&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;ipython&quot;&gt;3.IPython&lt;/h2&gt;
-
-&lt;p&gt;直接使用命令ipython进入&lt;/p&gt;
-
-&lt;h2 id=&quot;scipy-1&quot;&gt;4.关于SciPy技术栈的发行版&lt;/h2&gt;
-
-&lt;p&gt;我们知道SciPy技术栈内有很多技术组件，那么不同的组件配合使用时，肯定会有兼容的问题。我们期望能有个工具，它可以帮助我们管理SciPy技术栈的各个组件，保证他们的兼容性，同事也方便我们安装管理。它就是&lt;code&gt;Anaconda&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;可以在这里选择自己的操作系统环境&lt;code&gt;https://www.continuum.io/downloads&lt;/code&gt;.
-笔者使用的是macOS，在安装了Anaconda之后，系统的Python环境都变为了Anaconda安装的python了：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;leocookMacBook-Pro:~ leocook$ which python
-/Users/wulin/anaconda/bin/python
-leocookMacBook-Pro:~ leocook$ whereis python
-/usr/bin/python
-leocookMacBook-Pro:~ leocook$ python
-Python 2.7.13 |Anaconda 4.3.1 (x86_64)| (default, Dec 20 2016, 23:05:08)
-[GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)] on darwin
-Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
-Anaconda is brought to you by Continuum Analytics.
-Please check out: http://continuum.io/thanks and https://anaconda.org
-&amp;gt;&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;可以使用Anaconda命令查看我们安装了SciPy技术栈中的哪些组件：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;leocookMacBook-Pro:~ leocook$ conda list
-# packages in environment at /Users/leocook/anaconda:
-#
-_license                  1.1                      py27_1
-alabaster                 0.7.9                    py27_0
-anaconda                  4.3.1               np111py27_0
-anaconda-client           1.6.0                    py27_0
-anaconda-navigator        1.5.0                    py27_0
-anaconda-project          0.4.1                    py27_0
-appdirs                   1.4.3                     &amp;lt;pip&amp;gt;
-appnope                   0.1.0                    py27_0
-appscript                 1.0.1                    py27_0
-argcomplete               1.0.0                    py27_1
-astroid                   1.4.9                    py27_0
-astropy                   1.3                 np111py27_0
-babel                     2.3.4                    py27_0
-backports                 1.0                      py27_0
-backports_abc             0.5                      py27_0
-beautifulsoup4            4.5.3                    py27_0
-bitarray                  0.8.1                    py27_0
-blaze                     0.10.1                   py27_0
-bokeh                     0.12.4                   py27_0
-boto                      2.45.0                   py27_0
-bottleneck                1.2.0               np111py27_0
-cdecimal                  2.3                      py27_2
-cffi                      1.9.1                    py27_0
-chardet                   2.3.0                    py27_0
-chest                     0.2.3                    py27_0
-click                     6.7                      py27_0
-cloudpickle               0.2.2                    py27_0
-clyent                    1.2.2                    py27_0
-colorama                  0.3.7                    py27_0
-conda                     4.3.17                   py27_0
-conda-env                 2.6.0                         0
-configobj                 5.0.6                    py27_0
-configparser              3.5.0                    py27_0
-contextlib2               0.5.4                    py27_0
-cryptography              1.7.1                    py27_0
-curl                      7.52.1                        0
-cycler                    0.10.0                   py27_0
-cython                    0.25.2                   py27_0
-cytoolz                   0.8.2                    py27_0
-dask                      0.13.0                   py27_0
-datashape                 0.5.4                    py27_0
-decorator                 4.0.11                   py27_0
-dill                      0.2.5                    py27_0
-docutils                  0.13.1                   py27_0
-entrypoints               0.2.2                    py27_0
-enum34                    1.1.6                    py27_0
-et_xmlfile                1.0.1                    py27_0
-fastcache                 1.0.2                    py27_1
-flask                     0.12                     py27_0
-flask-cors                3.0.2                    py27_0
-freetype                  2.5.5                         2
-funcsigs                  1.0.2                     &amp;lt;pip&amp;gt;
-funcsigs                  1.0.2                    py27_0
-functools32               3.2.3.2                  py27_0
-futures                   3.0.5                    py27_0
-get_terminal_size         1.0.0                    py27_0
-gevent                    1.2.1                    py27_0
-greenlet                  0.4.11                   py27_0
-grin                      1.2.1                    py27_3
-h5py                      2.6.0               np111py27_2
-hdf5                      1.8.17                        1
-heapdict                  1.0.0                    py27_1
-icu                       54.1                          0
-idna                      2.2                      py27_0
-imagesize                 0.7.1                    py27_0
-ipaddress                 1.0.18                   py27_0
-ipykernel                 4.5.2                    py27_0
-ipython                   5.1.0                    py27_1
-ipython_genutils          0.1.0                    py27_0
-ipywidgets                5.2.2                    py27_1
-isort                     4.2.5                    py27_0
-itsdangerous              0.24                     py27_0
-jbig                      2.1                           0
-jdcal                     1.3                      py27_0
-jedi                      0.9.0                    py27_1
-jinja2                    2.9.4                    py27_0
-jpeg                      9b                            0
-jsonschema                2.5.1                    py27_0
-jupyter                   1.0.0                    py27_3
-jupyter_client            4.4.0                    py27_0
-jupyter_console           5.0.0                    py27_0
-jupyter_core              4.2.1                    py27_0
-Keras                     2.0.4                     &amp;lt;pip&amp;gt;
-lazy-object-proxy         1.2.2                    py27_0
-libgpuarray               0.6.4                         0
-libiconv                  1.14                          0
-libpng                    1.6.27                        0
-libtiff                   4.0.6                         3
-libxml2                   2.9.4                         0
-libxslt                   1.1.29                        0
-llvmlite                  0.15.0                   py27_0
-locket                    0.2.0                    py27_1
-lxml                      3.7.2                    py27_0
-mako                      1.0.6                    py27_0
-markupsafe                0.23                     py27_2
-matplotlib                2.0.0               np111py27_0
-mistune                   0.7.3                    py27_1
-mkl                       2017.0.1                      0
-mkl-service               1.1.2                    py27_3
-mock                      2.0.0                     &amp;lt;pip&amp;gt;
-mpmath                    0.19                     py27_1
-multipledispatch          0.4.9                    py27_0
-nbconvert                 4.2.0                    py27_0
-nbformat                  4.2.0                    py27_0
-networkx                  1.11                     py27_0
-nltk                      3.2.2                    py27_0
-nose                      1.3.7                    py27_1
-notebook                  4.3.1                    py27_0
-numba                     0.30.1              np111py27_0
-numexpr                   2.6.1               np111py27_2
-numpy                     1.12.1                    &amp;lt;pip&amp;gt;
-numpy                     1.11.3                   py27_0
-numpydoc                  0.6.0                    py27_0
-odo                       0.5.0                    py27_1
-openpyxl                  2.4.1                    py27_0
-openssl                   1.0.2k                        1
-packaging                 16.8                      &amp;lt;pip&amp;gt;
-pandas                    0.19.2              np111py27_1
-partd                     0.3.7                    py27_0
-path.py                   10.0                     py27_0
-pathlib2                  2.2.0                    py27_0
-patsy                     0.4.1                    py27_0
-pbr                       3.0.0                     &amp;lt;pip&amp;gt;
-pep8                      1.7.0                    py27_0
-pexpect                   4.2.1                    py27_0
-pickleshare               0.7.4                    py27_0
-pillow                    4.0.0                    py27_0
-pip                       9.0.1                    py27_1
-ply                       3.9                      py27_0
-prompt_toolkit            1.0.9                    py27_0
-protobuf                  3.3.0                     &amp;lt;pip&amp;gt;
-psutil                    5.0.1                    py27_0
-ptyprocess                0.5.1                    py27_0
-py                        1.4.32                   py27_0
-pyasn1                    0.1.9                    py27_0
-pyaudio                   0.2.7                    py27_0
-pycosat                   0.6.1                    py27_1
-pycparser                 2.17                     py27_0
-pycrypto                  2.6.1                    py27_4
-pycurl                    7.43.0                   py27_2
-pyflakes                  1.5.0                    py27_0
-pygments                  2.1.3                    py27_0
-pygpu                     0.6.4                    py27_0
-pylint                    1.6.4                    py27_1
-pyopenssl                 16.2.0                   py27_0
-pyparsing                 2.2.0                     &amp;lt;pip&amp;gt;
-pyparsing                 2.1.4                    py27_0
-pyqt                      5.6.0                    py27_1
-pytables                  3.3.0               np111py27_0
-pytest                    3.0.5                    py27_0
-python                    2.7.13                        0
-python-dateutil           2.6.0                    py27_0
-python.app                1.2                      py27_4
-pytz                      2016.10                  py27_0
-pyyaml                    3.12                     py27_0
-pyzmq                     16.0.2                   py27_0
-qt                        5.6.2                         0
-qtawesome                 0.4.3                    py27_0
-qtconsole                 4.2.1                    py27_1
-qtpy                      1.2.1                    py27_0
-readline                  6.2                           2
-redis                     3.2.0                         0
-redis-py                  2.10.5                   py27_0
-requests                  2.12.4                   py27_0
-rope                      0.9.4                    py27_1
-ruamel_yaml               0.11.14                  py27_1
-scandir                   1.4                      py27_0
-scikit-image              0.12.3              np111py27_1
-scikit-learn              0.18.1              np111py27_1
-scipy                     0.18.1              np111py27_1
-seaborn                   0.7.1                    py27_0
-setuptools                27.2.0                   py27_0
-setuptools                35.0.2                    &amp;lt;pip&amp;gt;
-simplegeneric             0.8.1                    py27_1
-singledispatch            3.4.0.3                  py27_0
-sip                       4.18                     py27_0
-six                       1.10.0                   py27_0
-six                       1.10.0                    &amp;lt;pip&amp;gt;
-snowballstemmer           1.2.1                    py27_0
-sockjs-tornado            1.0.3                    py27_0
-sphinx                    1.5.1                    py27_0
-spyder                    3.1.2                    py27_0
-sqlalchemy                1.1.5                    py27_0
-sqlite                    3.13.0                        0
-ssl_match_hostname        3.4.0.2                  py27_1
-statsmodels               0.6.1               np111py27_1
-subprocess32              3.2.7                    py27_0
-sympy                     1.0                      py27_0
-tensorflow                1.1.0                     &amp;lt;pip&amp;gt;
-terminado                 0.6                      py27_0
-theano                    0.9.0                    py27_0
-tk                        8.5.18                        0
-toolz                     0.8.2                    py27_0
-tornado                   4.4.2                    py27_0
-traitlets                 4.3.1                    py27_0
-unicodecsv                0.14.1                   py27_0
-wcwidth                   0.1.7                    py27_0
-Werkzeug                  0.12.1                    &amp;lt;pip&amp;gt;
-werkzeug                  0.11.15                  py27_0
-wheel                     0.29.0                    &amp;lt;pip&amp;gt;
-wheel                     0.29.0                   py27_0
-widgetsnbextension        1.2.6                    py27_0
-wrapt                     1.10.8                   py27_0
-xlrd                      1.0.0                    py27_0
-xlsxwriter                0.9.6                    py27_0
-xlwings                   0.10.2                   py27_0
-xlwt                      1.2.0                    py27_0
-xz                        5.2.2                         1
-yaml                      0.1.6                         0
-zlib                      1.2.8                         3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;anaconda&quot;&gt;5.使用Anaconda管理软件包&lt;/h2&gt;
-
-&lt;h3 id=&quot;theano&quot;&gt;5.1. 安装Theano&lt;/h3&gt;
-
-&lt;p&gt;Theano是一个基于Python的深度学习库。默认Theano是没有被安装的，那么我们下面使用Anaconda来安装它。
-首先我们使用命令来查看一下Theano包的情况：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;leocookMacBook-Pro:~ leocook$ conda search theano
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然后得到：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-Fetching package metadata .........
-theano                       0.8.2                    py35_0  defaults
-                             0.8.2                    py34_0  defaults
-                             0.8.2                    py27_0  defaults
-                             0.9.0                    py35_0  defaults
-                             0.9.0                    py36_0  defaults
-                          *  0.9.0                    py27_0  defaults
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;我们可以看到有多个版面，然后我们直接运行下面的命令：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;conda install theano
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;它会选择和我们py版本兼容的最新版本&lt;code&gt;0.9.0                    py27_0&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;tensorflow&quot;&gt;5.2 安装Tensorflow&lt;/h3&gt;
-
-&lt;p&gt;Tensorflow是Google开源的一个人工智能学习系统。我们使用&lt;code&gt;conda search tensorflow&lt;/code&gt;命令查看发现Anaconda库中没有Tensorflow的包。&lt;/p&gt;
-
-&lt;p&gt;其实，我们也可以用Anaconda来管理那些使用其他方式安装的包，例如使用pip安装的包。下面简单说明一下使用Anaconda管理使用pip安装的Tensorflow。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;创建一个名称为tensorflow的conda环境&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;conda create -n tensorflow
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;激活conda环境&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source activate tensorflow
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;激活环境后，在这里执行命令安装的程序，都会被Anaconda管理。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用pip来安装TensorFlow&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在这里&lt;code&gt;https://www.tensorflow.org/install/install_mac#the_url_of_the_tensorflow_python_package&lt;/code&gt;找到对应版本的URL，也就是下面命令中将会使用到的&lt;code&gt;$TF_PYTHON_URL&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(tensorflow)$ pip install --ignore-installed --upgrade $TF_PYTHON_URL
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;例如笔者的是：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.1.0-py2-none-any.whl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;安装完成后，退出tensorflow这个Anaconda环境：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source deactivate tensorflow
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-</description>
-        <pubDate>Wed, 10 May 2017 00:00:00 +0800</pubDate>
-        <link>http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/</link>
-        <guid isPermaLink="true">http://leocook.github.io/2017/05/10/SciPy%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%88%9D%E6%8E%A2/</guid>
-        
-        <category>SciPy</category>
-        
-        <category>Anaconda</category>
-        
-        <category>NumPy</category>
-        
-        <category>Matplotlib</category>
-        
-        <category>IPython</category>
-        
-        <category>Sympy</category>
-        
-        <category>pandas</category>
-        
-        <category>Tensorflow</category>
-        
-        <category>Theano</category>
-        
-        
-        <category>python</category>
-        
-        <category>SciPy</category>
         
       </item>
     
