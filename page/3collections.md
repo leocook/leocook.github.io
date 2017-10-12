@@ -25,17 +25,24 @@ icon: bookmark
 
 ## 老博客
 
-* 博客园
-　http://www.cnblogs.com/leocook/
+* 博客园  
+  http://www.cnblogs.com/leocook/
 
 
 ## 喜欢的软件
 
-* Gitbook 
+* Gitbook  
   https://www.gitbook.com
   http://zhaoda.net/2015/11/09/gitbook-plugins/
 
+* readthedocs  
+  https://readthedocs.org
+  
+* insight io  
+  https://insight.io
 
 ## Comments
 
 {% include comments.html %}
+
+
