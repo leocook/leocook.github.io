@@ -5,8 +5,8 @@
     <description></description>
     <link>http://leocook.github.io/</link>
     <atom:link href="http://leocook.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Oct 2017 15:04:53 +0800</pubDate>
-    <lastBuildDate>Mon, 23 Oct 2017 15:04:53 +0800</lastBuildDate>
+    <pubDate>Fri, 27 Oct 2017 17:48:34 +0800</pubDate>
+    <lastBuildDate>Fri, 27 Oct 2017 17:48:34 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -2208,7 +2208,7 @@ private static final long parkBlockerOffset;
 
 &lt;p&gt;关键词：CAS、Unsafe&lt;/p&gt;
 
-&lt;p&gt;CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+&lt;p&gt;CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以&lt;a href=&quot;https://github.com/aeste/gcc/blob/master/libjava/sun/misc/natUnsafe.cc&quot;&gt;点击这里&lt;/a&gt;。&lt;br /&gt;
 Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。&lt;/p&gt;
 
 &lt;p&gt;在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：&lt;/p&gt;
@@ -2508,6 +2508,7 @@ Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数�
 
 &lt;h4 id=&quot;section&quot;&gt;总结&lt;/h4&gt;
 &lt;p&gt;学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。&lt;/p&gt;
+
 </description>
         <pubDate>Sat, 24 Jun 2017 00:00:00 +0800</pubDate>
         <link>http://leocook.github.io/2017/06/24/Java%E5%B9%B6%E5%8F%91(%E4%B8%89)-Unsafe%E5%92%8CCAS/</link>

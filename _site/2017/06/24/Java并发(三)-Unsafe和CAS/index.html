@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Java并发(三)：unsafe和cas</title>
-    <meta name="description" content="关键词：CAS、UnsafeCAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。在学习CAS、sun.misc....">
+    <meta name="description" content="关键词：CAS、UnsafeCAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以点击这里。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
@@ -228,7 +228,7 @@
 
 <p>关键词：CAS、Unsafe</p>
 
-<p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+<p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以<a href="https://github.com/aeste/gcc/blob/master/libjava/sun/misc/natUnsafe.cc">点击这里</a>。<br />
 Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。</p>
 
 <p>在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：</p>
@@ -528,6 +528,7 @@ Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们�
 
 <h4 id="section">总结</h4>
 <p>学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。</p>
+
 
         </article>
 

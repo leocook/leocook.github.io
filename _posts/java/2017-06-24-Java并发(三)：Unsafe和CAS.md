@@ -11,7 +11,7 @@ tags: CAS Unsafe
 
 关键词：CAS、Unsafe
 
-CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。
+CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以[点击这里](https://github.com/aeste/gcc/blob/master/libjava/sun/misc/natUnsafe.cc)。  
 Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。
 
 在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：
@@ -281,3 +281,4 @@ class BigByteArray {
 
 #### 总结
 学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。
+
