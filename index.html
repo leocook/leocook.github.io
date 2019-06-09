@@ -1556,141 +1556,6 @@
       
         
   <h2 class="title">
-    <a href="/2017/06/24/java-2017-07-01-CAP理论/">
-      CAP理论
-    </a>
-  </h2>
-
-
-      
-      <div class="new-meta-box">
-        
-          
-        
-          
-            
-  <div class="new-meta-item author">
-    <a href="http://www.leocook.org" rel="nofollow">
-      
-        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
-      
-      <p>leocook</p>
-    </a>
-  </div>
-
-
-          
-        
-          
-            <div class="new-meta-item date">
-  <a class="notlink">
-    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2017-06-24</p>
-  </a>
-</div>
-
-          
-        
-          
-            
-  
-  <div class="new-meta-item category">
-    <a href="/blog/categories/编程思想/" rel="nofollow">
-      <i class="fas fa-folder-open" aria-hidden="true"></i>
-      <p>编程思想</p>
-    </a>
-  </div>
-
-
-          
-        
-          
-            
-
-          
-        
-          
-            
-
-          
-        
-      </div>
-      
-        <hr>
-      
-    </div>
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      <p>关键词：CAP、可用性、分区容错性、强一致性、弱一致性、最终一致性</p>
-<p>CAP理论在互联网的知名度挺高，有些开发在设计分布式系统的时候甚至会把它作为衡量系统设计的标准。CAP理论指出任何分布式系统在可用性、一致性、分区容错性这3个点上最多只能同时满足2点。但事实上，CAP理论在被人称之为定理的同时，也伴随着很多争议。其实我个人并不觉得它是一个定理。</p>
-<h3 id="CAP理论的起源"><a href="#CAP理论的起源" class="headerlink" title="CAP理论的起源"></a>CAP理论的起源</h3><p>CAP理论起源于伯克莱加州大学的计算机科学家Eric Brewer在2000年的分布式计算原则研讨会（PODC）上提出的猜想：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）三者无法在分布式系统中同时满足。其实Eric Brewer教授当时的猜想是建立在webservice集群场景上的，并对CAP理论进行定义：</p>
-<ul>
-<li><p>C(一致性)<br>系统在执行过某项操作后，仍处于状态一致。</p>
-</li>
-<li><p>A(可用性)<br>分布式系统中的每个节点都能响应客户端的请求，数据可以不是最新的。</p>
-</li>
-<li><p>P(分区容错性)<br>当分布式系统遇到节点故障、网络分区故障的时候，仍然能够提供一致性和可用性保障。</p>
-</li>
-</ul>
-<p>单看上面的理论，很抽象。下面简单聊聊我对它的理解：</p>
-<ul>
-<li>C(一致性)<br>一致性可以从客户端和服务端两个角度来看。从服务端来说，一致性就是指在分布式系统中修改了某个值之后，该值在其它节点上的副本也能立马更新到最新的值，并且客户端写、各分区数据更新到最新这一系列的操作组合是原子的。从客户端来说，当修改了某条记录之后，后续的所有请求都能够返回到更新后的新数据。<br>为此又衍生出了三个概念：<ul>
-<li>强一致性<br>分布式系统中某个值发生了变化后，必须要保证节点的副本值同时更新到最新值。保证该值在更新后，后续所有访问都能访问到返回最新的值。</li>
-<li>弱一致性<br>分布式系统中某个值发生了变化后，不能保证部分和所有的数据的副本能立马被更新到最新状态。后续的访问可能部分请求不能返回最新的值，可能所有请求都不能返回最新的值，但经过“不一致时间窗口”这段时间后，所有数据的副本都更新到了最新状态，客户端后续的访问也都会返回最新的数值。</li>
-<li>最终一致性<br>最终一致性是弱一致性的特殊形式，系统保证数据在后续没有再次被更新的前提下，该数据的所有副本最终都将会变为最新的数据，且客户端对它后续的所有访问返回的都是最新的数据。</li>
-</ul>
-</li>
-<li><p>A(可用性)<br>这里的可用性指的不是分布式环境的可用性，这里的可以性是指分布式中单个节点可响应客户端的请求，响应返回的数据可以是最新状态，也可以不是最新状态，只要客户端的请求能被响应，就算该节点是可用的。</p>
-</li>
-<li><p>P(分区容错性)<br>当分布式系统遇到节点故障、网络分区故障的时候，分布式系统仍然能够给客户端提供服务。其实，就是客户端在请求到故障节点时，会跳过该节点，并继续请求其它正常的节点。</p>
-</li>
-</ul>
-<h4 id="CAP三选二"><a href="#CAP三选二" class="headerlink" title="CAP三选二"></a>CAP三选二</h4><ul>
-<li>CA without P（一致性、可用性）<br>如果同时满足了一致性和可用性，那么存在两种情况：第一种是单机环境，这样就可以保证C和A了；第二种是分布式环境，每次数据修改时都对分区中对这条数据的副本加锁，不给其它操作来修改它，当所有副本数据都是最新之后，再释放锁，但是这些设计出来的系统效率极为低下，甚至还不如单机环境。所以无法满足P。</li>
-<li>CP without A（一致性、分区容错性）<br>如果要保证在多个节点环境下，每个节点之间都是强一致的，那么肯定会导致分区之间存在同步时间，当并发高的时候，同步时间可能会延长很多，这样就不能保证每个节点的数据都是最新的了。但是可以通过P保证用户请求指向更新后的那些节点，以此来保障整个系统可以正常工作。</li>
-<li>AP without C（可用性、分区容错性）<br>如果保证了可用性、以及分区容错性，那就必须要放弃一致性，例如某个节点故障了，这时候该节点将会被划分到“故障分区”进行隔离，隔离后节点将接收不到请求，自然就失去了一致性。</li>
-</ul>
-<h3 id="CAP理论的确定"><a href="#CAP理论的确定" class="headerlink" title="CAP理论的确定"></a>CAP理论的确定</h3><p>2002年，麻省理工学院的Lynch和Gilbert证明了Eric Brewer对CAP的猜想，并发表了论文。从此CAP理论成为了定理。</p>
-<h3 id="对CAP理论的质疑"><a href="#对CAP理论的质疑" class="headerlink" title="对CAP理论的质疑"></a>对CAP理论的质疑</h3><p>其实初看CAP理论的人都会对此表示一头雾水，很难用一两句简洁的语言来把它描述清楚。业界对它的质疑还是比较多的，下面简单的列两个：</p>
-<ul>
-<li>质疑1<br>不适合用于数据库事务架构。</li>
-<li>质疑2<br>使用不可变模型来降低CAP的复杂性，传统的CURD变为CR，例如Hadoop中HDFS的设计，以及Hbase的WAL Log设计。</li>
-</ul>
-<p>还有其他质疑就不列举了。</p>
-<h3 id="作者的回应"><a href="#作者的回应" class="headerlink" title="作者的回应"></a>作者的回应</h3><p>作者的回应主要是明确、缩小CAP理论的使用场景，例如CAP理论只局限在原子读写的场景，并申明不支持数据库事务等的场景。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>个人觉得学习CAP理论，当做了解分布式中几个重要场景就可以了，例如：如何保障数据多副本同步问题；故障转移的实现等。<br>除此以外，在查看一些并发资料的时候，会经常遇到强一致性、弱一致性、最终一致性这些词，这些名词的意义，以及这几种一致性场景在不同技术中的设计思想，是需要我们去留意的。最后，相信技术但不迷信技术！</p>
-
-      
-    </div>
-    
-      <div class="full-width auto-padding tags">
-        
-          <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a>
-        
-      </div>
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class="post-wrapper">
-            <article class="post reveal ">
-  
-
-
-  <section class="meta">
-    
-    
-    <div class="meta" id="header-meta">
-      
-        
-  <h2 class="title">
     <a href="/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/">
       Java并发(三)：Unsafe和CAS
     </a>
@@ -1853,6 +1718,141 @@
       <div class="full-width auto-padding tags">
         
           <a href="/blog/tags/CAS-Unsafe/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>CAS Unsafe</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2017/06/24/java-2017-07-01-CAP理论/">
+      CAP理论
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://www.leocook.org" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-06-24</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/编程思想/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>编程思想</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>关键词：CAP、可用性、分区容错性、强一致性、弱一致性、最终一致性</p>
+<p>CAP理论在互联网的知名度挺高，有些开发在设计分布式系统的时候甚至会把它作为衡量系统设计的标准。CAP理论指出任何分布式系统在可用性、一致性、分区容错性这3个点上最多只能同时满足2点。但事实上，CAP理论在被人称之为定理的同时，也伴随着很多争议。其实我个人并不觉得它是一个定理。</p>
+<h3 id="CAP理论的起源"><a href="#CAP理论的起源" class="headerlink" title="CAP理论的起源"></a>CAP理论的起源</h3><p>CAP理论起源于伯克莱加州大学的计算机科学家Eric Brewer在2000年的分布式计算原则研讨会（PODC）上提出的猜想：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）三者无法在分布式系统中同时满足。其实Eric Brewer教授当时的猜想是建立在webservice集群场景上的，并对CAP理论进行定义：</p>
+<ul>
+<li><p>C(一致性)<br>系统在执行过某项操作后，仍处于状态一致。</p>
+</li>
+<li><p>A(可用性)<br>分布式系统中的每个节点都能响应客户端的请求，数据可以不是最新的。</p>
+</li>
+<li><p>P(分区容错性)<br>当分布式系统遇到节点故障、网络分区故障的时候，仍然能够提供一致性和可用性保障。</p>
+</li>
+</ul>
+<p>单看上面的理论，很抽象。下面简单聊聊我对它的理解：</p>
+<ul>
+<li>C(一致性)<br>一致性可以从客户端和服务端两个角度来看。从服务端来说，一致性就是指在分布式系统中修改了某个值之后，该值在其它节点上的副本也能立马更新到最新的值，并且客户端写、各分区数据更新到最新这一系列的操作组合是原子的。从客户端来说，当修改了某条记录之后，后续的所有请求都能够返回到更新后的新数据。<br>为此又衍生出了三个概念：<ul>
+<li>强一致性<br>分布式系统中某个值发生了变化后，必须要保证节点的副本值同时更新到最新值。保证该值在更新后，后续所有访问都能访问到返回最新的值。</li>
+<li>弱一致性<br>分布式系统中某个值发生了变化后，不能保证部分和所有的数据的副本能立马被更新到最新状态。后续的访问可能部分请求不能返回最新的值，可能所有请求都不能返回最新的值，但经过“不一致时间窗口”这段时间后，所有数据的副本都更新到了最新状态，客户端后续的访问也都会返回最新的数值。</li>
+<li>最终一致性<br>最终一致性是弱一致性的特殊形式，系统保证数据在后续没有再次被更新的前提下，该数据的所有副本最终都将会变为最新的数据，且客户端对它后续的所有访问返回的都是最新的数据。</li>
+</ul>
+</li>
+<li><p>A(可用性)<br>这里的可用性指的不是分布式环境的可用性，这里的可以性是指分布式中单个节点可响应客户端的请求，响应返回的数据可以是最新状态，也可以不是最新状态，只要客户端的请求能被响应，就算该节点是可用的。</p>
+</li>
+<li><p>P(分区容错性)<br>当分布式系统遇到节点故障、网络分区故障的时候，分布式系统仍然能够给客户端提供服务。其实，就是客户端在请求到故障节点时，会跳过该节点，并继续请求其它正常的节点。</p>
+</li>
+</ul>
+<h4 id="CAP三选二"><a href="#CAP三选二" class="headerlink" title="CAP三选二"></a>CAP三选二</h4><ul>
+<li>CA without P（一致性、可用性）<br>如果同时满足了一致性和可用性，那么存在两种情况：第一种是单机环境，这样就可以保证C和A了；第二种是分布式环境，每次数据修改时都对分区中对这条数据的副本加锁，不给其它操作来修改它，当所有副本数据都是最新之后，再释放锁，但是这些设计出来的系统效率极为低下，甚至还不如单机环境。所以无法满足P。</li>
+<li>CP without A（一致性、分区容错性）<br>如果要保证在多个节点环境下，每个节点之间都是强一致的，那么肯定会导致分区之间存在同步时间，当并发高的时候，同步时间可能会延长很多，这样就不能保证每个节点的数据都是最新的了。但是可以通过P保证用户请求指向更新后的那些节点，以此来保障整个系统可以正常工作。</li>
+<li>AP without C（可用性、分区容错性）<br>如果保证了可用性、以及分区容错性，那就必须要放弃一致性，例如某个节点故障了，这时候该节点将会被划分到“故障分区”进行隔离，隔离后节点将接收不到请求，自然就失去了一致性。</li>
+</ul>
+<h3 id="CAP理论的确定"><a href="#CAP理论的确定" class="headerlink" title="CAP理论的确定"></a>CAP理论的确定</h3><p>2002年，麻省理工学院的Lynch和Gilbert证明了Eric Brewer对CAP的猜想，并发表了论文。从此CAP理论成为了定理。</p>
+<h3 id="对CAP理论的质疑"><a href="#对CAP理论的质疑" class="headerlink" title="对CAP理论的质疑"></a>对CAP理论的质疑</h3><p>其实初看CAP理论的人都会对此表示一头雾水，很难用一两句简洁的语言来把它描述清楚。业界对它的质疑还是比较多的，下面简单的列两个：</p>
+<ul>
+<li>质疑1<br>不适合用于数据库事务架构。</li>
+<li>质疑2<br>使用不可变模型来降低CAP的复杂性，传统的CURD变为CR，例如Hadoop中HDFS的设计，以及Hbase的WAL Log设计。</li>
+</ul>
+<p>还有其他质疑就不列举了。</p>
+<h3 id="作者的回应"><a href="#作者的回应" class="headerlink" title="作者的回应"></a>作者的回应</h3><p>作者的回应主要是明确、缩小CAP理论的使用场景，例如CAP理论只局限在原子读写的场景，并申明不支持数据库事务等的场景。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>个人觉得学习CAP理论，当做了解分布式中几个重要场景就可以了，例如：如何保障数据多副本同步问题；故障转移的实现等。<br>除此以外，在查看一些并发资料的时候，会经常遇到强一致性、弱一致性、最终一致性这些词，这些名词的意义，以及这几种一致性场景在不同技术中的设计思想，是需要我们去留意的。最后，相信技术但不迷信技术！</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a>
         
       </div>
     
