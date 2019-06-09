@@ -398,7 +398,7 @@ sudo ./cloudera-manager-installer.bin --skip_repo_package=1
 
 - 看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。
 
-![CM JDK](http://7xriy2.com1.z0.glb.clouddn.com/cm-02.png "cm jdk")
+![CM JDK](http://leocook-blog.test.upcdn.net/cm-02.png "cm jdk")
 
 - 选择是否使用单用户模式（Single User Mode）
 
@@ -408,13 +408,13 @@ sudo ./cloudera-manager-installer.bin --skip_repo_package=1
 
 - 配置好SSH登录
 
-![配置ssh登录信息](http://7xriy2.com1.z0.glb.clouddn.com/cm-03.png "输入密码")
+![配置ssh登录信息](http://leocook-blog.test.upcdn.net/cm-03.png "输入密码")
 
 - 配置好SSH后开始连入主机，安装jdk和cm-agent
-![install cm agent](http://7xriy2.com1.z0.glb.clouddn.com/cm-04.png "install cm agent")
+![install cm agent](http://leocook-blog.test.upcdn.net/cm-04.png "install cm agent")
 
 - 安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。
-![cm agent ok](http://7xriy2.com1.z0.glb.clouddn.com/cm-05.png "cm agent ok")
+![cm agent ok](http://leocook-blog.test.upcdn.net/cm-05.png "cm agent ok")
 
 - 分发Hadoop的安装包
 
@@ -445,23 +445,23 @@ manifest.json
 ```
 
 然后在cm-serve点击进入下一页，将会看到如下图：
-![cm parcel distributed](http://7xriy2.com1.z0.glb.clouddn.com/cm-06.png "cm parcel distributed")
+![cm parcel distributed](http://leocook-blog.test.upcdn.net/cm-06.png "cm parcel distributed")
 因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的**Download**自然就是100%，**Distributed**是把安装包从cm-server往集群中各个节点分发的过程，**Unpacked**是表示各个节点的上安装包的解压情况进度，前面都OK后，**Activated**自然就可以了，表示安装包已经部署好了，可以随时进行安装。
 
 - 选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。
-![hosts choose](http://7xriy2.com1.z0.glb.clouddn.com/cm-07.png "hosts choose")
+![hosts choose](http://leocook-blog.test.upcdn.net/cm-07.png "hosts choose")
 
 - 这里配置的是一些组件使用的mysql信息：
-![hadoop mysql config](http://7xriy2.com1.z0.glb.clouddn.com/cm-08.png "hadoop mysql config")
+![hadoop mysql config](http://leocook-blog.test.upcdn.net/cm-08.png "hadoop mysql config")
 
 - 然后可以配置一些服务的的具体参数
-![hadoop config](http://7xriy2.com1.z0.glb.clouddn.com/cm-09.png "hadoop config")
+![hadoop config](http://leocook-blog.test.upcdn.net/cm-09.png "hadoop config")
 
 - 参数配置都没问题后，开始执行安装。
-![hadoop install](http://7xriy2.com1.z0.glb.clouddn.com/cm-10.png "hadoop install")
+![hadoop install](http://leocook-blog.test.upcdn.net/cm-10.png "hadoop install")
 
 - 安装完成后。
-![install success](http://7xriy2.com1.z0.glb.clouddn.com/cm-11.jpeg "install success")
+![install success](http://leocook-blog.test.upcdn.net/cm-11.jpeg "install success")
 PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。
 
 

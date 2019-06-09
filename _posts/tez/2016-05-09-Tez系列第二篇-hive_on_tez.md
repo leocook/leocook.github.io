@@ -238,7 +238,7 @@ Time taken: 22.211 seconds, Fetched: 1 row(s)
 hive> 
 ```
 如下图：
-![Hive on Tez](http://7xriy2.com1.z0.glb.clouddn.com/tez-ok.png "Hive on Tez")
+![Hive on Tez](http://leocook-blog.test.upcdn.net/tez-ok.png "Hive on Tez")
 
 到此，hive on tez，整合完毕！
 

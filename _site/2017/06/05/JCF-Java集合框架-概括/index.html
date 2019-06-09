@@ -265,7 +265,7 @@
 
 <p>在Java2.0之前，只有一些简单的集合，例如Vector/Stack/Hashtable，由于这些集合直接使用synchronized关键字来实现线程安全，使得这些集合在使用的时候效率极低。从Java2.0开始之后，Java提供了一系列的Java Collections Framework（JCF）。</p>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif" alt="JCF" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/JCF.gif" alt="JCF" /></p>
 
 <p>下面开始讲讲Java的集合框架（后面简称JCF）。JCF主要包括了两种类型的集合：<strong>Collection</strong>和<strong>Map</strong>。
 Collection集合中的每个节点存放的是一个元素。Map集合中的每个元素存放的是&lt;key,value&gt;型的键值对。</p>
@@ -315,7 +315,7 @@ void remove()：删除迭代器刚越过的元素
 
 <p>实现List接口的集合有着两大特性：允许元素重复、元素是有序的。实现了List接口的集合，可以通过位置来操作集合的元素。下图展示了List接口中的全部方法：</p>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/list.png" alt="List" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/list.png" alt="List" /></p>
 
 <p>下面是几个常用的List类型集合。</p>
 
@@ -402,7 +402,7 @@ void remove()：删除迭代器刚越过的元素
 <h3 id="queue">3.3.Queue</h3>
 
 <p>队列是一种FIFO（First in first out）数据结构，元素在Queue的末尾添加，在头部删除。
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/Queue.png" alt="Queue" />
+<img src="http://leocook-blog.test.upcdn.net/Queue.png" alt="Queue" />
 Queue接口分别定义了上面6个方法，分别有插入、移除和检查的功能，有的方法在某些特殊情况下回报错，有的则不会，具体见下表：</p>
 
 <table>
@@ -443,7 +443,7 @@ Queue接口分别定义了上面6个方法，分别有插入、移除和检查�
 <p>Map是存储键值对映射（key,value）的容器类，可以存储任意类型的对象。但是key不能重复，且一个key只能对应一个值。如果使用对象作为key,那么必须要考虑一下该对象类的hashCode方法和equals方法是否需要重写，因为map是用着两个方法来判断key是否相等的，其中hashCode是用来加速判断的，如果hashCode相等，还会用equals方法来判断。</p>
 
 <p>常用到的Map接口实现类，有三个：HashMap、LinkedHashMap、TreeMap。Map接口定义的方法列表可见下图：
-<img src="http://7xriy2.com1.z0.glb.clouddn.com/map.png" alt="Map" /></p>
+<img src="http://leocook-blog.test.upcdn.net/map.png" alt="Map" /></p>
 
 <h3 id="hashmap">4.1.HashMap</h3>
 
@@ -451,7 +451,7 @@ Queue接口分别定义了上面6个方法，分别有插入、移除和检查�
 
 <p>在Jdk1.8中，对HashMap做了优化，当链表的长度超过8时，链表结构将会变为了平衡树，这样做主要是为了在HashMap里的元素较多时，能够加快查找的速度。</p>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/map%20struct.png" alt="map结构" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/map%20struct.png" alt="map结构" /></p>
 
 <p>关于HashMap，其实有很多可以细聊的，它与很多集合都有着关系。后边会再来一篇，详细说一下Java中HashMap的设计，以及Java中散列存储的设计思想。</p>
 
@@ -498,13 +498,13 @@ http://www.cnblogs.com/CarpenterLee/p/5414253.html</p>
   <li>JCF接口架构</li>
 </ul>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif" alt="JCF接口架构" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/JCF.gif" alt="JCF接口架构" /></p>
 
 <ul>
   <li>常用的集合分类情况</li>
 </ul>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/jcf%E4%BD%BF%E7%94%A8.png" alt="常用的集合分类情况" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/jcf%E4%BD%BF%E7%94%A8.png" alt="常用的集合分类情况" /></p>
 
 <ul>
   <li>接口功能实现</li>
@@ -512,7 +512,7 @@ http://www.cnblogs.com/CarpenterLee/p/5414253.html</p>
 
 <p>下面表格描述的比较好，每个接口对应不同数据结构的实现。</p>
 
-<p><img src="http://7xriy2.com1.z0.glb.clouddn.com/jcf%20imp.png" alt="JCF 接口实现" /></p>
+<p><img src="http://leocook-blog.test.upcdn.net/jcf%20imp.png" alt="JCF 接口实现" /></p>
 
 <p>参考文档：
 http://docs.oracle.com/javase/6/docs/technotes/guides/collections/overview.html
@@ -682,11 +682,11 @@ http://www.jianshu.com/p/63e76826e852</p>
 
 
         <h2 id="comments">个人微信</h2>
-        <img src="http://7xriy2.com1.z0.glb.clouddn.com/leocook%20weixin2.jpg" /><br />请备注：博客
+        <img src="http://leocook-blog.test.upcdn.net/leocook%20weixin2.jpg" /><br />请备注：博客
         
         <!--
         <h2 id="comments">订阅号</h2>
-        <img src="http://7xriy2.com1.z0.glb.clouddn.com/leocook.jpg" /><br />
+        <img src="http://leocook-blog.test.upcdn.net/leocook.jpg" /><br />
         -->
 
         <hr>

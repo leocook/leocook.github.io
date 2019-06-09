@@ -741,7 +741,7 @@ ServletContext上添加属性值被修改时触发。&lt;/li&gt;
 
 &lt;p&gt;ConcurrentHashMap的类部结构大概如下图这样：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/ConcurrentHashMap.png&quot; alt=&quot;结构&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/ConcurrentHashMap.png&quot; alt=&quot;结构&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;默认情况下Segment数组的大小是16(DEFAULT_INITIAL_CAPACITY),Segment下的HashEntry数组的默认大小是2(MIN_SEGMENT_TABLE_CAPACITY)。&lt;/p&gt;
 
@@ -1663,13 +1663,13 @@ private final boolean compareAndSetHead(Node update) {
 &lt;/div&gt;
 
 &lt;p&gt;当队列不为空时，节点添加到队列前，队列状态如下图所示：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-notnull-before.png&quot; alt=&quot;queue-notnull-before&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/queue-notnull-before.png&quot; alt=&quot;queue-notnull-before&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;节点加入队列的过程如下图所示：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-notnull-after.png&quot; alt=&quot;queue-notnull-after&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/queue-notnull-after.png&quot; alt=&quot;queue-notnull-after&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当队列为空时，首次加入节点会进行一些初始化，具体的操作过程可以看下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/queue-null-init.png&quot; alt=&quot;queue-null-init&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/queue-null-init.png&quot; alt=&quot;queue-null-init&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;CLH lock queue出队&lt;/li&gt;
@@ -2553,7 +2553,7 @@ Java最大只能创建长度为&lt;code&gt;Integer.MAX_VALUE&lt;/code&gt;的数�
 
 &lt;p&gt;CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition1.png&quot; alt=&quot;CPU读取值的过程&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/volition1.png&quot; alt=&quot;CPU读取值的过程&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如果修改某个变量的值，大概会有下面几步操作：&lt;/p&gt;
 
@@ -2588,11 +2588,11 @@ j=i
 
 &lt;p&gt;在创建线程的时候，内存结构如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行&lt;code&gt;j=i&lt;/code&gt;的时候，给j赋的值是0，而不是1。
 很显然，在线程1修改了i的值之后，线程2并没有读到修改后的i值，可以理解i的读取操作不具备可见性。&lt;/p&gt;
@@ -2605,11 +2605,11 @@ j=i
 
 &lt;p&gt;第一步：线程1直接读取内存的i值&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;第二步：执行&lt;code&gt;i=i+1&lt;/code&gt;，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。&lt;/p&gt;
 
@@ -2642,7 +2642,7 @@ y = -1;       //语句5
   &lt;li&gt;
     &lt;p&gt;flag变量没有被volatile关键字修饰时 &lt;br /&gt;
 由于指令重排的原因，我们可以得到下面依赖关系：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition11.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/volition11.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
 我们可以看出：
 语句1执行完之后才可以执行语句4；
 语句2执行完之后才可以执行语句5；
@@ -2651,7 +2651,7 @@ y = -1;       //语句5
   &lt;li&gt;
     &lt;p&gt;flag变量被volatile关键字修饰后&lt;br /&gt;
 由于volatile禁用了指令重排，我们可以得到下面依赖关系：&lt;br /&gt;
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/volition12.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/volition12.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
 我们可以看出：
 语句1和语句2的顺序不一定；
 语句1和语句2都执行完之后执行语句3；
@@ -3045,7 +3045,7 @@ synchronized关键字是同时具备原子性、可见性和有序性；而volat
 &lt;p&gt;银行转账的操作就具备原子性，例如A向B转账1000元，其中包括了2个动作：A账户减去1000元，B账户加上1000元。很好理解，这个转账操作要么不执行，若执行必须保证这两个动作都成功才行。&lt;/p&gt;
 
 &lt;p&gt;编程时，假设Int类型是4字节(32位)，我们把一个Int类型的内存结构用下图展示：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%8E%9F%E5%AD%90%E6%80%A7.png&quot; alt=&quot;原子性&quot; /&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/%E5%8E%9F%E5%AD%90%E6%80%A7.png&quot; alt=&quot;原子性&quot; /&gt;
 当执行赋值语句&lt;code&gt;a = 128&lt;/code&gt;的时候，如果能保证要么不执行，要执行的话&lt;code&gt;1~8B&lt;/code&gt;、&lt;code&gt;9~16B&lt;/code&gt;、&lt;code&gt;17~24B&lt;/code&gt;、&lt;code&gt;26~32B&lt;/code&gt;这四个字节都成功写入，且不会被其它线程操作干扰，那么这个赋值操作就具备原子性。&lt;/p&gt;
 
 &lt;p&gt;在Java中，&lt;code&gt;基础数据类型&lt;/code&gt;的变量的&lt;code&gt;赋值&lt;/code&gt;和&lt;code&gt;读取&lt;/code&gt;是原子性的操作。例如下面代码：&lt;/p&gt;
@@ -3076,11 +3076,11 @@ j=i
 &lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;在创建线程的时候，内存结构如下：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%911.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%913.png&quot; alt=&quot;&quot; /&gt;
 由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行&lt;code&gt;j=i&lt;/code&gt;的时候，给j赋的值是0，而不是1。&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -3089,11 +3089,11 @@ j=i
 
 &lt;p&gt;第一步：线程1直接读取内存的i值&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/vvv1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;第二步：执行&lt;code&gt;i=i+1&lt;/code&gt;，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/vvv2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。&lt;/p&gt;
 
@@ -3243,7 +3243,7 @@ doSomethingwithconfig(context);
 
 &lt;p&gt;在Java2.0之前，只有一些简单的集合，例如Vector/Stack/Hashtable，由于这些集合直接使用synchronized关键字来实现线程安全，使得这些集合在使用的时候效率极低。从Java2.0开始之后，Java提供了一系列的Java Collections Framework（JCF）。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif&quot; alt=&quot;JCF&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/JCF.gif&quot; alt=&quot;JCF&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面开始讲讲Java的集合框架（后面简称JCF）。JCF主要包括了两种类型的集合：&lt;strong&gt;Collection&lt;/strong&gt;和&lt;strong&gt;Map&lt;/strong&gt;。
 Collection集合中的每个节点存放的是一个元素。Map集合中的每个元素存放的是&amp;lt;key,value&amp;gt;型的键值对。&lt;/p&gt;
@@ -3293,7 +3293,7 @@ void remove()：删除迭代器刚越过的元素
 
 &lt;p&gt;实现List接口的集合有着两大特性：允许元素重复、元素是有序的。实现了List接口的集合，可以通过位置来操作集合的元素。下图展示了List接口中的全部方法：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/list.png&quot; alt=&quot;List&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/list.png&quot; alt=&quot;List&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面是几个常用的List类型集合。&lt;/p&gt;
 
@@ -3380,7 +3380,7 @@ void remove()：删除迭代器刚越过的元素
 &lt;h3 id=&quot;queue&quot;&gt;3.3.Queue&lt;/h3&gt;
 
 &lt;p&gt;队列是一种FIFO（First in first out）数据结构，元素在Queue的末尾添加，在头部删除。
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/Queue.png&quot; alt=&quot;Queue&quot; /&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/Queue.png&quot; alt=&quot;Queue&quot; /&gt;
 Queue接口分别定义了上面6个方法，分别有插入、移除和检查的功能，有的方法在某些特殊情况下回报错，有的则不会，具体见下表：&lt;/p&gt;
 
 &lt;table&gt;
@@ -3421,7 +3421,7 @@ Queue接口分别定义了上面6个方法，分别有插入、移除和检查�
 &lt;p&gt;Map是存储键值对映射（key,value）的容器类，可以存储任意类型的对象。但是key不能重复，且一个key只能对应一个值。如果使用对象作为key,那么必须要考虑一下该对象类的hashCode方法和equals方法是否需要重写，因为map是用着两个方法来判断key是否相等的，其中hashCode是用来加速判断的，如果hashCode相等，还会用equals方法来判断。&lt;/p&gt;
 
 &lt;p&gt;常用到的Map接口实现类，有三个：HashMap、LinkedHashMap、TreeMap。Map接口定义的方法列表可见下图：
-&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/map.png&quot; alt=&quot;Map&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://leocook-blog.test.upcdn.net/map.png&quot; alt=&quot;Map&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;hashmap&quot;&gt;4.1.HashMap&lt;/h3&gt;
 
@@ -3429,7 +3429,7 @@ Queue接口分别定义了上面6个方法，分别有插入、移除和检查�
 
 &lt;p&gt;在Jdk1.8中，对HashMap做了优化，当链表的长度超过8时，链表结构将会变为了平衡树，这样做主要是为了在HashMap里的元素较多时，能够加快查找的速度。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/map%20struct.png&quot; alt=&quot;map结构&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/map%20struct.png&quot; alt=&quot;map结构&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;关于HashMap，其实有很多可以细聊的，它与很多集合都有着关系。后边会再来一篇，详细说一下Java中HashMap的设计，以及Java中散列存储的设计思想。&lt;/p&gt;
 
@@ -3476,13 +3476,13 @@ http://www.cnblogs.com/CarpenterLee/p/5414253.html&lt;/p&gt;
   &lt;li&gt;JCF接口架构&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/JCF.gif&quot; alt=&quot;JCF接口架构&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/JCF.gif&quot; alt=&quot;JCF接口架构&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;常用的集合分类情况&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/jcf%E4%BD%BF%E7%94%A8.png&quot; alt=&quot;常用的集合分类情况&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/jcf%E4%BD%BF%E7%94%A8.png&quot; alt=&quot;常用的集合分类情况&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;接口功能实现&lt;/li&gt;
@@ -3490,7 +3490,7 @@ http://www.cnblogs.com/CarpenterLee/p/5414253.html&lt;/p&gt;
 
 &lt;p&gt;下面表格描述的比较好，每个接口对应不同数据结构的实现。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://7xriy2.com1.z0.glb.clouddn.com/jcf%20imp.png&quot; alt=&quot;JCF 接口实现&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://leocook-blog.test.upcdn.net/jcf%20imp.png&quot; alt=&quot;JCF 接口实现&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;参考文档：
 http://docs.oracle.com/javase/6/docs/technotes/guides/collections/overview.html

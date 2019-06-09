@@ -23,7 +23,7 @@ icon: heart
 * GitHub：[leocook](https://github.com/leocook)
 * 微信公众号: 
 
-![公众号](http://7xriy2.com1.z0.glb.clouddn.com/leocook.jpg)
+![公众号](http://leocook-blog.test.upcdn.net/leocook.jpg)
 
 
 ## 收藏的blog
@@ -34,3 +34,7 @@ icon: heart
 ## Comments
 
 {% include comments.html %}
+
+
+
+

@@ -47,7 +47,7 @@ b). 减少单个任务的资源占用，提高集群的并行度。
 感谢运维同学的帮助！
 
 ## 2.2.根据集群资源，分组的大概情况如截图：
-![服务器分组情况](http://7xriy2.com1.z0.glb.clouddn.com/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png "根据机器硬件资源情况，服务器分组情况" )
+![服务器分组情况](http://leocook-blog.test.upcdn.net/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png "根据机器硬件资源情况，服务器分组情况" )
 分组命名规则：
 ***NM***: NodeManager；    
 ***G01***: Group01；    
@@ -87,9 +87,9 @@ map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70
 到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。
 ## 4.2.mysql表现情况
 优化前的负载情况入下图：
-![优化前](http://7xriy2.com1.z0.glb.clouddn.com/mysql_befor.png "优化前负载情况")
+![优化前](http://leocook-blog.test.upcdn.net/mysql_befor.png "优化前负载情况")
 优化后的负载情况入下图：
-![优化后](http://7xriy2.com1.z0.glb.clouddn.com/mysql.png "优化后负载情况")
+![优化后](http://leocook-blog.test.upcdn.net/mysql.png "优化后负载情况")
 
 >后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。
 

@@ -24,7 +24,7 @@ tags: volatile happen-before 内存屏障
 
 CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：
 
-![CPU读取值的过程](http://7xriy2.com1.z0.glb.clouddn.com/volition1.png)
+![CPU读取值的过程](http://leocook-blog.test.upcdn.net/volition1.png)
 
 如果修改某个变量的值，大概会有下面几步操作：
 
@@ -55,11 +55,11 @@ j=i
 
 在创建线程的时候，内存结构如下：
 
-![](http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%911.png)
+![](http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%911.png)
 
 当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：
 
-![](http://7xriy2.com1.z0.glb.clouddn.com/%E5%B9%B6%E5%8F%913.png)
+![](http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%913.png)
 
 由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行<code>j=i</code>的时候，给j赋的值是0，而不是1。
 很显然，在线程1修改了i的值之后，线程2并没有读到修改后的i值，可以理解i的读取操作不具备可见性。
@@ -70,12 +70,12 @@ j=i
 
 第一步：线程1直接读取内存的i值
 
-![](http://7xriy2.com1.z0.glb.clouddn.com/vvv1.png)
+![](http://leocook-blog.test.upcdn.net/vvv1.png)
 
 
 第二步：执行<code>i=i+1</code>，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存
 
-![](http://7xriy2.com1.z0.glb.clouddn.com/vvv2.png)
+![](http://leocook-blog.test.upcdn.net/vvv2.png)
 
 这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。
 
@@ -105,7 +105,7 @@ y = -1;       //语句5
 
 - flag变量没有被volatile关键字修饰时   
 由于指令重排的原因，我们可以得到下面依赖关系：
-![](http://7xriy2.com1.z0.glb.clouddn.com/volition11.png)  
+![](http://leocook-blog.test.upcdn.net/volition11.png)  
 我们可以看出：
 语句1执行完之后才可以执行语句4；
 语句2执行完之后才可以执行语句5；
@@ -113,7 +113,7 @@ y = -1;       //语句5
 
 - flag变量被volatile关键字修饰后  
 由于volatile禁用了指令重排，我们可以得到下面依赖关系：  
-![](http://7xriy2.com1.z0.glb.clouddn.com/volition12.png)  
+![](http://leocook-blog.test.upcdn.net/volition12.png)  
 我们可以看出：
 语句1和语句2的顺序不一定；
 语句1和语句2都执行完之后执行语句3；
