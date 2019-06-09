@@ -326,58 +326,13 @@
       <p>关键词：LockSupport</p>
 <p>前面我们讨论了<code>sun.misc.Unsafe</code>类，该类提供了面向操作系统直接操作内存和CPU的方法，例如分配内心和阻塞线程等等。但是该类在使用时是不安全的，所以jdk在不同的场景下对它做了不同的包装。</p>
 <p><code>java.util.concurrent.locks.LockSupport</code>类就是对<code>sun.misc.Unsafe</code>类进行了一些封装，主要提供一些锁的基础操作。</p>
-<p>LockSupport阻塞线程的机制与<code>Object</code>的wait和notify是不一样的：</p>
-<ul>
-<li>调用API层面的区别<br><code>LockSupport</code>的park和unpark可以用“线程”作为该方法的参数，语义更合乎逻辑。<br><code>Object</code>的wait和notify是由<code>监视器对象</code>来调用的，对线程来说，它的阻塞和唤醒是被动的，不能准确的控制某个指定的线程，要么随机唤醒（notify）、要么唤醒全部（notifyAll）。</li>
-<li>实现原理的区别<br><code>Object</code>的wait和notify以及<code>synchronized</code>都是通过占用和释放该<code>对象的监视器</code>来实现锁的获取和释放。<br><code>LockSupport</code>不使用对象的监视器，每次执行<code>park</code>时会消耗1个<code>许可</code>，每次执行<code>unpark</code>时会获得1个<code>许可</code>。</li>
-</ul>
-<blockquote>
-<p>如果查看Unsafe的C++<a href="http://hg.openjdk.java.net/jdk7/jdk7/hotspot/file/81d815b05abb/src/os/linux/vm/os_linux.cpp" target="_blank" rel="noopener">源码</a>会发现，这个<code>许可</code>，其实就是一个<code>_counter</code>变量。<br>当执行<code>park</code>的时候，若<code>_counter</code>值大于0则立马返回并把<code>_counter</code>的值设置为0，线程不会阻塞；若<code>_counter</code>值等于0，则阻塞当前线程。可以理解这个过程将会消耗一个许可，若没有许可被消耗，则阻塞。<br>当执行<code>unpark</code>的时候，将会把<code>_counter</code>的值设置为1。可以理解这个过程是是给线程添加一个许可，且多次调用也只会添加一个许可。<br><code>_counter</code>为1的时候表示许可可用，为0的时候表示许可不可用。如果能够很好的理解这个“许可”的设计，在查看LockSupport类源码的时候，将会轻松很多。</p>
-</blockquote>
-<h4 id="LockSupport类的核心字段"><a href="#LockSupport类的核心字段" class="headerlink" title="LockSupport类的核心字段"></a>LockSupport类的核心字段</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//unsafe，用于CAS操作</span><br><span class="line">private static final Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line"></span><br><span class="line">//Thread中parkBlocker的内存偏移量</span><br><span class="line">private static final long parkBlockerOffset;</span><br></pre></td></tr></table></figure>
-<p>在<code>java.lang.Thread</code>类中有个字段<code>parkBlocker</code>用来存放该线程阻塞时是被哪个对象阻塞的。</p>
-<h4 id="LockSupport类的核心方法"><a href="#LockSupport类的核心方法" class="headerlink" title="LockSupport类的核心方法"></a>LockSupport类的核心方法</h4><ul>
-<li><p>public static void park()<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程。</p>
-</li>
-<li><p>public static void park(Object blocker)<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程，并告诉线程是谁阻塞了它。</p>
-</li>
-<li><p>public static void parkNanos(long nanos)<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒。</p>
-</li>
-<li><p>public static void parkNanos(Object blocker, long nanos)<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程nanos纳秒，并告诉线程是谁阻塞了它。</p>
-</li>
-<li><p>public static void parkUntil(long deadline)<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline。与parkNanos相比，这里的时间是绝对时间戳。</p>
-</li>
-<li><p>public static void parkUntil(Object blocker, long deadline)<br>如果许可可用，则使用该许可，并立刻返回；否则阻塞当前线程直到时间deadline，并告诉线程是谁阻塞了它。</p>
-</li>
-<li><p>public static void unpark(Thread thread)<br>若许可不可用，则使许可可用。若线程因为调用了park而阻塞，则它将解除阻塞状态。否则保证下一次调用park不会受阻。</p>
-</li>
-<li><p>private static void setBlocker(Thread t, Object arg)<br>给线程t设置阻塞对象，告诉t是谁阻塞了它。</p>
-</li>
-<li><p>public static Object getBlocker(Thread t)<br>获取是谁阻塞了线程t</p>
-</li>
-</ul>
-<h4 id="Thread-interrupt-方法"><a href="#Thread-interrupt-方法" class="headerlink" title="Thread.interrupt()方法"></a>Thread.interrupt()方法</h4><p>Thread.interrupt()方法不会中断一个正在运行的线程。当线程被Object.wait、Thread.join和Thread.sleep三种方法阻塞时，若调用了Thread.interrupt()方法，线程将退出阻塞状态，并会抛出一个<code>InterruptedException</code>中断异常。</p>
-<blockquote>
-<p><code>LockSupport.park()</code>也能够响应中断信号，但是它不会抛出<code>InterruptedException</code>中断异常。</p>
-</blockquote>
-<ul>
-<li>Thread.interrupted() &amp; Thread.isInterrupted()方法<br>测试线程是否已经中断。前者是静态方法，后者不是。当我们需要停止一个线程的时候，一般有两种方式：<ul>
-<li>通过共享变量；</li>
-<li>通过调用线程的<code>interrupt</code>方法。</li>
-</ul>
-</li>
-</ul>
-<p>前者在线程阻塞的时候不能够被中断，只有当线程执行的时候才可以;而后者只能在线程处于阻塞的时候才能够被中断，线程执行时不可以中断。</p>
-<ul>
-<li>interrupted status<br><code>interrupted status</code>是线程的中断状态，被JVM的C++代码维护着。<ul>
-<li>在调用Thread.join和Thread.sleep之后，将会设置interrupted status；</li>
-<li>当退出阻塞、抛出<code>InterruptedException</code>异常的时候，interrupted status将会被清除；</li>
-<li>调用<code>public static boolean interrupted()</code>方法后，会清除interrupted status</li>
-</ul>
-</li>
-</ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>java.util.concurrent.locks.LockSupport</code>类是对<code>sun.misc.Unsafe</code>类的二次封装，主要提供了一些线程阻塞的工具。<br>该类在AQS中被大量的运用，在阅读AQS的源码时，需要对该类有所了解。</p>
-
+      
+        <div class="readmore">
+          <a href="/2017/07/08/java-2017-07-08-Java并发-四-：LockSupport/" class="flat-box">
+            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+            阅读全文
+          </a>
+        </div>
       
     </div>
     

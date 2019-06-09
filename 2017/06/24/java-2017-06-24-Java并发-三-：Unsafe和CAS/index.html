@@ -332,6 +332,7 @@
 <li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
 <li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
 </ul>
+<a id="more"></a>
 <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS是<code>Compare and Swap</code>的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。<br>维基百科对CAS的解释可以看这里：<a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2" target="_blank" rel="noopener">CAS比较并交换</a></p>
 <p>Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。</p>
 <h4 id="CAS原理"><a href="#CAS原理" class="headerlink" title="CAS原理"></a>CAS原理</h4><p>CAS有三个操作数：内存位置V，预期值A和新值B（将要被修改成的值）。<br>在修改值的时候，若内存位置V存的值和预期值A相等，那么就把内存位置的V的值修改为B，返回true；否则，什么都不做，并返回false。<br>在Java的实现中，V可以是一个存储A地址的long整数，A是一个使用了volatile修饰的基础数据类型或者对象，B的类型和A的类型一致。</p>
@@ -423,7 +424,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:39:04+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:36:19+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -446,7 +447,13 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：CAS、Unsafe
+CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以点击这里。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。
+在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：
+
+Java并发：原子性、可见性、有序性
+Java并发：volatile关键字
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -454,7 +461,13 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：CAS、Unsafe
+CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以点击这里。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。
+在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：
+
+Java并发：原子性、可见性、有序性
+Java并发：volatile关键字
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -462,7 +475,13 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/&title=Java并发(三)：Unsafe和CAS | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：CAS、Unsafe
+CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以点击这里。Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。
+在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：
+
+Java并发：原子性、可见性、有序性
+Java并发：volatile关键字
+">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           
@@ -488,16 +507,16 @@
                         <span class="art-item-left">
                             <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                             <h4>
-                                <a href="/2017/07/08/java-2017-07-08-Java并发-四-：LockSupport/" rel="prev" title="Java并发(四)：LockSupport">
+                                <a href="/2017/06/24/java-2017-07-01-CAP理论/" rel="prev" title="CAP理论">
                                   
-                                      Java并发(四)：LockSupport
+                                      CAP理论
                                   
                                 </a>
                             </h4>
                             
                                 
                                 <h6 class="tags">
-                                    <a class="tag" href="/blog/tags/LockSupport/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>LockSupport</a>
+                                    <a class="tag" href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a>
                                 </h6>
                             
                         </span>
@@ -508,16 +527,16 @@
                         <span class="art-item-right" aria-hidden="true">
                             <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
                             <h4>
-                                <a href="/2017/06/24/java-2017-07-01-CAP理论/" rel="prev" title="CAP理论">
+                                <a href="/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/" rel="prev" title="Java并发(二)：volatile关键字">
                                     
-                                        CAP理论
+                                        Java并发(二)：volatile关键字
                                     
                                 </a>
                             </h4>
                             
                                 
                                 <h6 class="tags">
-                                    <a class="tag" href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a>
+                                    <a class="tag" href="/blog/tags/volatile-happen-before-内存屏障/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>volatile happen-before 内存屏障</a>
                                 </h6>
                             
                         </span>

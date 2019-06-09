@@ -326,6 +326,7 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           <p>这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。</p>
+<a id="more"></a>
 <h2 id="1-应用程序角度进行优化"><a href="#1-应用程序角度进行优化" class="headerlink" title="1.应用程序角度进行优化"></a>1.应用程序角度进行优化</h2><h3 id="1-1-减少不必要的reduce任务"><a href="#1-1-减少不必要的reduce任务" class="headerlink" title="1.1.减少不必要的reduce任务"></a>1.1.减少不必要的reduce任务</h3><p>若对于同一份数据需要多次处理，可以尝试先排序、分区，然后自定义InputSplit将某一个分区作为一个Map的输入，在Map中处理数据，将Reduce的个数设置为空。</p>
 <h3 id="1-2-外部文件引用"><a href="#1-2-外部文件引用" class="headerlink" title="1.2.外部文件引用"></a>1.2.外部文件引用</h3><p>如字典、配置文件等需要在Task之间共享的数据，可使用分布式缓存DistributedCache或者使用-files</p>
 <h3 id="1-3-使用Combiner"><a href="#1-3-使用Combiner" class="headerlink" title="1.3.使用Combiner"></a>1.3.使用Combiner</h3><p>combiner是发生在map端的，作用是归并Map端输出的文件，这样Map端输出的数据量就小了，减少了Map端和reduce端间的数据传输。需要注意的是，Combiner不能影响作业的结果;不是每个MR都可以使用Combiner的，需要根据具体业务来定;Combiner是发生在Map端的，不能垮Map来执行（只有Reduce可以接收多个Map任务的输出数据）</p>
@@ -424,7 +425,7 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:38:45+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:35:54+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -447,7 +448,7 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -455,7 +456,7 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -463,7 +464,7 @@ mapred.tasktracker.shuffle.readahead.bytes : 4MB
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2015/02/23/hadoop-2016-02-23-hadoop优化-概述/&title=hadoop优化-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=这篇文章是我开始涉及做集群相关优化时的第一篇笔记，内容比较浅显易懂，适合想了解集群优化的朋友阅读。">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           

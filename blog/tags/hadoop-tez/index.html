@@ -325,29 +325,13 @@
     <div class="article-entry" itemprop="articleBody">
       <p>本文主要围绕着这么几个问题来展开：Tez是什么？为什么要有Tez？Tez能解决什么问题？</p>
 <h2 id="1-Tez是什么"><a href="#1-Tez是什么" class="headerlink" title="1.Tez是什么"></a>1.Tez是什么</h2><h3 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1.介绍"></a>1.1.介绍</h3><p>Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：<a href="http://tez.apache.org/" target="_blank" rel="noopener">http://tez.apache.org/</a></p>
-<h3 id="1-2-两大优势"><a href="#1-2-两大优势" class="headerlink" title="1.2.两大优势"></a>1.2.两大优势</h3><p><strong>用户体验</strong>    </p>
-<ul>
-<li>使用API来自定义数据流    </li>
-<li>灵活的Input-Processor-Output运行模式    </li>
-<li>与计算的数据类型无关    </li>
-<li>简单的部署流程    </li>
-</ul>
-<p><strong>计算性能</strong>    </p>
-<ul>
-<li>性能高于MapReduce    </li>
-<li>资源管理更加优化    </li>
-<li>运行时配置预加载    </li>
-<li>物理数据流动态运行    </li>
-</ul>
-<p><strong>举例</strong><br>下图是一个基于MR的Hive/Pig的DAG数据流处理过程:<br><img src="http://leocook-blog.test.upcdn.net/tez01-PigHiveQueryOnMR.png" alt="Hive/Pig" title="Hive/Pig的DAG"></p>
-<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:<br><img src="http://leocook-blog.test.upcdn.net/tez02-PigHiveQueryOnTez.png" alt="Hive/Pig" title="Hive/Pig的DAG"></p>
-<h2 id="2-为什么要有Tez"><a href="#2-为什么要有Tez" class="headerlink" title="2.为什么要有Tez"></a>2.为什么要有Tez</h2><h3 id="2-1-YARN的AM"><a href="#2-1-YARN的AM" class="headerlink" title="2.1.YARN的AM"></a>2.1.YARN的AM</h3><p>YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。</p>
-<h3 id="2-2-YARN的资源无法重用"><a href="#2-2-YARN的资源无法重用" class="headerlink" title="2.2.YARN的资源无法重用"></a>2.2.YARN的资源无法重用</h3><p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。<br>但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。</p>
-<h3 id="2-3-YARN的DAG中间计算结果读写效率低下"><a href="#2-3-YARN的DAG中间计算结果读写效率低下" class="headerlink" title="2.3.YARN的DAG中间计算结果读写效率低下"></a>2.3.YARN的DAG中间计算结果读写效率低下</h3><p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。<br>如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。</p>
-<h2 id="3-Tez能解决什么问题"><a href="#3-Tez能解决什么问题" class="headerlink" title="3.Tez能解决什么问题"></a>3.Tez能解决什么问题</h2><h3 id="3-1-使用AM缓冲池实现AM的复用，AMPoolServer"><a href="#3-1-使用AM缓冲池实现AM的复用，AMPoolServer" class="headerlink" title="3.1.使用AM缓冲池实现AM的复用，AMPoolServer"></a>3.1.使用AM缓冲池实现AM的复用，AMPoolServer</h3><p>使用Tez后，yarn的作业不是先提交给RM了，而是提交给AMPS。AMPS在启动后，会预先创建若干个AM，作为AM资源池，当作业被提交到AMPS的时候，AMPS会把该作业直接提交到AM上，这样就避免每个作业都创建独立的AM，大大的提高了效率。</p>
-<h3 id="3-2-Container预启动"><a href="#3-2-Container预启动" class="headerlink" title="3.2.Container预启动"></a>3.2.Container预启动</h3><p>AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。</p>
-<h3 id="3-3-Container重用"><a href="#3-3-Container重用" class="headerlink" title="3.3.Container重用"></a>3.3.Container重用</h3><p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。<br>看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。</p>
-
+      
+        <div class="readmore">
+          <a href="/2016/04/01/tez-2016-04-01-Tez系列第一篇-基础常识/" class="flat-box">
+            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+            阅读全文
+          </a>
+        </div>
       
     </div>
     

@@ -327,6 +327,7 @@
         <div class="article-entry" itemprop="articleBody">
           <p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
 <p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
+<a id="more"></a>
 <h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>如果某个操作是原子的，那么该操作要么不执行，若执行的话就一定会成功。可以理解该操作在执行期间不会被其它因素中断，若是被一些不可控的元素破坏，该操作也不会产生副作用。</p>
 <p>银行转账的操作就具备原子性，例如A向B转账1000元，其中包括了2个动作：A账户减去1000元，B账户加上1000元。很好理解，这个转账操作要么不执行，若执行必须保证这两个动作都成功才行。</p>
 <p>编程时，假设Int类型是4字节(32位)，我们把一个Int类型的内存结构用下图展示：<br><img src="http://leocook-blog.test.upcdn.net/%E5%8E%9F%E5%AD%90%E6%80%A7.png" alt="原子性"><br>当执行赋值语句<code>a = 128</code>的时候，如果能保证要么不执行，要执行的话<code>1~8B</code>、<code>9~16B</code>、<code>17~24B</code>、<code>26~32B</code>这四个字节都成功写入，且不会被其它线程操作干扰，那么这个赋值操作就具备原子性。</p>
@@ -380,7 +381,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:38:53+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:36:03+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -403,7 +404,8 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：原子性、可见性、有序性、volatile、happen-before
+并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：Java并发：volatile关键字">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -411,7 +413,8 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：原子性、可见性、有序性、volatile、happen-before
+并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：Java并发：volatile关键字">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -419,7 +422,8 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/&title=Java并发(一)：原子性、可见性、有序性 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=关键词：原子性、可见性、有序性、volatile、happen-before
+并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：Java并发：volatile关键字">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           

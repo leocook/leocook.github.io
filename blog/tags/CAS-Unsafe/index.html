@@ -330,87 +330,13 @@
 <li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
 <li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
 </ul>
-<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS是<code>Compare and Swap</code>的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。<br>维基百科对CAS的解释可以看这里：<a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2" target="_blank" rel="noopener">CAS比较并交换</a></p>
-<p>Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。</p>
-<h4 id="CAS原理"><a href="#CAS原理" class="headerlink" title="CAS原理"></a>CAS原理</h4><p>CAS有三个操作数：内存位置V，预期值A和新值B（将要被修改成的值）。<br>在修改值的时候，若内存位置V存的值和预期值A相等，那么就把内存位置的V的值修改为B，返回true；否则，什么都不做，并返回false。<br>在Java的实现中，V可以是一个存储A地址的long整数，A是一个使用了volatile修饰的基础数据类型或者对象，B的类型和A的类型一致。</p>
-<h4 id="AtomicInteger示例"><a href="#AtomicInteger示例" class="headerlink" title="AtomicInteger示例"></a>AtomicInteger示例</h4><p>java.util.concurrent.atomicAtomicInteger是Jdk提供的一个类，如果你需要一个读写有原子性的整数类型，使用它就对了！<br>我们可以趴一下AtomicInteger的源码，可以观察到下面这个方法:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 在当前值上原子性的自增1</span><br><span class="line"> */</span><br><span class="line">public final int getAndIncrement() &#123;</span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        int current = get();</span><br><span class="line">        int next = current + 1;</span><br><span class="line">        if (compareAndSet(current, next))</span><br><span class="line">            return current;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public final boolean compareAndSet(int expect, int update) &#123;</span><br><span class="line">    return unsafe.compareAndSwapInt(this, valueOffset, expect, update);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们能够看到，为了保证操作的原子性，调用了<code>compareAndSet</code>方法，而<code>compareAndSet</code>方法又调用了Unsafe的<code>compareAndSwapInt</code>方法。</p>
-<h4 id="CAS的ABA问题"><a href="#CAS的ABA问题" class="headerlink" title="CAS的ABA问题"></a>CAS的ABA问题</h4><p>维基百科上的说明是如下：</p>
-<ul>
-<li>1.进程P1读取了一个数值A</li>
-<li>2.P1被挂起(时间片耗尽、中断等)，进程P2开始执行</li>
-<li>3.P2修改数值A为数值B，然后又修改回A</li>
-<li>4.P1被唤醒，比较后发现数值A没有变化，程序继续执行。<br>对于线程P1来说，数值一直是A未变化过，但实际上数值发生过变化的。关于这个维基百科里说的很清楚。</li>
-</ul>
-<h2 id="sun-misc-Unsafe"><a href="#sun-misc-Unsafe" class="headerlink" title="sun.misc.Unsafe"></a>sun.misc.Unsafe</h2><p>我们在日常开发的时候，Java是无法直接做操作系统级别的访问，如果想访问操作系统，我们可以使用C/C++来开发，然后使用JNI或者JNA来调用C/C++的库。<br>JVM中存在<code>sun.misc.Unsafe</code>这样的一个类，该类中提供了一系列的底层方法，这些方法可以直接操作操作系统的内存等。该类在设计的时候，默认是不让一般的开发人员不可以使用，只有授信代码才可以使用。</p>
-<h4 id="Unsafe类是单例的"><a href="#Unsafe类是单例的" class="headerlink" title="Unsafe类是单例的"></a>Unsafe类是单例的</h4><p>从下面的代码中，我们可以看出Unsafe是单例的。且只能通过类加载器来获取，不能直接使用new来创建。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private static final Unsafe theUnsafe;</span><br><span class="line"></span><br><span class="line">private Unsafe() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@CallerSensitive</span><br><span class="line">public static Unsafe getUnsafe() &#123;</span><br><span class="line">    Class var0 = Reflection.getCallerClass();</span><br><span class="line">    if(var0.getClassLoader() != null) &#123;</span><br><span class="line">        throw new SecurityException(&quot;Unsafe&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return theUnsafe;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="创建Unsafe对象"><a href="#创建Unsafe对象" class="headerlink" title="创建Unsafe对象"></a>创建Unsafe对象</h4><p>如果你直接调用getUnsafe方法来创建Unsafe对象，那么在编译的时候你将会得到警告提示，例如对于下面这段代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import sun.misc.Unsafe;</span><br><span class="line"></span><br><span class="line">public class ThreadDemo&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们编译时将会看到如下的警告信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ThreadDemo.java:1: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除</span><br><span class="line">import sun.misc.Unsafe;</span><br><span class="line">               ^</span><br><span class="line">ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除</span><br><span class="line">Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">^</span><br><span class="line">ThreadDemo.java:6: 警告: Unsafe是内部专用 API, 可能会在未来发行版中删除</span><br><span class="line">Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">                ^</span><br><span class="line">3 个警告</span><br></pre></td></tr></table></figure>
-<p>但是我可以对代码进行授信处理，Java是通过内加载器是否为根类加载器判断是否授信的，我们可以使用JVM参数bootclasspath：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xbootclasspath:/usr/java/jdk1.7.0/jre/lib/rt.jar:. com.mishadoff.magic.UnsafeClient</span><br></pre></td></tr></table></figure>
-<p><strong>Jdk不建议开发者直接创建Unsafe对象</strong>，如果我们必须要创建，那么我们可以使用<strong>反射</strong>的方式来创建：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import sun.misc.Unsafe;</span><br><span class="line">import sun.reflect.Reflection;</span><br><span class="line"></span><br><span class="line">Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);</span><br><span class="line">field.setAccessible(true);</span><br><span class="line">Unsafe unsafe = (Unsafe) field.get(null);</span><br><span class="line">System.out.println(unsafe);</span><br></pre></td></tr></table></figure>
-<h4 id="Unsafe类的方法介绍"><a href="#Unsafe类的方法介绍" class="headerlink" title="Unsafe类的方法介绍"></a>Unsafe类的方法介绍</h4><p>Unsafe类中的方法有很多，其实我们需要关注只有这么几个。</p>
-<ul>
-<li><p>内存分配<br>allocateMemory：分配内存（非堆内存）<br>reallocateMemory：重新分配内存<br>freeMemory：释放内存</p>
-</li>
-<li><p>线程操作<br>park：锁定当前的线程<br>unpark：解锁指定的线程</p>
-</li>
-<li><p>CAS操作<br>public final native boolean compareAndSwapXXX(Object o,long offset,K expected,K x)<br>例如：compareAndSwapInt、compareAndSwapLong、compareAndSwapObject等等。<br>该方法也就是Java中的CAS的实现，这个方法会比较expected的值和内存地址在offset位置的值是否一样，如果一样则会更新expected的值为x，并返回true，否则返回false。</p>
-</li>
-</ul>
-<p>还有其它的相关方法可以看下面：</p>
-<ul>
-<li><p>public native int addressSize()<br>本地指针所占用的存储大小，值为4或8.</p>
-</li>
-<li><p>public native int pageSize()<br>返回内存页信息</p>
-</li>
-<li><p>public native Object allocateInstance(Class cls)<br>分配一个指定的对象，但是不执行任何构造方法。</p>
-</li>
-<li><p>public native int arrayBaseOffset(Class arrayClass)<br>返回数组的内存起始位置</p>
-</li>
-<li><p>copyMemory<br>把某段内存块中的数据copy到另外一段内存块中。</p>
-</li>
-<li><p>defineAnonymousClass<br>定义一个匿名类。</p>
-</li>
-<li><p>defineClass<br>让JVM定义一个类，不进行安全性检查。</p>
-</li>
-<li><p>ensureClassInitialized<br>确定类已经被初始化了。这个经常在访问类的静态成员变量时会结合访问。</p>
-</li>
-<li><p>fieldOffset<br>返回字段在对象中的内存offset</p>
-</li>
-<li><p>freeMemory<br>释放内存</p>
-</li>
-<li><p>getXXX(Object o,long offset)<br>获取对象o中内存偏移量为offset的值。</p>
-</li>
-<li><p>getUnsafe<br>单例，获取Unsafe对象</p>
-</li>
-<li><p>monitorEnter(Object o)<br>锁定对象，直到调用了monitorExit(Object o)后才会被解锁</p>
-</li>
-<li><p>monitorExit(Object o)<br>解锁对象，该对象必须是之前就已经被锁定了(被执行过monitorExit)</p>
-</li>
-</ul>
-<p>详情可以查看：<code><a href="http://www.docjar.com/docs/api/sun/misc/Unsafe.html" target="_blank" rel="noopener">http://www.docjar.com/docs/api/sun/misc/Unsafe.html</a></code></p>
-<h4 id="Examples-for-Unsafe"><a href="#Examples-for-Unsafe" class="headerlink" title="Examples for Unsafe"></a>Examples for Unsafe</h4><ul>
-<li>sun.misc.Unsafe#allocateInstance()<br>不使用类的构造方法，来生成一个类的对象。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import sun.misc.Unsafe;</span><br><span class="line">import sun.reflect.Reflection;</span><br><span class="line"></span><br><span class="line">Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);</span><br><span class="line">field.setAccessible(true);</span><br><span class="line">Unsafe unsafe = (Unsafe) field.get(null);</span><br><span class="line"></span><br><span class="line">Person person1 = (Person)unsafe.allocateInstance(Person.class);</span><br><span class="line">System.out.println(person1); //null: 0</span><br><span class="line"></span><br><span class="line">Person person2 = new Person();</span><br><span class="line">System.out.println(person2);//test: 22</span><br></pre></td></tr></table></figure>
-<p>我们对比person1和person2，可以发现person1是没有使用构造方法的，而person2是使用了构造方法的。</p>
-<ul>
-<li>objectFieldOffset、putXXX<br>操作对象成员的值：<br><code>objectFieldOffset(Field var1)</code>是获取成员变量的相对于对象内存的偏移量。<br><code>putLong，putInt，putDouble，putChar，putObject</code>等，可以直接修改对象内存中的数据，可以突破访问修饰符(private/protected)的限制。可以查看下面的例子：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import sun.misc.Unsafe;</span><br><span class="line">import sun.reflect.Reflection;</span><br><span class="line"></span><br><span class="line">Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);</span><br><span class="line">field.setAccessible(true);</span><br><span class="line">Unsafe unsafe = (Unsafe) field.get(null);</span><br><span class="line"></span><br><span class="line">Person person1 = (Person)unsafe.allocateInstance(Person.class);</span><br><span class="line">System.out.println(person1);    //null: 0</span><br><span class="line"></span><br><span class="line">Class clazz = person1.getClass();</span><br><span class="line">Field name = clazz.getDeclaredField(&quot;name&quot;);</span><br><span class="line">Field age = clazz.getDeclaredField(&quot;age&quot;);</span><br><span class="line"></span><br><span class="line">unsafe.putObject(person1, unsafe.objectFieldOffset(name),&quot;张三&quot;);</span><br><span class="line">unsafe.putInt(person1, unsafe.objectFieldOffset(age),18);</span><br><span class="line"></span><br><span class="line">System.out.println(person1);    //张三: 18</span><br></pre></td></tr></table></figure>
-<p>关于Unsafe类里的方法，感兴趣的网上查找阅读相关的C/C++实现。</p>
-<ul>
-<li>大数组操作<br>Java最大只能创建长度为<code>Integer.MAX_VALUE</code>的数组，我们知道当JVM消耗内存过高的时候发生GC，性能上会大打折扣。那么当我们需要创建一个大数组，且不想因为GC而引起大的性能损耗时，我们能想到的就是使用堆外内存。例如下边的代码就实现了一个大的字节数组：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class BigByteArray &#123;</span><br><span class="line">    private final static int BYTE = 1;</span><br><span class="line"></span><br><span class="line">    private long size;</span><br><span class="line">    private long address;</span><br><span class="line"></span><br><span class="line">    public BigArray(long size) &#123;</span><br><span class="line">        this.size = size;</span><br><span class="line">        address = getUnsafe().allocateMemory(size * BYTE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void set(long i, byte value) &#123;</span><br><span class="line">        getUnsafe().putByte(address + i * BYTE, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int get(long idx) &#123;</span><br><span class="line">        return getUnsafe().getByte(address + idx * BYTE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public long size() &#123;</span><br><span class="line">        return size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>学习完Unsafe和CAS之后，我们再来学习Java中的AQS的实现，就好理解了。</p>
-
+      
+        <div class="readmore">
+          <a href="/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/" class="flat-box">
+            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+            阅读全文
+          </a>
+        </div>
       
     </div>
     

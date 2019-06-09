@@ -349,6 +349,7 @@
 <li>Hash散列表</li>
 <li>平衡树</li>
 </ul>
+<a id="more"></a>
 <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>在Java2.0之前，只有一些简单的集合，例如Vector/Stack/Hashtable，由于这些集合直接使用synchronized关键字来实现线程安全，使得这些集合在使用的时候效率极低。从Java2.0开始之后，Java提供了一系列的Java Collections Framework（JCF）。</p>
 <p><img src="http://leocook-blog.test.upcdn.net/JCF.gif" alt="JCF"></p>
 <p>下面开始讲讲Java的集合框架（后面简称JCF）。JCF主要包括了两种类型的集合：<strong>Collection</strong>和<strong>Map</strong>。<br>Collection集合中的每个节点存放的是一个元素。Map集合中的每个元素存放的是<key,value>型的键值对。</key,value></p>
@@ -499,7 +500,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:38:57+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:36:09+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -522,7 +523,30 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=在Java中，集合也就是可以装载多个Java对象的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。
+在学习JCF之前，我们先回顾一下，在计算机编程中我们期望集合能有哪些能力？
+
+可以遍历集合全部的元素
+关于集合类部元素的顺序
+保留写入集合的顺序
+可根据元素的大小自动排序
+
+
+能快速查找出集合中的某个元素
+可以根据位置来快速的修改元素
+能高效的增加、删除集合中元素
+集合内的元素可以快速去重
+
+聊到集合，那肯定少不了下面几种基础的数据结构：
+
+线性存储
+（可变）数组
+链表
+
+
+Hash散列表
+平衡树
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -530,7 +554,30 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=在Java中，集合也就是可以装载多个Java对象的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。
+在学习JCF之前，我们先回顾一下，在计算机编程中我们期望集合能有哪些能力？
+
+可以遍历集合全部的元素
+关于集合类部元素的顺序
+保留写入集合的顺序
+可根据元素的大小自动排序
+
+
+能快速查找出集合中的某个元素
+可以根据位置来快速的修改元素
+能高效的增加、删除集合中元素
+集合内的元素可以快速去重
+
+聊到集合，那肯定少不了下面几种基础的数据结构：
+
+线性存储
+（可变）数组
+链表
+
+
+Hash散列表
+平衡树
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -538,7 +585,30 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/&title=JCF（Java集合框架）概括 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=在Java中，集合也就是可以装载多个Java对象的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。
+在学习JCF之前，我们先回顾一下，在计算机编程中我们期望集合能有哪些能力？
+
+可以遍历集合全部的元素
+关于集合类部元素的顺序
+保留写入集合的顺序
+可根据元素的大小自动排序
+
+
+能快速查找出集合中的某个元素
+可以根据位置来快速的修改元素
+能高效的增加、删除集合中元素
+集合内的元素可以快速去重
+
+聊到集合，那肯定少不了下面几种基础的数据结构：
+
+线性存储
+（可变）数组
+链表
+
+
+Hash散列表
+平衡树
+">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           

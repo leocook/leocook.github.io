@@ -328,6 +328,7 @@
           <p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
 <p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong></p>
 <p><img src="http://leocook-blog.test.upcdn.net/spark%20m.png" alt="spark mem" title="spark mem"></p>
+<a id="more"></a>
 <p>本文在描述spark各个部分内存的时候，大概从三个方面介绍：概念描述、该内存参数怎么配置，内存不够的时候会发生什么情况。</p>
 <h2 id="1-Reserved-Memory"><a href="#1-Reserved-Memory" class="headerlink" title="1.Reserved Memory"></a>1.Reserved Memory</h2><p>系统预留内存，用于存储Spark内部对象。它的大小是300MB，不能通过参数修改，如果真的需要修改，需要重新编译（spark.testing.reservedMemory参数可以使用，但是不推荐在线上环境中使用）。</p>
 <p>当executor分配的内存小于1.5*Reserved Memory的时候，将会报“please use larger heap size”错误。</p>
@@ -366,7 +367,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:40:10+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:37:21+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -389,7 +390,9 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。
+Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。而本文介绍的就是1.6版本开始之后内存管理机制。
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -397,7 +400,9 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。
+Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。而本文介绍的就是1.6版本开始之后内存管理机制。
+">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -405,7 +410,9 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2016/10/13/spark-2016-10-13-spark内存管理/&title=spark内存管理 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。
+Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。而本文介绍的就是1.6版本开始之后内存管理机制。
+">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           

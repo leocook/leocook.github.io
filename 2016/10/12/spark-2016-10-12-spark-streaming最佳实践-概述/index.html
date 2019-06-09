@@ -327,6 +327,7 @@
         <div class="article-entry" itemprop="articleBody">
           <p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
 <p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
+<a id="more"></a>
 <h2 id="1-内存溢出"><a href="#1-内存溢出" class="headerlink" title="1.内存溢出"></a>1.内存溢出</h2><p>Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。</p>
 <p>我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：</p>
 <ul>
@@ -379,7 +380,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:40:14+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:37:29+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>最后更新于 2019年6月9日</p>
@@ -402,7 +403,8 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。
+Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -410,7 +412,8 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。
+Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -418,7 +421,8 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/&title=spark streaming最佳实践-概述 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。
+Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           

@@ -338,41 +338,13 @@
 </ul>
 </li>
 </ul>
-<h2 id="1-程序计数器"><a href="#1-程序计数器" class="headerlink" title="1.程序计数器"></a>1.程序计数器</h2><p>它是线程间隔离的。字节码的行号指示器，用来标记当前线程所执行的字节码的行号。</p>
-<blockquote>
-<p>Q1. 为什么每个线程都需要一个独立的计数器呢？<br>因为JVM的多线程是轮询在CPU上执行的，任何一个时间点，一个处理器上最多只有一条指定在执行。为保证线程切换后，能恢复从正确的执行位置执行指令，所以给每个线程都独立的使用一块空间作为程序计数器，使得多线程之间计数器互不影响。</p>
-</blockquote>
-<h2 id="2-JVM栈"><a href="#2-JVM栈" class="headerlink" title="2.JVM栈"></a>2.JVM栈</h2><p>它是线程间隔离的，也就是常说到的“栈内存”。每个方法执行的时候都会创建一个栈桢，用来存放局部变量表用来存放该方法内使用到的局部变量表、操作数栈、动态链接、方法出口灯信息。</p>
-<p>一个方法从调用到执行完成的过程也就对应着一个栈桢在JVM栈中入栈到出栈的过程。<br>局部变量表中存放了编译器可确定的各种基本数据类型（例如：boolean、byte、char、short等等），以及对象的引用。</p>
-<p>使用<code>-Xss</code>参数设置栈容量 例： <code>-Xss128k</code></p>
-<blockquote>
-<p>JVM规范规定该区域会抛出两种异常：</p>
-<ol>
-<li>StackOverFlowError：当线程请求栈深度超出虚拟机栈所允许的深度时,抛出该异常</li>
-<li>OutOfMemoryError：当Java虚拟机扩展到无法申请足够内存时,抛出该异常</li>
-</ol>
-</blockquote>
-<h2 id="3-本地方法栈"><a href="#3-本地方法栈" class="headerlink" title="3.本地方法栈"></a>3.本地方法栈</h2><p>它是线程间隔离的，和“JVM栈”的区别是：“JVM栈”是执行Java方法时所使用到的内存；“本地方法栈”是JVM执行Native方法时所使用到的内存存。<br>这一块内存在JVM规范中没有强制指定，所以不同的虚拟机实现它的方法可能不一样。Sum HotSpot虚拟机是把“JVM栈”和“本地方法栈”合二为一的。</p>
-<blockquote>
-<p>JVM规范规定该区域可抛出StackOverFlowError和OutOfMemoryError异常。</p>
-</blockquote>
-<h2 id="4-Java堆"><a href="#4-Java堆" class="headerlink" title="4.Java堆"></a>4.Java堆</h2><p>它是线程间共享的，存放JVM对象实例，也是GC发生的主要区域，所以也被称为GC堆。<br>关于GC算法垃圾回收器，后边会介绍。</p>
-<blockquote>
-<p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
-</blockquote>
-<p><code>-Xms</code>参数设置最小值，<code>-Xmx</code>参数设置最大值，可以指定参数<code>-XX:+HeapDumpOnOutOfMemoryError</code>，使得JVM在出现OutOfMemoryError异常异常时能够dump出Java堆的快照。</p>
-<h2 id="5-方法区"><a href="#5-方法区" class="headerlink" title="5.方法区"></a>5.方法区</h2><p>它是线程间共享的，存放已被JVM加载的类信息、常量、静态变量、即时编译器编译后的代码等。它还有个别名叫做Non-Heap（非堆）。</p>
-<p><code>-XX:MaxPermSize</code>可以设置方法区的最大值，<code>-XX:PermSize</code>设置方法区的最小值。</p>
-<blockquote>
-<p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
-</blockquote>
-<h3 id="5-1-运行时常量池"><a href="#5-1-运行时常量池" class="headerlink" title="5.1.运行时常量池"></a>5.1.运行时常量池</h3><p>它是方法区的一部分，存放编译器生成的各种编译期生成的字面量和符号引用。</p>
-<h2 id="HotSpot虚拟机"><a href="#HotSpot虚拟机" class="headerlink" title="HotSpot虚拟机"></a>HotSpot虚拟机</h2><p>HotSpot虚拟机中有两个比较特别的地方：</p>
-<ul>
-<li>本地方法栈和虚拟机栈合二为一了；</li>
-<li>在分代垃圾回收器中，把方法区称为永久代，但它们不是等价的。这里准确的说是使用永久代来实现了方法区。</li>
-</ul>
-
+      
+        <div class="readmore">
+          <a href="/2017/04/05/java-2017-04-05-JVM内存模型基础/" class="flat-box">
+            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+            阅读全文
+          </a>
+        </div>
       
     </div>
     

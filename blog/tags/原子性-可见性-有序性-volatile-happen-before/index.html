@@ -325,49 +325,13 @@
     <div class="article-entry" itemprop="articleBody">
       <p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
 <p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
-<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>如果某个操作是原子的，那么该操作要么不执行，若执行的话就一定会成功。可以理解该操作在执行期间不会被其它因素中断，若是被一些不可控的元素破坏，该操作也不会产生副作用。</p>
-<p>银行转账的操作就具备原子性，例如A向B转账1000元，其中包括了2个动作：A账户减去1000元，B账户加上1000元。很好理解，这个转账操作要么不执行，若执行必须保证这两个动作都成功才行。</p>
-<p>编程时，假设Int类型是4字节(32位)，我们把一个Int类型的内存结构用下图展示：<br><img src="http://leocook-blog.test.upcdn.net/%E5%8E%9F%E5%AD%90%E6%80%A7.png" alt="原子性"><br>当执行赋值语句<code>a = 128</code>的时候，如果能保证要么不执行，要执行的话<code>1~8B</code>、<code>9~16B</code>、<code>17~24B</code>、<code>26~32B</code>这四个字节都成功写入，且不会被其它线程操作干扰，那么这个赋值操作就具备原子性。</p>
-<p>在Java中，<code>基础数据类型</code>的变量的<code>赋值</code>和<code>读取</code>是原子性的操作。例如下面代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = 10; //原子的</span><br><span class="line">y = x; //非原子的</span><br><span class="line">x++; //非原子的</span><br><span class="line">x = x + 1; //非原子的</span><br></pre></td></tr></table></figure>
-<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><p>可见性就是指当多个线程访问同一个变量时，若某个线程修改了变量的值，其他线程能够立即看得到修改的值。</p>
-<p>例如下面的代码块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i=0;//共享变量</span><br><span class="line"></span><br><span class="line">//线程1的操作</span><br><span class="line">i=i+1</span><br><span class="line"></span><br><span class="line">//线程2的操作</span><br><span class="line">j=i</span><br></pre></td></tr></table></figure></p>
-<p>我们假设先执行的线程1，然后执行线程2，且<code>线程1和线程2不同时执行</code>一般会想到j=1，但事实上却不一定。</p>
-<ul>
-<li><p>在创建线程的时候，内存结构如下：<br><img src="http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%911.png" alt></p>
-</li>
-<li><p>当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：<br><img src="http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%913.png" alt><br>由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行<code>j=i</code>的时候，给j赋的值是0，而不是1。</p>
-</li>
-</ul>
-<p>所以上述的并发设计是不具备可见性的，因为在线程1修改了i的时候，线程2并没有立刻就能读到。面对这个问题，在Java中，我们可以使用<code>volatile</code>关键字声明变量不使用CPU缓存，这样就能保证了并发的可见性。如下分析：</p>
-<p>第一步：线程1直接读取内存的i值</p>
-<p><img src="http://leocook-blog.test.upcdn.net/vvv1.png" alt></p>
-<p>第二步：执行<code>i=i+1</code>，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存</p>
-<p><img src="http://leocook-blog.test.upcdn.net/vvv2.png" alt></p>
-<p>这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。</p>
-<p>由于线程1修改了变量i的值之后，会立马把值刷到内存中，并使其它CPU中i的缓存失效，这样就能保证变量值修改后，其它线程能立刻读到最新的值。</p>
-<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h3><p>有序性指的是程序执行时按照代码的先后顺序执行。</p>
-<h4 id="happen-before"><a href="#happen-before" class="headerlink" title="happen-before"></a>happen-before</h4><p>如果A happen-before B，那么A的所有操作完成后并产生结果才会执行B操作，可以说A所做的任何操作对B都是可见的。</p>
-<ul>
-<li>1.程序次序规则：在一个单独的线程中，按照程序代码的执行流顺序，（时间上）先执行的操作happen—before（时间上）后执行的操作；</li>
-<li>2.管理锁定规则：一个unlock操作happen—before后面（时间上的先后顺序，下同）对同一个锁的lock操作；</li>
-<li>3.volatile变量规则：对一个volatile变量的写操作happen—before后面对该变量的读操作。</li>
-<li>4.线程启动规则：Thread对象的start（）方法happen—before此线程的每一个动作；</li>
-<li>5.线程终止规则：线程的所有操作都happen—before对此线程的终止检测，可以通过Thread.join（）方法结束、Thread.isAlive（）的返回值等手段检测到线程已经终止执行；</li>
-<li>6.线程中断规则：对线程interrupt（）方法的调用happen—before发生于被中断线程的代码检测到中断时事件的发生；</li>
-<li>7.对象终结规则：一个对象的初始化完成（构造函数执行结束）happen—before它的finalize（）方法的开始；</li>
-<li>8.传递性：如果操作A happen—before操作B，操作B happen—before操作C，那么可以得出A happen—before操作C。</li>
-</ul>
-<h4 id="指令重排"><a href="#指令重排" class="headerlink" title="指令重排"></a>指令重排</h4><p>在Java中，为了提高执行效率、CPU的利用率，在执行字节码文件的时候会发生<code>指令重排</code>操作。我们观察下面这段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int a = 1; //语句1</span><br><span class="line">int b = 2; //语句2</span><br><span class="line">a += 1; //语句3</span><br><span class="line">b += 1; //语句4</span><br></pre></td></tr></table></figure></p>
-<p>假设每行代码执行需要耗时1ms(实际上执行实际会比1ms短很多很多)，那么这四条语句会执行4ms时间，他们的执行顺序是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">第1步：int a = 1; </span><br><span class="line">第2步：int b = 2; </span><br><span class="line">第3步：a += 1; </span><br><span class="line">第4步：b += 1;</span><br></pre></td></tr></table></figure></p>
-<p>我们可以观察出这四行语句有如下的依赖关系：<code>语句3依赖语句1</code>、<code>语句4依赖语句2</code>。</p>
-<p>其实在Java中，JVM在执行时会发生指令重排，<strong>语句1和语句2</strong>谁先执行是说不定的，<strong>语句3和语句4</strong>谁先执行也是说不定的。但一定是<strong>语句1</strong>执行完之后才执行<strong>语句3</strong>，<strong>语句2</strong>执行完之后才执行<strong>语句4</strong>，这样就可以把语句1和语句3放在一个cpu中，语句2和语句4放在一个cpu，两个cpu并行执行。这样的话，执行的顺序可能就是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">第1步：int a = 1; a += 1; </span><br><span class="line">第2步：int b = 2; b += 1;</span><br></pre></td></tr></table></figure></p>
-<p>这样操作完只需要花费2ms，相比于之前的4ms，时间节省了一倍！</p>
-<p>虽然有序性在一定程度上提高了效率，但是在实际开发中也会带来一些灾难，例如下面的这段代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//线程1:</span><br><span class="line">context = loadContext();   //语句1</span><br><span class="line">inited = true;             //语句2</span><br><span class="line"> </span><br><span class="line">//线程2:</span><br><span class="line">while(!inited )&#123;</span><br><span class="line">  sleep()</span><br><span class="line">&#125;</span><br><span class="line">doSomethingwithconfig(context);</span><br></pre></td></tr></table></figure>
-<p>由于语句2可能会在语句1之前运行，所以可能会在context还没有被初始化的时候，就开始执行doSomethingwithconfig(context)了。<br>在Java中可以使用volatile关键字来对inited进行修饰，从而保证语句1 happen-before 语句2。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>原子性保证了某（多）个操作在执行的时候不会被打断；<br>可见性保证了某个值被修改后在其它线程中可以立马看到，不会读到久值；<br>有序性保证了某些操作happen-before另外一些操作。</p>
-
+      
+        <div class="readmore">
+          <a href="/2017/06/12/java-2017-06-12-Java并发-一-：原子性、可见性、有序性/" class="flat-box">
+            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+            阅读全文
+          </a>
+        </div>
       
     </div>
     
