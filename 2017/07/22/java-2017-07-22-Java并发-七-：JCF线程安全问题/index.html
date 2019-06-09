@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Java并发(七)：JCF线程安全问题 | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover post half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      <div class="l_main">
+  
+
+  
+    <article id="post" class="post white-box article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  
+    <h1 class="title">
+      <a href="/2017/07/22/java-2017-07-22-Java并发-七-：JCF线程安全问题/">
+        Java并发(七)：JCF线程安全问题
+      </a>
+    </h1>
+  
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-07-22</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/java/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>java</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
+
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          <p>Jdk本身给我实现了很多数据结构，例如List、Set、Queue以及Map等。但是这些类都不是线程安全的，在Jdk1.0的时候提供了<code>Hashtable</code>、<code>Vector</code>以及<code>Stack</code>这些线程安全集合，但由于它们只是在原来集合的基础上通过关键字<code>synchronized</code>来保证功能的<strong>原子性和可见性</strong>，这样做的缺点就是效率地下，当有一个线程执行get的时候，其它所有线程都被阻塞。</p>
+<h3 id="什么是线程安全"><a href="#什么是线程安全" class="headerlink" title="什么是线程安全"></a>什么是线程安全</h3><p>线程安全是一个很难一言表达清楚的，通俗的说就是：一个程序在单线程的环境下可以正常运行，在多线程环境下也能正确的运行，并且可以返回确定的结果，那么这个程序就是线程安全的。<br>一个线程安全的类，在多线程环境下不会因为执行的顺序导致对象成为无效状态，同样也不会违反任何先验条件和后验条件。</p>
+<p>关于无效状态、先验条件、后验条件，下面是一些说明：</p>
+<ul>
+<li>无效状态</li>
+</ul>
+<p>在做选择排序的过程中，前边已经排序好的那段数据顺序被其它线程给打乱了，这时候就可以说这个被排序的类处于无效状态。</p>
+<ul>
+<li>先验条件</li>
+</ul>
+<p>在做二分查找的时候，被查找的集合必须是已经排好序的，这就是执行二份查找的条件，也就是先验条件。</p>
+<ul>
+<li>后验条件</li>
+</ul>
+<p>指的代码的业务目标是否正确。</p>
+<h3 id="fail-fast机制"><a href="#fail-fast机制" class="headerlink" title="fail-fast机制"></a>fail-fast机制</h3><p>当迭代器实现了fail-fast机制，创建了该集合的迭代器后，使用该集合迭代器遍历或者修改集合元素的之前，若该集合被直接调用方法并产生了修改（size的变化），那么将会抛出<code>java.util.ConcurrentModificationException</code>异常。  </p>
+<blockquote>
+<p>例如<code>ArrayList</code>对象，线程1在用迭代器遍历里边元素的同时，线程2put了一个新的元素，那么就会抛出异常<code>java.util.ConcurrentModificationException</code>。</p>
+</blockquote>
+<p>fail-fast机制是使用了<code>modCount</code>变量（集合类持有的字段）和<code>expectedModCount</code>（迭代器持有的字段）来实现。<br>在迭代器创建的时候将exceptedModCount被初始化为modCount的值，任何对集合的修改都会改变modCount的值.每当调用next等方法的时候，会判断expectedModCount和当前的modCount是否相等，不相等的话则抛出CME异常.</p>
+<ul>
+<li><p>modCount<br><code>modCount变量是集合类中的变量</code>，在集合被修改时，modCount变量将会加1；当调用迭代器的方法改变了集合size的方法时，modCount变量也会加1。</p>
+</li>
+<li><p>expectedModCount<br><code>expectedModCount变量是迭代器类中的变量</code>，在创建的迭代器对象时，会使用modCount的值来对其进行初始化。只有在调用迭代器改变了集合size的时候，才会加1。</p>
+</li>
+<li><p>ArrayList、LikedList<br>它们都是AbstractList的子类，它们的modCount都是从AbstractList类中继承来的，当执行会使集合size发生变化的方法时，例如：add、remove等，modCount会加1。执行set、get操作不会使modCount发生变化，因为他们没有使集合的size发生变化。<br>当调用迭代器的next、add、remove、previous、set等访问集合元素的方法时，都会校验exceptedModCount和modCount是否相等，如果不相等，则抛出CME异常。</p>
+</li>
+<li><p>HashMap、LinkedHashMap<br>当调用Map的方法或者Map的迭代器使得Map集合被修改（值被修改，或者顺序发生变化）时，modCount加1。<br>在调用Map的迭代器访问、修改Map集合元素的时候，都会判断expectedModCount和当前的modCount是否相等，不相等的话则抛出CME异常.</p>
+</li>
+</ul>
+<blockquote>
+<p>很显然，只使用modCount和expectedModCount并不能保证集合的线程安全。  </p>
+<ul>
+<li>modCount是集合类的成员变量，expectedModCount是迭代器的成员变量</li>
+<li>在使用迭代器遍历集合元素时，会判断modCount和expectedModCount是否相等来校验集合是否被修改过，很显然这个办法是存在bug的。</li>
+<li>对于Map结构，数据只要变化modCount就会加1；对于List结构，当集合size变化时，modCount才会加1。  </li>
+</ul>
+<p>这些规则表述的可能不是很准确，具体可以查看相关源码。Set结构是什么样的呢？留给读者自己查看源码吧！</p>
+</blockquote>
+<h3 id="Collections-synchronizedXXX"><a href="#Collections-synchronizedXXX" class="headerlink" title="Collections.synchronizedXXX"></a>Collections.synchronizedXXX</h3><p>发展到Jdk1.2时，Jdk提供了<code>Collections.synchronizedXXX</code>系列的方法：</p>
+<ul>
+<li><p>Collections.synchronizedCollection<br>包装Collection接口的实现类，使其具备线程安全</p>
+</li>
+<li><p>Collections.synchronizedList<br>包装List接口的实现类，使其具备线程安全</p>
+</li>
+<li><p>Collections.synchronizedMap<br>包装Map接口的实现类，使其具备线程安全</p>
+</li>
+<li><p>Collections.synchronizedSet<br>包装Set接口的实现类，使其具备线程安全</p>
+</li>
+</ul>
+<p>这里我们查看<code>java.util.Collections.SynchronizedCollection</code>类的源码，可以看出，这也是在原来集合的基础上包装了一层<code>synchronized</code>关键字，只是提供了并发集合使用的便利性，并没有从本质上提高并发集合的效率！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">static class SynchronizedCollection&lt;E&gt; implements Collection&lt;E&gt;, Serializable &#123;</span><br><span class="line">    private static final long serialVersionUID = 3053995032091335093L;</span><br><span class="line"></span><br><span class="line">    final Collection&lt;E&gt; c;  // Backing Collection</span><br><span class="line">    final Object mutex;     // Object on which to synchronize</span><br><span class="line"></span><br><span class="line">    SynchronizedCollection(Collection&lt;E&gt; c) &#123;</span><br><span class="line">        if (c==null)</span><br><span class="line">            throw new NullPointerException();</span><br><span class="line">        this.c = c;</span><br><span class="line">        mutex = this;</span><br><span class="line">    &#125;</span><br><span class="line">    SynchronizedCollection(Collection&lt;E&gt; c, Object mutex) &#123;</span><br><span class="line">        this.c = c;</span><br><span class="line">        this.mutex = mutex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int size() &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.size();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean isEmpty() &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.isEmpty();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean contains(Object o) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.contains(o);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public Object[] toArray() &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.toArray();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public &lt;T&gt; T[] toArray(T[] a) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.toArray(a);&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Iterator&lt;E&gt; iterator() &#123;</span><br><span class="line">        return c.iterator(); // Must be manually synched by user!</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean add(E e) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.add(e);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean remove(Object o) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.remove(o);&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean containsAll(Collection&lt;?&gt; coll) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.containsAll(coll);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean addAll(Collection&lt;? extends E&gt; coll) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.addAll(coll);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean removeAll(Collection&lt;?&gt; coll) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.removeAll(coll);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean retainAll(Collection&lt;?&gt; coll) &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.retainAll(coll);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public void clear() &#123;</span><br><span class="line">        synchronized (mutex) &#123;c.clear();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        synchronized (mutex) &#123;return c.toString();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    private void writeObject(ObjectOutputStream s) throws IOException &#123;</span><br><span class="line">        synchronized (mutex) &#123;s.defaultWriteObject();&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="java-util-concurrent概述"><a href="#java-util-concurrent概述" class="headerlink" title="java.util.concurrent概述"></a>java.util.concurrent概述</h3><p>Jdk1.5开始，Java的并发模型发生了翻天覆地的变化,具体可以查看<code>java.util.concurrent</code>包下的类。</p>
+<ul>
+<li><p>CAS的实现<br>目前大多数CPU硬件级别都只是CAS了，jdk1.5后封装了CAS的实现，并以Unsafe类供jdk中其它类调用。这个设计的初衷是给Jdk的类库使用，都不是给开发人员。</p>
+</li>
+<li><p>锁和原子类<br>在CAS的基础上，实现了AQS，并实现了ReentrantLock锁，一般很少创建ReentrantLock对象，而是继承ReentrantLock类并在此基础上构建。<br><code>java.util.concurrent.atomic</code>包下提供了一系列的原子变量，例如在并发环境下计算自增值，就可以使用该包下面的类。</p>
+</li>
+<li><p>高级的工具类<br>例如下面三个：</p>
+<ul>
+<li>Executor框架：线程池</li>
+<li>TimerTask类：定时器</li>
+<li>Semaphore类：资源计数器</li>
+<li>CountdownLatch类：倒计时计数器</li>
+</ul>
+</li>
+</ul>
+<p>上面简单的介绍了<code>java.util.concurrent</code>包，那么该包下关于集合线程安全的实现体现在哪些方面呢？</p>
+<ul>
+<li><p>阻塞的线程安全集合<br>集合被其它线程访问时，例如使用迭代器迭代、get或者put的时候，当其它线程在访问该资源时，会进入阻塞状态。这种集合在并发执行时，可以保证数据的强一致性。</p>
+</li>
+<li><p>非阻塞的线程安全集合<br>集合被其它线程访问时，例如使用迭代器迭代、get或者put的时候，当其它线程在访问该资源时，不会进入阻塞状态。这种集合在并发执行时，可以保证数据的弱强一致性，更新的数据在经过某一段时间之后才会被访问到。</p>
+</li>
+</ul>
+<h4 id="ConcurrentXXX"><a href="#ConcurrentXXX" class="headerlink" title="ConcurrentXXX"></a>ConcurrentXXX</h4><p>以<code>Concurrent</code>开头的集合类，都是<code>非阻塞的线程安全类</code>。<br>非阻塞的线程安全集合在使用时只能保证数据的弱一致性，无法保证数据的强一致性。如果必须要保证数据的强一致性，可以使用阻塞的线程安全类。前边提到的使用synchronized来保证线程安全的集合类，就是阻塞的线程安全类。</p>
+<p>这里号称是非阻塞的线程安全类，只是理想状态下非阻塞，使用时阻塞的概率较低，效率较高，但还是会可能线程被阻塞的。</p>
+<ul>
+<li><p>ConcurrentHashMap<br>非阻塞线程安全的HashMap</p>
+</li>
+<li><p>ConcurrentLinkedDeque<br>非阻塞线程安全的双端队列</p>
+</li>
+<li><p>ConcurrentLinkedQueue<br>非阻塞线程安全的队列</p>
+</li>
+<li><p>ConcurrentSkipListMap<br>非阻塞线程安全的TreeMap（有序）</p>
+</li>
+<li><p>ConcurrentSkipListSet<br>非阻塞线程安全的TreeSet（有序）</p>
+</li>
+</ul>
+<h4 id="CopyOnWriteArrayXXX"><a href="#CopyOnWriteArrayXXX" class="headerlink" title="CopyOnWriteArrayXXX"></a>CopyOnWriteArrayXXX</h4><p>这一类集合在数据发生变化时，会通过内存拷贝来创建一个新的集合。若在迭代器遍历过程中集合的元素发生变化，迭代器会继续遍历“老”的集合，其它操作会访问“新”的集合。<br>这类集合适合“数据量小”、“读多写少”的场景。</p>
+<ul>
+<li><p>CopyOnWriteArrayList<br>线程安全的ArrayList，基于内存拷贝实现的。</p>
+</li>
+<li><p>CopyOnWriteArraySet<br>线程安全的ArrayList，基于内存拷贝实现的。其实就是对CopyOnWriteArrayList的包装，调用add方法的时候会调用CopyOnWriteArrayList类的addIfAbsent方法，当元素不存在的时候才会被加入到集合中。</p>
+</li>
+</ul>
+<h4 id="BlockingXXX"><a href="#BlockingXXX" class="headerlink" title="BlockingXXX"></a>BlockingXXX</h4><p>阻塞线程安全类，其中BlockingDeque接口继承了BlockingQueue接口。这一类集合在并发过程中，可以保证数据的强一致性。</p>
+<ul>
+<li><p>ArrayBlockingQueue<br>阻塞的线程安全队列，它是基于数组实现的，创建的时候就需要指定队列的长度。</p>
+</li>
+<li><p>LinkedBlockingQueue<br>阻塞的线程安全队列，是基于链表实现的。</p>
+</li>
+<li><p>LinkedBlockingDeque<br>阻塞的线程安全双端队列，是基于链表实现的。</p>
+</li>
+<li><p>PriorityBlockingQueue<br>阻塞的线程安全优先队列，队列中的元素必须实现Comparable接口，在插入元素时，会调用接口的<code>compareTo</code>方法来判断元素的大小，从而确定元素的位置。</p>
+</li>
+</ul>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>这里把<code>ConcurrentHashMap</code>单独拿出来说一下，因为ConcurrentXXX系列集合实现的核心思想和它基本上一样。CopyOnWriteArray系列和BlockingXXX系列实现手法比较简单，自己浏览一下源码就可以了。</p>
+<p>ConcurrentHashMap的类部结构大概如下图这样：</p>
+<p><img src="http://leocook-blog.test.upcdn.net/ConcurrentHashMap.png" alt="结构"></p>
+<p>默认情况下Segment数组的大小是16(DEFAULT_INITIAL_CAPACITY),Segment下的HashEntry数组的默认大小是2(MIN_SEGMENT_TABLE_CAPACITY)。</p>
+<h4 id="原理相关"><a href="#原理相关" class="headerlink" title="原理相关"></a>原理相关</h4><ul>
+<li><p>锁的范围<br>ConcurrentHashMap中读数据是没有锁的，写数据时会有锁。在向同一个Segment元素下写数据时，会使用同一把锁。</p>
+</li>
+<li><p>非阻塞锁<br>这里号称是非阻塞的线程安全类，只是理想状态下非阻塞，使用时阻塞的概率较低，效率较高，但还是会可能线程被阻塞的。</p>
+</li>
+<li><p>弱一致性原理<br>ConcurrentHashMap的get是没有锁的，但是put是有锁的。可能会出现一种情况是：线程1先执行了put，但是在数据没还没完全写入时，线程2读取了集合里的数据，此时是读取不到线程1刚刚执行写操作写入的数据，但是在很短暂的一个时间段后，线程2就能读到线程1写入的数了。<br>这就是读写分离产生的弱一致性。</p>
+</li>
+</ul>
+<h4 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h4><ul>
+<li><p>HashEntry<br>该类实现的就是单纯的单向链表结构，和HashMap中的Entry类似。</p>
+<ul>
+<li>关键字段</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * hash值</span><br><span class="line"> */</span><br><span class="line">final int hash;</span><br><span class="line">final K key;</span><br><span class="line">volatile V value;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 下一个节点</span><br><span class="line"> */</span><br><span class="line">volatile HashEntry&lt;K,V&gt; next;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关键方法  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 使用UNSAFE来设置next节点</span><br><span class="line"> */</span><br><span class="line">final void setNext(HashEntry&lt;K,V&gt; n) &#123;</span><br><span class="line">    UNSAFE.putOrderedObject(this, nextOffset, n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Unsafe相关的初始化</span><br><span class="line">static final sun.misc.Unsafe UNSAFE;</span><br><span class="line">static final long nextOffset;</span><br><span class="line">static &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        UNSAFE = sun.misc.Unsafe.getUnsafe();</span><br><span class="line">        Class k = HashEntry.class;</span><br><span class="line">        nextOffset = UNSAFE.objectFieldOffset</span><br><span class="line">            (k.getDeclaredField(&quot;next&quot;));</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        throw new Error(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Segment<br>该类就是ConcurrentHashMap中分桶的实现。</p>
+<ul>
+<li>关键字段  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 处理器个数</span><br><span class="line"> */</span><br><span class="line">static final int MAX_SCAN_RETRIES =</span><br><span class="line">    Runtime.getRuntime().availableProcessors() &gt; 1 ? 64 : 1;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line"> * 基于数组实现的Hash表</span><br><span class="line"> */</span><br><span class="line">transient volatile HashEntry&lt;K,V&gt;[] table;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 分桶内的元素个数。</span><br><span class="line"> */</span><br><span class="line">transient int count;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关键方法 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">final V put(K key, int hash, V value, boolean onlyIfAbsent) &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 1. 写数据前,先拿到当前的节点元素,并执行park</span><br><span class="line">     */</span><br><span class="line">    HashEntry&lt;K,V&gt; node = tryLock() ? null :</span><br><span class="line">        scanAndLockForPut(key, hash, value);</span><br><span class="line">    V oldValue;</span><br><span class="line">    try &#123;</span><br><span class="line">        //拿到分桶数组</span><br><span class="line">        HashEntry&lt;K,V&gt;[] tab = table;</span><br><span class="line"></span><br><span class="line">        //拿到该节点应该在的哪个</span><br><span class="line">        int index = (tab.length - 1) &amp; hash;</span><br><span class="line"></span><br><span class="line">        //拿到分桶中HashEntry的起始位置HashEntry链表下</span><br><span class="line">        HashEntry&lt;K,V&gt; first = entryAt(tab, index);</span><br><span class="line"></span><br><span class="line">        //往下迭代</span><br><span class="line">        for (HashEntry&lt;K,V&gt; e = first;;) &#123;</span><br><span class="line"></span><br><span class="line">            // 当分桶不为空时,持续遍历,找到节点,并修改它的value</span><br><span class="line">            if (e != null) &#123;</span><br><span class="line">                K k;</span><br><span class="line">                if ((k = e.key) == key/*基本类型,或同一对象*/ ||</span><br><span class="line">                    (e.hash == hash &amp;&amp; key.equals(k))/*+自定义对象*/) &#123;</span><br><span class="line">                    oldValue = e.value;</span><br><span class="line">                    if (!onlyIfAbsent) &#123;</span><br><span class="line">                        e.value = value;</span><br><span class="line">                        ++modCount;</span><br><span class="line">                    &#125;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">                e = e.next;</span><br><span class="line">            &#125;</span><br><span class="line">            //当分桶非空的时候</span><br><span class="line">            else &#123;</span><br><span class="line"></span><br><span class="line">                //若node已经获取到了,设置node为first元素</span><br><span class="line">                if (node != null)</span><br><span class="line">                    node.setNext(first);</span><br><span class="line">                else</span><br><span class="line">                    node = new HashEntry&lt;K,V&gt;(hash, key, value, first);</span><br><span class="line">                int c = count + 1;</span><br><span class="line"></span><br><span class="line">                //集合元素超过阈值后,扩充</span><br><span class="line">                if (c &gt; threshold &amp;&amp; tab.length &lt; MAXIMUM_CAPACITY)</span><br><span class="line">                    rehash(node);</span><br><span class="line">                else</span><br><span class="line">                    //否则直接把节点的值放在分桶的第一个位置</span><br><span class="line">                    setEntryAt(tab, index, node);</span><br><span class="line">                ++modCount;</span><br><span class="line">                count = c;</span><br><span class="line">                oldValue = null;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    return oldValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 获取锁,并返回对应的 HashEntry 节点。</span><br><span class="line"> *</span><br><span class="line"> * 1.若对应的分桶数组不存在,表示该hash值还未出现过,则直接创建出一个node,并在尝试次数达到MAX_SCAN_RETRIES时,阻塞</span><br><span class="line"> * 2.若对应的分桶数组存在,则阻塞,接触阻塞后返回节点</span><br><span class="line"> *</span><br><span class="line"> * @return a new node if key not found, else null</span><br><span class="line"> */</span><br><span class="line">private HashEntry&lt;K,V&gt; scanAndLockForPut(K key, int hash, V value) &#123;</span><br><span class="line">    //拿到分桶数组的首元素</span><br><span class="line">    HashEntry&lt;K,V&gt; first = entryForHash(this, hash);</span><br><span class="line">    HashEntry&lt;K,V&gt; e = first;</span><br><span class="line">    HashEntry&lt;K,V&gt; node = null;</span><br><span class="line"></span><br><span class="line">    int retries = -1; // negative while locating node</span><br><span class="line"></span><br><span class="line">    //尝试获取锁,若获取不到锁,就一直轮询下去</span><br><span class="line">    while (!tryLock()) &#123;</span><br><span class="line">        HashEntry&lt;K,V&gt; f; // to recheck first below</span><br><span class="line">        if (retries &lt; 0) &#123;</span><br><span class="line">            if (e == null) &#123;    //首元素不存在,意思是hash还没有碰撞过</span><br><span class="line">                if (node == null) // speculatively create node</span><br><span class="line">                    node = new HashEntry&lt;K,V&gt;(hash, key, value, null);</span><br><span class="line">                retries = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (key.equals(e.key)) //查看key和首元素的key是否相等</span><br><span class="line">                retries = 0;</span><br><span class="line">            else</span><br><span class="line">                //如果key的位置不在首元素出</span><br><span class="line">                e = e.next;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (++retries &gt; MAX_SCAN_RETRIES) &#123;</span><br><span class="line">            lock(); //独占</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        else if ((retries &amp; 1) == 0/*retries为偶数时*/ &amp;&amp;</span><br><span class="line">                 (f = entryForHash(this, hash)) != first) &#123;</span><br><span class="line">            /**</span><br><span class="line">             * 如果在次过程中HashEntry数组的first节点发生了变化,则重新遍历</span><br><span class="line">             */</span><br><span class="line">            e = first = f; // re-traverse if entry changed</span><br><span class="line">            retries = -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 获取数据，key不能为null</span><br><span class="line"> */</span><br><span class="line">public V get(Object key) &#123;</span><br><span class="line">    Segment&lt;K,V&gt; s; // manually integrate access methods to reduce overhead</span><br><span class="line">    HashEntry&lt;K,V&gt;[] tab;</span><br><span class="line">    int h = hash(key);</span><br><span class="line"></span><br><span class="line">    //确定数据是在哪个分桶中的</span><br><span class="line">    long u = (((h &gt;&gt;&gt; segmentShift) &amp; segmentMask) &lt;&lt; SSHIFT) + SBASE;</span><br><span class="line"></span><br><span class="line">    //确定数据是在哪个分桶中的</span><br><span class="line">    if ((s = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(segments, u)) != null &amp;&amp;</span><br><span class="line">        (tab = s.table) != null) &#123;</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * 1.先确定数据是在哪个链表中</span><br><span class="line">         * 2.遍历下去,直到读到对应的key的值</span><br><span class="line">         */</span><br><span class="line">        for (HashEntry&lt;K,V&gt; e = (HashEntry&lt;K,V&gt;) UNSAFE.getObjectVolatile</span><br><span class="line">                 (tab, ((long)(((tab.length - 1) &amp; h)) &lt;&lt; TSHIFT) + TBASE);</span><br><span class="line">             e != null; e = e.next) &#123;</span><br><span class="line">            K k;</span><br><span class="line">            if ((k = e.key) == key || (e.hash == h &amp;&amp; key.equals(k)))</span><br><span class="line">                return e.value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>老的线程安全集合是基于<code>synchronized</code>关键字实现的，效率低下，但是具备强一致性的特性；</li>
+<li>基于AQS实现的新版线程安全集合效率较高，强一致性和弱一致性的集合都有部分的实现；</li>
+<li>个人觉得<code>ConcurrentHashMap</code>这个类源码研究透了，整个Java集合并发这部分知识就很好理解了；</li>
+<li>原理级别的东西看下源码就知道了，不用每一步都刻意去记忆，理解并记住其中的设计思想就可以了。</li>
+</ol>
+
+        </div>
+        
+          
+
+
+  <section class="meta" id="footer-meta">
+    <hr>
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:39:07+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>最后更新于 2019年6月9日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/ConcurrentHashMap/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>ConcurrentHashMap</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://leocook.github.io/2017/07/22/java-2017-07-22-Java并发-七-：JCF线程安全问题/&title=Java并发(七)：JCF线程安全问题 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://leocook.github.io/2017/07/22/java-2017-07-22-Java并发-七-：JCF线程安全问题/&title=Java并发(七)：JCF线程安全问题 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://leocook.github.io/2017/07/22/java-2017-07-22-Java并发-七-：JCF线程安全问题/&title=Java并发(七)：JCF线程安全问题 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+            <div class="prev-next">
+                
+                    <section class="prev">
+                        <span class="art-item-left">
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                            <h4>
+                                <a href="/2017/08/31/java-2017-08-31-Servlet的那些二三事儿/" rel="prev" title="Servlet的那些二三事儿">
+                                  
+                                      Servlet的那些二三事儿
+                                  
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/Servlet/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>Servlet</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2017/07/16/java-2017-07-16-Java并发-六-：ReentrantLock、synchronized/" rel="prev" title="Java并发(六)：ReentrantLock、synchronized">
+                                    
+                                        Java并发(六)：ReentrantLock、synchronized
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/ReentrantLock-synchronized/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>ReentrantLock synchronized</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+      </section>
+    </article>
+  
+
+  
+    <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Java并发(七)：JCF线程安全问题',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是线程安全"><span class="toc-text">什么是线程安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fail-fast机制"><span class="toc-text">fail-fast机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collections-synchronizedXXX"><span class="toc-text">Collections.synchronizedXXX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java-util-concurrent概述"><span class="toc-text">java.util.concurrent概述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ConcurrentXXX"><span class="toc-text">ConcurrentXXX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CopyOnWriteArrayXXX"><span class="toc-text">CopyOnWriteArrayXXX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BlockingXXX"><span class="toc-text">BlockingXXX</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ConcurrentHashMap"><span class="toc-text">ConcurrentHashMap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原理相关"><span class="toc-text">原理相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内部类"><span class="toc-text">内部类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "1BWypTkkzWRLpL7hjUoj1Uvm-gzGzoHsz",
+    appKey: "74X742aj5vd15GFuMiARpXph",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

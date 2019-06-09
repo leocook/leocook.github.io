@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Archives: 2017/8 | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover  half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      <div class="l_main">
+	
+		
+  <section class="post-list">
+    
+      
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2017/08/31/java-2017-08-31-Servlet的那些二三事儿/">
+      Servlet的那些二三事儿
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-08-31</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/java/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>java</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>Servlet（Server Applet），全称Java Servlet。主要是使用Java来开发一些web应用，例如网站、web service等等。下面就从几个方面来总结一下servlet的关键点，当然也会提及到jsp、http等。</p>
+<h2 id="servlet的生命周期"><a href="#servlet的生命周期" class="headerlink" title="servlet的生命周期"></a>servlet的生命周期</h2><ul>
+<li><p>初始阶段<br>Web容器加载servlet，调用init()方法。</p>
+</li>
+<li><p>运行阶段<br>当请求到达时，运行其service()方法。service()识别请求类型，并调用相对应的doGet、doPost方法。</p>
+</li>
+<li><p>销毁阶段<br>服务结束，web容器会调用servlet的distroy()方法销毁servlet。</p>
+</li>
+</ul>
+<h2 id="如何去实现一个Servlet"><a href="#如何去实现一个Servlet" class="headerlink" title="如何去实现一个Servlet"></a>如何去实现一个Servlet</h2><p>先了解一下Servlet API的两个包：<code>javax.servlet.*</code>和<code>javax.servlet.http.*</code>。<code>javax.servlet.*</code>包下放的主要是一些接口，<code>javax.servlet.http.*</code>包下方的主要是上述接口在http协议中的实现。<br>目前网络数据交互式传输中，http协议占据这主导的地位，说不准哪天出现一个新的协议，那时servlet可能还会对新协议做支持。<br>实现一个Servlet目前有两种方式，一种是直接实现最底层的Servlet接口；第二种则是实现继承HttpServlet类。</p>
+<h3 id="javax-servlet-Servlet接口"><a href="#javax-servlet-Servlet接口" class="headerlink" title="javax.servlet.Servlet接口"></a>javax.servlet.Servlet接口</h3><p>有下面这几个方法</p>
+<ul>
+<li><p>init<br>在servlet初始化时，会调用它。</p>
+</li>
+<li><p>service<br>在servlet处理请求的时候，会调用它。</p>
+</li>
+<li><p>destroy<br>在服务结束时，销毁servlet的时候，会调用它。</p>
+</li>
+<li><p>getServletConfig  </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;ServletConfigTest&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-class&gt;com.vae.servlet.ServletConfigTest&lt;/servlet-class&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;name1&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;value1&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;encode&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;utf-8&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br></pre></td></tr></table></figure>
+<p>获取servlet的配置信息,<code>init-param</code>标签下的内容。</p>
+<ul>
+<li>getServletInfo<br>获取servlet信息，</li>
+</ul>
+<h3 id="javax-servlet-http-HttpServlet类"><a href="#javax-servlet-http-HttpServlet类" class="headerlink" title="javax.servlet.http.HttpServlet类"></a>javax.servlet.http.HttpServlet类</h3><ul>
+<li><p>doGet<br>处理get请求时，会执行该方法。</p>
+</li>
+<li><p>doPost<br>处理post请求时，会执行该方法。</p>
+</li>
+<li><p>init<br>在servlet初始化时，会调用它。相当于Servlet接口中的init方法。</p>
+</li>
+<li><p>destroy<br>在servlet初始化时，会调用它。相当于Servlet接口中的init方法。</p>
+</li>
+</ul>
+<h2 id="JSP和Servlet的关系"><a href="#JSP和Servlet的关系" class="headerlink" title="JSP和Servlet的关系"></a>JSP和Servlet的关系</h2><p>这里说明一下，JSP在被编译后生成的就是Servlet，所以访问jsp，其实访问的也就是其对于的Servlet。</p>
+<h3 id="四种会话作用域"><a href="#四种会话作用域" class="headerlink" title="四种会话作用域"></a>四种会话作用域</h3><p>由于在web开发中，数据传输的范围是不同的，所以产生了<code>四种会话作用域</code>，其实就是提供了4种生命周期的对象，用于存储数据使用。</p>
+<ul>
+<li>page<br>单个页面级别</li>
+<li>request<br>单个请求级别</li>
+<li>session<br>单个session级别</li>
+<li>application<br>服务器从启动到停止</li>
+</ul>
+<h3 id="Jsp的九个内置对象"><a href="#Jsp的九个内置对象" class="headerlink" title="Jsp的九个内置对象"></a>Jsp的九个内置对象</h3><ul>
+<li><p>page<br>指JSP也变本身，代表的是java.lang.Object类的对象。</p>
+</li>
+<li><p>request<br>包含了客户端请求的信息，代表的是javax.servlet.HttpServletRequest类的对象</p>
+</li>
+<li><p>session<br>包含了当前会话的信息，代表的是javax.servlet.http.HttpSession类的对象。</p>
+</li>
+<li><p>application<br>包含了当前服务器全局的信息，重启后失效。代表的是javax.servlet.ServletContext类的对象。</p>
+</li>
+<li><p>response<br>包含了服务端返回客户端的响应信息，代表的是javax.servlet.HttpServletResponse类的对象。</p>
+</li>
+<li><p>out<br>向客户端输出数据。</p>
+</li>
+<li><p>config<br>ServletConfig类的一个实例，</p>
+</li>
+<li><p>pageContext<br>包含了当前页面的信息</p>
+</li>
+<li><p>exception<br>处理异常使用</p>
+</li>
+</ul>
+<h3 id="内置对象和作用域的对照"><a href="#内置对象和作用域的对照" class="headerlink" title="内置对象和作用域的对照"></a>内置对象和作用域的对照</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>内置对象名</th>
+<th>对应的Java类</th>
+<th>作用域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>page</td>
+<td>java.lang.Object</td>
+<td>Page</td>
+</tr>
+<tr>
+<td>request</td>
+<td>javax.servlet.http.HttpServletRequest</td>
+<td>Request</td>
+</tr>
+<tr>
+<td>session</td>
+<td>javax.servlet.http.HttpSession</td>
+<td>Session</td>
+</tr>
+<tr>
+<td>application</td>
+<td>javax.servlet.ServletContext</td>
+<td>Application</td>
+</tr>
+<tr>
+<td>response</td>
+<td>javax.servlet.http.HttpServletResponse</td>
+<td>Page</td>
+</tr>
+<tr>
+<td>out</td>
+<td>javax.servlet.jsp.JspWriter</td>
+<td>Page</td>
+</tr>
+<tr>
+<td>config</td>
+<td>javax.servlet.ServletConfig</td>
+<td>Page</td>
+</tr>
+<tr>
+<td>pageContext</td>
+<td>javax.servlet.jsp.PageContext</td>
+<td>Page</td>
+</tr>
+<tr>
+<td>exception</td>
+<td>java.lang.Throwable</td>
+<td>Page</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="转发和重定向"><a href="#转发和重定向" class="headerlink" title="转发和重定向"></a>转发和重定向</h2><h3 id="什么是转发和重定向"><a href="#什么是转发和重定向" class="headerlink" title="什么是转发和重定向"></a>什么是转发和重定向</h3><p>从体验上来说，转发后浏览器的URL不会变，而重定向时URL会变。从执行的原理上来说，转发是服务端的行为，期间request域共享；重定向是客户端的行为，客户端发现返回的http状态码是302时，将会向新的URL发送</p>
+<h3 id="Servlet中如何实现转发和重定向"><a href="#Servlet中如何实现转发和重定向" class="headerlink" title="Servlet中如何实现转发和重定向"></a>Servlet中如何实现转发和重定向</h3><ul>
+<li><p>转发<br>request.getRequestDispatcher(“目标文件”).forward(request,response)</p>
+</li>
+<li><p>重定向<br>response.sendRedirect(“目标文件”)</p>
+</li>
+</ul>
+<h3 id="JSP中如何实现转发和重定向"><a href="#JSP中如何实现转发和重定向" class="headerlink" title="JSP中如何实现转发和重定向"></a>JSP中如何实现转发和重定向</h3><ul>
+<li><p>转发<br><code> &lt;jsp:forward page=”目标文件” /&gt; </code></p>
+</li>
+<li><p>重定向<br><code>&lt;%response.sendRedirect(“目标文件”);//重定向到new.jsp%&gt;</code></p>
+</li>
+</ul>
+<h3 id="如何选择转发和重定向"><a href="#如何选择转发和重定向" class="headerlink" title="如何选择转发和重定向"></a>如何选择转发和重定向</h3><ul>
+<li><p>何时选择转发  </p>
+<ul>
+<li>当需要隐藏地址的时候，选用转发；</li>
+<li>当需要共享request域数据时，选用转发。</li>
+</ul>
+</li>
+<li><p>何时选择重定向<br>当不需要隐藏地址的时候，且不需要共享request域数据时，选用重定向。重定向只是单纯的重新访问一个新的地址。</p>
+</li>
+</ul>
+<h2 id="Servlet中的过滤器"><a href="#Servlet中的过滤器" class="headerlink" title="Servlet中的过滤器"></a>Servlet中的过滤器</h2><h3 id="为什么需要过滤器"><a href="#为什么需要过滤器" class="headerlink" title="为什么需要过滤器"></a>为什么需要过滤器</h3><p>在web开发中，我们可能需要对所有的请求都做一层过滤，例如权限验证这些操作等等。此时我们就需要一种技术，所有或者一类请求在处理前都会经过这个技术来进行一次预处理。</p>
+<h3 id="什么是过滤器"><a href="#什么是过滤器" class="headerlink" title="什么是过滤器"></a>什么是过滤器</h3><p>过滤器就是在请求到达Servlet之前会经过的一层，在过滤器这一层我们可以检查权限、可以对所有或者部分请求做统一的处理。</p>
+<h3 id="如何使用过滤器"><a href="#如何使用过滤器" class="headerlink" title="如何使用过滤器"></a>如何使用过滤器</h3><p>过滤器类一般都会实现<code>javax.servlet.Filter</code>这个接口。然后在web.xml中进行配置，下面是一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;filter&gt;</span><br><span class="line">    &lt;filter-name&gt;filter01&lt;/filter-name&gt; &lt;!-- filter的名字，自定义 --&gt;</span><br><span class="line">    &lt;filter-class&gt;filter.class&lt;/filter-class&gt; &lt;!-- filter类，可以是自己实现的，也可以使用默认的 --&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;key&lt;/param-name&gt;&lt;!-- 初始化参数，可选配置 --&gt;</span><br><span class="line">        &lt;param-value&gt;value&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">&lt;/filter&gt;</span><br><span class="line">&lt;filter-mapping&gt; &lt;!-- 配置filter生效的url，当访问这些url时，都会执行该filter --&gt;</span><br><span class="line">    &lt;filter-name&gt;filter01&lt;/filter-name&gt; &lt;!-- filter的名字，自定义 --&gt;</span><br><span class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt; &lt;!-- 这里可以精确匹配，也可以模糊匹配，例如匹配所有的url就是“/*”，匹配所有的jsp，就是“*.jsp”.注意，路径和扩展名匹配不可以同时使用 --&gt;</span><br><span class="line">&lt;/filter-mapping&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="过滤器链"><a href="#过滤器链" class="headerlink" title="过滤器链"></a>过滤器链</h3><h2 id="Servlet中的监听器"><a href="#Servlet中的监听器" class="headerlink" title="Servlet中的监听器"></a>Servlet中的监听器</h2><p>Servlet的监听器是实现了javax.servlet.ServletContextListener接口的服务端程序，它随web的启动而启动，在启动期间可以监听web应用内部发生的一系列事件。可以对不同域的不同事件设置监听，例如域内部属性的变化，request、session和application的创建和销毁等等。</p>
+<h3 id="官方提供的几个监听器"><a href="#官方提供的几个监听器" class="headerlink" title="官方提供的几个监听器"></a>官方提供的几个监听器</h3><p>Servlet监听器对特定的事件进行监听，当产生这些事件的时候，会执行监听器的代码。可以对应用的加载、卸载，对session的初始化、销毁，对session中值变化等事件进行监听。官方提供了一些对ServletContext、session、request的监听。</p>
+<h3 id="Session级别的监听"><a href="#Session级别的监听" class="headerlink" title="Session级别的监听"></a>Session级别的监听</h3><h4 id="HttpSessionListener"><a href="#HttpSessionListener" class="headerlink" title="HttpSessionListener"></a>HttpSessionListener</h4><p>全局监听session的创建和销毁，在XML中配置监听，全局的。</p>
+<ul>
+<li>sessionCreated<br>有新的session创建时，会出发执行这个方法</li>
+<li>sessionDestroyed<br>执行session.invalidate()方法时，或者session超时（默认30分钟）会执行该方法。</li>
+</ul>
+<h4 id="HttpSessionBindingListener"><a href="#HttpSessionBindingListener" class="headerlink" title="HttpSessionBindingListener"></a>HttpSessionBindingListener</h4><p>实例化后设置为session的属性，绑定到单个session。只能监听单个session，一个session对应一个HttpSessionBindingListener对象的实例。</p>
+<ul>
+<li>valueBound<br>当对象被绑定到session上时，例如：application.setAttribute(“onlineUserList”, onlineUserList);</li>
+<li>valueUnbound<br>执行方法session.invalidate()；或者session超时；或者修改了session域的属性，例如：session.setAttribute(“onlineUserListener”, “其他对象”);或者删除了某一个属性，例如：session.removeAttribute(“onlineUserListener”)。都会触发valueUnbound方法的执行。</li>
+</ul>
+<h4 id="HttpSessionAttributeListener"><a href="#HttpSessionAttributeListener" class="headerlink" title="HttpSessionAttributeListener"></a>HttpSessionAttributeListener</h4><p>监听session的属性变化</p>
+<ul>
+<li>attributeAdded<br>当有新的属性添加时，将会将会触发</li>
+<li>attributeRemoved<br>当有属性移除时，将会触发</li>
+<li>attributeReplaced<br>当有属性被覆盖时，将会触发</li>
+</ul>
+<h4 id="HttpSessionActivationListener"><a href="#HttpSessionActivationListener" class="headerlink" title="HttpSessionActivationListener"></a>HttpSessionActivationListener</h4><p>和HttpSessionBindingListener一样，需要绑定到session上，是对单个session的监听。有的时候需要对session做持久化，即将session持久化写到磁盘上，当服务器挂了重启后，还能恢复session中的信息。</p>
+<ul>
+<li>sessionWillPassivate<br>当执行这个方法的时候，可以把session保存到硬盘上</li>
+<li>sessionDidActivate<br>当执行这个方法的时候，就是把session从硬盘读取出来，并使用</li>
+</ul>
+<h3 id="ServletContext级别的监听"><a href="#ServletContext级别的监听" class="headerlink" title="ServletContext级别的监听"></a>ServletContext级别的监听</h3><h4 id="ServletContextAttributeListener"><a href="#ServletContextAttributeListener" class="headerlink" title="ServletContextAttributeListener"></a>ServletContextAttributeListener</h4><p>ServletContext上存在属性变化时，将会出发此类监听。</p>
+<ul>
+<li>attributeAdded<br>ServletContext上添加属性时触发。</li>
+<li>attributeRemoved<br>ServletContext上删除属性时触发。</li>
+<li>attributeReplaced<br>ServletContext上添加属性值被修改时触发。</li>
+</ul>
+<h4 id="ServletContextListener"><a href="#ServletContextListener" class="headerlink" title="ServletContextListener"></a>ServletContextListener</h4><p>监听ServletContext的创建和销毁</p>
+<ul>
+<li>contextInitialized<br>初始化ServletContext对象</li>
+<li>contextDestroyed<br>销毁ServletContext对象</li>
+</ul>
+<h3 id="request级别的监听"><a href="#request级别的监听" class="headerlink" title="request级别的监听"></a>request级别的监听</h3><h4 id="ServletRequestAttributeListener"><a href="#ServletRequestAttributeListener" class="headerlink" title="ServletRequestAttributeListener"></a>ServletRequestAttributeListener</h4><p>监听request属性变化事件</p>
+<ul>
+<li>attributeAdded<br>当request域有新的属性添加时，触发事件</li>
+<li>attributeRemoved<br>当request域有属性移除时，触发事件</li>
+<li>attributeReplaced<br>当request域有属性被覆盖时，触发事件</li>
+</ul>
+<h4 id="ServletRequestListener"><a href="#ServletRequestListener" class="headerlink" title="ServletRequestListener"></a>ServletRequestListener</h4><p>监听request生命周期的变化</p>
+<ul>
+<li>requestDestroyed<br>当request销毁时，触发该事件</li>
+<li>requestInitialized<br>当request初始化时，触发该事件</li>
+</ul>
+<h2 id="servlet的单例与多线程问题"><a href="#servlet的单例与多线程问题" class="headerlink" title="servlet的单例与多线程问题"></a>servlet的单例与多线程问题</h2><p>servlet是单例，多线程的。servlet类在web容器中只会被创建一个实例。但是多线程环境下，多个线程可以同时调用同一个Servlet的service方法。<br>所以在Servlet对象中使用共享变量的时候要小心，很容易出现线程安全问题。</p>
+<h2 id="servlet的单线程模式"><a href="#servlet的单线程模式" class="headerlink" title="servlet的单线程模式"></a>servlet的单线程模式</h2><p>默认Jsp的Servlet是单例、多线程的。但也可以在Jsp页面里声明<code> &lt;%@page isThreadSafe=”false”%&gt; </code>，表示Jsp的Servlet类将以Singleton模式来运行。即：Jsp对应的Servlet实例将不会同时被多个线程调用，一个请求创建一个Servlet实例。</p>
+<blockquote>
+<p>Jsp的Servlet里一般不会有很复杂的业务逻辑，更多的是页面展示，以及一些简单的数据处理，所以一般情况下不用配置<code>isThreadSafe=false</code>的，推荐配置为true.</p>
+</blockquote>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/Servlet/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>Servlet</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+    
+  </section>
+  
+    
+    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+    
+    
+
+  
+
+
+	
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+
+
+	<!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+	
+
+	
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

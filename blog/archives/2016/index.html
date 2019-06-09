@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Archives: 2016 | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover  half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      <div class="l_main">
+	
+		
+  <section class="post-list">
+    
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/12/30/book-2016-12-31-2016书单/">
+      2016书单
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-12-30</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/书单/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>书单</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>2016年看的书主要还是以技术类的比价多，意料之外的是看完了《西游记》。</p>
+<h2 id="1-《西游记》"><a href="#1-《西游记》" class="headerlink" title="1.《西游记》"></a>1.《西游记》</h2><p>和86版的电视剧差别挺大，在北京时，主要是坐地铁的时候看完的。</p>
+<p><img src="http://leocook-blog.test.upcdn.net/xiyouji.png" alt="西游记" title="西游记"></p>
+<p>图书地址：<a href="https://www.amazon.cn/dp/B00C4PGGUW" target="_blank" rel="noopener">https://www.amazon.cn/dp/B00C4PGGUW</a></p>
+<hr>
+<h2 id="2-《Spark最佳实践》"><a href="#2-《Spark最佳实践》" class="headerlink" title="2.《Spark最佳实践》"></a>2.《Spark最佳实践》</h2><p>同类目书籍中，比较偏向实战，推荐。</p>
+<p><img src="https://img3.doubanio.com/lpic/s28707922.jpg" alt="Spark最佳实践" title="Spark最佳实践"></p>
+<p>图书地址：<a href="https://item.jd.com/11923673.html" target="_blank" rel="noopener">https://item.jd.com/11923673.html</a></p>
+<hr>
+<h2 id="3-《Spark快速大数据分析》"><a href="#3-《Spark快速大数据分析》" class="headerlink" title="3.《Spark快速大数据分析》"></a>3.《Spark快速大数据分析》</h2><p>spark入门级别的书，写得比较细致，也可以作为手册查询，内容基本上都是官网翻译过来的。</p>
+<p><img src="https://img1.doubanio.com/lpic/s28300707.jpg" alt="Spark快速大数据分析" title="Spark快速大数据分析"></p>
+<p>图书地址：<a href="https://item.jd.com/11782888.html" target="_blank" rel="noopener">https://item.jd.com/11782888.html</a></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/书单/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>书单</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/10/13/spark-2016-10-13-spark内存管理/">
+      spark内存管理
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-10-13</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/spark/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>spark</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>Spark的最大卖点就是内存迭代运算，相对于传统MapReduce的磁盘迭代运算，spark的迭代运算要快得多。作为内存迭代运算的spark，掌握它的内存管理是很有必要的。</p>
+<p>Spark的内存可以大体上分为三大块：Reserved Memory（预留内存）、User Memory（用户内存），以及Spark Memory（Spark内存）。Spark Memory又包含Storage Memory和Execution Memory这两大块，1.6版本之前他们是不能共享的，从1.6版本(如下图)开始它们就可以共享了。<strong>而本文介绍的就是1.6版本开始之后内存管理机制。</strong></p>
+<p><img src="http://leocook-blog.test.upcdn.net/spark%20m.png" alt="spark mem" title="spark mem"></p>
+<p>本文在描述spark各个部分内存的时候，大概从三个方面介绍：概念描述、该内存参数怎么配置，内存不够的时候会发生什么情况。</p>
+<h2 id="1-Reserved-Memory"><a href="#1-Reserved-Memory" class="headerlink" title="1.Reserved Memory"></a>1.Reserved Memory</h2><p>系统预留内存，用于存储Spark内部对象。它的大小是300MB，不能通过参数修改，如果真的需要修改，需要重新编译（spark.testing.reservedMemory参数可以使用，但是不推荐在线上环境中使用）。</p>
+<p>当executor分配的内存小于1.5*Reserved Memory的时候，将会报“please use larger heap size”错误。</p>
+<h2 id="2-User-Memory"><a href="#2-User-Memory" class="headerlink" title="2.User Memory"></a>2.User Memory</h2><p>用户内存，用于存储RDD转换操作所需要的数据，例如RDD依赖等信息。<br>这个内存大小为(“Java Heap” – “Reserved Memory”) <em> (1.0 – spark.memory.fraction)，默认是(“Java Heap” – 300MB) </em> 0.25。如果用户使用的内存大于这个值，将会导致OOM。</p>
+<h2 id="3-Spark-Memory"><a href="#3-Spark-Memory" class="headerlink" title="3.Spark Memory"></a>3.Spark Memory</h2><p>这部分内存是归Spark自身管理的，大小为(“Java Heap” – “Reserved Memory”) <em> spark.memory.fraction，默认为(“Java Heap” – 300MB) </em> 0.75。Spark Memory又被分为Storage Memory和Execution Memory，下面详细说明。</p>
+<h3 id="3-1-Storage-Memory"><a href="#3-1-Storage-Memory" class="headerlink" title="3.1.Storage Memory"></a>3.1.Storage Memory</h3><p>用来存储spark的cache数据，例如RDD的缓存、unroll数据。当缓存数据的持久化level达到一定的时候，spark将会把它存到磁盘中，例如广播变量的数据持久化级别都是“MEMORY_AND_DISK”，所以所有的广播变量数据大小达到一定量的时候，都会存到磁盘中的。默认大小是Spark Memory的0.5，可用过参数spark.memory.storageFraction来配置（spark.memory.storageFraction=0.5）。</p>
+<ul>
+<li>Unroll Memory</li>
+</ul>
+<p>“Unroll Memory”是”Storage Memory”的一部分，在Spark中数据可以以序列化和反序列化的形式存储，序列化后的数据是无法直接被访问的，只有反序列化后才能被使用，反序列化过程中用到的RAM就是Unroll Memory。Spark中的大部分数据都是以序列化的形式传输的。</p>
+<h3 id="3-2-Execution-Memory"><a href="#3-2-Execution-Memory" class="headerlink" title="3.2.Execution Memory"></a>3.2.Execution Memory</h3><p>用于存储spark的buffer部分，例如task运行过程中产生的一些对象，shuffle过程中map的输出，在内存不够的时候，支持写到磁盘上。Spark Memory中能被应用使用的内存中，除了Storage Memory剩余内存都是Execution Memory的了。</p>
+<ul>
+<li>Shuffle Memory</li>
+</ul>
+<p>shuffle阶段使用的内存，主要是使用在sort上。如果这一块没有足够的内存来用作shuffle，将会内存溢出失败。<br>当然，在内存不足的时候，也可以使用spark的外部排序（spark.shuffle.spill=true），但是性能将会有些折扣。</p>
+<h3 id="3-3-Storage-Memory和Execution-Memory共享规则"><a href="#3-3-Storage-Memory和Execution-Memory共享规则" class="headerlink" title="3.3.Storage Memory和Execution Memory共享规则"></a>3.3.Storage Memory和Execution Memory共享规则</h3><ul>
+<li><p><strong>一方空闲，一方内存不足的时候，内存不足的一方可以借用另一方的内存。</strong></p>
+</li>
+<li><p><strong>Storage Memory占用了Execution Memory的内存，当Execution Memory内存不够用时</strong></p>
+</li>
+</ul>
+<p>强制释放Storage Memory中属于Execution Memory的那部分内存，释放后的内存被Execution Memory使用。Storage Memory丢失的数据在下次使用的时候会被重新计算。</p>
+<ul>
+<li><strong>Execution Memory占用了Storage Memory的内存，当Storage Memory内存不够用时</strong></li>
+</ul>
+<p>不强制释放Execution Memory中属于Storage Memory的那部分内存，Storage Memory会一直等待，直到Execution Memory主动释放属于Storage Memory的那部分内存。因为强制释放Execution Memory会导致任务失败。</p>
+<p>（PS：感觉Execution Memory在欺负Storage Memory，有木有~~~）</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/spark/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>spark</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/10/12/spark-2016-10-12-spark-streaming最佳实践-概述/">
+      spark streaming最佳实践-概述
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-10-12</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/spark/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>spark</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>Spark streaming是基于Spark core的，天然的具备易扩展、高吞吐量，以及自动容错等特性。支持的主流数据源有Kafka、Flume、HDFS、Twitter、TCP socket等等，Spark的数据输出在spark streaming中都支持，对于有spark基础的开发人员来说，开发spark streaming应用成本将会少很多。本文是一篇概述型的文章，相关详细的配置会在后边逐渐补上。</p>
+<p>Spark streaming在企业实战中经常回到这么几类问题：内存溢出、外部系统连接数过多、分配的资源超过了程序所需要的资源，造成资源浪费。</p>
+<h2 id="1-内存溢出"><a href="#1-内存溢出" class="headerlink" title="1.内存溢出"></a>1.内存溢出</h2><p>Spark内存大概分为了两类：Execution Memory和Storage Memory，前者主要用来做buffer的，例如joins、shuffle、sort等等；后者主要用来做cache，例如RDD的数据存储、广播变量、task结果数据等等。从1.6版本之前这两部分内存是不能共享的，从1.6开始之后这两部分内存就可以共享了。</p>
+<p>我遇到的内存溢出问题大概有三类，通常是单个分区处理的数据量过多：</p>
+<ul>
+<li>a).数据倾斜引；   </li>
+<li>b).数据未倾斜，分区数过少；   </li>
+<li>c).某个分区中产生了一个较大的内存集合，例如大的List、Set，或者Map。   </li>
+</ul>
+<p>这类问题在spark core中也是经常会出现的，关于数据倾斜的问题以后会详细讲解。入手一个新的业务时，应该对该业务的数据量有个大概的预估，这样给这个应用分配多少节点，每个节点会处理多大的数据量，这样就能很好的预估出每个节点分配多少资源比较合理了。</p>
+<p>为了避免内存溢出，可以从下面几个方向来做：</p>
+<ul>
+<li>a).避免数据倾斜；</li>
+<li>b).评估每个分区的数据量，给每个分区分配合理的资源；</li>
+<li>c).控制好List、Set等集合的大小；</li>
+<li>d).控制Spark streaming读取源数据的最大速度（spark.streaming.kafka.maxRatePerPartition），实时数据流量有高峰和低谷，不同时间处理的数据量是不一样的，为防止数据高峰的时候内存溢出，这里有必要做配置；</li>
+<li>e).配置Spark streaming可动态控制读取数据源的速度（spark.streaming.backpressure.enabled）。</li>
+</ul>
+<h2 id="2-外部系统连接数过多"><a href="#2-外部系统连接数过多" class="headerlink" title="2.外部系统连接数过多"></a>2.外部系统连接数过多</h2><p>在使用spark streaming解决问题的时候，经常会对外部数据源进行读写操作，切记每次读写完成之后需要关闭网络连接。在我们以往的编程经验中，这些思维都是一直持有的。<br>在往hbase写入数据的时候，如果你使用了RDD.saveAsHadoopDataset方法，就需要注意了，org.apache.hadoop.hbase.mapred.TableOutputFormat类存在bug：不能释放zookeeper连接，导致在往hbase写数据的时候，zookeeper的连接数不停得增长。</p>
+<p>推荐使用下面这种写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import org.apache.hadoop.mapreduce.Job</span><br><span class="line">import org.apache.hadoop.hbase.mapreduce.TableOutputFormat</span><br><span class="line"></span><br><span class="line">val conf = HBaseConfiguration.create()</span><br><span class="line">conf.set(&quot;hbase.zookeeper.quorum&quot;, zk_hosts)</span><br><span class="line">conf.set(&quot;hbase.zookeeper.property.clientPort&quot;, zk_port)</span><br><span class="line"></span><br><span class="line">conf.set(TableOutputFormat.OUTPUT_TABLE, &quot;TABLE_NAME&quot;)</span><br><span class="line">val job = Job.getInstance(conf)</span><br><span class="line">job.setOutputFormatClass(classOf[TableOutputFormat[String]])</span><br><span class="line"></span><br><span class="line">formatedLines.map&#123;</span><br><span class="line">  case (a,b, c) =&gt; &#123;</span><br><span class="line">    val row = Bytes.toBytes(a)</span><br><span class="line"></span><br><span class="line">    val put = new Put(row)</span><br><span class="line">    put.setDurability(Durability.SKIP_WAL)</span><br><span class="line"></span><br><span class="line">    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;node&quot;), Bytes.toBytes(b))</span><br><span class="line">    put.addColumn(Bytes.toBytes(&quot;cf&quot;), Bytes.toBytes(&quot;topic&quot;), Bytes.toBytes(c))</span><br><span class="line"></span><br><span class="line">    (new ImmutableBytesWritable(row), put)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;.saveAsNewAPIHadoopDataset(job.getConfiguration)</span><br></pre></td></tr></table></figure>
+<h2 id="3-资源分配的浪费"><a href="#3-资源分配的浪费" class="headerlink" title="3.资源分配的浪费"></a>3.资源分配的浪费</h2><p>如果实时数据在每天的某个时间点有着平时的几倍的数据量，如果给该作业分配过多的资源，那么在绝大多数，这些资源都是闲置浪费的。这里可以启用动态资源分配。</p>
+<p>关于配置介绍可以查看官方文档：<a href="http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation" target="_blank" rel="noopener">http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation</a></p>
+<p>如果启用该配置，需要做如下配置：</p>
+<blockquote>
+<p>1.在spark应用中配置spark.dynamicAllocation.enabled=true<br>2.每个节点启动外部shuffle服务，并在spark应用中配置spark.shuffle.service.enabled=true</p>
+</blockquote>
+<p>关于外部shuffle服务，在standalone、Mesos，yarn中的配置是不一样的。</p>
+<ul>
+<li>standalone</li>
+</ul>
+<p>启动worker的时候指定spark.shuffle.service.enabled=true</p>
+<ul>
+<li>Mesos</li>
+</ul>
+<p>在所有节点上配置spark.shuffle.service.enabled=true，然后执行$SPARK_HOME/sbin/start-mesos-shuffle-service.sh</p>
+<ul>
+<li>yarn</li>
+</ul>
+<p>a.添加yarn的配置文件，重新编译spark。如果使用官方编译好的安装包，可以忽略这一步。<br>b.找到spark-<version>-yarn-shuffle.jar。如果自己编译spark的话，在目录$SPARK_HOME/common/network-yarn/target/scala-<version>下；如果是使用官方编译好的spark，在lib目录下寻找。<br>c.添加到spark-<version>-yarn-shuffle.jar到yarn所有NodeManager的classpath下。<br>d.配置所有NodeManager的yarn-site.xml文件如下：</version></version></version></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;spark_shuffle&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.aux-services.spark_shuffle.class&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;org.apache.spark.network.yarn.YarnShuffleService&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>e.重启所有的NodeManager</p>
+<p>spark on yarn配置了外部shuffle之后，<code>—num-executors</code>配置将不再生效。</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/spark/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>spark</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/08/17/ELK-2016-07-20-ELK安装配置介绍/">
+      ELK安装配置介绍
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-08-17</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/ELK/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>ELK</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
+<h2 id="版本列表"><a href="#版本列表" class="headerlink" title="版本列表"></a>版本列表</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>project</th>
+<th>version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>es</td>
+<td>2.3.4</td>
+</tr>
+<tr>
+<td>logstash</td>
+<td>2.3.4</td>
+</tr>
+<tr>
+<td>kibana</td>
+<td>4.5.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="1-logstash配置"><a href="#1-logstash配置" class="headerlink" title="1.logstash配置"></a>1.logstash配置</h2><h3 id="1-1-Jdk安装"><a href="#1-1-Jdk安装" class="headerlink" title="1.1.Jdk安装"></a>1.1.Jdk安装</h3><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></p>
+<h3 id="1-2-下载logstash"><a href="#1-2-下载logstash" class="headerlink" title="1.2.下载logstash"></a>1.2.下载logstash</h3><p><a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="noopener">https://www.elastic.co/downloads/logstash</a></p>
+<h3 id="1-3-启动"><a href="#1-3-启动" class="headerlink" title="1.3.启动"></a>1.3.启动</h3><p>解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。</p>
+<ul>
+<li>使用-e指定启动的参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./logstash -e &apos;input &#123; stdin &#123; &#125; &#125; output &#123; stdout &#123;&#125; &#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>这里设定stdin为输入，stdout为输出。</p>
+<ul>
+<li>使用配置文件启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat logstash-simple.conf</span><br><span class="line">input &#123; stdin &#123; &#125; &#125;</span><br><span class="line">output &#123;</span><br><span class="line">   stdout &#123; codec=&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">./logstash agent -f logstash-simple.conf</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-验证"><a href="#1-4-验证" class="headerlink" title="1.4.验证"></a>1.4.验证</h3><p>启动后才命令行输入”hello World”，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf</span><br><span class="line"></span><br><span class="line">Settings: Default pipeline workers: 1</span><br><span class="line">Pipeline main started</span><br><span class="line">hello World</span><br><span class="line">&#123;</span><br><span class="line">       &quot;message&quot; =&gt; &quot;hello World&quot;,</span><br><span class="line">       &quot;@version&quot; =&gt; &quot;1&quot;,</span><br><span class="line">       &quot;@timestamp&quot; =&gt; &quot;2016-07-18T07:20:20.526Z&quot;,</span><br><span class="line">       &quot;host&quot; =&gt; &quot;0.0.0.0&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印出来的message部分显示为输入内容。</p>
+<h2 id="2-ES"><a href="#2-ES" class="headerlink" title="2.ES"></a>2.ES</h2><h3 id="2-1-下载"><a href="#2-1-下载" class="headerlink" title="2.1.下载"></a>2.1.下载</h3><p><a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/downloads/elasticsearch</a></p>
+<h3 id="2-2-配置"><a href="#2-2-配置" class="headerlink" title="2.2.配置"></a>2.2.配置</h3><p>配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi config/elasticsearch.yml</span><br><span class="line">network.host: 0.0.0.0</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-启动"><a href="#2-3-启动" class="headerlink" title="2.3.启动"></a>2.3.启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-插件安装"><a href="#2-4-插件安装" class="headerlink" title="2.4.插件安装"></a>2.4.插件安装</h3><p>kopf插件安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf</span><br></pre></td></tr></table></figure>
+<p>安装完之后，可以访问web页面<a href="http://[hostname]:9200/_plugin/kopf查看。" target="_blank" rel="noopener">http://[hostname]:9200/_plugin/kopf查看。</a></p>
+<h3 id="2-5-验证"><a href="#2-5-验证" class="headerlink" title="2.5.验证"></a>2.5.验证</h3><p>es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -anp |grep :9200</span><br></pre></td></tr></table></figure>
+<p>或者使用浏览器访问端口9200.</p>
+<h2 id="3-Kibana"><a href="#3-Kibana" class="headerlink" title="3. Kibana"></a>3. Kibana</h2><h3 id="3-1-下载"><a href="#3-1-下载" class="headerlink" title="3.1.下载"></a>3.1.下载</h3><p><a href="https://www.elastic.co/downloads/kibana" target="_blank" rel="noopener">https://www.elastic.co/downloads/kibana</a></p>
+<h3 id="3-2-配置"><a href="#3-2-配置" class="headerlink" title="3.2.配置"></a>3.2.配置</h3><p>配置一下es的地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi config/kibana.yml</span><br><span class="line"></span><br><span class="line">elasticsearch.url: &quot;http://[hostname]:9200&quot;</span><br></pre></td></tr></table></figure>
+<p>这里默认是使用ES的数据。</p>
+<h3 id="3-3-启动"><a href="#3-3-启动" class="headerlink" title="3.3.启动"></a>3.3.启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-验证"><a href="#3-4-验证" class="headerlink" title="3.4.验证"></a>3.4.验证</h3><p>访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[hostname]:5601/</span><br></pre></td></tr></table></figure>
+<p>点击”create”创建索引名称。</p>
+<h2 id="4-使ELK整体协作起来"><a href="#4-使ELK整体协作起来" class="headerlink" title="4.使ELK整体协作起来"></a>4.使ELK整体协作起来</h2><h3 id="4-1-原理"><a href="#4-1-原理" class="headerlink" title="4.1.原理"></a>4.1.原理</h3><ul>
+<li>logstash</li>
+</ul>
+<p>logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。</p>
+<ul>
+<li>kibana</li>
+</ul>
+<p>kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。</p>
+<h3 id="4-2-E和L的连接"><a href="#4-2-E和L的连接" class="headerlink" title="4.2.E和L的连接"></a>4.2.E和L的连接</h3><p>其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vi logstash-indexer.conf</span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    type =&gt;&quot;syslog&quot;</span><br><span class="line">    path =&gt; [ &quot;/var/log/syslog&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  syslog &#123;</span><br><span class="line">    type =&gt;&quot;syslog&quot;</span><br><span class="line">    port =&gt;&quot;5544&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">  stdout &#123; codec=&gt; rubydebug &#125;</span><br><span class="line">  elasticsearch &#123;hosts =&gt; &quot;localhost&quot; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置介绍</li>
+</ul>
+<p>logstash的配置里，一定要有一个input和一个output。<br>file: 这里配置输入的文件信息。<br>syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。<br>output里定义了两处输出，分别是<strong>stdout</strong>命令行和<strong>elasticsearch</strong>。</p>
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./logstash agent -f logstash-indexer.conf &gt; nohup &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-Kibana的配置"><a href="#4-3-Kibana的配置" class="headerlink" title="4.3.Kibana的配置"></a>4.3.Kibana的配置</h3><p>只需要修改kibana.yml中es的地址就可以了。</p>
+<h3 id="4-4-ES"><a href="#4-4-ES" class="headerlink" title="4.4.ES"></a>4.4.ES</h3><p>ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。</p>
+<h3 id="5-小结"><a href="#5-小结" class="headerlink" title="5.小结"></a>5.小结</h3><p>ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。</p>
+<p>参考地址：<br><a href="http://baidu.blog.51cto.com/71938/1676798" target="_blank" rel="noopener">http://baidu.blog.51cto.com/71938/1676798</a><br><a href="https://www.gitbook.com/book/chenryn/kibana-guide-cn/details" target="_blank" rel="noopener">https://www.gitbook.com/book/chenryn/kibana-guide-cn/details</a></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/es-logstash-kibana-ELK/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>es logstash kibana ELK</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/07/26/nginx-2016-07-26-Lua-on-Nginx/">
+      Lua_on_Nginx
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-07-26</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/nginx/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>nginx</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>Nginx的高并发是它的一大显著优势，Lua则是一门较为轻便的脚本语言。把他们组合在一起，则极大的增强了Nginx的能力（灵活性，扩展性）。<br>Nginx-Lua模块是由淘宝开发的第三方模块，使用它可以把Lua内嵌到Nginx中。</p>
+<p>nginx  地址：<a href="http://www.nginx.org" target="_blank" rel="noopener">http://www.nginx.org</a></p>
+<p>luajit 地址：<a href="http://luajit.org/download.html" target="_blank" rel="noopener">http://luajit.org/download.html</a></p>
+<p>HttpLuaModule 地址：<a href="http://wiki.nginx.org/HttpLuaModule" target="_blank" rel="noopener">http://wiki.nginx.org/HttpLuaModule</a></p>
+<h2 id="1-系统环境"><a href="#1-系统环境" class="headerlink" title="1.系统环境"></a>1.系统环境</h2><p>必须的编译环境，需要提前准备好。我这里的环境是ubuntu14.04，用的apt source是官方的源，使用163 source的时候有问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get install make</span><br><span class="line">apt-get install gcc</span><br><span class="line">apt-get install libpcre3 libpcre3-dev</span><br><span class="line">apt-get install libssl-dev</span><br></pre></td></tr></table></figure>
+<h2 id="2-Lua的运行时环境配置"><a href="#2-Lua的运行时环境配置" class="headerlink" title="2.Lua的运行时环境配置"></a>2.Lua的运行时环境配置</h2><h3 id="2-1-下载Lua的运行环境"><a href="#2-1-下载Lua的运行环境" class="headerlink" title="2.1.下载Lua的运行环境"></a>2.1.下载Lua的运行环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/</span><br><span class="line"></span><br><span class="line">wget http://luajit.org/download/LuaJIT-2.0.4.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf LuaJIT-2.0.4.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-编译安装"><a href="#2-2-编译安装" class="headerlink" title="2.2.编译安装"></a>2.2.编译安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/LuaJIT-2.0.4</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="3-下载Nginx的lua模块"><a href="#3-下载Nginx的lua模块" class="headerlink" title="3.下载Nginx的lua模块"></a>3.下载Nginx的lua模块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/</span><br><span class="line"></span><br><span class="line">wget https://github.com/openresty/lua-nginx-module/archive/v0.10.5.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf v0.10.5.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="4-Nginx配置"><a href="#4-Nginx配置" class="headerlink" title="4.Nginx配置"></a>4.Nginx配置</h2><h3 id="4-1-下载nginx"><a href="#4-1-下载nginx" class="headerlink" title="4.1.下载nginx"></a>4.1.下载nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/</span><br><span class="line"></span><br><span class="line">wget http://nginx.org/download/nginx-1.10.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf nginx-1.10.1.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-编译安装"><a href="#4-2-编译安装" class="headerlink" title="4.2.编译安装"></a>4.2.编译安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 导入环境变</span><br><span class="line">export LUAJIT_LIB=/usr/local/lib</span><br><span class="line">export LUAJIT_INC=/usr/local/include/luajit-2.0</span><br><span class="line"></span><br><span class="line"># 安装到/usr/local/nginx-1.10.1目录下</span><br><span class="line">./configure --prefix=/usr/local/nginx-1.10.1 --add-module=../lua-nginx-module-0.10.5</span><br><span class="line"></span><br><span class="line">make -j2</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-配置"><a href="#4-3-配置" class="headerlink" title="4.3.配置"></a>4.3.配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx-1.10.1</span><br><span class="line">vi conf/nginx.conf</span><br></pre></td></tr></table></figure>
+<p>然后在http -&gt; server下加入配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location /lua_test &#123;</span><br><span class="line">    default_type &apos;text/plain&apos;;</span><br><span class="line">    content_by_lua &apos;ngx.say(&quot;hello, ttlsa lua&quot;)&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个配置后，访问<a href="http://[hostname]:[port]/lua_test，就能访问你所定义的代码块了。" target="_blank" rel="noopener">http://[hostname]:[port]/lua_test，就能访问你所定义的代码块了。</a></p>
+<p>如果你还想修改nginx的http端口，修改一下<strong>http.server</strong>中的<strong>listen</strong>值，就可以了。</p>
+<h3 id="4-4-启动nginx"><a href="#4-4-启动nginx" class="headerlink" title="4.4.启动nginx"></a>4.4.启动nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/nginx-1.10.1/sbin/nginx</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-验证"><a href="#4-5-验证" class="headerlink" title="4.5.验证"></a>4.5.验证</h3><p>查看端口的运行情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# netstat -anp|grep 4002</span><br><span class="line">tcp        0      0 0.0.0.0:4002            0.0.0.0:*               LISTEN      1736/nginx</span><br></pre></td></tr></table></figure>
+<p>或者直接请求4002端口。（我这里使用的是4002端口，你可以根据需要，设置为你需要的。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/usr/local/nginx-1.10.1/sbin# curl http://192.168.1.160:4002/lua_test</span><br><span class="line">hello, ttlsa lua</span><br></pre></td></tr></table></figure>
+<h2 id="5-FAQ"><a href="#5-FAQ" class="headerlink" title="5.FAQ"></a>5.FAQ</h2><h3 id="5-1-缺少pcre3"><a href="#5-1-缺少pcre3" class="headerlink" title="5.1.缺少pcre3"></a>5.1.缺少pcre3</h3><ul>
+<li>错误log</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./configure: error: the HTTP rewrite module requires the PCRE library.</span><br><span class="line">You can either disable the module by using --without-http_rewrite_module</span><br><span class="line">option, or install the PCRE library into the system, or build the PCRE library</span><br><span class="line">statically from the source with nginx by using --with-pcre=&lt;path&gt; option.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解决办法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libpcre3 libpcre3-dev</span><br></pre></td></tr></table></figure>
+<h3 id="5-2-缺少libssl"><a href="#5-2-缺少libssl" class="headerlink" title="5.2.缺少libssl"></a>5.2.缺少libssl</h3><ul>
+<li>错误log</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./configure: error: the HTTP gzip module requires the zlib library.</span><br><span class="line">You can either disable the module by using --without-http_gzip_module</span><br><span class="line">option, or install the zlib library into the system, or build the zlib library</span><br><span class="line">statically from the source with nginx by using --with-zlib=&lt;path&gt; option.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解决办法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libssl-dev</span><br></pre></td></tr></table></figure>
+<p>参考地址：<br><a href="http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/" target="_blank" rel="noopener">http://www.ttlsa.com/nginx/nginx-modules-ngx_lua/</a></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/nginx-lua/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>nginx lua</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/">
+      Install_hadoop_cluster_on_CM
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-07-23</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/hadoop/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>hadoop</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.</p>
+<h2 id="1-Cloudera-Manager安装前准备"><a href="#1-Cloudera-Manager安装前准备" class="headerlink" title="1.Cloudera Manager安装前准备"></a>1.Cloudera Manager安装前准备</h2><h3 id="1-1-操作系统的优化"><a href="#1-1-操作系统的优化" class="headerlink" title="1.1. 操作系统的优化"></a>1.1. 操作系统的优化</h3><ul>
+<li>打开的最大文件数<br>修改当前的session配置(临时)：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -SHn 65535</span><br></pre></td></tr></table></figure>
+<p>永久修改（需要重启服务器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;ulimit -SHn 65535&quot; &gt;&gt; /etc/rc.local</span><br><span class="line">sudo chmod +x /etc/rc.local</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开的组大文件句柄数<br>临时配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 一般可不做修改，这是临时配置</span><br><span class="line">sudo echo 2000000 &gt; /proc/sys/fs/file-max</span><br></pre></td></tr></table></figure>
+<p>永久配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;echo 2000000 &gt; /proc/sys/fs/file-max&quot; &gt;&gt; /etc/rc.local</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;fs.file-max = 2000000&quot; &gt;&gt;/etc/sysctl.conf #推荐</span><br><span class="line">#使文件生效sudo /sbin/sysctl -p</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开的最大网络连接数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;net.core.somaxconn = 2048&quot; &gt;&gt;/etc/sysctl.conf</span><br><span class="line">sudo /sbin/sysctl -p</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关闭selinux</li>
+</ul>
+<p>ubuntu默认是不安装的selinux的，所以这里可以直接忽略。</p>
+<ul>
+<li>配置ntp</li>
+</ul>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install ntp</span><br></pre></td></tr></table></figure>
+<p>如果只需要保证集群内部的各个server之间时间保持同步，只需要在需要同步的机器上配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 */12 * * * ntpdate dt-vt-154</span><br></pre></td></tr></table></figure>
+<p>如果需要时间和互联网的时间保持一致，那么就需要在提供ntp server的机器上配置上层ntpserver:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">server [ntpserver_01]</span><br><span class="line">server [ntpserver_02]</span><br><span class="line">server [ntpserver_03]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关闭防火墙</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw disable #关闭防火墙</span><br><span class="line">apt-get remove iptables #卸载防火墙</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置好hosts映射文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/hosts</span><br><span class="line"></span><br><span class="line">192.168.1.151   dt-vt-151</span><br><span class="line">192.168.1.152   dt-vt-152</span><br><span class="line">192.168.1.153   dt-vt-153</span><br><span class="line">192.168.1.154   dt-vt-154</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Java环境配置</li>
+</ul>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/java</span><br><span class="line">cd /opt/java</span><br><span class="line">#下载到安装文件到这个目录</span><br></pre></td></tr></table></figure>
+<p>环境配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line"></span><br><span class="line">export JAVA_HOME=/opt/java/jdk1.7.0_79</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>执行下面命令，使当前的session生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-数据的存放"><a href="#1-2-数据的存放" class="headerlink" title="1.2. 数据的存放"></a>1.2. 数据的存放</h3><p>在使用CM来管理集群的时候，会涉及到大量的数据存储，例如Hadoop的主机列表信息，主机的配置信息，负载信息，各个模块的运行时状态等等。<br>咱们这里使用mysql来作为CM的数据存储，这里不仅是CM，Hadoop中的Hive等模块的元数据，都来使用mysql存储。</p>
+<ul>
+<li>安装mysql</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
+<p>我这里安装完后是5.5.49.</p>
+<ul>
+<li>关闭mysql，备份配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/mysql stop</span><br></pre></td></tr></table></figure>
+<p>把/var/lib/mysql/ib_logfile0和/var/lib/mysql/ib_logfile1拷贝至某个配置目录中，例如：/var/lib/mysql/bak</p>
+<ul>
+<li>配置InnoDB引擎</li>
+</ul>
+<p>务必使用InnoDB引擎引擎，若是使用MyISAM引擎CM将启动不了。在Mysql的命令行中运行下面的命令，来查看你的Mysql使用了哪个引擎。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show table status;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置mysql的innodb刷写模式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_flush_method=O_DIRECT</span><br></pre></td></tr></table></figure>
+<p>即：配置Innodb的刷写模式为异步写模式。</p>
+<ul>
+<li>修改mysql的最大连接数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max_connections=1550</span><br></pre></td></tr></table></figure>
+<p>在这里，你应该会考虑配置该数值为多少比较合适。<br>当集群规模<strong>小于50台</strong>的时候，假设该库中有N个数据库是用来服务于Hadoop的，那么max_connections可以设置为100<em>N+50。例如：Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, 和 Hive metastore都是使用mysql的，那么就配置max_connections为550.<br>当集群规模<em>*大于50台</em></em>的时候，建议每个数据库只存放在一台机器上。</p>
+<ul>
+<li>配置文件样例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">transaction-isolation = READ-COMMITTED</span><br><span class="line"># Disabling symbolic-links is recommended to prevent assorted security risks;</span><br><span class="line"># to do so, uncomment this line:</span><br><span class="line"># symbolic-links = 0</span><br><span class="line"></span><br><span class="line">key_buffer = 16M</span><br><span class="line">key_buffer_size = 32M</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line">thread_stack = 256K</span><br><span class="line">thread_cache_size = 64</span><br><span class="line">query_cache_limit = 8M</span><br><span class="line">query_cache_size = 64M</span><br><span class="line">query_cache_type = 1</span><br><span class="line"></span><br><span class="line">max_connections = 1550</span><br><span class="line">#expire_logs_days = 10</span><br><span class="line">#max_binlog_size = 100M</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># InnoDB settings</span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">innodb_flush_log_at_trx_commit  = 2</span><br><span class="line">innodb_log_buffer_size = 64M</span><br><span class="line">innodb_buffer_pool_size = 4G</span><br><span class="line">innodb_thread_concurrency = 8</span><br><span class="line">innodb_flush_method = O_DIRECT</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line">log-error=/var/log/mysqld.log</span><br><span class="line">pid-file=/var/run/mysqld/mysqld.pid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动mysql</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/mysql start</span><br></pre></td></tr></table></figure>
+<p>打开开机自启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install sysv-rc-conf</span><br><span class="line">sysv-rc-conf mysql on</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装mysql-jdbc驱动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libmysql-java</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mysql远程连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/mysql/my.cnf</span><br><span class="line"></span><br><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>給相关服务创建mysql的数据库</li>
+</ul>
+<p>相关列表如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Database</th>
+<th>User</th>
+<th>Password</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity Monitor</td>
+<td>amon</td>
+<td>amon</td>
+<td>amon_password</td>
+</tr>
+<tr>
+<td>Reports Manager</td>
+<td>rman</td>
+<td>rman</td>
+<td>rman_password</td>
+</tr>
+<tr>
+<td>Hive Metastore Server</td>
+<td>hive_metastore</td>
+<td>hive</td>
+<td>hive_password</td>
+</tr>
+<tr>
+<td>Sentry Server</td>
+<td>sentry</td>
+<td>sentry</td>
+<td>sentry_password</td>
+</tr>
+<tr>
+<td>Cloudera Navigator Audit Server</td>
+<td>nav</td>
+<td>nav</td>
+<td>nav_password</td>
+</tr>
+<tr>
+<td>Cloudera Navigator Metadata Server</td>
+<td>navms</td>
+<td>navms</td>
+<td>navms_password</td>
+</tr>
+<tr>
+<td>OOZIE</td>
+<td>oozie</td>
+<td>oozie</td>
+<td>oozie</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>建表语句格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create database database DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on database.* TO &apos;user&apos;@&apos;%&apos; IDENTIFIED BY &apos;password&apos;;</span><br></pre></td></tr></table></figure>
+<p>建表语句如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">create database amon DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on amon.* TO &apos;amon&apos;@&apos;%&apos; IDENTIFIED BY &apos;amon&apos;;</span><br><span class="line"></span><br><span class="line">create database rmon DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on rmon.* TO &apos;rmon&apos;@&apos;%&apos; IDENTIFIED BY &apos;rmon&apos;;</span><br><span class="line"></span><br><span class="line">create database hive_metastore DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on hive_metastore.* TO &apos;hive&apos;@&apos;%&apos; IDENTIFIED BY &apos;hive&apos;;</span><br><span class="line"></span><br><span class="line">create database sentry DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on sentry.* TO &apos;sentry&apos;@&apos;%&apos; IDENTIFIED BY &apos;sentry&apos;;</span><br><span class="line"></span><br><span class="line">create database nav DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on nav.* TO &apos;nav&apos;@&apos;%&apos; IDENTIFIED BY &apos;nav&apos;;</span><br><span class="line"></span><br><span class="line">create database navms DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on navms.* TO &apos;navms&apos;@&apos;%&apos; IDENTIFIED BY &apos;navms&apos;;</span><br><span class="line"></span><br><span class="line">create database oozie DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on oozie.* TO &apos;oozie&apos;@&apos;%&apos; IDENTIFIED BY &apos;oozie&apos;;</span><br></pre></td></tr></table></figure>
+<h2 id="2-开始安装Cloudera-Manager"><a href="#2-开始安装Cloudera-Manager" class="headerlink" title="2.开始安装Cloudera Manager"></a>2.开始安装Cloudera Manager</h2><h3 id="2-1-下载CM"><a href="#2-1-下载CM" class="headerlink" title="2.1.下载CM"></a>2.1.下载CM</h3><p>可以下载安装最新版本的CM：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>当然，如果你想选择安装其它版本，可以访问下面的地址，并选择下载你所需要的版本(cm5+)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://archive.cloudera.com/cm5/installer/</span><br></pre></td></tr></table></figure>
+<p>我这里使用的是版本是5.4.10，从release note上看，目前cdh5.4.10是最稳当的版本。我下载到了本地路径如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/cm/cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>修改权限，使其可以被执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-配置私有软件仓库-如果不使用私有仓库，这里可以直接跳过"><a href="#2-2-配置私有软件仓库-如果不使用私有仓库，这里可以直接跳过" class="headerlink" title="2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)"></a>2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)</h3><h4 id="2-2-1-创建一个临时可以使用的远程仓库"><a href="#2-2-1-创建一个临时可以使用的远程仓库" class="headerlink" title="2.2.1.创建一个临时可以使用的远程仓库"></a>2.2.1.创建一个临时可以使用的远程仓库</h4><p>这个配置是在安装cloudera-manager-server的时候才会用的。这里的仓库是使用传统的http协议，通过网络传输数据的。可以去<a href="http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。</a></p>
+<ul>
+<li>解压安装包</li>
+</ul>
+<p>下载完安装包后，解压到某个目录下，我这里下载的是cm5.4.10-ubuntu14-04.tar.gz这个版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf cm5.4.10-ubuntu14-04.tar.gz</span><br><span class="line">chmod -R ugo+rX /opt/cm/local_resp/cm</span><br></pre></td></tr></table></figure>
+<p>解压后的目录是/opt/cm/local_resp/cm</p>
+<ul>
+<li>启动Http server</li>
+</ul>
+<p>启动一个Http服务，使可以通过网络来访问仓库中的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/cm/</span><br><span class="line">python -m SimpleHTTPServer 8900</span><br></pre></td></tr></table></figure>
+<p>我这里使用的是8900，你可以根据需要，使用指定的端口。</p>
+<ul>
+<li>验证</li>
+</ul>
+<p>可在浏览器中访问地址<a href="http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。" target="_blank" rel="noopener">http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。</a></p>
+<h4 id="2-2-2-配置安装CM所需要的私有仓库"><a href="#2-2-2-配置安装CM所需要的私有仓库" class="headerlink" title="2.2.2.配置安装CM所需要的私有仓库"></a>2.2.2.配置安装CM所需要的私有仓库</h4><p>在目录<strong>/etc/apt/sources.list.d/</strong>下创建文件<strong>my-private-cloudera-repo.list</strong>，并写入配置把这个文件和上面新建的仓库关联到一起：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/apt/sources.list.d/my-private-cloudera-repo.list</span><br><span class="line"></span><br><span class="line">deb [arch=amd64] http://192.168.1.154:8900/cm/ trusty-cm5.4.10 contrib</span><br></pre></td></tr></table></figure>
+<p>执行下面的命令，使得上面的配置生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-3-配置使用CM安装节点时会用到的仓库"><a href="#2-2-3-配置使用CM安装节点时会用到的仓库" class="headerlink" title="2.2.3.配置使用CM安装节点时会用到的仓库"></a>2.2.3.配置使用CM安装节点时会用到的仓库</h3><p>可以下载地址：<a href="http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/</a> 里的所有内容到本地，然后使用<strong>2.2.1</strong>中的方式来启动一个Http server。</p>
+<h3 id="2-2-4-配置节点的JDK"><a href="#2-2-4-配置节点的JDK" class="headerlink" title="2.2.4.配置节点的JDK"></a>2.2.4.配置节点的JDK</h3><p>这一步是可选的，如果你不想每台机器都去手动安装，也可以在后边使用CM来批量安装。</p>
+<h3 id="2-3-开始安装CM"><a href="#2-3-开始安装CM" class="headerlink" title="2.3.开始安装CM"></a>2.3.开始安装CM</h3><ul>
+<li>连接互联网安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<ul>
+<li>使用本地仓库安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./cloudera-manager-installer.bin --skip_repo_package=1</span><br></pre></td></tr></table></figure>
+<p>然后就是一路的YES &amp; NEXT，最后安装完成，CM默认的端口是7180，账户名和密码都是7180.</p>
+<h3 id="2-4-使用CM安装集群"><a href="#2-4-使用CM安装集群" class="headerlink" title="2.4.使用CM安装集群"></a>2.4.使用CM安装集群</h3><p>首次登陆CM管理界面的时候，会出现一个集群安装向导。我这里选择的是免费版本。然后大概有如下几步：</p>
+<ul>
+<li><p>使用ip或者hostname来搜索主机，搜索到之后，go to next step.</p>
+</li>
+<li><p>看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。</p>
+</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/cm-02.png" alt="CM JDK" title="cm jdk"></p>
+<ul>
+<li>选择是否使用单用户模式（Single User Mode）</li>
+</ul>
+<p>不使用该模式的话，HDFS服务会使用“hdfs”账户来启动，Hbase的Region Server会使用“hbase”账户来启动。使用了该模式之后，所有的服务都是使用同一个账户去启动的。<br>这里主要看集群的使用场景，如果其中涉及到不同的模块是由不同人员来运维管理的话，我建议还是不要使用单用户模式了。但如果集群是统一由一个人员来管理，那么选择使用单用户模式可能会方便很多。<br>我这里没有使用单用户模式。</p>
+<ul>
+<li>配置好SSH登录</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/cm-03.png" alt="配置ssh登录信息" title="输入密码"></p>
+<ul>
+<li><p>配置好SSH后开始连入主机，安装jdk和cm-agent<br><img src="http://leocook-blog.test.upcdn.net/cm-04.png" alt="install cm agent" title="install cm agent"></p>
+</li>
+<li><p>安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。<br><img src="http://leocook-blog.test.upcdn.net/cm-05.png" alt="cm agent ok" title="cm agent ok"></p>
+</li>
+<li><p>分发Hadoop的安装包</p>
+</li>
+</ul>
+<p>去地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://archive.cloudera.com/cdh5/parcels/5.4.10/</span><br></pre></td></tr></table></figure>
+<p>下载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel</span><br><span class="line">CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1</span><br><span class="line">manifest.json</span><br></pre></td></tr></table></figure>
+<p>下载完成后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1&quot;重命名为&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha&quot;</span><br></pre></td></tr></table></figure>
+<p>并移到目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/cloudera/parcel-repo</span><br></pre></td></tr></table></figure>
+<p>然后在cm-serve点击进入下一页，将会看到如下图：<br><img src="http://leocook-blog.test.upcdn.net/cm-06.png" alt="cm parcel distributed" title="cm parcel distributed"><br>因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的<strong>Download</strong>自然就是100%，<strong>Distributed</strong>是把安装包从cm-server往集群中各个节点分发的过程，<strong>Unpacked</strong>是表示各个节点的上安装包的解压情况进度，前面都OK后，<strong>Activated</strong>自然就可以了，表示安装包已经部署好了，可以随时进行安装。</p>
+<ul>
+<li><p>选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。<br><img src="http://leocook-blog.test.upcdn.net/cm-07.png" alt="hosts choose" title="hosts choose"></p>
+</li>
+<li><p>这里配置的是一些组件使用的mysql信息：<br><img src="http://leocook-blog.test.upcdn.net/cm-08.png" alt="hadoop mysql config" title="hadoop mysql config"></p>
+</li>
+<li><p>然后可以配置一些服务的的具体参数<br><img src="http://leocook-blog.test.upcdn.net/cm-09.png" alt="hadoop config" title="hadoop config"></p>
+</li>
+<li><p>参数配置都没问题后，开始执行安装。<br><img src="http://leocook-blog.test.upcdn.net/cm-10.png" alt="hadoop install" title="hadoop install"></p>
+</li>
+<li><p>安装完成后。<br><img src="http://leocook-blog.test.upcdn.net/cm-11.jpeg" alt="install success" title="install success"><br>PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。</p>
+</li>
+</ul>
+<h2 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h2><h3 id="3-1-主机的Host配置不能出差错"><a href="#3-1-主机的Host配置不能出差错" class="headerlink" title="3.1.主机的Host配置不能出差错"></a>3.1.主机的Host配置不能出差错</h3><p>我就配置错过host，期间走了一些弯路，主要表现在添加完主机之后，Hosts下的主机名都是localhost。</p>
+<h3 id="3-2-cm-agent安装失败重试时"><a href="#3-2-cm-agent安装失败重试时" class="headerlink" title="3.2.cm-agent安装失败重试时"></a>3.2.cm-agent安装失败重试时</h3><p>如果在重试的过程中出现了一直等待，或者cm-agent端口被占用的情况，大概有下面的几种情况：</p>
+<ul>
+<li>锁文件没有删除</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rm /tmp/.scm_prepare_node.lock</span><br></pre></td></tr></table></figure>
+<ul>
+<li>端口被占用 <strong>9000/9001</strong></li>
+</ul>
+<p>这种情况是部分进程没有关闭成功，找到端口对应的进程号，然后然后使用<strong>kill -9停止进程</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nap | grep 9000</span><br><span class="line">netstat -nap | grep 9001</span><br></pre></td></tr></table></figure>
+<p>主要是<strong>supervisor</strong>和<strong>cm-agent</strong>进程</p>
+<h2 id="4-会用到的一些地址总结"><a href="#4-会用到的一些地址总结" class="headerlink" title="4.会用到的一些地址总结"></a>4.会用到的一些地址总结</h2><h3 id="4-1-Mysql的相关配置"><a href="#4-1-Mysql的相关配置" class="headerlink" title="4.1.Mysql的相关配置"></a>4.1.Mysql的相关配置</h3><p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html</a></p>
+<h3 id="4-2-创建本地仓库"><a href="#4-2-创建本地仓库" class="headerlink" title="4.2.创建本地仓库"></a>4.2.创建本地仓库</h3><ul>
+<li>For CM</li>
+</ul>
+<p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html</a></p>
+<ul>
+<li>For parcel</li>
+</ul>
+<p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html</a></p>
+<h3 id="4-3-parcel的下载地址"><a href="#4-3-parcel的下载地址" class="headerlink" title="4.3.parcel的下载地址"></a>4.3.parcel的下载地址</h3><p><a href="http://archive.cloudera.com/cdh5/parcels/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/parcels/</a><br><a href="http://archive.cloudera.com/kafka/parcels/" target="_blank" rel="noopener">http://archive.cloudera.com/kafka/parcels/</a></p>
+<h3 id="4-4-cm的下载地址"><a href="#4-4-cm的下载地址" class="headerlink" title="4.4.cm的下载地址"></a>4.4.cm的下载地址</h3><p>加压后可以直接运行<br><a href="http://archive.cloudera.com/cm5/cm/5/" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/cm/5/</a></p>
+<h2 id="5-附件"><a href="#5-附件" class="headerlink" title="5.附件"></a>5.附件</h2><p>博文中的图片是压缩后的，清晰度比较低，原图可以访问下面的地址：</p>
+<p>链接: <a href="http://pan.baidu.com/s/1cmiBCE" target="_blank" rel="noopener">http://pan.baidu.com/s/1cmiBCE</a> 密码: rnmw</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/cm-hadoop/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>cm hadoop</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/05/17/tez-2016-05-17-Tez系列第三篇-Tez和oozie整合/">
+      Tez系列第三篇-Tez和oozie整合
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-05-17</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/tez/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>tez</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <h2 id="1-完成上一篇的基础的相关配置"><a href="#1-完成上一篇的基础的相关配置" class="headerlink" title="1.完成上一篇的基础的相关配置"></a>1.完成上一篇的基础的相关配置</h2><h2 id="2-拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下"><a href="#2-拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下" class="headerlink" title="2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下"></a>2.拷贝Tez的依赖Jar包到OOZIE的HDFS共享目录下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -copyFromLocal *.jar /user/oozie/share/lib/lib_20150722203343/hive/</span><br><span class="line">hadoop fs -copyFromLocal /usr/lib/tez/lib/*.jar /user/oozie/share/lib/lib_20150722203343/hive/</span><br></pre></td></tr></table></figure>
+<h2 id="3-修改Jar的权限"><a href="#3-修改Jar的权限" class="headerlink" title="3.修改Jar的权限"></a>3.修改Jar的权限</h2><p>保证oozie有权限读取、使用Jar包:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -chown oozie:oozie /user/oozie/share/lib/lib_20150722203343/hive/*.jar</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-是配置生效"><a href="#4-是配置生效" class="headerlink" title="4.是配置生效"></a>4.是配置生效</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">oozie admin -sharelibupdate</span><br><span class="line">oozie admin -shareliblist hive</span><br></pre></td></tr></table></figure>
+<p>或者重启oozie也可以</p>
+<h2 id="5-在workflow里使用Tez"><a href="#5-在workflow里使用Tez" class="headerlink" title="5.在workflow里使用Tez"></a>5.在workflow里使用Tez</h2><p>这里咱们只是让oozie处理hive作业时使用Tez引擎，具体配置如下.</p>
+<h3 id="5-1-使单个workflow里的hive都用tez"><a href="#5-1-使单个workflow里的hive都用tez" class="headerlink" title="5.1.使单个workflow里的hive都用tez"></a>5.1.使单个workflow里的hive都用tez</h3><p>在作业流的hive-site.xml中加入下面的配置，即可使整个作业里的hive都使用Tez引擎：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;hive.execution.engine&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;tez&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;tez.lib.uris&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;$&#123;nameNode&#125;/tmp/apps/tez-0.8.2/,$&#123;nameNode&#125;/tmp/apps/tez-0.8.2/lib&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="5-2-使单个workflow里的单个hive都用tez"><a href="#5-2-使单个workflow里的单个hive都用tez" class="headerlink" title="5.2.使单个workflow里的单个hive都用tez"></a>5.2.使单个workflow里的单个hive都用tez</h3><p>上面的配置不用加，在workflow.xml里的hive节点添加如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;hive.execution.engine&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;tez&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;tez.lib.uris&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;$&#123;nameNode&#125;/tmp/apps/tez-0.8.2/,$&#123;nameNode&#125;/tmp/apps/tez-0.8.2/lib&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">	&lt;name&gt;tez.use.cluster.hadoop-libs&lt;/name&gt;</span><br><span class="line">	&lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>hive.execution.engine属性可以不添加，在hive的脚本中的第一行添加:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set hive.execution.engine=tez;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/hadoop-tez-oozie-hive/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>hadoop tez oozie hive</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/05/09/tez-2016-05-09-Tez系列第二篇-hive-on-tez/">
+      Tez系列第二篇-hive_on_tez
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-05-09</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/tez/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>tez</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>本文主要描述Tez的安装配置，以及使用Tez作为Hive的计算引擎时的相关配置。</p>
+<h2 id="1-安装配置Tez"><a href="#1-安装配置Tez" class="headerlink" title="1.安装配置Tez"></a>1.安装配置Tez</h2><h3 id="1-1-环境要求"><a href="#1-1-环境要求" class="headerlink" title="1.1.环境要求"></a>1.1.环境要求</h3><ul>
+<li>CDH5.4.4(hadoop2.6.0)</li>
+<li>编译环境：gcc, gcc-c++, make, build</li>
+<li>Nodejs、npm (Tez-ui需要)</li>
+<li>Git</li>
+<li>pb2.5.0</li>
+<li>maven3</li>
+<li>Tez0.8.2</li>
+</ul>
+<h3 id="1-2-集群准备"><a href="#1-2-集群准备" class="headerlink" title="1.2.集群准备"></a>1.2.集群准备</h3><p>以及安装完成的cdh5.4.4集群。</p>
+<h3 id="1-3-编译环境准备"><a href="#1-3-编译环境准备" class="headerlink" title="1.3. 编译环境准备"></a>1.3. 编译环境准备</h3><p>安装gcc, gcc-c++, make, build<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc gcc-c++ libstdc++-devel make build</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-4-Nodejs、npm"><a href="#1-4-Nodejs、npm" class="headerlink" title="1.4. Nodejs、npm"></a>1.4. Nodejs、npm</h3><p>下载源码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://nodejs.org/dist/v0.8.14/node-v0.8.14.tar.gz</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line">解压后编译:</span><br></pre></td></tr></table></figure></p>
+<p>./configure<br>make &amp;&amp; make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">查看nodejs和npm的版本:</span><br></pre></td></tr></table></figure></p>
+<p>node —version<br>npm —version<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">笔者的安装环境里，node的版本是v0.12.9，npm的版本是2.14.9</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 1.5.安装GIT</span><br><span class="line">下载git:</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://git-scm.com/download" target="_blank" rel="noopener">https://git-scm.com/download</a><br>笔者选择的是1.7.3版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">解压后编译:</span><br></pre></td></tr></table></figure></p>
+<p>./configure<br>make<br>make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 1.6. ProtocolBuffer2.5.0</span><br><span class="line">- 下载pb源码</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://github.com/google/protobuf/releases/tag/v2.5.0" target="_blank" rel="noopener">https://github.com/google/protobuf/releases/tag/v2.5.0</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 编译安装pb</span><br></pre></td></tr></table></figure></p>
+<p>./configure -prefix=/opt/protoc/<br>make &amp;&amp; make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置环境变量</span><br></pre></td></tr></table></figure></p>
+<p>export PROTOC_HOME=/opt/protoc<br>export PATH=$PATH:$PROTOC_HOME/bin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 检验</span><br></pre></td></tr></table></figure></p>
+<p>protoc —version<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">查看pb的版本是不是2.5.0，笔者这里显示为 **libprotoc 2.5.0**</span><br><span class="line"></span><br><span class="line">### 1.7.编译&amp;安装Tez</span><br><span class="line">- 下载Tez   </span><br><span class="line">Tez所有版本列表在者：</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://tez.apache.org/releases/index.html" target="_blank" rel="noopener">http://tez.apache.org/releases/index.html</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">笔者这里下载的是0.8.2版本。</span><br><span class="line"></span><br><span class="line">- 解压修改配置    </span><br><span class="line"></span><br><span class="line">vi pom.xml</span><br></pre></td></tr></table></figure></p>
+<p><hadoop.version>2.6.0-cdh5.4.4&lt;/hadoop.version&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line">vi tez-ui/pom.xml</span><br></pre></td></tr></table></figure></hadoop.version></p>
+<p><nodeversion>v0.12.9</nodeversion></p>
+<p><npmversion>2.14.9</npmversion><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 开始编译</span><br></pre></td></tr></table></figure></p>
+<p>mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.23<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt;编译的过程中可能会发生错误，我这边由于网络故障，经常会出现node.gz.tar文件下载失败。最后还是编译成功了。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 2. 开始整合Hive和Tez</span><br><span class="line"></span><br><span class="line">### 2.1. 查看编译完成的目标目录结构</span><br></pre></td></tr></table></figure></p>
+<p>[wulin@lf-R710-29 target]$ ls<br>archive-tmp  maven-archiver  tez-0.8.2  tez-0.8.2-minimal  tez-0.8.2-minimal.tar.gz  tez-0.8.2.tar.gz  tez-dist-0.8.2-tests.jar<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.1. 拷贝tez-0.8.2-minimal目录至HDFS</span><br></pre></td></tr></table></figure></p>
+<p>hdfs dfs -put tez-0.8.2-minimal /tmp/tez-dir/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">先拷贝到tmp目录做测试，成功运行后在拷贝到正式目录。</span><br><span class="line"></span><br><span class="line">### 2.2. 拷贝对应以来jar</span><br><span class="line">把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录</span><br><span class="line"></span><br><span class="line">### 2.3. 把tez-0.8.2拷贝到服务器本地部署的目录</span><br></pre></td></tr></table></figure></p>
+<p>cp -r tez-0.8.2 /opt/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.4. 进入部署的目录创建conf/tez-site.xml</span><br></pre></td></tr></table></figure></p>
+<p>&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br>&lt;?xml-stylesheet type=”text/xsl” href=”configuration.xsl”?&gt;</p>
+<p><configuration><br> <property><br>   <name>tez.lib.uris</name><br>   <value>${fs.defaultFS}/tmp/tez-dir/tez-0.8.2-minimal,${fs.defaultFS}/tmp/tez-dir/tez-0.8.2-minimal/lib</value>
+ </property><br> <property><br>   <name>tez.use.cluster.hadoop-libs</name><br>   <value>true</value>
+ </property>
+</configuration><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;注：tez.lib.uris参数值，是之前上传到hdfs目录的tez包，它必须是tez-0.8.2-minimal目录，而不能是tez-0.8.2目录。（如果有谁使用tez-0.8.2目录部署成功的话，可以告诉我，谢谢！）。根据官网的说明，使用tez-0.8.2-minimal包的时候，务必设置tez.use.cluster.hadoop-libs属性为true。</span><br><span class="line"></span><br><span class="line">### 2.4. 把Tez加入到环境变量</span><br></pre></td></tr></table></figure></p>
+<p>export TEZ_JARS=/opt/tez-0.8.2-minimal<br>export TEZ_CONF_DIR=$TEZ_JARS/conf<br>export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/<em>:${TEZ_JARS}/lib/</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;注：经笔者的测试，TEZ_JARS指向tez-0.8.2-minimal目录或者tez-0.8.2目录都是可以的。</span><br><span class="line"></span><br><span class="line">### 2.5. 让Hive把Tez用起来</span><br><span class="line">- 配置整合</span><br><span class="line">临时配置</span><br></pre></td></tr></table></figure></p>
+<p>hive&gt;set hive.execution.engine=tez;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">或者修改hive-site.xml（长期配置）</span><br></pre></td></tr></table></figure></p>
+<p> <property><br>   <name>hive.execution.engine</name><br>   <value>tez</value>
+ </property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 执行hive，验证查看</span><br></pre></td></tr></table></figure></p>
+<p>hive&gt; select count(<em>) from dual;<br>Query ID = wulin_20160406152121_6fd704e7-a437-4345-9958-2fbd1cccb057<br>Total jobs = 1<br>Launching Job 1 out of 1<br>Number of reduce tasks determined at compile time: 1<br>In order to change the average load for a reducer (in bytes):<br>  set hive.exec.reducers.bytes.per.reducer=<number><br>In order to limit the maximum number of reducers:<br>  set hive.exec.reducers.max=<number><br>In order to set a constant number of reducers:<br>  set mapreduce.job.reduces=<number><br>Starting Job = job_1457012272029_352465, Tracking URL = <a href="http://lfh-R710-165:8088/proxy/application_1457012272029_352465/" target="_blank" rel="noopener">http://lfh-R710-165:8088/proxy/application_1457012272029_352465/</a><br>Kill Command = /opt/cloudera/parcels/CDH-5.4.4-1.cdh5.4.4.p0.4/lib/hadoop/bin/hadoop job  -kill job_1457012272029_352465<br>Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1<br>2016-04-06 15:21:29,925 Stage-1 map = 0%,  reduce = 0%<br>2016-04-06 15:21:38,274 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.05 sec<br>2016-04-06 15:21:45,611 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 3.86 sec<br>MapReduce Total cumulative CPU time: 3 seconds 860 msec<br>Ended Job = job_1457012272029_352465<br>MapReduce Jobs Launched:<br>Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 3.86 sec   HDFS Read: 6138 HDFS Write: 2 SUCCESS<br>Total MapReduce CPU Time Spent: 3 seconds 860 msec<br>OK<br>1<br>Time taken: 35.934 seconds, Fetched: 1 row(s)<br>hive&gt; set hive.execution.engine=tez;<br>hive&gt; select count(</number></number></number></em>) from dual;<br>Query ID = wulin_20160406152222_426dd505-1f6a-4d02-ae95-5a4d0e6bbc76<br>Total jobs = 1<br>Launching Job 1 out of 1</p>
+<h2 id="Status-Running-Executing-on-YARN-cluster-with-App-id-application-1457012272029-352467"><a href="#Status-Running-Executing-on-YARN-cluster-with-App-id-application-1457012272029-352467" class="headerlink" title="Status: Running (Executing on YARN cluster with App id application_1457012272029_352467)"></a>Status: Running (Executing on YARN cluster with App id application_1457012272029_352467)</h2><pre><code>    VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+</code></pre><hr>
+<p>Map 1 ……….   SUCCEEDED      1          1        0        0       0       0</p>
+<h2 id="Reducer-2-……-SUCCEEDED-1-1-0-0-0-0"><a href="#Reducer-2-……-SUCCEEDED-1-1-0-0-0-0" class="headerlink" title="Reducer 2 ……   SUCCEEDED      1          1        0        0       0       0"></a>Reducer 2 ……   SUCCEEDED      1          1        0        0       0       0</h2><h2 id="VERTICES-02-02-gt-gt-100-ELAPSED-TIME-9-64-s"><a href="#VERTICES-02-02-gt-gt-100-ELAPSED-TIME-9-64-s" class="headerlink" title="VERTICES: 02/02  [==========================&gt;&gt;] 100%  ELAPSED TIME: 9.64 s     "></a>VERTICES: 02/02  [==========================&gt;&gt;] 100%  ELAPSED TIME: 9.64 s     </h2><p>OK<br>1<br>Time taken: 22.211 seconds, Fetched: 1 row(s)<br>hive&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">如下图：</span><br><span class="line">![Hive on Tez](http://leocook-blog.test.upcdn.net/tez-ok.png &quot;Hive on Tez&quot;)</span><br><span class="line"></span><br><span class="line">到此，hive on tez，整合完毕！</span><br><span class="line"></span><br><span class="line">## 常见的错误</span><br><span class="line"></span><br><span class="line">### 1.不要使用sudo权限来编译（编译tez时的错误）</span><br></pre></td></tr></table></figure></p>
+<p>[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.3.2:exec (Bower install) on project tez-ui: Command execution failed. Process exited with an error: 1 (Exit value: 1) -&gt; [Help 1]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">解决办法：</span><br><span class="line">不要使用root用户，也不要使用sudo来编译.</span><br><span class="line"></span><br><span class="line">### 2.maven插件frontend-maven-plugin的版本问题（编译tez时的错误）</span><br></pre></td></tr></table></figure></p>
+<p>[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Execution install node and npm of goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm failed: A required class was missing while executing com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm: org/slf4j/helpers/MarkerIgnoringBase<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">解决办法：强制执行编译时frontend-maven-plugin插件的版本（mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true  -Dfrontend-maven-plugin.version=0.0.XX）</span><br><span class="line">如果maven的版本低于3.1，frontend-maven-plugin版本应该 &lt;= 0.0.22；</span><br><span class="line">如果maven的版本大于或等于3.1，frontend-maven-plugin版本应该 &gt;= 0.0.23.</span><br><span class="line"></span><br><span class="line">### 3.解压Node压缩包时错误（编译tez时的错误）</span><br></pre></td></tr></table></figure></p>
+<p>[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:0.0.22:install-node-and-npm (install node and npm) on project tez-ui: Could not extract the Node archive: Could not extract archive: ‘/home/…/tez/tez-ui/src/main/webapp/node_tmp/node.tar.gz’: EOFException -&gt; [Help 1]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">解决版本：检查第二个问题，并重新执行。如果还失败，可以多执行几次，可能和网络有关系。</span><br><span class="line"></span><br><span class="line">### 4.node&amp;npm版本不对应（编译tez时的错误）</span><br></pre></td></tr></table></figure></p>
+<p>[ERROR] npm WARN engine hoek@2.16.3: wanted: {“node”:”&gt;=0.10.40”} (current: {“node”:”v0.10.18”,”npm”:”1.3.8”})<br>[ERROR] npm WARN engine boom@2.10.1: wanted: {“node”:”&gt;=0.10.40”} (current: {“node”:”v0.10.18”,”npm”:”1.3.8”})<br>[ERROR] npm WARN engine cryptiles@2.0.5: wanted: {“node”:”&gt;=0.10.40”} (current: {“node”:”v0.10.18”,”npm”:”1.3.8”})<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">解决办法：</span><br><span class="line">1. 安装正确版本的nodeJs；</span><br><span class="line">2. 修改tez-ui/pom.xml中的nodeVersion和npmVersion标签值为系统环境的值。可使用下面命令，查看系统里的node和npm版本：</span><br></pre></td></tr></table></figure></p>
+<p>node —version<br>npm —version<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 5.缺少MR的依赖包（error when run hive on tez）</span><br></pre></td></tr></table></figure></p>
+<p>Vertex failed, vertexName=Map 1, vertexId=vertex_1457012272029_352429_1_00, diagnostics=[Vertex vertex_1457012272029_352429_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: dual initializer failed, vertex=vertex_1457012272029_352429_1_00 [Map 1], java.lang.NoClassDefFoundError: org/apache/hadoop/mapred/MRVersion<br>        at org.apache.hadoop.hive.shims.Hadoop23Shims.isMR2(Hadoop23Shims.java:843)<br>        at org.apache.hadoop.hive.shims.Hadoop23Shims.getHadoopConfNames(Hadoop23Shims.java:914)<br>        at org.apache.hadoop.hive.conf.HiveConf$ConfVars.<clinit>(HiveConf.java:356)<br>        at org.apache.hadoop.hive.ql.exec.Utilities.getBaseWork(Utilities.java:371)<br>        at org.apache.hadoop.hive.ql.exec.Utilities.getMapWork(Utilities.java:296)<br>        at org.apache.hadoop.hive.ql.exec.tez.HiveSplitGenerator.initialize(HiveSplitGenerator.java:106)<br>        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:278)<br>        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:269)<br>        at java.security.AccessController.doPrivileged(Native Method)<br>        at javax.security.auth.Subject.doAs(Subject.java:415)<br>        at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1628)<br>        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:269)<br>        at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:253)<br>        at java.util.concurrent.FutureTask.run(FutureTask.java:262)<br>        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)<br>        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)<br>        at java.lang.Thread.run(Thread.java:745)<br>Caused by: java.lang.ClassNotFoundException: org.apache.hadoop.mapred.MRVersion<br>        at java.net.URLClassLoader$1.run(URLClassLoader.java:366)<br>        at java.net.URLClassLoader$1.run(URLClassLoader.java:355)<br>        at java.security.AccessController.doPrivileged(Native Method)<br>        at java.net.URLClassLoader.findClass(URLClassLoader.java:354)<br>        at java.lang.ClassLoader.loadClass(ClassLoader.java:425)<br>        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)<br>        at java.lang.ClassLoader.loadClass(ClassLoader.java:358)<br>        … 17 more<br>]<br>Vertex killed, vertexName=Reducer 2, vertexId=vertex_1457012272029_352429_1_01, diagnostics=[Vertex received Kill in INITED state., Vertex vertex_1457012272029_352429_1_01 [Reducer 2] killed/failed due to:OTHER_VERTEX_FAILURE]<br>DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1<br>FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">这个错误是在配置完之后，运行hive时才会出现的。</span><br><span class="line">解决办法：</span><br><span class="line">拷贝mr依赖包至tez的hdfs目录中。笔者的环境是CDH5.4.4，所以把hadoop-mapreduce-client-common-2.6.0-cdh5.4.4.jar拷贝到hdfs的/tmp/tez-dir/tez-0.8.2-minimal目录，就解决问题了。</span><br><span class="line"></span><br><span class="line">### 6.tez&amp;hive on oozie 错误</span><br></pre></td></tr></table></figure></clinit></p>
+<p>Status: Running (Executing on YARN cluster with App id application_1461470184587_0770)</p>
+<p>Map 1: -/-    Reducer 2: 0/1<br>Status: Failed<br>Vertex failed, vertexName=Map 1, vertexId=vertex_1461470184587_0770_1_00, diagnostics=[Vertex vertex_1461470184587_0770_1_00 [Map 1] killed/failed due to:ROOT_INPUT_INIT_FAILURE, Vertex Input: wl_manager_core_assembly initializer failed, vertex=vertex_1461470184587_0770_1_00 [Map 1], java.lang.IllegalArgumentException: Illegal Capacity: -1<br>    at java.util.ArrayList.<init>(ArrayList.java:142)<br>    at org.apache.hadoop.mapred.FileInputFormat.getSplits(FileInputFormat.java:330)<br>    at org.apache.hadoop.hive.ql.io.HiveInputFormat.addSplitsForGroup(HiveInputFormat.java:306)<br>    at org.apache.hadoop.hive.ql.io.HiveInputFormat.getSplits(HiveInputFormat.java:408)<br>    at org.apache.hadoop.hive.ql.exec.tez.HiveSplitGenerator.initialize(HiveSplitGenerator.java:129)<br>    at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:278)<br>    at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable$1.run(RootInputInitializerManager.java:269)<br>    at java.security.AccessController.doPrivileged(Native Method)<br>    at javax.security.auth.Subject.doAs(Subject.java:415)<br>    at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1671)<br>    at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:269)<br>    at org.apache.tez.dag.app.dag.RootInputInitializerManager$InputInitializerCallable.call(RootInputInitializerManager.java:253)<br>    at java.util.concurrent.FutureTask.run(FutureTask.java:262)<br>    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)<br>    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)<br>    at java.lang.Thread.run(Thread.java:745)<br>]<br>Vertex killed, vertexName=Reducer 2, vertexId=vertex_1461470184587_0770_1_01, diagnostics=[Vertex received Kill in INITED state., Vertex vertex_1461470184587_0770_1_01 [Reducer 2] killed/failed due to:OTHER_VERTEX_FAILURE]<br>DAG did not succeed due to VERTEX_FAILURE. failedVertices:1 killedVertices:1<br>FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.tez.TezTask<br>Intercepting System.exit(2)<br>Failing Oozie Launcher, Main class [org.apache.oozie.action.hadoop.HiveMain], exit code [2]<br>```</init></p>
+<p>参考链接：<br><a href="http://m.oschina.net/blog/421764" target="_blank" rel="noopener">http://m.oschina.net/blog/421764</a><br><a href="http://duguyiren3476.iteye.com/blog/2214549" target="_blank" rel="noopener">http://duguyiren3476.iteye.com/blog/2214549</a><br><a href="https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/TEZ/Build+errors+and+solutions</a></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/hadoop-tez-hive/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>hadoop tez hive</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/04/01/tez-2016-04-01-Tez系列第一篇-基础常识/">
+      Tez系列第一篇-基础常识
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-04-01</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/tez/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>tez</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>本文主要围绕着这么几个问题来展开：Tez是什么？为什么要有Tez？Tez能解决什么问题？</p>
+<h2 id="1-Tez是什么"><a href="#1-Tez是什么" class="headerlink" title="1.Tez是什么"></a>1.Tez是什么</h2><h3 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1.介绍"></a>1.1.介绍</h3><p>Tez目标是用来构建复杂的有向五环图数据处理程序。Tez项目目前是构建在YARN之上的。详情可以查看Tez的官网：<a href="http://tez.apache.org/" target="_blank" rel="noopener">http://tez.apache.org/</a></p>
+<h3 id="1-2-两大优势"><a href="#1-2-两大优势" class="headerlink" title="1.2.两大优势"></a>1.2.两大优势</h3><p><strong>用户体验</strong>    </p>
+<ul>
+<li>使用API来自定义数据流    </li>
+<li>灵活的Input-Processor-Output运行模式    </li>
+<li>与计算的数据类型无关    </li>
+<li>简单的部署流程    </li>
+</ul>
+<p><strong>计算性能</strong>    </p>
+<ul>
+<li>性能高于MapReduce    </li>
+<li>资源管理更加优化    </li>
+<li>运行时配置预加载    </li>
+<li>物理数据流动态运行    </li>
+</ul>
+<p><strong>举例</strong><br>下图是一个基于MR的Hive/Pig的DAG数据流处理过程:<br><img src="http://leocook-blog.test.upcdn.net/tez01-PigHiveQueryOnMR.png" alt="Hive/Pig" title="Hive/Pig的DAG"></p>
+<p>下图是一个基于Tez的Hive/Pig的DAG数据流处理过程:<br><img src="http://leocook-blog.test.upcdn.net/tez02-PigHiveQueryOnTez.png" alt="Hive/Pig" title="Hive/Pig的DAG"></p>
+<h2 id="2-为什么要有Tez"><a href="#2-为什么要有Tez" class="headerlink" title="2.为什么要有Tez"></a>2.为什么要有Tez</h2><h3 id="2-1-YARN的AM"><a href="#2-1-YARN的AM" class="headerlink" title="2.1.YARN的AM"></a>2.1.YARN的AM</h3><p>YARN的每个作业在执行前都会先创建一个AM，然后才会开始正真的计算。这样处理小作业的时候，会有较大的延迟，而且还会造成极大的性能浪费。</p>
+<h3 id="2-2-YARN的资源无法重用"><a href="#2-2-YARN的资源无法重用" class="headerlink" title="2.2.YARN的资源无法重用"></a>2.2.YARN的资源无法重用</h3><p>在MR1中，用户可以开启JVM重用，用来降低作业延迟。<br>但是在YARN中，每个作业的AM会先向RM申请资源（Container），申请到资源之后开始运行作业，作业处理完成后释放资源，期间没有资源重新利用的环节。这样会使作业大大的延迟。</p>
+<h3 id="2-3-YARN的DAG中间计算结果读写效率低下"><a href="#2-3-YARN的DAG中间计算结果读写效率低下" class="headerlink" title="2.3.YARN的DAG中间计算结果读写效率低下"></a>2.3.YARN的DAG中间计算结果读写效率低下</h3><p>可以查看1.2中的图“<strong>基于MR的Hive/Pig的DAG数据流处理过程</strong>”，可以看出图中的每一节点都是把结果写到一个中间存储（HDFS/S3）中，下个节点从中间存储读取数据，再来继续接下来的计算。可见中间存储的读写性能对整个DAG的性能影响是很大的。<br>如果使用Tez，则可以省去中间存储的读写，上个节点的输出可以直接重定向到下个节点的输入。</p>
+<h2 id="3-Tez能解决什么问题"><a href="#3-Tez能解决什么问题" class="headerlink" title="3.Tez能解决什么问题"></a>3.Tez能解决什么问题</h2><h3 id="3-1-使用AM缓冲池实现AM的复用，AMPoolServer"><a href="#3-1-使用AM缓冲池实现AM的复用，AMPoolServer" class="headerlink" title="3.1.使用AM缓冲池实现AM的复用，AMPoolServer"></a>3.1.使用AM缓冲池实现AM的复用，AMPoolServer</h3><p>使用Tez后，yarn的作业不是先提交给RM了，而是提交给AMPS。AMPS在启动后，会预先创建若干个AM，作为AM资源池，当作业被提交到AMPS的时候，AMPS会把该作业直接提交到AM上，这样就避免每个作业都创建独立的AM，大大的提高了效率。</p>
+<h3 id="3-2-Container预启动"><a href="#3-2-Container预启动" class="headerlink" title="3.2.Container预启动"></a>3.2.Container预启动</h3><p>AM缓冲池中的每个AM在启动时都会预先创建若干个container，以此来减少因创建container所话费的时间。</p>
+<h3 id="3-3-Container重用"><a href="#3-3-Container重用" class="headerlink" title="3.3.Container重用"></a>3.3.Container重用</h3><p>每个任务运行完之后，AM不会立马释放Container，而是将它分配给其它未执行的任务。<br>看到这里， Tez是什么？为什么要有Tez？Tez能解决什么问题？应该都知道了吧！下一篇来开始讲解正式环境中的使用。</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/hadoop-tez/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>hadoop tez</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2016/03/13/hadoop-2016-03-13-hadoop优化-yarn/">
+      hadoop优化-yarn
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-03-13</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/hadoop/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>hadoop</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>集群优化这块一直是一个比较麻烦的事情，目前由于集群的资源分配问题，已经出现了几次作业故障，有必要好这块的东西重新梳理一下。经过３天的测试，最终找到了对于目前环境相对适合的参数，目前集群已经11*24无节点故障了，先在这里做一些简单的分享吧。</p>
+<h1 id="1-之前的集群存在的问题"><a href="#1-之前的集群存在的问题" class="headerlink" title="1.之前的集群存在的问题"></a>1.之前的集群存在的问题</h1><h2 id="1-1-问题一：作业的执行速率不同步"><a href="#1-1-问题一：作业的执行速率不同步" class="headerlink" title="1.1.问题一：作业的执行速率不同步"></a>1.1.问题一：作业的执行速率不同步</h2><ul>
+<li>问题表现<br>部分任务跑的慢，部分任务跑得快。</li>
+<li>问题的原因<br>集群资源分配不合理，出现有低配的机器运行作业数较多，高配机器运行作业数较少的情况。</li>
+<li>解决办法<br>重新分配角色组，使得低配机器参与相对较少的计算，高配机器参与相对较多的计算。</li>
+</ul>
+<h2 id="1-2-问题二：资源利用倾斜"><a href="#1-2-问题二：资源利用倾斜" class="headerlink" title="1.2.问题二：资源利用倾斜"></a>1.2.问题二：资源利用倾斜</h2><ul>
+<li>问题表现<br>部分机器资源利用率极高，部分机器资源利用率级低；</li>
+<li>问题的原因<br><strong>同【问题一】</strong></li>
+<li>解决办法<br><strong>同【问题一】</strong></li>
+</ul>
+<h2 id="1-3-问题三：集群资源并没有真正的参与计算"><a href="#1-3-问题三：集群资源并没有真正的参与计算" class="headerlink" title="1.3.问题三：集群资源并没有真正的参与计算"></a>1.3.问题三：集群资源并没有真正的参与计算</h2><ul>
+<li>问题表现<br>作业个数较多的时候，出现集群资源分配完了，但是集群负载极低，作业执行极缓慢。</li>
+<li>问题的原因<br>咱们的ETL结果报表使用的是单节点mysql，大量的小文件写操作使得磁盘的IO成为了严重的性能瓶颈，所以每个导数据的任务执行的较缓慢，导数据的作业长时间占用计算资源，计算任务执行的较为缓慢。</li>
+<li>解决办法<br>a). 把mysql中的数据库存到不同的磁盘上的，降低单个磁盘的负载。<br>b). 减少单个任务的资源占用，提高集群的并行度。</li>
+</ul>
+<h1 id="2-集群资源重新划分的过程"><a href="#2-集群资源重新划分的过程" class="headerlink" title="2.集群资源重新划分的过程"></a>2.集群资源重新划分的过程</h1><h2 id="2-1-拿到集群中所有机器的硬件资源列表"><a href="#2-1-拿到集群中所有机器的硬件资源列表" class="headerlink" title="2.1.拿到集群中所有机器的硬件资源列表"></a>2.1.拿到集群中所有机器的硬件资源列表</h2><p>感谢运维同学的帮助！</p>
+<h2 id="2-2-根据集群资源，分组的大概情况如截图："><a href="#2-2-根据集群资源，分组的大概情况如截图：" class="headerlink" title="2.2.根据集群资源，分组的大概情况如截图："></a>2.2.根据集群资源，分组的大概情况如截图：</h2><p><img src="http://leocook-blog.test.upcdn.net/%E5%88%86%E7%BB%84%E5%88%97%E8%A1%A8.png" alt="服务器分组情况" title="根据机器硬件资源情况，服务器分组情况"><br>分组命名规则：<br><strong><em>NM</em></strong>: NodeManager；<br><strong><em>G01</em></strong>: Group01；<br><strong><em>C08</em></strong>: cpu是8核；<br><strong><em>M48</em></strong>: 内存是48GB。<br><strong><em>ZK</em></strong>: 机器上安装了ZK，如果没有这一项，默认该机器上只安装了HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager这四个角色。（如果某台机器上只安装了一个测试的zk，则可忽略该角色的资源占用，若该角色占用资源较多，那么就应该把这台机器单独拿出来分组）</p>
+<h2 id="2-3-资源划分的策略"><a href="#2-3-资源划分的策略" class="headerlink" title="2.3.资源划分的策略"></a>2.3.资源划分的策略</h2><p>根据机器上安装的服务，大概给服务做了如下的划分：</p>
+<ul>
+<li><p>安装有重要服务的机器，可参与计算<br>例如安装了OOZIE、ResourcesManager、NodeManager的节点，当它们故障时，对集群来说，将可能会是一场灾难，所以不让这些机器参与计算，保证这些服务的稳定。</p>
+</li>
+<li><p>安装有重要服务的机器，不参与计算<br>例如安装了FLUME、KAFKA或ZK的节点，由于它们本身就是可以配置分布式执行的，当其中一个服务出现故障时，对业务的影响是较小的，甚至没有。所以允许这些节点和参与计算的节点安装在同一台主机上。</p>
+</li>
+<li><p>只安装了存储和计算的机器<br>例如HbaseRegion Server、HDFS DataNode、Impala Daemon和Yarn NodeManager，不会因为一台机器的故障导致集群出现灾难。</p>
+</li>
+</ul>
+<h2 id="2-4-具体的划分策略"><a href="#2-4-具体的划分策略" class="headerlink" title="2.4.具体的划分策略"></a>2.4.具体的划分策略</h2><h3 id="2-4-1-内存划分策略"><a href="#2-4-1-内存划分策略" class="headerlink" title="2.4.1.内存划分策略"></a>2.4.1.内存划分策略</h3><ul>
+<li>yarn容器可直接管理的资源<br>主机中内存*0.8 - 7GB（Hbase）- 7GB（HDFS），具体根据集群规模，hdfs、hbase的环境来定。有的几点还安装了其它服务，具体需要观察集群环境。</li>
+<li>单个任务可使用的任务资源<br>map任务划分1GB，reduce任务划分2GB，JVM虚拟机分别设置为他们70%。<h3 id="2-4-2-内存划分策略"><a href="#2-4-2-内存划分策略" class="headerlink" title="2.4.2.内存划分策略"></a>2.4.2.内存划分策略</h3></li>
+<li>yarn容器可直接管理的资源<br>对于只安装了HRS、DN、ID、NM的节点，vcore总数设置为（cpu核数-1）的2倍，具体根据cpu的计算性能来定（减一时预留给系统的）。如果节点上安装了一些会消耗CPU的服务，那么就设置vcore总数为cpu核数/2。如果安装了一些对CPU消耗不是非常大的服务，例如ZK，那么就设置vcore总是为（cpu的核数-1）。</li>
+<li>单个任务可使用的任务资源<br>1个vcore。<h1 id="3-mysql调优的过程"><a href="#3-mysql调优的过程" class="headerlink" title="3.mysql调优的过程"></a>3.mysql调优的过程</h1>不同的库，挂载在不同的磁盘上，减小单块盘的压力。</li>
+</ul>
+<h1 id="4-成果"><a href="#4-成果" class="headerlink" title="4.成果"></a>4.成果</h1><h2 id="4-1-集群表现情况"><a href="#4-1-集群表现情况" class="headerlink" title="4.1.集群表现情况"></a>4.1.集群表现情况</h2><p>到目前为止，已超过72小时NodeManager未出现过故障了，待考察一周。</p>
+<h2 id="4-2-mysql表现情况"><a href="#4-2-mysql表现情况" class="headerlink" title="4.2.mysql表现情况"></a>4.2.mysql表现情况</h2><p>优化前的负载情况入下图：<br><img src="http://leocook-blog.test.upcdn.net/mysql_befor.png" alt="优化前" title="优化前负载情况"><br>优化后的负载情况入下图：<br><img src="http://leocook-blog.test.upcdn.net/mysql.png" alt="优化后" title="优化后负载情况"></p>
+<blockquote>
+<p>后端导数据速度有明显加快，但是SDA盘的负载还是明显略高于SDB的负载。</p>
+</blockquote>
+<h1 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h1><p>在摸索这个问题上花费了比较多的时间，目前的优化方案满足现在的业务场景。在集群优化这方边，在个人现在能看到的未来，还有很多可以优化的项。例如：</p>
+<ul>
+<li>Impala的资源管理未使用yarn，所以一直还没有开始使用；</li>
+<li>OOZIE未做HA配置；</li>
+<li>HDFS数据平衡效果不是很好；</li>
+<li>CPU一个线程做两个vcore使用，压力还是比较大的。</li>
+</ul>
+<p>在接下，将会按照优先级逐一解决。</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/hadoop-集群优化/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>hadoop 集群优化</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+    
+  </section>
+  
+    
+    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+    
+    
+
+  
+
+
+	
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+
+
+	<!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+	
+
+	
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

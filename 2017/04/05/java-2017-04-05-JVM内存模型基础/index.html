@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>JVM内存模型基础 | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover post half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      <div class="l_main">
+  
+
+  
+    <article id="post" class="post white-box article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  
+    <h1 class="title">
+      <a href="/2017/04/05/java-2017-04-05-JVM内存模型基础/">
+        JVM内存模型基础
+      </a>
+    </h1>
+  
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-04-05</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/java/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>java</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
+
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          <p>Java内存模型也被称为JMM，开发人员在使用时无需过多考虑因指针引起的如内存泄露和溢出问题，也不用为每个new出来的对象使用delete等方法来释放内存。JVM已经为开发人员处理好了这一切，但是由于各种原因，Java程序也会出现内存溢出等问题，如果不了解JVM的内存模型以及相关的管理策略，那么整个排查过程将会变得十分艰难。<br><img src="http://leocook-blog.test.upcdn.net/JVM%20mem%20model.png" alt="JVM mem model" title="JVM mem model"></p>
+<p>JVM的运行时内存共有5块区域，其中有3个是线程间隔离的，有2个是线程间共享的。</p>
+<ul>
+<li><p>线程间隔离（线程私有区）</p>
+<ul>
+<li>程序计数器</li>
+<li>JVM栈</li>
+<li>本地方法栈</li>
+</ul>
+</li>
+<li><p>线程间共享</p>
+<ul>
+<li>Java堆</li>
+<li>方法区</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-程序计数器"><a href="#1-程序计数器" class="headerlink" title="1.程序计数器"></a>1.程序计数器</h2><p>它是线程间隔离的。字节码的行号指示器，用来标记当前线程所执行的字节码的行号。</p>
+<blockquote>
+<p>Q1. 为什么每个线程都需要一个独立的计数器呢？<br>因为JVM的多线程是轮询在CPU上执行的，任何一个时间点，一个处理器上最多只有一条指定在执行。为保证线程切换后，能恢复从正确的执行位置执行指令，所以给每个线程都独立的使用一块空间作为程序计数器，使得多线程之间计数器互不影响。</p>
+</blockquote>
+<h2 id="2-JVM栈"><a href="#2-JVM栈" class="headerlink" title="2.JVM栈"></a>2.JVM栈</h2><p>它是线程间隔离的，也就是常说到的“栈内存”。每个方法执行的时候都会创建一个栈桢，用来存放局部变量表用来存放该方法内使用到的局部变量表、操作数栈、动态链接、方法出口灯信息。</p>
+<p>一个方法从调用到执行完成的过程也就对应着一个栈桢在JVM栈中入栈到出栈的过程。<br>局部变量表中存放了编译器可确定的各种基本数据类型（例如：boolean、byte、char、short等等），以及对象的引用。</p>
+<p>使用<code>-Xss</code>参数设置栈容量 例： <code>-Xss128k</code></p>
+<blockquote>
+<p>JVM规范规定该区域会抛出两种异常：</p>
+<ol>
+<li>StackOverFlowError：当线程请求栈深度超出虚拟机栈所允许的深度时,抛出该异常</li>
+<li>OutOfMemoryError：当Java虚拟机扩展到无法申请足够内存时,抛出该异常</li>
+</ol>
+</blockquote>
+<h2 id="3-本地方法栈"><a href="#3-本地方法栈" class="headerlink" title="3.本地方法栈"></a>3.本地方法栈</h2><p>它是线程间隔离的，和“JVM栈”的区别是：“JVM栈”是执行Java方法时所使用到的内存；“本地方法栈”是JVM执行Native方法时所使用到的内存存。<br>这一块内存在JVM规范中没有强制指定，所以不同的虚拟机实现它的方法可能不一样。Sum HotSpot虚拟机是把“JVM栈”和“本地方法栈”合二为一的。</p>
+<blockquote>
+<p>JVM规范规定该区域可抛出StackOverFlowError和OutOfMemoryError异常。</p>
+</blockquote>
+<h2 id="4-Java堆"><a href="#4-Java堆" class="headerlink" title="4.Java堆"></a>4.Java堆</h2><p>它是线程间共享的，存放JVM对象实例，也是GC发生的主要区域，所以也被称为GC堆。<br>关于GC算法垃圾回收器，后边会介绍。</p>
+<blockquote>
+<p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
+</blockquote>
+<p><code>-Xms</code>参数设置最小值，<code>-Xmx</code>参数设置最大值，可以指定参数<code>-XX:+HeapDumpOnOutOfMemoryError</code>，使得JVM在出现OutOfMemoryError异常异常时能够dump出Java堆的快照。</p>
+<h2 id="5-方法区"><a href="#5-方法区" class="headerlink" title="5.方法区"></a>5.方法区</h2><p>它是线程间共享的，存放已被JVM加载的类信息、常量、静态变量、即时编译器编译后的代码等。它还有个别名叫做Non-Heap（非堆）。</p>
+<p><code>-XX:MaxPermSize</code>可以设置方法区的最大值，<code>-XX:PermSize</code>设置方法区的最小值。</p>
+<blockquote>
+<p>JVM规范规定该区域可抛出OutOfMemoryError异常。</p>
+</blockquote>
+<h3 id="5-1-运行时常量池"><a href="#5-1-运行时常量池" class="headerlink" title="5.1.运行时常量池"></a>5.1.运行时常量池</h3><p>它是方法区的一部分，存放编译器生成的各种编译期生成的字面量和符号引用。</p>
+<h2 id="HotSpot虚拟机"><a href="#HotSpot虚拟机" class="headerlink" title="HotSpot虚拟机"></a>HotSpot虚拟机</h2><p>HotSpot虚拟机中有两个比较特别的地方：</p>
+<ul>
+<li>本地方法栈和虚拟机栈合二为一了；</li>
+<li>在分代垃圾回收器中，把方法区称为永久代，但它们不是等价的。这里准确的说是使用永久代来实现了方法区。</li>
+</ul>
+
+        </div>
+        
+          
+
+
+  <section class="meta" id="footer-meta">
+    <hr>
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:39:13+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>最后更新于 2019年6月9日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/jvm/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>jvm</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://leocook.github.io/2017/04/05/java-2017-04-05-JVM内存模型基础/&title=JVM内存模型基础 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://leocook.github.io/2017/04/05/java-2017-04-05-JVM内存模型基础/&title=JVM内存模型基础 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://leocook.github.io/2017/04/05/java-2017-04-05-JVM内存模型基础/&title=JVM内存模型基础 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+            <div class="prev-next">
+                
+                    <section class="prev">
+                        <span class="art-item-left">
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                            <h4>
+                                <a href="/2017/05/10/python-2017-05-10-SciPy生态系统初探/" rel="prev" title="SciPy生态系统初探">
+                                  
+                                      SciPy生态系统初探
+                                  
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2016/12/30/book-2016-12-31-2016书单/" rel="prev" title="2016书单">
+                                    
+                                        2016书单
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/书单/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>书单</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+      </section>
+    </article>
+  
+
+  
+    <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'JVM内存模型基础',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-程序计数器"><span class="toc-text">1.程序计数器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JVM栈"><span class="toc-text">2.JVM栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-本地方法栈"><span class="toc-text">3.本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Java堆"><span class="toc-text">4.Java堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-方法区"><span class="toc-text">5.方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-运行时常量池"><span class="toc-text">5.1.运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HotSpot虚拟机"><span class="toc-text">HotSpot虚拟机</span></a></li></ol>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "1BWypTkkzWRLpL7hjUoj1Uvm-gzGzoHsz",
+    appKey: "74X742aj5vd15GFuMiARpXph",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

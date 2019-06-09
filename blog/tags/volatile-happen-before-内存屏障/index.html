@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Tag: volatile happen-before 内存屏障 | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover  half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      
+<div class="l_main">
+  
+    
+      
+  <section class="post-list">
+    
+      
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/">
+      Java并发(二)：volatile关键字
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-06-17</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/java/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>java</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>关键词：volatile、happen-before、内存屏障</p>
+<p>在阅读Java并发编程相关的jdk源码中，有个关键字<code>volatile</code>会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。<br><code>volatile</code>关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。</p>
+<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/" target="_blank" rel="noopener">Java并发：原子性、可见性、有序性</a></p>
+<p>本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。</p>
+<h3 id="CPU读取值的过程"><a href="#CPU读取值的过程" class="headerlink" title="CPU读取值的过程"></a>CPU读取值的过程</h3><p>CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：</p>
+<p><img src="http://leocook-blog.test.upcdn.net/volition1.png" alt="CPU读取值的过程"></p>
+<p>如果修改某个变量的值，大概会有下面几步操作：</p>
+<ul>
+<li>把值从内存中读到CPU Cache中</li>
+<li>CPU读取Cache中的值执行操作，并把修改后的值写入到CPU Cache中</li>
+<li>数据从CPU Cache中刷到内存中</li>
+</ul>
+<p>所以，只有上面三个步骤在执行的过程中不被其它操作干扰时，这个修改操作才会正常完成。</p>
+<h3 id="volatile变量具有可见性"><a href="#volatile变量具有可见性" class="headerlink" title="volatile变量具有可见性"></a>volatile变量具有可见性</h3><p>简言之，被volatile关键字修饰的变量在修改后，将会强制被刷到内存中，且该变量在其它CPU中的Cache将会失效，从而保证线程在修改变量值后，其它线程能立马读到。</p>
+<p>下面详细说说使用与不使用volatile关键字的差异：</p>
+<ul>
+<li>未使用volatile关键字</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int i=0;//共享变量</span><br><span class="line"></span><br><span class="line">//线程1的操作</span><br><span class="line">i=i+1</span><br><span class="line"></span><br><span class="line">//线程2的操作</span><br><span class="line">j=i</span><br></pre></td></tr></table></figure>
+<p>我们假设先执行的线程1，然后执行线程2，一般会想到j=1，但事实上却不一定。</p>
+<p>在创建线程的时候，内存结构如下：</p>
+<p><img src="http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%911.png" alt></p>
+<p>当执行一次线程1之后，cpu缓存中i变为了1，并把cache中的1刷到了内存中，内存结构如下：</p>
+<p><img src="http://leocook-blog.test.upcdn.net/%E5%B9%B6%E5%8F%913.png" alt></p>
+<p>由于在线程启动的时候已经把i的值读到了cpu的cache中，所以在执行<code>j=i</code>的时候，给j赋的值是0，而不是1。<br>很显然，在线程1修改了i的值之后，线程2并没有读到修改后的i值，可以理解i的读取操作不具备可见性。</p>
+<ul>
+<li>使用volatile关键字</li>
+</ul>
+<p>在Java中，我们可以使用<code>volatile</code>关键字来保证变量的可见性，<strong>被volatile修饰后的变量在被修改后，会直接把缓存刷入内存，从而保证下次读取能够读到最新的值</strong>。如下分析：</p>
+<p>第一步：线程1直接读取内存的i值</p>
+<p><img src="http://leocook-blog.test.upcdn.net/vvv1.png" alt></p>
+<p>第二步：执行<code>i=i+1</code>，并把结果刷回内存，CPU2中的缓存失效，然后CPU2更新缓存，把i值赋值给j，并写回内存</p>
+<p><img src="http://leocook-blog.test.upcdn.net/vvv2.png" alt></p>
+<p>这样就保证了i的操作是具备可见性的了，所以线程1修改了i之后，线程2能立刻读到修改后的值。</p>
+<h3 id="volatile变量不具有原子性"><a href="#volatile变量不具有原子性" class="headerlink" title="volatile变量不具有原子性"></a>volatile变量不具有原子性</h3><p>volatile可以理解为一个轻量级的synchronized，但是volatile变量不具备原子性。synchronized对比volatile实现的是锁，锁提供了两个重要的特性：互斥（mutual exclusion） 和可见性（visibility）。正是互斥保证了操作的原子性。</p>
+<p>那么什么时候使用volatile，什么时候使用synchronized呢？</p>
+<ul>
+<li>当变量只需要具备可见性的时候使用volatile，例如：对变量的写操作不依赖于该变量当前值；</li>
+<li>当变量需要同时具备原子性和可见性的时候，就使用synchronized。</li>
+<li>在使用volatile和synchronized都可以的时候，优先使用volatile，因为volatile的同步机制性能要高于锁的性能。</li>
+</ul>
+<h3 id="volatile变量一定程度上具有有序性"><a href="#volatile变量一定程度上具有有序性" class="headerlink" title="volatile变量一定程度上具有有序性"></a>volatile变量一定程度上具有有序性</h3><p>在使用了volatile关键字之后，将会禁用指令重排，从而保证有序性。<br>当程序执行到volatile变量的读取或写操作时，将会保证该操作前面的语句都已经执行完成且结果对后边代码具有可见性；该操作后边的代码都没有执行。</p>
+<p>我们可以查看下面这个代码块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = 2;        //语句1</span><br><span class="line">y = 0;        //语句2</span><br><span class="line">flag = true;  //语句3</span><br><span class="line">x = 4;         //语句4</span><br><span class="line">y = -1;       //语句5</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>flag变量没有被volatile关键字修饰时<br>由于指令重排的原因，我们可以得到下面依赖关系：<br><img src="http://leocook-blog.test.upcdn.net/volition11.png" alt><br>我们可以看出：<br>语句1执行完之后才可以执行语句4；<br>语句2执行完之后才可以执行语句5；<br>其它执行的顺序不一定。</p>
+</li>
+<li><p>flag变量被volatile关键字修饰后<br>由于volatile禁用了指令重排，我们可以得到下面依赖关系：<br><img src="http://leocook-blog.test.upcdn.net/volition12.png" alt><br>我们可以看出：<br>语句1和语句2的顺序不一定；<br>语句1和语句2都执行完之后执行语句3；<br>语句3执行完之后才执行语句4和语句5；<br>语句4和语句5谁先执行不一定。</p>
+</li>
+</ul>
+<h3 id="volatile关键字的实现原理"><a href="#volatile关键字的实现原理" class="headerlink" title="volatile关键字的实现原理"></a>volatile关键字的实现原理</h3><h4 id="happen-before"><a href="#happen-before" class="headerlink" title="happen-before"></a>happen-before</h4><p>如果A happen-before B，那么A的所有操作完成后并产生结果才会执行B操作，可以说A所做的任何操作对B都是可见的。happen-before大概有下面几种场景：</p>
+<ul>
+<li>1.程序次序规则：在一个单独的线程中，按照程序代码的执行流顺序，（时间上）先执行的操作happen—before（时间上）后执行的操作；</li>
+<li>2.管理锁定规则：一个unlock操作happen—before后面（时间上的先后顺序，下同）对同一个锁的lock操作；</li>
+<li>3.volatile变量规则：对一个volatile变量的写操作happen—before后面对该变量的读操作。</li>
+<li>4.线程启动规则：Thread对象的start()方法happen—before此线程的每一个动作；</li>
+<li>5.线程终止规则：线程的所有操作都happen—before对此线程的终止检测，可以通过调用Thread.join()方法、获取Thread.isAlive()的返回值等手段检测到线程已经终止执行；</li>
+<li>6.线程中断规则：对线程interrupt()方法的调用happen—before发生于被中断线程的代码检测到中断时事件的发生；</li>
+<li>7.对象终结规则：一个对象的初始化完成（构造函数执行结束）happen—before它的finalize（）方法的开始；</li>
+<li>8.传递性：如果操作A happen—before操作B，操作B happen—before操作C，那么可以得出A happen—before操作C。</li>
+</ul>
+<p>其实我们这里主要查看的是第3条，即volatile变量保证的有序性。在代码重排中，主要分为编译器重排和指令重排，为了实现volatile变量的内存语义，JMM会限制这两类重排，下面是JMM针对volatile变量所规定的重排规则表：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>1st operation</th>
+<th>2st operation</th>
+<th>2st operation</th>
+<th>2st operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Normal Load<br>Normal Store</td>
+<td>Volatile Load</td>
+<td>Volatile Store</td>
+</tr>
+<tr>
+<td>Normal Load</td>
+<td></td>
+<td></td>
+<td>No</td>
+</tr>
+<tr>
+<td>Normal Store</td>
+<td></td>
+<td></td>
+<td>No</td>
+</tr>
+<tr>
+<td>Volatile Load</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Volatile Store</td>
+<td></td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>观察上述表格，可以得知Volation变量的happen—before原则：</p>
+<ul>
+<li>所有的Volatile变量读都happen—before改变量的其它操作</li>
+<li>Volation变量的所有操作都happen—before该变量的写操作</li>
+<li>Volation变量的写操作happen—before该变量的读操作</li>
+</ul>
+<h4 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h4><p>内存屏障也称之为内存栅栏，是一组处理器指令，用于实现对内存操作顺序限制。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>1st operation</th>
+<th>2st operation</th>
+<th>2st operation</th>
+<th>2st operation</th>
+<th>2st operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Normal Load</td>
+<td>Normal Store</td>
+<td>Volatile Load</td>
+<td>Volatile Store</td>
+</tr>
+<tr>
+<td>Normal Load</td>
+<td></td>
+<td></td>
+<td></td>
+<td>LoadStore</td>
+</tr>
+<tr>
+<td>Normal Store</td>
+<td></td>
+<td></td>
+<td></td>
+<td>StoreStore</td>
+</tr>
+<tr>
+<td>Volatile Load</td>
+<td>LoadLoad</td>
+<td>LoadStore</td>
+<td>LoadLoad</td>
+<td>LoadStore</td>
+</tr>
+<tr>
+<td>Volatile Store</td>
+<td></td>
+<td></td>
+<td>StoreLoad</td>
+<td>StoreStore</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>JMM中共有这4种屏障：</p>
+<ul>
+<li><p>LoadLoad屏障<br>执行顺序：Load1—&gt;Loadload—&gt;Load2<br>Load2以及后序的Load指令在加载数据之前，都能访问到Load1加载的数据。</p>
+</li>
+<li><p>LoadStore屏障<br>执行顺序： Load1—&gt;LoadStore—&gt;Store2<br>Store2以及后序的Store指令在存储数据之前，都能访问到Load1加载的数据。</p>
+</li>
+<li><p>StoreStore屏障<br>执行顺序：Store1—&gt;StoreStore—&gt;Store2<br>Store2以及后序的Store指令在存储数据之前，都能访问到Store1操作所存储的数据。</p>
+</li>
+<li><p>StoreLoad屏障<br>执行顺序: Store1—&gt; StoreLoad—&gt;Load2<br>Load2以及后序的Load指令在加载数据之前，都可以访问到Store1操作所存储的数据。</p>
+</li>
+</ul>
+<h4 id="volatile关键字原理"><a href="#volatile关键字原理" class="headerlink" title="volatile关键字原理"></a>volatile关键字原理</h4><p>volatile实际上就是使用内存屏障的来实现可见性和有序性的：</p>
+<ul>
+<li>有序性：它会确保指令重排时，使用内存屏障保证volatile变量操作前的操作都已经完成了，且在volatile变量操作完成后，才会执行后边的代码</li>
+<li>可见性：CPU每次在修改volatile变量值之后，它会强制把数据从缓存刷到内存中去，才算本次操作完成</li>
+<li>可见性：volatile变量值修改后，它会导致其他CPU中的缓存失效</li>
+</ul>
+<h3 id="volatile的几个使用场景"><a href="#volatile的几个使用场景" class="headerlink" title="volatile的几个使用场景"></a>volatile的几个使用场景</h3><ul>
+<li>状态标记量  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//使用volatile来保证标记变量的可见性</span><br><span class="line">volatile boolean flag = false;</span><br><span class="line"> </span><br><span class="line">while(!flag)&#123;</span><br><span class="line">    doSomething();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public void setFlag() &#123;</span><br><span class="line">    flag = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//使用volatile来保证标有序性</span><br><span class="line">volatile boolean inited = false;</span><br><span class="line">//线程1:</span><br><span class="line">context = loadContext();  </span><br><span class="line">inited = true;            </span><br><span class="line"> </span><br><span class="line">//线程2:</span><br><span class="line">while(!inited )&#123;</span><br><span class="line">sleep()</span><br><span class="line">&#125;</span><br><span class="line">doSomethingwithconfig(context);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>双重检查锁  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//除了饿汉模式，这种写法创建单例效率最高</span><br><span class="line">class Singleton&#123;</span><br><span class="line">    private volatile static Singleton instance = null;</span><br><span class="line">     </span><br><span class="line">    private Singleton() &#123;</span><br><span class="line">         </span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if(instance==null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if(instance==null)</span><br><span class="line">                    //一定会把数据刷到内存中</span><br><span class="line">                    instance = new Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="volatile关键字陷阱"><a href="#volatile关键字陷阱" class="headerlink" title="volatile关键字陷阱"></a>volatile关键字陷阱</h3><p>Java是一门支持多线程的语言，为了解决线程的并发问题，使用了<code>同步块</code>和<code>volatile关键字</code>机制。<br>synchronized关键字是同时具备原子性、可见性和有序性；而volatile关键字只具备可见性和有序性，并不具备原子性，问题就出在这里，下面我们举例代码来看看。</p>
+<ul>
+<li>代码一  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class Counter &#123;</span><br><span class="line"></span><br><span class="line">    public static Integer count = 0;</span><br><span class="line">    static CountDownLatch countDownLatch = null;</span><br><span class="line"></span><br><span class="line">    public static void inc() &#123;</span><br><span class="line"></span><br><span class="line">        //这里延迟1毫秒，使得结果明显</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        count++;</span><br><span class="line">        countDownLatch.countDown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        int threadCount = 1000;</span><br><span class="line"></span><br><span class="line">        countDownLatch = new CountDownLatch(threadCount);</span><br><span class="line">        //同时启动1000个线程，去进行i++计算，看看实际结果</span><br><span class="line"></span><br><span class="line">        for (int i = 0; i &lt; threadCount; i++) &#123;</span><br><span class="line">            Thread t = new Thread(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    Counter.inc();</span><br><span class="line">                &#125;&#125;);</span><br><span class="line">            t.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        countDownLatch.await();</span><br><span class="line"></span><br><span class="line">        //这里每次运行的值都有可能不同,可能为1000</span><br><span class="line">        System.out.println(&quot;运行结果:Counter.count=&quot; + Counter.count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我这边计算的结果是978，每次运行的结果应该都是不一样的。这段代码应该很好理解，上面代码是很常见的线程不安全实例。</p>
+<ul>
+<li>代码二<br>在上面代码的基础上，使用volatile来修饰count：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public volatile static int count = 0;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>当执行完之后，我们发现结果仍然不是1000，原因是volatile无法保证变量的操作是原子的，只能保证变量的操作是具备可见性的。</p>
+<ul>
+<li>代码三<br>在代码一的基础上，修改了inc方法,给<code>count++;</code>添加同步代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public synchronized static void inc() &#123;</span><br><span class="line"></span><br><span class="line">    //这里延迟1毫秒，使得结果明显</span><br><span class="line">    try &#123;</span><br><span class="line">        Thread.sleep(1);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    count++;</span><br><span class="line">    </span><br><span class="line">    countDownLatch.countDown();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>查看上面的代码，我们可以发现volatile关键字是不具备原子性的。我们再使用的时候，需要避免这个坑。</p>
+<p>当我们需要使用具备原子操作的基础类型时，我们除了使用同步代码块，还可以使用<code>java.util.concurrent.atomic</code>包下的原子类型,例如代码一可以这样修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class Counter &#123;</span><br><span class="line"></span><br><span class="line">    public static AtomicInteger count = new AtomicInteger(0);</span><br><span class="line">    static CountDownLatch countDownLatch = null;</span><br><span class="line"></span><br><span class="line">    public static void inc() &#123;</span><br><span class="line"></span><br><span class="line">        //这里延迟1毫秒，使得结果明显</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        count.incrementAndGet();</span><br><span class="line">        countDownLatch.countDown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        int threadCount = 1000;</span><br><span class="line"></span><br><span class="line">        countDownLatch = new CountDownLatch(threadCount);</span><br><span class="line">        //同时启动1000个线程，去进行i++计算，看看实际结果</span><br><span class="line"></span><br><span class="line">        for (int i = 0; i &lt; threadCount; i++) &#123;</span><br><span class="line">            Thread t = new Thread(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    Counter.inc();</span><br><span class="line">                &#125;&#125;);</span><br><span class="line">            t.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        countDownLatch.await();</span><br><span class="line"></span><br><span class="line">        //这里每次运行的值都有可能不同,可能为1000</span><br><span class="line">        System.out.println(&quot;运行结果:Counter.count=&quot; + Counter.count.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>总结</li>
+</ul>
+<p>一句话总结下，volatile关键字通过内存屏障来保证了变量的可见性和有序性。</p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/volatile-happen-before-内存屏障/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>volatile happen-before 内存屏障</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+    
+  </section>
+  
+    
+    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+    
+    
+
+  
+
+
+    
+  
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

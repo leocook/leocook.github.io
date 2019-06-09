@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Tag: java | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover  half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      
+<div class="l_main">
+  
+    
+      
+  <section class="post-list">
+    
+      
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class="post-wrapper">
+            <article class="post reveal ">
+  
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  <h2 class="title">
+    <a href="/2017/06/05/java-2017-06-05-JCF（Java集合框架）概括/">
+      JCF（Java集合框架）概括
+    </a>
+  </h2>
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2017-06-05</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/java/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>java</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      <p>在Java中，集合也就是可以装载多个<strong>Java对象</strong>的某种对象，所以Java的集合只能装载对象，在装载基础数据类型的时候，事实上装载的是基础类型锁对应的包装类。</p>
+<p>在学习JCF之前，我们先回顾一下，在计算机编程中我们期望<strong>集合能有哪些能力？</strong></p>
+<ul>
+<li>可以遍历集合全部的元素</li>
+<li>关于集合类部元素的顺序<ul>
+<li>保留写入集合的顺序</li>
+<li>可根据元素的大小自动排序</li>
+</ul>
+</li>
+<li>能快速查找出集合中的某个元素</li>
+<li>可以根据位置来快速的修改元素</li>
+<li>能高效的增加、删除集合中元素</li>
+<li>集合内的元素可以快速去重</li>
+</ul>
+<p>聊到集合，那肯定少不了下面几种基础的数据结构：</p>
+<ul>
+<li>线性存储<ul>
+<li>（可变）数组</li>
+<li>链表</li>
+</ul>
+</li>
+<li>Hash散列表</li>
+<li>平衡树</li>
+</ul>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>在Java2.0之前，只有一些简单的集合，例如Vector/Stack/Hashtable，由于这些集合直接使用synchronized关键字来实现线程安全，使得这些集合在使用的时候效率极低。从Java2.0开始之后，Java提供了一系列的Java Collections Framework（JCF）。</p>
+<p><img src="http://leocook-blog.test.upcdn.net/JCF.gif" alt="JCF"></p>
+<p>下面开始讲讲Java的集合框架（后面简称JCF）。JCF主要包括了两种类型的集合：<strong>Collection</strong>和<strong>Map</strong>。<br>Collection集合中的每个节点存放的是一个元素。Map集合中的每个元素存放的是<key,value>型的键值对。</key,value></p>
+<h2 id="2-Iterator接口"><a href="#2-Iterator接口" class="headerlink" title="2.Iterator接口"></a>2.Iterator接口</h2><p>这是迭代器接口，不同集合的Iterator实现会不一样。例如ArrayList的Iterator实现是内部类Itr。<br>集合实现了Iterator之后，就可以使用迭代器顺序遍历了。<br>Iterator接口的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Object next()：返回迭代器刚越过的元素的引用，返回值是Object，需要强制转换成自己需要的类型</span><br><span class="line"></span><br><span class="line">boolean hasNext()：判断容器内是否还有可供访问的元素</span><br><span class="line"></span><br><span class="line">void remove()：删除迭代器刚越过的元素</span><br></pre></td></tr></table></figure>
+<p>查看源码的话，会看到下面这一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">* @see Collection</span><br><span class="line">* @see ListIterator</span><br><span class="line">* @see Iterable</span><br><span class="line">public interface Iterator&lt;E&gt; &#123;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Iterable</li>
+</ul>
+<p>所有实现了Iterable接口的集合，都可以使用增强的for循环，因为这个集合将会实现一个自己的Iterator。</p>
+<ul>
+<li>ListIterator</li>
+</ul>
+<p>ListIterator是针对List实现的迭代器。由于List是顺序存储结构，所以除了next()、hasNext()、remove()方法，ListIterator还提供了List下标处理的相关方法，例如获取上/下一个元素以及它们的下标情况。</p>
+<h2 id="3-Collection"><a href="#3-Collection" class="headerlink" title="3.Collection"></a>3.Collection</h2><p>Collection是Java集合层次结构中的根节点，实现Collection的集合中，有的是允许存放重复的元素，有的不允许有重复的元素（set），有的集合是有序的，有的则是无序的。Collection下面有三种子接口，分别是List、Set、Queue，下面逐一介绍。</p>
+<h3 id="3-1-List"><a href="#3-1-List" class="headerlink" title="3.1.List"></a>3.1.List</h3><p>实现List接口的集合有着两大特性：允许元素重复、元素是有序的。实现了List接口的集合，可以通过位置来操作集合的元素。下图展示了List接口中的全部方法：</p>
+<p><img src="http://leocook-blog.test.upcdn.net/list.png" alt="List"></p>
+<p>下面是几个常用的List类型集合。</p>
+<ul>
+<li>ArrayList</li>
+</ul>
+<p>基于数组实现的线性存储集合。数组的大小可以变化，当元素个数超过了数组的大小，将会重新创建一个更大长度的数组，并把当前数组中的内容复制进去，每次长度增长为原来的1.5倍左右，可以查看源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void grow(int minCapacity) &#123;</span><br><span class="line">    // overflow-conscious code</span><br><span class="line">    int oldCapacity = elementData.length;</span><br><span class="line">    int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</span><br><span class="line">    if (newCapacity - minCapacity &lt; 0)</span><br><span class="line">        newCapacity = minCapacity;</span><br><span class="line">    if (newCapacity - MAX_ARRAY_SIZE &gt; 0)</span><br><span class="line">        newCapacity = hugeCapacity(minCapacity);</span><br><span class="line">    // minCapacity is usually close to size, so this is a win:</span><br><span class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>LinkedList</li>
+</ul>
+<p>基于链表实现的线性存储集合。下面对比ArrayList和LinkedList：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th style="text-align:left">ArrayList</th>
+<th style="text-align:left">LinkedList</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">内部数据结构</td>
+<td style="text-align:left">数组</td>
+<td style="text-align:left">链表</td>
+</tr>
+<tr>
+<td style="text-align:center">是否顺序结构</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td style="text-align:center">位置检索</td>
+<td style="text-align:left">快</td>
+<td style="text-align:left">慢</td>
+</tr>
+<tr>
+<td style="text-align:center">增、删</td>
+<td style="text-align:left">慢</td>
+<td style="text-align:left">快</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-2-Set"><a href="#3-2-Set" class="headerlink" title="3.2.Set"></a>3.2.Set</h3><p>实现Set接口的集合内部元素不重复，Set有三个具体的实现类：HashSet（散列集）、LinkedHashSet（顺序集）、TreeSet（平衡树）。</p>
+<ul>
+<li>HashSet</li>
+</ul>
+<p>基于hash的无序set。其实HashSet内部是用HashMap实现的，HashMap后边会说到。在散列集中，有两个名词需要关注，初始容量和客座率。客座率是确定在增加规则集之前，该规则集的饱满程度，当元素个数超过了容量与客座率的乘积时，容量就会自动翻倍。</p>
+<ul>
+<li>LinkedHashSet</li>
+</ul>
+<p>基于链表实现的HashSet，LinkedHashSet中的元素是有序的，且顺序和写入的顺序一致。</p>
+<ul>
+<li>TreeSet</li>
+</ul>
+<p>TreeSet是一个有序的Set，排序的比较器可以通过传入Comparator来自定义。</p>
+<h3 id="3-3-Queue"><a href="#3-3-Queue" class="headerlink" title="3.3.Queue"></a>3.3.Queue</h3><p>队列是一种FIFO（First in first out）数据结构，元素在Queue的末尾添加，在头部删除。<br><img src="http://leocook-blog.test.upcdn.net/Queue.png" alt="Queue"><br>Queue接口分别定义了上面6个方法，分别有插入、移除和检查的功能，有的方法在某些特殊情况下回报错，有的则不会，具体见下表：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Operation</th>
+<th style="text-align:left">抛出异常</th>
+<th style="text-align:left">返回特殊值</th>
+<th style="text-align:left">操作失败的条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Insert（插入）</td>
+<td style="text-align:left">add(e)</td>
+<td style="text-align:left">offer(e),return false</td>
+<td style="text-align:left">当队列空间有限制，且没有多余的空间时</td>
+</tr>
+<tr>
+<td style="text-align:center">Remove（移除）</td>
+<td style="text-align:left">remove()</td>
+<td style="text-align:left">poll(),return null</td>
+<td style="text-align:left">队列为空</td>
+</tr>
+<tr>
+<td style="text-align:center">Examine（检查）</td>
+<td style="text-align:left">element()</td>
+<td style="text-align:left">peek(),return null</td>
+<td style="text-align:left">队列为空</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Queue平时用的不是很多，优先队列PriorityQueue有的时候会用到。</p>
+<h2 id="4-Map"><a href="#4-Map" class="headerlink" title="4.Map"></a>4.Map</h2><p>Map是存储键值对映射（key,value）的容器类，可以存储任意类型的对象。但是key不能重复，且一个key只能对应一个值。如果使用对象作为key,那么必须要考虑一下该对象类的hashCode方法和equals方法是否需要重写，因为map是用着两个方法来判断key是否相等的，其中hashCode是用来加速判断的，如果hashCode相等，还会用equals方法来判断。</p>
+<p>常用到的Map接口实现类，有三个：HashMap、LinkedHashMap、TreeMap。Map接口定义的方法列表可见下图：<br><img src="http://leocook-blog.test.upcdn.net/map.png" alt="Map"></p>
+<h3 id="4-1-HashMap"><a href="#4-1-HashMap" class="headerlink" title="4.1.HashMap"></a>4.1.HashMap</h3><p>HashMap是基于数组+链表实现的Hash散列Map结构，数组里存放着索引，链表里存放的是元素数据。(key,value)键值对中，key的hash值就是数组的下标。</p>
+<p>在Jdk1.8中，对HashMap做了优化，当链表的长度超过8时，链表结构将会变为了平衡树，这样做主要是为了在HashMap里的元素较多时，能够加快查找的速度。</p>
+<p><img src="http://leocook-blog.test.upcdn.net/map%20struct.png" alt="map结构"></p>
+<p>关于HashMap，其实有很多可以细聊的，它与很多集合都有着关系。后边会再来一篇，详细说一下Java中HashMap的设计，以及Java中散列存储的设计思想。</p>
+<h3 id="4-2-LinkedHashMap"><a href="#4-2-LinkedHashMap" class="headerlink" title="4.2.LinkedHashMap"></a>4.2.LinkedHashMap</h3><p>LinkedHashMap类继承了HashMap类，HashMap中的元素是没有顺序的，但是LinkedHashMap中的元素是有顺序的。<br>LinkedHashMap里的元素顺序有两种排序方式：第一种是根据元素key被插入的顺序;第二种是根据元素被访问的顺序来排序（最近最少被访问的元素优先）。</p>
+<h3 id="4-3-TreeMap"><a href="#4-3-TreeMap" class="headerlink" title="4.3.TreeMap"></a>4.3.TreeMap</h3><p>TreeMap是基于红黑树结构来实现的，可以使用Comparable或Comparator接口来实现排序的比较算法。</p>
+<blockquote>
+<p>在日常开发中，如果不用考虑键值对元素的顺序，就使用HashMap；如果需要考虑元素插入顺序，就使用LinkedHashMap；如果需要根据Key自定义排序规则，那么就使用TreeMap。</p>
+</blockquote>
+<h2 id="5-其它集合"><a href="#5-其它集合" class="headerlink" title="5.其它集合"></a>5.其它集合</h2><p>下面简单说几个不是很常用的集合。</p>
+<h3 id="5-1-Vector"><a href="#5-1-Vector" class="headerlink" title="5.1.Vector"></a>5.1.Vector</h3><p>Vector的使用和ArrayList的使用基本一样，它是线程安全的线程安全，但是Vector的线程安全是使用关键字synchronized修饰实现的，所以Vector的效率很低。相对来说，ArrayList更加高效！</p>
+<h3 id="5-2-Stack"><a href="#5-2-Stack" class="headerlink" title="5.2.Stack"></a>5.2.Stack</h3><p>Stack是Java2之前设计的栈结构，内部是使用数组实现的。我们知道栈结构的操作中会频繁的出现入栈和出栈，那么使用数组结构的话，在栈结构变长时，自然会带来性能上的折扣。<br>LinkedList也具备栈的功能，而且是基于链表实现的，所以在开发需要用到栈结构时，推荐使用LinkedList。</p>
+<h3 id="5-3-HashTable"><a href="#5-3-HashTable" class="headerlink" title="5.3.HashTable"></a>5.3.HashTable</h3><p>HashTable的功能和HashMap相似，它是Dictionary类的，并且使用了synchronized关键字实现了线程安全，所以性能会很差！<br>除此之外，HashTable的Key不能为空指针null,但是HashMap的key可以为null。</p>
+<p>关于集合的线程安全，后边会另写一篇详细说明。</p>
+<p>参考地址：<br><a href="http://www.open-open.com/lib/view/open1474167415464.html" target="_blank" rel="noopener">http://www.open-open.com/lib/view/open1474167415464.html</a><br><a href="http://www.cnblogs.com/CarpenterLee/p/5414253.html" target="_blank" rel="noopener">http://www.cnblogs.com/CarpenterLee/p/5414253.html</a></p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6.总结"></a>6.总结</h2><ul>
+<li>JCF接口架构</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/JCF.gif" alt="JCF接口架构"></p>
+<ul>
+<li>常用的集合分类情况</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/jcf%E4%BD%BF%E7%94%A8.png" alt="常用的集合分类情况"></p>
+<ul>
+<li>接口功能实现</li>
+</ul>
+<p>下面表格描述的比较好，每个接口对应不同数据结构的实现。</p>
+<p><img src="http://leocook-blog.test.upcdn.net/jcf%20imp.png" alt="JCF 接口实现"></p>
+<p>参考文档：<br><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/collections/overview.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/6/docs/technotes/guides/collections/overview.html</a><br><a href="http://www.jianshu.com/p/63e76826e852" target="_blank" rel="noopener">http://www.jianshu.com/p/63e76826e852</a></p>
+
+      
+    </div>
+    
+      <div class="full-width auto-padding tags">
+        
+          <a href="/blog/tags/java/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>java</a>
+        
+      </div>
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+    
+  </section>
+  
+    
+    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+    
+    
+
+  
+
+
+    
+  
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>

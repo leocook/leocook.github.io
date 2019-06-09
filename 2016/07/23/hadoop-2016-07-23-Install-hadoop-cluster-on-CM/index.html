@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>Install_hadoop_cluster_on_CM | leocook</title>
+  
+  <meta name="keywords" content="spark hadoop bigdata java">
+  
+  
+  <meta name="description" content="spark hadoop bigdata java">
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+  
+
+  
+  <link rel="shortcut icon" type="image/x-icon" href="http://leocook-blog.test.upcdn.net/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8fb14a2d14c6194196ac5c028cc66cfb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  
+  <div class="cover-wrapper">
+    <cover class="cover post half">
+      
+        
+  <h1 class="title">LEOCOOK</h1>
+
+
+  <div class="m_search">
+    <form name="searchform" class="form u-search-form">
+      <input type="text" class="input u-search-input" placeholder="search">
+      <i class="icon fas fa-search fa-fw"></i>
+    </form>
+  </div>
+
+<div class="menu navgation">
+  <ul class="h-list">
+    
+      
+        <li>
+          <a class="nav home" href="/" id="home">
+            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/projects/" id="projects">
+            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
+            <i class="fas fa-link fa-fw"></i>&nbsp;友链
+          </a>
+        </li>
+      
+        <li>
+          <a class="nav home" href="/about/" rel="nofollow" id="about">
+            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
+          </a>
+        </li>
+      
+    
+  </ul>
+</div>
+
+      
+    </cover>
+    <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          leocook
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
+								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+  </div>
+
+
+  <div class="l_body">
+    <div class='body-wrapper'>
+      <div class="l_main">
+  
+
+  
+    <article id="post" class="post white-box article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  
+    <h1 class="title">
+      <a href="/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/">
+        Install_hadoop_cluster_on_CM
+      </a>
+    </h1>
+  
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    <a href="http://leocook.github.io" rel="nofollow">
+      
+        <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      
+      <p>leocook</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2016-07-23</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/hadoop/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>hadoop</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
+
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          <p>对于Hadoop这个复杂的大系统，我们期望能有一个平台，可以对Hadoop的每一个部件都能够进行安装部署，以及细颗粒度的监控。Apache发行版的Hadoop可以使用Ambari；Cloudera公司的CDH版本Hadoop则可以使用Cloudera Manager（后面简称为CM）来统一管理和部署。咱们这里的操作系统使用的是ubuntu14.04.</p>
+<h2 id="1-Cloudera-Manager安装前准备"><a href="#1-Cloudera-Manager安装前准备" class="headerlink" title="1.Cloudera Manager安装前准备"></a>1.Cloudera Manager安装前准备</h2><h3 id="1-1-操作系统的优化"><a href="#1-1-操作系统的优化" class="headerlink" title="1.1. 操作系统的优化"></a>1.1. 操作系统的优化</h3><ul>
+<li>打开的最大文件数<br>修改当前的session配置(临时)：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -SHn 65535</span><br></pre></td></tr></table></figure>
+<p>永久修改（需要重启服务器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;ulimit -SHn 65535&quot; &gt;&gt; /etc/rc.local</span><br><span class="line">sudo chmod +x /etc/rc.local</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开的组大文件句柄数<br>临时配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 一般可不做修改，这是临时配置</span><br><span class="line">sudo echo 2000000 &gt; /proc/sys/fs/file-max</span><br></pre></td></tr></table></figure>
+<p>永久配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;echo 2000000 &gt; /proc/sys/fs/file-max&quot; &gt;&gt; /etc/rc.local</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;fs.file-max = 2000000&quot; &gt;&gt;/etc/sysctl.conf #推荐</span><br><span class="line">#使文件生效sudo /sbin/sysctl -p</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开的最大网络连接数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &quot;net.core.somaxconn = 2048&quot; &gt;&gt;/etc/sysctl.conf</span><br><span class="line">sudo /sbin/sysctl -p</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关闭selinux</li>
+</ul>
+<p>ubuntu默认是不安装的selinux的，所以这里可以直接忽略。</p>
+<ul>
+<li>配置ntp</li>
+</ul>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install ntp</span><br></pre></td></tr></table></figure>
+<p>如果只需要保证集群内部的各个server之间时间保持同步，只需要在需要同步的机器上配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 */12 * * * ntpdate dt-vt-154</span><br></pre></td></tr></table></figure>
+<p>如果需要时间和互联网的时间保持一致，那么就需要在提供ntp server的机器上配置上层ntpserver:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">server [ntpserver_01]</span><br><span class="line">server [ntpserver_02]</span><br><span class="line">server [ntpserver_03]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关闭防火墙</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw disable #关闭防火墙</span><br><span class="line">apt-get remove iptables #卸载防火墙</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置好hosts映射文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/hosts</span><br><span class="line"></span><br><span class="line">192.168.1.151   dt-vt-151</span><br><span class="line">192.168.1.152   dt-vt-152</span><br><span class="line">192.168.1.153   dt-vt-153</span><br><span class="line">192.168.1.154   dt-vt-154</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Java环境配置</li>
+</ul>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/java</span><br><span class="line">cd /opt/java</span><br><span class="line">#下载到安装文件到这个目录</span><br></pre></td></tr></table></figure>
+<p>环境配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line"></span><br><span class="line">export JAVA_HOME=/opt/java/jdk1.7.0_79</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>执行下面命令，使当前的session生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-数据的存放"><a href="#1-2-数据的存放" class="headerlink" title="1.2. 数据的存放"></a>1.2. 数据的存放</h3><p>在使用CM来管理集群的时候，会涉及到大量的数据存储，例如Hadoop的主机列表信息，主机的配置信息，负载信息，各个模块的运行时状态等等。<br>咱们这里使用mysql来作为CM的数据存储，这里不仅是CM，Hadoop中的Hive等模块的元数据，都来使用mysql存储。</p>
+<ul>
+<li>安装mysql</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
+<p>我这里安装完后是5.5.49.</p>
+<ul>
+<li>关闭mysql，备份配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/mysql stop</span><br></pre></td></tr></table></figure>
+<p>把/var/lib/mysql/ib_logfile0和/var/lib/mysql/ib_logfile1拷贝至某个配置目录中，例如：/var/lib/mysql/bak</p>
+<ul>
+<li>配置InnoDB引擎</li>
+</ul>
+<p>务必使用InnoDB引擎引擎，若是使用MyISAM引擎CM将启动不了。在Mysql的命令行中运行下面的命令，来查看你的Mysql使用了哪个引擎。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show table status;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置mysql的innodb刷写模式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_flush_method=O_DIRECT</span><br></pre></td></tr></table></figure>
+<p>即：配置Innodb的刷写模式为异步写模式。</p>
+<ul>
+<li>修改mysql的最大连接数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max_connections=1550</span><br></pre></td></tr></table></figure>
+<p>在这里，你应该会考虑配置该数值为多少比较合适。<br>当集群规模<strong>小于50台</strong>的时候，假设该库中有N个数据库是用来服务于Hadoop的，那么max_connections可以设置为100<em>N+50。例如：Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, 和 Hive metastore都是使用mysql的，那么就配置max_connections为550.<br>当集群规模<em>*大于50台</em></em>的时候，建议每个数据库只存放在一台机器上。</p>
+<ul>
+<li>配置文件样例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">transaction-isolation = READ-COMMITTED</span><br><span class="line"># Disabling symbolic-links is recommended to prevent assorted security risks;</span><br><span class="line"># to do so, uncomment this line:</span><br><span class="line"># symbolic-links = 0</span><br><span class="line"></span><br><span class="line">key_buffer = 16M</span><br><span class="line">key_buffer_size = 32M</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line">thread_stack = 256K</span><br><span class="line">thread_cache_size = 64</span><br><span class="line">query_cache_limit = 8M</span><br><span class="line">query_cache_size = 64M</span><br><span class="line">query_cache_type = 1</span><br><span class="line"></span><br><span class="line">max_connections = 1550</span><br><span class="line">#expire_logs_days = 10</span><br><span class="line">#max_binlog_size = 100M</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># InnoDB settings</span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">innodb_flush_log_at_trx_commit  = 2</span><br><span class="line">innodb_log_buffer_size = 64M</span><br><span class="line">innodb_buffer_pool_size = 4G</span><br><span class="line">innodb_thread_concurrency = 8</span><br><span class="line">innodb_flush_method = O_DIRECT</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line">log-error=/var/log/mysqld.log</span><br><span class="line">pid-file=/var/run/mysqld/mysqld.pid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动mysql</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/mysql start</span><br></pre></td></tr></table></figure>
+<p>打开开机自启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install sysv-rc-conf</span><br><span class="line">sysv-rc-conf mysql on</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装mysql-jdbc驱动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libmysql-java</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mysql远程连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/mysql/my.cnf</span><br><span class="line"></span><br><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>給相关服务创建mysql的数据库</li>
+</ul>
+<p>相关列表如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Database</th>
+<th>User</th>
+<th>Password</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity Monitor</td>
+<td>amon</td>
+<td>amon</td>
+<td>amon_password</td>
+</tr>
+<tr>
+<td>Reports Manager</td>
+<td>rman</td>
+<td>rman</td>
+<td>rman_password</td>
+</tr>
+<tr>
+<td>Hive Metastore Server</td>
+<td>hive_metastore</td>
+<td>hive</td>
+<td>hive_password</td>
+</tr>
+<tr>
+<td>Sentry Server</td>
+<td>sentry</td>
+<td>sentry</td>
+<td>sentry_password</td>
+</tr>
+<tr>
+<td>Cloudera Navigator Audit Server</td>
+<td>nav</td>
+<td>nav</td>
+<td>nav_password</td>
+</tr>
+<tr>
+<td>Cloudera Navigator Metadata Server</td>
+<td>navms</td>
+<td>navms</td>
+<td>navms_password</td>
+</tr>
+<tr>
+<td>OOZIE</td>
+<td>oozie</td>
+<td>oozie</td>
+<td>oozie</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>建表语句格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create database database DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on database.* TO &apos;user&apos;@&apos;%&apos; IDENTIFIED BY &apos;password&apos;;</span><br></pre></td></tr></table></figure>
+<p>建表语句如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">create database amon DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on amon.* TO &apos;amon&apos;@&apos;%&apos; IDENTIFIED BY &apos;amon&apos;;</span><br><span class="line"></span><br><span class="line">create database rmon DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on rmon.* TO &apos;rmon&apos;@&apos;%&apos; IDENTIFIED BY &apos;rmon&apos;;</span><br><span class="line"></span><br><span class="line">create database hive_metastore DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on hive_metastore.* TO &apos;hive&apos;@&apos;%&apos; IDENTIFIED BY &apos;hive&apos;;</span><br><span class="line"></span><br><span class="line">create database sentry DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on sentry.* TO &apos;sentry&apos;@&apos;%&apos; IDENTIFIED BY &apos;sentry&apos;;</span><br><span class="line"></span><br><span class="line">create database nav DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on nav.* TO &apos;nav&apos;@&apos;%&apos; IDENTIFIED BY &apos;nav&apos;;</span><br><span class="line"></span><br><span class="line">create database navms DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on navms.* TO &apos;navms&apos;@&apos;%&apos; IDENTIFIED BY &apos;navms&apos;;</span><br><span class="line"></span><br><span class="line">create database oozie DEFAULT CHARACTER SET utf8;</span><br><span class="line">grant all on oozie.* TO &apos;oozie&apos;@&apos;%&apos; IDENTIFIED BY &apos;oozie&apos;;</span><br></pre></td></tr></table></figure>
+<h2 id="2-开始安装Cloudera-Manager"><a href="#2-开始安装Cloudera-Manager" class="headerlink" title="2.开始安装Cloudera Manager"></a>2.开始安装Cloudera Manager</h2><h3 id="2-1-下载CM"><a href="#2-1-下载CM" class="headerlink" title="2.1.下载CM"></a>2.1.下载CM</h3><p>可以下载安装最新版本的CM：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>当然，如果你想选择安装其它版本，可以访问下面的地址，并选择下载你所需要的版本(cm5+)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://archive.cloudera.com/cm5/installer/</span><br></pre></td></tr></table></figure>
+<p>我这里使用的是版本是5.4.10，从release note上看，目前cdh5.4.10是最稳当的版本。我下载到了本地路径如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/cm/cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>修改权限，使其可以被执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-配置私有软件仓库-如果不使用私有仓库，这里可以直接跳过"><a href="#2-2-配置私有软件仓库-如果不使用私有仓库，这里可以直接跳过" class="headerlink" title="2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)"></a>2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)</h3><h4 id="2-2-1-创建一个临时可以使用的远程仓库"><a href="#2-2-1-创建一个临时可以使用的远程仓库" class="headerlink" title="2.2.1.创建一个临时可以使用的远程仓库"></a>2.2.1.创建一个临时可以使用的远程仓库</h4><p>这个配置是在安装cloudera-manager-server的时候才会用的。这里的仓库是使用传统的http协议，通过网络传输数据的。可以去<a href="http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/repo-as-tarball/下载你所需要的cdh包。</a></p>
+<ul>
+<li>解压安装包</li>
+</ul>
+<p>下载完安装包后，解压到某个目录下，我这里下载的是cm5.4.10-ubuntu14-04.tar.gz这个版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf cm5.4.10-ubuntu14-04.tar.gz</span><br><span class="line">chmod -R ugo+rX /opt/cm/local_resp/cm</span><br></pre></td></tr></table></figure>
+<p>解压后的目录是/opt/cm/local_resp/cm</p>
+<ul>
+<li>启动Http server</li>
+</ul>
+<p>启动一个Http服务，使可以通过网络来访问仓库中的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/cm/</span><br><span class="line">python -m SimpleHTTPServer 8900</span><br></pre></td></tr></table></figure>
+<p>我这里使用的是8900，你可以根据需要，使用指定的端口。</p>
+<ul>
+<li>验证</li>
+</ul>
+<p>可在浏览器中访问地址<a href="http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。" target="_blank" rel="noopener">http://server:8900/cm，如果可以正常访问，并且能看到相对应的文件列表，则表示正常启动。</a></p>
+<h4 id="2-2-2-配置安装CM所需要的私有仓库"><a href="#2-2-2-配置安装CM所需要的私有仓库" class="headerlink" title="2.2.2.配置安装CM所需要的私有仓库"></a>2.2.2.配置安装CM所需要的私有仓库</h4><p>在目录<strong>/etc/apt/sources.list.d/</strong>下创建文件<strong>my-private-cloudera-repo.list</strong>，并写入配置把这个文件和上面新建的仓库关联到一起：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/apt/sources.list.d/my-private-cloudera-repo.list</span><br><span class="line"></span><br><span class="line">deb [arch=amd64] http://192.168.1.154:8900/cm/ trusty-cm5.4.10 contrib</span><br></pre></td></tr></table></figure>
+<p>执行下面的命令，使得上面的配置生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-3-配置使用CM安装节点时会用到的仓库"><a href="#2-2-3-配置使用CM安装节点时会用到的仓库" class="headerlink" title="2.2.3.配置使用CM安装节点时会用到的仓库"></a>2.2.3.配置使用CM安装节点时会用到的仓库</h3><p>可以下载地址：<a href="http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/</a> 里的所有内容到本地，然后使用<strong>2.2.1</strong>中的方式来启动一个Http server。</p>
+<h3 id="2-2-4-配置节点的JDK"><a href="#2-2-4-配置节点的JDK" class="headerlink" title="2.2.4.配置节点的JDK"></a>2.2.4.配置节点的JDK</h3><p>这一步是可选的，如果你不想每台机器都去手动安装，也可以在后边使用CM来批量安装。</p>
+<h3 id="2-3-开始安装CM"><a href="#2-3-开始安装CM" class="headerlink" title="2.3.开始安装CM"></a>2.3.开始安装CM</h3><ul>
+<li>连接互联网安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./cloudera-manager-installer.bin</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<ul>
+<li>使用本地仓库安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./cloudera-manager-installer.bin --skip_repo_package=1</span><br></pre></td></tr></table></figure>
+<p>然后就是一路的YES &amp; NEXT，最后安装完成，CM默认的端口是7180，账户名和密码都是7180.</p>
+<h3 id="2-4-使用CM安装集群"><a href="#2-4-使用CM安装集群" class="headerlink" title="2.4.使用CM安装集群"></a>2.4.使用CM安装集群</h3><p>首次登陆CM管理界面的时候，会出现一个集群安装向导。我这里选择的是免费版本。然后大概有如下几步：</p>
+<ul>
+<li><p>使用ip或者hostname来搜索主机，搜索到之后，go to next step.</p>
+</li>
+<li><p>看到如下图片的时候，如果你已经在前面的主机中安装好了JDK，那么这里可以不选，如果没有，则必须选择。</p>
+</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/cm-02.png" alt="CM JDK" title="cm jdk"></p>
+<ul>
+<li>选择是否使用单用户模式（Single User Mode）</li>
+</ul>
+<p>不使用该模式的话，HDFS服务会使用“hdfs”账户来启动，Hbase的Region Server会使用“hbase”账户来启动。使用了该模式之后，所有的服务都是使用同一个账户去启动的。<br>这里主要看集群的使用场景，如果其中涉及到不同的模块是由不同人员来运维管理的话，我建议还是不要使用单用户模式了。但如果集群是统一由一个人员来管理，那么选择使用单用户模式可能会方便很多。<br>我这里没有使用单用户模式。</p>
+<ul>
+<li>配置好SSH登录</li>
+</ul>
+<p><img src="http://leocook-blog.test.upcdn.net/cm-03.png" alt="配置ssh登录信息" title="输入密码"></p>
+<ul>
+<li><p>配置好SSH后开始连入主机，安装jdk和cm-agent<br><img src="http://leocook-blog.test.upcdn.net/cm-04.png" alt="install cm agent" title="install cm agent"></p>
+</li>
+<li><p>安装完成，此时cm-agent就已经安装好了，随时都可以使用cm-server控制安装Hadoop的相关组件,完成后先不要点击进入下一步，继续看下面。<br><img src="http://leocook-blog.test.upcdn.net/cm-05.png" alt="cm agent ok" title="cm agent ok"></p>
+</li>
+<li><p>分发Hadoop的安装包</p>
+</li>
+</ul>
+<p>去地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://archive.cloudera.com/cdh5/parcels/5.4.10/</span><br></pre></td></tr></table></figure>
+<p>下载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel</span><br><span class="line">CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1</span><br><span class="line">manifest.json</span><br></pre></td></tr></table></figure>
+<p>下载完成后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha1&quot;重命名为&quot;CDH-5.4.10-1.cdh5.4.10.p0.16-trusty.parcel.sha&quot;</span><br></pre></td></tr></table></figure>
+<p>并移到目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/cloudera/parcel-repo</span><br></pre></td></tr></table></figure>
+<p>然后在cm-serve点击进入下一页，将会看到如下图：<br><img src="http://leocook-blog.test.upcdn.net/cm-06.png" alt="cm parcel distributed" title="cm parcel distributed"><br>因为你已经把安装包下载好，并且放入到/opt/cloudera/parcel-repo（默认的目录）里面，所以这里的<strong>Download</strong>自然就是100%，<strong>Distributed</strong>是把安装包从cm-server往集群中各个节点分发的过程，<strong>Unpacked</strong>是表示各个节点的上安装包的解压情况进度，前面都OK后，<strong>Activated</strong>自然就可以了，表示安装包已经部署好了，可以随时进行安装。</p>
+<ul>
+<li><p>选择安装Hadoop的那些组件之后，会在这里显示各个组件部署的主机地址。<br><img src="http://leocook-blog.test.upcdn.net/cm-07.png" alt="hosts choose" title="hosts choose"></p>
+</li>
+<li><p>这里配置的是一些组件使用的mysql信息：<br><img src="http://leocook-blog.test.upcdn.net/cm-08.png" alt="hadoop mysql config" title="hadoop mysql config"></p>
+</li>
+<li><p>然后可以配置一些服务的的具体参数<br><img src="http://leocook-blog.test.upcdn.net/cm-09.png" alt="hadoop config" title="hadoop config"></p>
+</li>
+<li><p>参数配置都没问题后，开始执行安装。<br><img src="http://leocook-blog.test.upcdn.net/cm-10.png" alt="hadoop install" title="hadoop install"></p>
+</li>
+<li><p>安装完成后。<br><img src="http://leocook-blog.test.upcdn.net/cm-11.jpeg" alt="install success" title="install success"><br>PS：我这里的Kafka是后来安装上去的，默认Hadoop的parcel包是没有kafka的。</p>
+</li>
+</ul>
+<h2 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h2><h3 id="3-1-主机的Host配置不能出差错"><a href="#3-1-主机的Host配置不能出差错" class="headerlink" title="3.1.主机的Host配置不能出差错"></a>3.1.主机的Host配置不能出差错</h3><p>我就配置错过host，期间走了一些弯路，主要表现在添加完主机之后，Hosts下的主机名都是localhost。</p>
+<h3 id="3-2-cm-agent安装失败重试时"><a href="#3-2-cm-agent安装失败重试时" class="headerlink" title="3.2.cm-agent安装失败重试时"></a>3.2.cm-agent安装失败重试时</h3><p>如果在重试的过程中出现了一直等待，或者cm-agent端口被占用的情况，大概有下面的几种情况：</p>
+<ul>
+<li>锁文件没有删除</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rm /tmp/.scm_prepare_node.lock</span><br></pre></td></tr></table></figure>
+<ul>
+<li>端口被占用 <strong>9000/9001</strong></li>
+</ul>
+<p>这种情况是部分进程没有关闭成功，找到端口对应的进程号，然后然后使用<strong>kill -9停止进程</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nap | grep 9000</span><br><span class="line">netstat -nap | grep 9001</span><br></pre></td></tr></table></figure>
+<p>主要是<strong>supervisor</strong>和<strong>cm-agent</strong>进程</p>
+<h2 id="4-会用到的一些地址总结"><a href="#4-会用到的一些地址总结" class="headerlink" title="4.会用到的一些地址总结"></a>4.会用到的一些地址总结</h2><h3 id="4-1-Mysql的相关配置"><a href="#4-1-Mysql的相关配置" class="headerlink" title="4.1.Mysql的相关配置"></a>4.1.Mysql的相关配置</h3><p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_mysql.html</a></p>
+<h3 id="4-2-创建本地仓库"><a href="#4-2-创建本地仓库" class="headerlink" title="4.2.创建本地仓库"></a>4.2.创建本地仓库</h3><ul>
+<li>For CM</li>
+</ul>
+<p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_package_repo.html</a></p>
+<ul>
+<li>For parcel</li>
+</ul>
+<p><a href="http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/5-4-x/topics/cm_ig_create_local_parcel_repo.html</a></p>
+<h3 id="4-3-parcel的下载地址"><a href="#4-3-parcel的下载地址" class="headerlink" title="4.3.parcel的下载地址"></a>4.3.parcel的下载地址</h3><p><a href="http://archive.cloudera.com/cdh5/parcels/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/parcels/</a><br><a href="http://archive.cloudera.com/kafka/parcels/" target="_blank" rel="noopener">http://archive.cloudera.com/kafka/parcels/</a></p>
+<h3 id="4-4-cm的下载地址"><a href="#4-4-cm的下载地址" class="headerlink" title="4.4.cm的下载地址"></a>4.4.cm的下载地址</h3><p>加压后可以直接运行<br><a href="http://archive.cloudera.com/cm5/cm/5/" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/cm/5/</a></p>
+<h2 id="5-附件"><a href="#5-附件" class="headerlink" title="5.附件"></a>5.附件</h2><p>博文中的图片是压缩后的，清晰度比较低，原图可以访问下面的地址：</p>
+<p>链接: <a href="http://pan.baidu.com/s/1cmiBCE" target="_blank" rel="noopener">http://pan.baidu.com/s/1cmiBCE</a> 密码: rnmw</p>
+
+        </div>
+        
+          
+
+
+  <section class="meta" id="footer-meta">
+    <hr>
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T15:38:41+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>最后更新于 2019年6月9日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/cm-hadoop/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>cm hadoop</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://leocook.github.io/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/&title=Install_hadoop_cluster_on_CM | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://leocook.github.io/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/&title=Install_hadoop_cluster_on_CM | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://leocook.github.io/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/&title=Install_hadoop_cluster_on_CM | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+          
+            <img src="http://leocook-blog.test.upcdn.net/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+            <div class="prev-next">
+                
+                    <section class="prev">
+                        <span class="art-item-left">
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                            <h4>
+                                <a href="/2016/07/26/nginx-2016-07-26-Lua-on-Nginx/" rel="prev" title="Lua_on_Nginx">
+                                  
+                                      Lua_on_Nginx
+                                  
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/nginx-lua/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>nginx lua</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2016/05/17/tez-2016-05-17-Tez系列第三篇-Tez和oozie整合/" rel="prev" title="Tez系列第三篇-Tez和oozie整合">
+                                    
+                                        Tez系列第三篇-Tez和oozie整合
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/hadoop-tez-oozie-hive/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>hadoop tez oozie hive</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+      </section>
+    </article>
+  
+
+  
+    <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Install_hadoop_cluster_on_CM',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+            <section class="widget author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
+      </div>
+    
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Cloudera-Manager安装前准备"><span class="toc-text">1.Cloudera Manager安装前准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-操作系统的优化"><span class="toc-text">1.1. 操作系统的优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-数据的存放"><span class="toc-text">1.2. 数据的存放</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-开始安装Cloudera-Manager"><span class="toc-text">2.开始安装Cloudera Manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-下载CM"><span class="toc-text">2.1.下载CM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-配置私有软件仓库-如果不使用私有仓库，这里可以直接跳过"><span class="toc-text">2.2.配置私有软件仓库(如果不使用私有仓库，这里可以直接跳过)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-创建一个临时可以使用的远程仓库"><span class="toc-text">2.2.1.创建一个临时可以使用的远程仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-配置安装CM所需要的私有仓库"><span class="toc-text">2.2.2.配置安装CM所需要的私有仓库</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-配置使用CM安装节点时会用到的仓库"><span class="toc-text">2.2.3.配置使用CM安装节点时会用到的仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-配置节点的JDK"><span class="toc-text">2.2.4.配置节点的JDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-开始安装CM"><span class="toc-text">2.3.开始安装CM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-使用CM安装集群"><span class="toc-text">2.4.使用CM安装集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-注意事项"><span class="toc-text">3.注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-主机的Host配置不能出差错"><span class="toc-text">3.1.主机的Host配置不能出差错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-cm-agent安装失败重试时"><span class="toc-text">3.2.cm-agent安装失败重试时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-会用到的一些地址总结"><span class="toc-text">4.会用到的一些地址总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-Mysql的相关配置"><span class="toc-text">4.1.Mysql的相关配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-创建本地仓库"><span class="toc-text">4.2.创建本地仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-parcel的下载地址"><span class="toc-text">4.3.parcel的下载地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-cm的下载地址"><span class="toc-text">4.4.cm的下载地址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-附件"><span class="toc-text">5.附件</span></a></li></ol>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            <section class="widget grid">
+  
+<header class="pure">
+  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="grid navgation">
+      
+        <li><a class="flat-box" title="/" href="/" id="home">
+          
+            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+          
+          近期文章
+        </a></li>
+      
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+          
+            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
+          
+          文章归档
+        </a></li>
+      
+        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
+          
+            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
+          
+          开源项目
+        </a></li>
+      
+        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
+          
+            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
+          
+          我的友链
+        </a></li>
+      
+        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
+          
+            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+          
+          关于小站
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/ELK/" href="/blog/categories/ELK/"><div class="name">ELK</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/WebService/" href="/blog/categories/WebService/"><div class="name">WebService</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/hadoop/" href="/blog/categories/hadoop/"><div class="name">hadoop</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/java/" href="/blog/categories/java/"><div class="name">java</div><div class="badge">(10)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/linux/" href="/blog/categories/linux/"><div class="name">linux</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/nginx/" href="/blog/categories/nginx/"><div class="name">nginx</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/python-SciPy/" href="/blog/categories/python-SciPy/"><div class="name">python SciPy</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/spark/" href="/blog/categories/spark/"><div class="name">spark</div><div class="badge">(2)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/tez/" href="/blog/categories/tez/"><div class="name">tez</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/书单/" href="/blog/categories/书单/"><div class="name">书单</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/统计学/" href="/blog/categories/统计学/"><div class="name">统计学</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/编程思想/" href="/blog/categories/编程思想/"><div class="name">编程思想</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+  <section class="widget tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/blog/tags/AQS/" style="font-size: 14px; color: #999">AQS</a> <a href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/" style="font-size: 14px; color: #999">CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a> <a href="/blog/tags/CAS-Unsafe/" style="font-size: 14px; color: #999">CAS Unsafe</a> <a href="/blog/tags/ConcurrentHashMap/" style="font-size: 14px; color: #999">ConcurrentHashMap</a> <a href="/blog/tags/LockSupport/" style="font-size: 14px; color: #999">LockSupport</a> <a href="/blog/tags/ReentrantLock-synchronized/" style="font-size: 14px; color: #999">ReentrantLock synchronized</a> <a href="/blog/tags/SciPy-Anaconda-NumPy-Matplotlib-IPython-Sympy-pandas-Tensorflow-Theano/" style="font-size: 14px; color: #999">SciPy Anaconda  NumPy Matplotlib IPython Sympy pandas Tensorflow Theano</a> <a href="/blog/tags/Servlet/" style="font-size: 14px; color: #999">Servlet</a> <a href="/blog/tags/cm-hadoop/" style="font-size: 14px; color: #999">cm hadoop</a> <a href="/blog/tags/es-logstash-kibana-ELK/" style="font-size: 14px; color: #999">es logstash kibana ELK</a> <a href="/blog/tags/hadoop-tez/" style="font-size: 14px; color: #999">hadoop tez</a> <a href="/blog/tags/hadoop-tez-hive/" style="font-size: 14px; color: #999">hadoop tez hive</a> <a href="/blog/tags/hadoop-tez-oozie-hive/" style="font-size: 14px; color: #999">hadoop tez oozie hive</a> <a href="/blog/tags/hadoop-集群优化/" style="font-size: 14px; color: #999">hadoop 集群优化</a> <a href="/blog/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/blog/tags/jvm/" style="font-size: 14px; color: #999">jvm</a> <a href="/blog/tags/nginx-lua/" style="font-size: 14px; color: #999">nginx lua</a> <a href="/blog/tags/spark/" style="font-size: 24px; color: #555">spark</a> <a href="/blog/tags/tomcat/" style="font-size: 14px; color: #999">tomcat</a> <a href="/blog/tags/ubuntu/" style="font-size: 14px; color: #999">ubuntu</a> <a href="/blog/tags/volatile-happen-before-内存屏障/" style="font-size: 14px; color: #999">volatile happen-before 内存屏障</a> <a href="/blog/tags/书单/" style="font-size: 14px; color: #999">书单</a> <a href="/blog/tags/原子性-可见性-有序性-volatile-happen-before/" style="font-size: 14px; color: #999">原子性 可见性 有序性 volatile happen-before</a> <a href="/blog/tags/统计学/" style="font-size: 14px; color: #999">统计学</a> <a href="/blog/tags/集群优化/" style="font-size: 14px; color: #999">集群优化</a>
+    </div>
+  </section>
+
+
+          
+        
+      
+        
+          
+          
+            
+
+
+  <section class="widget music">
+    
+<header class="pure">
+  <div><i class="fas fa-compact-disc fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;最近在听</div>
+  
+    <a class="rightBtn" rel="external nofollow noopener noreferrer" target="_blank" href="https://music.163.com/#/user/home?id=9040129" title="https://music.163.com/#/user/home?id=9040129">
+    <i class="far fa-heart fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.css">
+  <div class="aplayer" data-theme="#1BCDFC" data-mode="circulation" data-server="netease" data-type="playlist" data-id="8635324" data-volume="0.7">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.7.0/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@1.1.0/dist/Meting.min.js"></script>
+
+
+    </div>
+  </section>
+
+
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:leocook@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/leocook" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/user/home?id=9040129" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/6d/a0c9e6f9efad8b731cb7376504bd10d79d2053.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "1BWypTkkzWRLpL7hjUoj1Uvm-gzGzoHsz",
+    appKey: "74X742aj5vd15GFuMiARpXph",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.5/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+
+</body>
+</html>
