@@ -192,7 +192,7 @@
             </li>
           
             <li>
-							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
 								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
 							</a>
             </li>
@@ -269,7 +269,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -327,8 +327,8 @@
 <p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以<a href="https://github.com/aeste/gcc/blob/master/libjava/sun/misc/natUnsafe.cc" target="_blank" rel="noopener">点击这里</a>。<br>Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。</p>
 <p>在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：</p>
 <ul>
-<li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/" target="_blank" rel="noopener">Java并发：原子性、可见性、有序性</a></li>
-<li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/" target="_blank" rel="noopener">Java并发：volatile关键字</a></li>
+<li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+<li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
 </ul>
 <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS是<code>Compare and Swap</code>的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。<br>维基百科对CAS的解释可以看这里：<a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2" target="_blank" rel="noopener">CAS比较并交换</a></p>
 <p>Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。</p>
@@ -515,7 +515,7 @@
           近期文章
         </a></li>
       
-        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
           
             <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
           

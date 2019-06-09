@@ -192,7 +192,7 @@
             </li>
           
             <li>
-							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
 								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
 							</a>
             </li>
@@ -287,7 +287,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -583,7 +583,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -828,7 +828,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -886,7 +886,7 @@
 <p>可重入锁也被称为递归锁，指同一个线程内，外层代码锁未被释放时，内层代码也可以获取到锁，递归就是一种很常见的场景。下面就是可重入锁的一种使用场景：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Demo&#123;</span><br><span class="line">    Lock lock = new Lock();</span><br><span class="line">    public void outer()&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        inner();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    public void inner()&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        //do something</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ReentrantLock和synchronized在并发编程中，有着相同的语义，但是它们实现的原理存在着较大的差异，在设计的思想上更是有着很多不同之处。</p>
-<h3 id="实现原理上的区别"><a href="#实现原理上的区别" class="headerlink" title="实现原理上的区别"></a>实现原理上的区别</h3><h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><p>ReentrantLock是基于AQS实现的锁，我们知道AQS是调用了LockSupport类的park和unpark方法来实现阻塞和唤醒的。<br>如果之前看过<a href="http://www.leocook.org/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B" target="_blank" rel="noopener">Java并发(四)：locksupport</a>-LockSupport/)这篇文章的话，应该很好理解：ReentrantLock是通过一个<code>_counter</code>变量来标记阻塞状态的。<br>阅读ReentrantLock源码可以发现，AQS中的state字段在ReentrantLock中也被用作记录锁的重入次数（也就是同一个线程同时获得锁的次数），当state的值为0时，则表示资源没有被其它锁占用。</p>
+<h3 id="实现原理上的区别"><a href="#实现原理上的区别" class="headerlink" title="实现原理上的区别"></a>实现原理上的区别</h3><h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><p>ReentrantLock是基于AQS实现的锁，我们知道AQS是调用了LockSupport类的park和unpark方法来实现阻塞和唤醒的。<br>如果之前看过<a href="http://www.leocook.org/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B">Java并发(四)：locksupport</a>-LockSupport/)这篇文章的话，应该很好理解：ReentrantLock是通过一个<code>_counter</code>变量来标记阻塞状态的。<br>阅读ReentrantLock源码可以发现，AQS中的state字段在ReentrantLock中也被用作记录锁的重入次数（也就是同一个线程同时获得锁的次数），当state的值为0时，则表示资源没有被其它锁占用。</p>
 <h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>在JVM中，对象（this）或者类（SomeClass.class）都会被分配一个监视器(Monitor)。Monitor可以理解为一种同步工具，也可以理解为伴随着对象实例的一种JVM内部对象。<br>synchronized关键字是使用了对象监视器(Monitor)来标识资源是否被锁占用，我们将下边代码反进行反编译：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 同步代码块</span><br><span class="line"> */</span><br><span class="line">public void method1()&#123;</span><br><span class="line">    synchronized (this)&#123;</span><br><span class="line">        System.out.println(&quot;method1 start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 同步方法</span><br><span class="line"> */</span><br><span class="line">public synchronized void method2()&#123;</span><br><span class="line">    System.out.println(&quot;method2 start&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>反编译后，我们可以看到字节码：</p>
@@ -994,7 +994,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -1224,7 +1224,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -1375,7 +1375,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -1433,8 +1433,8 @@
 <p>CAS是JSR-166和核心思想，Java中的CAS思想被C/C++实现，并被sun.misc.Unsafe类包装，供Java调用。查看其对应的C/C++源码可以<a href="https://github.com/aeste/gcc/blob/master/libjava/sun/misc/natUnsafe.cc" target="_blank" rel="noopener">点击这里</a>。<br>Java中的非阻塞锁是基于AQS实现的，而AQS的设计就是建立在CAS和Unsafe类上的，所以学习本文还是很有必要性的。</p>
 <p>在学习CAS、sun.misc.Unsafe类之前，我们需要知道一些基础的概念：</p>
 <ul>
-<li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/" target="_blank" rel="noopener">Java并发：原子性、可见性、有序性</a></li>
-<li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/" target="_blank" rel="noopener">Java并发：volatile关键字</a></li>
+<li><a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></li>
+<li><a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></li>
 </ul>
 <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS是<code>Compare and Swap</code>的缩写，即比较并转换。在设计并发算法的时候会用到的技术，JSR-166特性是完全建立在CAS的基础上的，可见其重要性。<br>维基百科对CAS的解释可以看这里：<a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2" target="_blank" rel="noopener">CAS比较并交换</a></p>
 <p>Java就是通过Unsafe类的compareAndSwap系列方法实现的CAS，当前的绝大多是CPU都是支持CAS的，不同厂商的CPU的CAS指令可能是不同的。</p>
@@ -1559,7 +1559,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -1615,7 +1615,7 @@
     <div class="article-entry" itemprop="articleBody">
       <p>关键词：volatile、happen-before、内存屏障</p>
 <p>在阅读Java并发编程相关的jdk源码中，有个关键字<code>volatile</code>会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。<br><code>volatile</code>关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。</p>
-<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/" target="_blank" rel="noopener">Java并发：原子性、可见性、有序性</a></p>
+<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></p>
 <p>本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。</p>
 <h3 id="CPU读取值的过程"><a href="#CPU读取值的过程" class="headerlink" title="CPU读取值的过程"></a>CPU读取值的过程</h3><p>CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：</p>
 <p><img src="http://leocook-blog.test.upcdn.net/volition1.png" alt="CPU读取值的过程"></p>
@@ -1865,7 +1865,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -1920,7 +1920,7 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       <p>关键词：原子性、可见性、有序性、volatile、happen-before</p>
-<p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/" target="_blank" rel="noopener">Java并发：volatile关键字</a></p>
+<p>并发编程中，有三个特性需要我们时刻关注的：原子性、可见性、有序性，本文主要是对这三个特性做解释，其中涉及到的volatile关键字，如果不是很理解的可以查看这里：<a href="http://www.leocook.org/2017/06/17/Java%E5%B9%B6%E5%8F%91-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">Java并发：volatile关键字</a></p>
 <h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>如果某个操作是原子的，那么该操作要么不执行，若执行的话就一定会成功。可以理解该操作在执行期间不会被其它因素中断，若是被一些不可控的元素破坏，该操作也不会产生副作用。</p>
 <p>银行转账的操作就具备原子性，例如A向B转账1000元，其中包括了2个动作：A账户减去1000元，B账户加上1000元。很好理解，这个转账操作要么不执行，若执行必须保证这两个动作都成功才行。</p>
 <p>编程时，假设Int类型是4字节(32位)，我们把一个Int类型的内存结构用下图展示：<br><img src="http://leocook-blog.test.upcdn.net/%E5%8E%9F%E5%AD%90%E6%80%A7.png" alt="原子性"><br>当执行赋值语句<code>a = 128</code>的时候，如果能保证要么不执行，要执行的话<code>1~8B</code>、<code>9~16B</code>、<code>17~24B</code>、<code>26~32B</code>这四个字节都成功写入，且不会被其它线程操作干扰，那么这个赋值操作就具备原子性。</p>
@@ -2006,7 +2006,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -2266,7 +2266,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -2477,7 +2477,7 @@
           近期文章
         </a></li>
       
-        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
           
             <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
           

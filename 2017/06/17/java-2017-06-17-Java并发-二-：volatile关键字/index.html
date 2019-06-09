@@ -192,7 +192,7 @@
             </li>
           
             <li>
-							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
 								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
 							</a>
             </li>
@@ -258,7 +258,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -327,7 +327,7 @@
         <div class="article-entry" itemprop="articleBody">
           <p>关键词：volatile、happen-before、内存屏障</p>
 <p>在阅读Java并发编程相关的jdk源码中，有个关键字<code>volatile</code>会经常看到，在并发编程中偶尔也会用到该关键字，但是在使用它的过程中又很容易引起混淆。<br><code>volatile</code>关键字一方面通过内存屏障禁止了指令重排，从而保证了有序性；另一方面通过内存屏障实现了可见性。</p>
-<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/" target="_blank" rel="noopener">Java并发：原子性、可见性、有序性</a></p>
+<p>阅读本文前，你需要理解原子性、可见性、有序性这三个基本的并发特性。可以查看这里：<a href="http://www.leocook.org/2017/06/12/Java%E5%B9%B6%E5%8F%91-%E5%8E%9F%E5%AD%90%E6%80%A7-%E5%8F%AF%E8%A7%81%E6%80%A7-%E6%9C%89%E5%BA%8F%E6%80%A7/">Java并发：原子性、可见性、有序性</a></p>
 <p>本文会先聊聊CPU从内存中读取值的硬件层面的过程，然后说一说volatile关键字是如何保证可见性、有序性的，以及相关的原理。最后还会列出几个示例来说明volatile不能解决的一些场景。</p>
 <h3 id="CPU读取值的过程"><a href="#CPU读取值的过程" class="headerlink" title="CPU读取值的过程"></a>CPU读取值的过程</h3><p>CPU在读取数据进行计算的时候，cpu并不是直接读取内存中的值，而是先把内存中的值读到cpu的高速Cache中，然后cpu直接操作Cache中的值。cpu在完成计算后，把结果写到Cache中，然后再把Cache写回到内存中。具体的过程可以查看下图：</p>
 <p><img src="http://leocook-blog.test.upcdn.net/volition1.png" alt="CPU读取值的过程"></p>
@@ -568,7 +568,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://leocook.github.io/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
           
             <img src="http://leocook-blog.test.upcdn.net/qq.png">
           
@@ -576,7 +576,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://leocook.github.io/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
           
             <img src="http://leocook-blog.test.upcdn.net/qzone.png">
           
@@ -584,7 +584,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://leocook.github.io/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2017/06/17/java-2017-06-17-Java并发-二-：volatile关键字/&title=Java并发(二)：volatile关键字 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=">
           
             <img src="http://leocook-blog.test.upcdn.net/weibo.png">
           
@@ -610,16 +610,16 @@
                         <span class="art-item-left">
                             <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                             <h4>
-                                <a href="/2017/06/24/java-2017-07-01-CAP理论/" rel="prev" title="CAP理论">
+                                <a href="/2017/06/24/java-2017-06-24-Java并发-三-：Unsafe和CAS/" rel="prev" title="Java并发(三)：Unsafe和CAS">
                                   
-                                      CAP理论
+                                      Java并发(三)：Unsafe和CAS
                                   
                                 </a>
                             </h4>
                             
                                 
                                 <h6 class="tags">
-                                    <a class="tag" href="/blog/tags/CAP-可用性-分区容错性-强一致性-弱一致性-最终一致性/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>CAP 可用性 分区容错性 强一致性 弱一致性 最终一致性</a>
+                                    <a class="tag" href="/blog/tags/CAS-Unsafe/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>CAS Unsafe</a>
                                 </h6>
                             
                         </span>
@@ -780,7 +780,7 @@
           近期文章
         </a></li>
       
-        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
           
             <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
           

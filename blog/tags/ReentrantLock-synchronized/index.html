@@ -192,7 +192,7 @@
             </li>
           
             <li>
-							<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
+							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
 								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
 							</a>
             </li>
@@ -269,7 +269,7 @@
           
             
   <div class="new-meta-item author">
-    <a href="http://leocook.github.io" rel="nofollow">
+    <a href="http://www.leocook.org" rel="nofollow">
       
         <img src="http://leocook-blog.test.upcdn.net/touxiang.jpeg">
       
@@ -327,7 +327,7 @@
 <p>可重入锁也被称为递归锁，指同一个线程内，外层代码锁未被释放时，内层代码也可以获取到锁，递归就是一种很常见的场景。下面就是可重入锁的一种使用场景：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Demo&#123;</span><br><span class="line">    Lock lock = new Lock();</span><br><span class="line">    public void outer()&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        inner();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    public void inner()&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        //do something</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ReentrantLock和synchronized在并发编程中，有着相同的语义，但是它们实现的原理存在着较大的差异，在设计的思想上更是有着很多不同之处。</p>
-<h3 id="实现原理上的区别"><a href="#实现原理上的区别" class="headerlink" title="实现原理上的区别"></a>实现原理上的区别</h3><h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><p>ReentrantLock是基于AQS实现的锁，我们知道AQS是调用了LockSupport类的park和unpark方法来实现阻塞和唤醒的。<br>如果之前看过<a href="http://www.leocook.org/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B" target="_blank" rel="noopener">Java并发(四)：locksupport</a>-LockSupport/)这篇文章的话，应该很好理解：ReentrantLock是通过一个<code>_counter</code>变量来标记阻塞状态的。<br>阅读ReentrantLock源码可以发现，AQS中的state字段在ReentrantLock中也被用作记录锁的重入次数（也就是同一个线程同时获得锁的次数），当state的值为0时，则表示资源没有被其它锁占用。</p>
+<h3 id="实现原理上的区别"><a href="#实现原理上的区别" class="headerlink" title="实现原理上的区别"></a>实现原理上的区别</h3><h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><p>ReentrantLock是基于AQS实现的锁，我们知道AQS是调用了LockSupport类的park和unpark方法来实现阻塞和唤醒的。<br>如果之前看过<a href="http://www.leocook.org/2017/07/08/Java%E5%B9%B6%E5%8F%91(%E5%9B%9B">Java并发(四)：locksupport</a>-LockSupport/)这篇文章的话，应该很好理解：ReentrantLock是通过一个<code>_counter</code>变量来标记阻塞状态的。<br>阅读ReentrantLock源码可以发现，AQS中的state字段在ReentrantLock中也被用作记录锁的重入次数（也就是同一个线程同时获得锁的次数），当state的值为0时，则表示资源没有被其它锁占用。</p>
 <h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>在JVM中，对象（this）或者类（SomeClass.class）都会被分配一个监视器(Monitor)。Monitor可以理解为一种同步工具，也可以理解为伴随着对象实例的一种JVM内部对象。<br>synchronized关键字是使用了对象监视器(Monitor)来标识资源是否被锁占用，我们将下边代码反进行反编译：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 同步代码块</span><br><span class="line"> */</span><br><span class="line">public void method1()&#123;</span><br><span class="line">    synchronized (this)&#123;</span><br><span class="line">        System.out.println(&quot;method1 start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 同步方法</span><br><span class="line"> */</span><br><span class="line">public synchronized void method2()&#123;</span><br><span class="line">    System.out.println(&quot;method2 start&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>反编译后，我们可以看到字节码：</p>
@@ -497,7 +497,7 @@
           近期文章
         </a></li>
       
-        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
+        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
           
             <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
           
