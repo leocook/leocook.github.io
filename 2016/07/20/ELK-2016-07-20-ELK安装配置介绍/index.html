@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>Archives: 2016/8 | leocook</title>
+  <title>ELK安装配置介绍 | leocook</title>
   
   <meta name="keywords" content="spark hadoop bigdata java">
   
@@ -61,7 +61,7 @@
   
   
   <div class="cover-wrapper">
-    <cover class="cover  half">
+    <cover class="cover post half">
       
         
   <h1 class="title">LEOCOOK</h1>
@@ -228,22 +228,11 @@
   <div class="l_body">
     <div class='body-wrapper'>
       <div class="l_main">
-	
-		
-  <section class="post-list">
-    
-      
-        
-          
-        
-      
-    
-    
-      
-        
-          <div class="post-wrapper">
-            <article class="post reveal ">
   
+
+  
+    <article id="post" class="post white-box article-type-post" itemscope itemprop="blogPost">
+      
 
 
   <section class="meta">
@@ -252,11 +241,13 @@
     <div class="meta" id="header-meta">
       
         
-  <h2 class="title">
-    <a href="/2016/08/17/ELK-2016-07-20-ELK安装配置介绍/">
-      ELK安装配置介绍
-    </a>
-  </h2>
+  
+    <h1 class="title">
+      <a href="/2016/07/20/ELK-2016-07-20-ELK安装配置介绍/">
+        ELK安装配置介绍
+      </a>
+    </h1>
+  
 
 
       
@@ -282,7 +273,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2016-08-17</p>
+    <p>2016-07-20</p>
   </a>
 </div>
 
@@ -303,6 +294,19 @@
         
           
             
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
+
 
           
         
@@ -319,43 +323,249 @@
   </section>
 
 
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      <p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
-      
-        <div class="readmore">
-          <a href="/2016/08/17/ELK-2016-07-20-ELK安装配置介绍/" class="flat-box">
-            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-            阅读全文
-          </a>
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          <p>es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。</p>
+<a id="more"></a>
+<h2 id="版本列表"><a href="#版本列表" class="headerlink" title="版本列表"></a>版本列表</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>project</th>
+<th>version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>es</td>
+<td>2.3.4</td>
+</tr>
+<tr>
+<td>logstash</td>
+<td>2.3.4</td>
+</tr>
+<tr>
+<td>kibana</td>
+<td>4.5.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="1-logstash配置"><a href="#1-logstash配置" class="headerlink" title="1.logstash配置"></a>1.logstash配置</h2><h3 id="1-1-Jdk安装"><a href="#1-1-Jdk安装" class="headerlink" title="1.1.Jdk安装"></a>1.1.Jdk安装</h3><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></p>
+<h3 id="1-2-下载logstash"><a href="#1-2-下载logstash" class="headerlink" title="1.2.下载logstash"></a>1.2.下载logstash</h3><p><a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="noopener">https://www.elastic.co/downloads/logstash</a></p>
+<h3 id="1-3-启动"><a href="#1-3-启动" class="headerlink" title="1.3.启动"></a>1.3.启动</h3><p>解压后可直接启动，不增加额外的配置也是能够启动成功的。启动方式有多种，这里举例说明。</p>
+<ul>
+<li>使用-e指定启动的参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./logstash -e &apos;input &#123; stdin &#123; &#125; &#125; output &#123; stdout &#123;&#125; &#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>这里设定stdin为输入，stdout为输出。</p>
+<ul>
+<li>使用配置文件启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat logstash-simple.conf</span><br><span class="line">input &#123; stdin &#123; &#125; &#125;</span><br><span class="line">output &#123;</span><br><span class="line">   stdout &#123; codec=&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">./logstash agent -f logstash-simple.conf</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-验证"><a href="#1-4-验证" class="headerlink" title="1.4.验证"></a>1.4.验证</h3><p>启动后才命令行输入”hello World”，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@dt-vt-153:/opt/logstash/logstash-2.3.4/bin# ./logstash agent -f logstash-simple.conf</span><br><span class="line"></span><br><span class="line">Settings: Default pipeline workers: 1</span><br><span class="line">Pipeline main started</span><br><span class="line">hello World</span><br><span class="line">&#123;</span><br><span class="line">       &quot;message&quot; =&gt; &quot;hello World&quot;,</span><br><span class="line">       &quot;@version&quot; =&gt; &quot;1&quot;,</span><br><span class="line">       &quot;@timestamp&quot; =&gt; &quot;2016-07-18T07:20:20.526Z&quot;,</span><br><span class="line">       &quot;host&quot; =&gt; &quot;0.0.0.0&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印出来的message部分显示为输入内容。</p>
+<h2 id="2-ES"><a href="#2-ES" class="headerlink" title="2.ES"></a>2.ES</h2><h3 id="2-1-下载"><a href="#2-1-下载" class="headerlink" title="2.1.下载"></a>2.1.下载</h3><p><a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/downloads/elasticsearch</a></p>
+<h3 id="2-2-配置"><a href="#2-2-配置" class="headerlink" title="2.2.配置"></a>2.2.配置</h3><p>配置一下主机的地址,这里不配置的话，只能在安装服务的宿主机上使用localhost来访问ES了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi config/elasticsearch.yml</span><br><span class="line">network.host: 0.0.0.0</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-启动"><a href="#2-3-启动" class="headerlink" title="2.3.启动"></a>2.3.启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-插件安装"><a href="#2-4-插件安装" class="headerlink" title="2.4.插件安装"></a>2.4.插件安装</h3><p>kopf插件安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/elasticsearch/elasticsearch-2.3.4/bin/plugin install lmenezes/elasticsearch-kopf</span><br></pre></td></tr></table></figure>
+<p>安装完之后，可以访问web页面<a href="http://[hostname]:9200/_plugin/kopf查看。" target="_blank" rel="noopener">http://[hostname]:9200/_plugin/kopf查看。</a></p>
+<h3 id="2-5-验证"><a href="#2-5-验证" class="headerlink" title="2.5.验证"></a>2.5.验证</h3><p>es默认使用的9200端口，可使用下面的命令来查看该端口是否已经被监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -anp |grep :9200</span><br></pre></td></tr></table></figure>
+<p>或者使用浏览器访问端口9200.</p>
+<h2 id="3-Kibana"><a href="#3-Kibana" class="headerlink" title="3. Kibana"></a>3. Kibana</h2><h3 id="3-1-下载"><a href="#3-1-下载" class="headerlink" title="3.1.下载"></a>3.1.下载</h3><p><a href="https://www.elastic.co/downloads/kibana" target="_blank" rel="noopener">https://www.elastic.co/downloads/kibana</a></p>
+<h3 id="3-2-配置"><a href="#3-2-配置" class="headerlink" title="3.2.配置"></a>3.2.配置</h3><p>配置一下es的地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi config/kibana.yml</span><br><span class="line"></span><br><span class="line">elasticsearch.url: &quot;http://[hostname]:9200&quot;</span><br></pre></td></tr></table></figure>
+<p>这里默认是使用ES的数据。</p>
+<h3 id="3-3-启动"><a href="#3-3-启动" class="headerlink" title="3.3.启动"></a>3.3.启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/kibana/kibana-4.5.3-linux-x64/bin/kibana</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-验证"><a href="#3-4-验证" class="headerlink" title="3.4.验证"></a>3.4.验证</h3><p>访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[hostname]:5601/</span><br></pre></td></tr></table></figure>
+<p>点击”create”创建索引名称。</p>
+<h2 id="4-使ELK整体协作起来"><a href="#4-使ELK整体协作起来" class="headerlink" title="4.使ELK整体协作起来"></a>4.使ELK整体协作起来</h2><h3 id="4-1-原理"><a href="#4-1-原理" class="headerlink" title="4.1.原理"></a>4.1.原理</h3><ul>
+<li>logstash</li>
+</ul>
+<p>logstash主要用作收集数据使用，可以自由的定义数据的入口和出口，兼容多种数据源。</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>es和solr比较类似，都是基于lucene的来提供的搜索服务。但是在高并发的表现上，ES的负载均衡效果是优于solr的。</p>
+<ul>
+<li>kibana</li>
+</ul>
+<p>kibana是一个可以可以用来查看ES里数据的Web。在早期logstash有一个logstash-web，但是功能比较简单。咱们这里说的kibana严格意义上说是kibana4，是在2015年重构完成的一个版本。</p>
+<h3 id="4-2-E和L的连接"><a href="#4-2-E和L的连接" class="headerlink" title="4.2.E和L的连接"></a>4.2.E和L的连接</h3><p>其实就是把logstash收集到的数据写入es中，这里只要在logstash的启动参数上做配置就可以了，具体的配置文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vi logstash-indexer.conf</span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    type =&gt;&quot;syslog&quot;</span><br><span class="line">    path =&gt; [ &quot;/var/log/syslog&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  syslog &#123;</span><br><span class="line">    type =&gt;&quot;syslog&quot;</span><br><span class="line">    port =&gt;&quot;5544&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">  stdout &#123; codec=&gt; rubydebug &#125;</span><br><span class="line">  elasticsearch &#123;hosts =&gt; &quot;localhost&quot; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置介绍</li>
+</ul>
+<p>logstash的配置里，一定要有一个input和一个output。<br>file: 这里配置输入的文件信息。<br>syslog：把logstash配置为一个可接收syslog服务器来接收file里变化的数据。<br>output里定义了两处输出，分别是<strong>stdout</strong>命令行和<strong>elasticsearch</strong>。</p>
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./logstash agent -f logstash-indexer.conf &gt; nohup &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-Kibana的配置"><a href="#4-3-Kibana的配置" class="headerlink" title="4.3.Kibana的配置"></a>4.3.Kibana的配置</h3><p>只需要修改kibana.yml中es的地址就可以了。</p>
+<h3 id="4-4-ES"><a href="#4-4-ES" class="headerlink" title="4.4.ES"></a>4.4.ES</h3><p>ES在这个架构中作为数据存储和索引的系统。无额外的特殊配置。</p>
+<h3 id="5-小结"><a href="#5-小结" class="headerlink" title="5.小结"></a>5.小结</h3><p>ELK架构在处理运维系统的日志分析以及一些数据量不是很大的场景还是很实用的。快速、简单、易扩展，企业中使用可以考虑使用hdfs作为es的数据存储来使用，具体性能需要根据实际的业务复杂度来衡量，复杂度不是很高的海量数据统计，可优先考虑使用elk方案。</p>
+<p>参考地址：<br><a href="http://baidu.blog.51cto.com/71938/1676798" target="_blank" rel="noopener">http://baidu.blog.51cto.com/71938/1676798</a><br><a href="https://www.gitbook.com/book/chenryn/kibana-guide-cn/details" target="_blank" rel="noopener">https://www.gitbook.com/book/chenryn/kibana-guide-cn/details</a></p>
+
         </div>
+        
+          
+
+
+  <section class="meta" id="footer-meta">
+    <hr>
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-12T22:04:27+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>最后更新于 2019年6月12日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/es-logstash-kibana-ELK/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>es logstash kibana ELK</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.leocook.org/2016/07/20/ELK-2016-07-20-ELK安装配置介绍/&title=ELK安装配置介绍 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.leocook.org/2016/07/20/ELK-2016-07-20-ELK安装配置介绍/&title=ELK安装配置介绍 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。">
+          
+            <img src="http://leocook-blog.test.upcdn.net/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.leocook.org/2016/07/20/ELK-2016-07-20-ELK安装配置介绍/&title=ELK安装配置介绍 | leocook&pics=http://leocook-blog.test.upcdn.net/touxiang.jpeg&summary=es是接触的比较早，在13年就做过相关开发，后来使用过ELK来做一些数据统计。最近打算从头来梳理一下这块的东西，今天就先从安装和配置开始吧。">
+          
+            <img src="http://leocook-blog.test.upcdn.net/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
       
     </div>
-    
-      <div class="full-width auto-padding tags">
-        
-          <a href="/blog/tags/es-logstash-kibana-ELK/" rel="nofollow"><i class="fas fa-hashtag fa-fw"></i>es logstash kibana ELK</a>
-        
-      </div>
-    
   </section>
-</article>
 
-          </div>
+
         
+        
+            <div class="prev-next">
+                
+                    <section class="prev">
+                        <span class="art-item-left">
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                            <h4>
+                                <a href="/2016/07/23/hadoop-2016-07-23-Install-hadoop-cluster-on-CM/" rel="prev" title="Install_hadoop_cluster_on_CM">
+                                  
+                                      Install_hadoop_cluster_on_CM
+                                  
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/cm-hadoop/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>cm hadoop</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2016/05/17/tez-2016-05-17-Tez系列第三篇-Tez和oozie整合/" rel="prev" title="Tez系列第三篇-Tez和oozie整合">
+                                    
+                                        Tez系列第三篇-Tez和oozie整合
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/blog/tags/hadoop-tez-oozie-hive/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>hadoop tez oozie hive</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+      </section>
+    </article>
+  
+
+  
+    <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
       
-    
-  </section>
-  
-    
-    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
-    
-    
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
 
   
 
 
-	
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'ELK安装配置介绍',
+      tools: true
+    }
+  </script>
+
+
 </div>
 <aside class="l_side">
   
@@ -408,6 +618,20 @@
           
           
             
+  <section class="widget toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#版本列表"><span class="toc-text">版本列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-logstash配置"><span class="toc-text">1.logstash配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Jdk安装"><span class="toc-text">1.1.Jdk安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-下载logstash"><span class="toc-text">1.2.下载logstash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-启动"><span class="toc-text">1.3.启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-验证"><span class="toc-text">1.4.验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-ES"><span class="toc-text">2.ES</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-下载"><span class="toc-text">2.1.下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-配置"><span class="toc-text">2.2.配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-启动"><span class="toc-text">2.3.启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-插件安装"><span class="toc-text">2.4.插件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-验证"><span class="toc-text">2.5.验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Kibana"><span class="toc-text">3. Kibana</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-下载"><span class="toc-text">3.1.下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-配置"><span class="toc-text">3.2.配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-启动"><span class="toc-text">3.3.启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-验证"><span class="toc-text">3.4.验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-使ELK整体协作起来"><span class="toc-text">4.使ELK整体协作起来</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-原理"><span class="toc-text">4.1.原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-E和L的连接"><span class="toc-text">4.2.E和L的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Kibana的配置"><span class="toc-text">4.3.Kibana的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-ES"><span class="toc-text">4.4.ES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-小结"><span class="toc-text">5.小结</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
 
           
         
@@ -622,14 +846,6 @@
 <script>setLoadingBarProgress(80);</script>
 
 
-
-
-	<!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
-	
-
-	
-
-
       <script>setLoadingBarProgress(60);</script>
     </div>
     <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
@@ -716,6 +932,36 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "1BWypTkkzWRLpL7hjUoj1Uvm-gzGzoHsz",
+    appKey: "74X742aj5vd15GFuMiARpXph",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
 
 
 

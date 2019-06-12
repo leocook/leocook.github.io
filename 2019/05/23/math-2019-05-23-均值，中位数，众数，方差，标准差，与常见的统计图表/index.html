@@ -392,9 +392,154 @@
 <p>这么来看，方差的计算就变得简单很多了。</p>
 <h3 id="3-3-标准差"><a href="#3-3-标准差" class="headerlink" title="3.3.标准差"></a>3.3.标准差</h3><p>标准差：$\sigma = \sqrt[2]{\sigma^2}$</p>
 <p>和方差一样，标准差的值越大，表示数据越分散。</p>
-<h2 id="4-常见的数学图形"><a href="#4-常见的数学图形" class="headerlink" title="4.常见的数学图形"></a>4.常见的数学图形</h2><h3 id="4-1-直方图"><a href="#4-1-直方图" class="headerlink" title="4.1.直方图"></a>4.1.直方图</h3><h3 id="4-2-箱线图"><a href="#4-2-箱线图" class="headerlink" title="4.2.箱线图"></a>4.2.箱线图</h3><h3 id="4-3-茎叶图"><a href="#4-3-茎叶图" class="headerlink" title="4.3.茎叶图"></a>4.3.茎叶图</h3><h3 id="4-4-线图"><a href="#4-4-线图" class="headerlink" title="4.4.线图"></a>4.4.线图</h3><h3 id="4-5-柱形图"><a href="#4-5-柱形图" class="headerlink" title="4.5.柱形图"></a>4.5.柱形图</h3><h3 id="4-6-饼图"><a href="#4-6-饼图" class="headerlink" title="4.6.饼图"></a>4.6.饼图</h3><h3 id="4-6-不同图形之间的对比"><a href="#4-6-不同图形之间的对比" class="headerlink" title="4.6.不同图形之间的对比"></a>4.6.不同图形之间的对比</h3><ul>
-<li>柱形图和直方图对比</li>
+<h2 id="4-常见的数学图形"><a href="#4-常见的数学图形" class="headerlink" title="4.常见的数学图形"></a>4.常见的数学图形</h2><h3 id="4-1-直方图（Histogram）"><a href="#4-1-直方图（Histogram）" class="headerlink" title="4.1.直方图（Histogram）"></a>4.1.直方图（Histogram）</h3><p>直方图又称为质量分布图，主要查看样本分段分布使用。</p>
+<p>如果要画出直方图，需要下面这几个步骤：</p>
+<ul>
+<li>a. 找出最大值不最小值，确定数据的范围</li>
 </ul>
+<p>例如有下面这一组成绩数据: {53 53 61 61 63 65 67 67 69 69 69 70 70 71 74 75 75 76 77 78 79 80 81 81 81 81<br>82 84 85 86 87 87 87 88 89 90 91 91 94 95}，排序后很容易得到最大值是95，最小值是53。</p>
+<ul>
+<li>b. 画出频数直方表</li>
+</ul>
+<p>整理数据，将数据分为几组，按照50~60、 60~70、 70~80、<br>80~90、 90~100这几个分段来划分（一般都分为5~10组），如下：</p>
+<center>
+![频数分布表](http://leocook-blog.test.upcdn.net/频数分布表.png "频数分布表")
+</center>
+可以看到在80~90这个分段的人数最多。
+
+- c. 画出频数直方图
+
+根据频数分布表，可以画出频数直方图。频数作为纵坐标，成绩作为横坐标。通过
+直方图可以对成绩的分布有了一个直观的印象。
+
+<center>
+![频数直方图](http://leocook-blog.test.upcdn.net/频数直方图.png "频数直方图")
+</center>
+
+<ul>
+<li>d. 频率直方图</li>
+</ul>
+<p>除了频数直方图，还有另一种直方图——频率<br>直方图。不频数直方图相比，频率直方图的纵坐<br>标有所改变，使用了频率/组距。</p>
+<p>频率=频数/总数；组距就是分组的极差，这里组<br>距是10（可以是100-90=10，也可以使90-80=<br>10等），</p>
+<center>
+![频率直方图](http://leocook-blog.test.upcdn.net/频率直方图.png "频率直方图")
+</center>
+
+<h3 id="4-2-箱线图"><a href="#4-2-箱线图" class="headerlink" title="4.2.箱线图"></a>4.2.箱线图</h3><p>箱线图又称为箱形图、盒须图或盒式图，用于显示一组数据分散情况。</p>
+<p>箱线图也可以大致地看出数据的分布。下图是40个成绩所画出的箱线图，可以看出数据分布稍微地偏重于高分段：</p>
+<center>
+![箱线图](http://leocook-blog.test.upcdn.net/箱线图1.png "箱线图")
+</center>
+
+<h4 id="4-2-1-箱线图一些概念"><a href="#4-2-1-箱线图一些概念" class="headerlink" title="4.2.1.箱线图一些概念"></a>4.2.1.箱线图一些概念</h4><ul>
+<li>下四分位数</li>
+</ul>
+<p>Q1，将所有数据按照从小到大的顺序排序排在第25%位置的数字</p>
+<ul>
+<li>上四分位数</li>
+</ul>
+<p>Q3，将所有数据按照从小到大的顺序排序排在第75%位置的数字</p>
+<ul>
+<li>四分位距</li>
+</ul>
+<p>IQR，等于Q3-Q1，衡量数据离散程度的一个统计量</p>
+<ul>
+<li>异常点</li>
+</ul>
+<p>小于Q1－1.5IQR或大于Q3+1.5IQR的值</p>
+<ul>
+<li>上边缘</li>
+</ul>
+<p>除异常点以外的数据中的最大值</p>
+<ul>
+<li>下边缘</li>
+</ul>
+<p>除异常点以外的数据中的最小值</p>
+<p>下面有一组数据：</p>
+<blockquote>
+<p>53 53 61 61 63 65 67 67 69 69 69 70 70 71 74 75 75 76 77 78 79 80 81 81 81 81<br>82 84 85 86 87 87 87 88 89 90 91 91 94 95</p>
+</blockquote>
+<p>对于上述数据，Q1=69; Q3=86.5; IQR=86.5-69=17.5; </p>
+<p>因为Q1－1.5IQR=42.75，Q3+1.5IQR=112.75，所以没有异常点。上边缘就是95，下边缘就是52。</p>
+<h4 id="4-2-1-箱线图的画法"><a href="#4-2-1-箱线图的画法" class="headerlink" title="4.2.1.箱线图的画法"></a>4.2.1.箱线图的画法</h4><p>例如有一组数据</p>
+<blockquote>
+<p>8 2 3 7 4 9 6 9 4 3</p>
+</blockquote>
+<ul>
+<li><ol>
+<li>排序：2 3 3 4 4 6 7 8 9 9</li>
+</ol>
+</li>
+<li><ol>
+<li>找出中位数：（4+6）/2=5</li>
+</ol>
+</li>
+<li><ol>
+<li>分别找出前半部分不后半部分的中位数——下四分位数不上四分位数：3不8</li>
+</ol>
+</li>
+<li><ol>
+<li>判断异常点：3-1.5*(8-3)=-4.5；8+1.5*(8-3)=15.5；没有异常点</li>
+</ol>
+</li>
+<li><ol>
+<li>找出最大值不最小值：2不9</li>
+</ol>
+</li>
+<li><ol>
+<li>在3到8之间间画一个箱子，分别用箭头指向2,9</li>
+</ol>
+</li>
+</ul>
+<center>
+![箱线图](http://leocook-blog.test.upcdn.net/箱线图2.png "箱线图")
+</center>
+
+<h3 id="4-3-茎叶图"><a href="#4-3-茎叶图" class="headerlink" title="4.3.茎叶图"></a>4.3.茎叶图</h3><p>茎叶图又称为枝叶图，和直方图比较相似，用于查看样本分段分布。茎叶图的优点是没有原始数据信息的损失，但缺点也很显然，样本个位往前相差不能太大。</p>
+<p>茎叶图可以在保留全部数据信息的情冴下，直观地显示出数据的分布情况<br>4.2.1中40个成绩的茎叶图，左边是茎，右边是叶。</p>
+<center>
+![茎叶图](http://leocook-blog.test.upcdn.net/茎叶图1.png "茎叶图")
+</center>
+
+<p>若将茎叶图旋转90度，则可以得到一个类似于直方图的图。跟直方图一样，也可以直<br>观地知道数据的分布情冴。</p>
+<center>
+![茎叶图](http://leocook-blog.test.upcdn.net/茎叶图2.png "茎叶图")
+</center>
+
+<p>茎叶图的画法：</p>
+<ul>
+<li>假设有下面这一组数据</li>
+</ul>
+<blockquote>
+<p>53 53 59 61 61 63 65 67 67 69 69 69 70 70 71 74 75 75 76 77 78 79 80 81 81 81<br>81 82 84 85 86 87 87 87 88 89 90 91 91 94 95</p>
+</blockquote>
+<ul>
+<li>将数据分为茎和叶两部分，这里的<b>茎是指十位上的数字</b>，<b>叶是指个位上的数字</b></li>
+<li>将茎部分（十位）从小到大，从上到下写出来</li>
+<li>相对于各自的茎，将同一茎（十位）的叶子（个位）从小到大，从左往右写出来</li>
+</ul>
+<center>
+![茎叶图](http://leocook-blog.test.upcdn.net/茎叶图3.png "茎叶图")
+</center>
+
+
+<h3 id="4-4-线图"><a href="#4-4-线图" class="headerlink" title="4.4.线图"></a>4.4.线图</h3><p>线图的表现形式比较多，主要用作描述变化趋势。如下图所示，表示广州房价变化趋势：</p>
+<center>
+![茎叶图](http://leocook-blog.test.upcdn.net/线图.png "茎叶图")
+</center>
+
+<h3 id="4-5-柱形图（bar-chart）"><a href="#4-5-柱形图（bar-chart）" class="headerlink" title="4.5.柱形图（bar chart）"></a>4.5.柱形图（bar chart）</h3><p>柱形图，又称长条图、柱状图、条状图、棒形图。通常用来比较两个或以上的度量，只有一个变量，可以是不同时间不同条件。</p>
+<p>和直方图相比，直方图有两个变量，分别是统计样本，和该样本对应的某个属性的度量。</p>
+<center>
+![柱形图](http://leocook-blog.test.upcdn.net/柱形图.png "柱形图")
+</center>
+
+<h3 id="4-6-饼图"><a href="#4-6-饼图" class="headerlink" title="4.6.饼图"></a>4.6.饼图</h3><p>饼图主要用作描述样本发布占比情况，见得比较多，没什么好说的，如下图：</p>
+<center>
+![饼图](http://leocook-blog.test.upcdn.net/饼图.png "饼图")
+</center>
+
+<h2 id="5-延伸"><a href="#5-延伸" class="headerlink" title="5.延伸"></a>5.延伸</h2><p>图表是一种工具，方便我们来管理数据、展示数据，以至于可以更快速的做决策判断。感觉兴趣的可以看看<b><a href="https://baike.baidu.com/item/%E5%93%81%E8%B4%A8%E7%AE%A1%E7%90%86%E4%B8%83%E5%A4%A7%E6%89%8B%E6%B3%95/7210479" target="_blank" rel="noopener">品质管理七大手法。</a></b></p>
 
         </div>
         
@@ -406,10 +551,10 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-09T23:34:52+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-12T21:54:14+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>最后更新于 2019年6月9日</p>
+    <p>最后更新于 2019年6月12日</p>
   </a>
 </div>
 
@@ -631,7 +776,7 @@
 </header>
 
     <div class="content pure">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-概述"><span class="toc-text">1.概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-集中趋势描述"><span class="toc-text">2.集中趋势描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-均值"><span class="toc-text">2.1.均值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-中位数"><span class="toc-text">2.2.中位数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-众数"><span class="toc-text">2.3.众数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-均值、中位数、众数对比"><span class="toc-text">2.4.均值、中位数、众数对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-离散程度描述"><span class="toc-text">3.离散程度描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-极差"><span class="toc-text">3.1.极差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-方差"><span class="toc-text">3.2.方差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-标准差"><span class="toc-text">3.3.标准差</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-常见的数学图形"><span class="toc-text">4.常见的数学图形</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-直方图"><span class="toc-text">4.1.直方图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-箱线图"><span class="toc-text">4.2.箱线图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-茎叶图"><span class="toc-text">4.3.茎叶图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-线图"><span class="toc-text">4.4.线图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-柱形图"><span class="toc-text">4.5.柱形图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-饼图"><span class="toc-text">4.6.饼图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-不同图形之间的对比"><span class="toc-text">4.6.不同图形之间的对比</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-概述"><span class="toc-text">1.概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-集中趋势描述"><span class="toc-text">2.集中趋势描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-均值"><span class="toc-text">2.1.均值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-中位数"><span class="toc-text">2.2.中位数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-众数"><span class="toc-text">2.3.众数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-均值、中位数、众数对比"><span class="toc-text">2.4.均值、中位数、众数对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-离散程度描述"><span class="toc-text">3.离散程度描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-极差"><span class="toc-text">3.1.极差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-方差"><span class="toc-text">3.2.方差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-标准差"><span class="toc-text">3.3.标准差</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-常见的数学图形"><span class="toc-text">4.常见的数学图形</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-直方图（Histogram）"><span class="toc-text">4.1.直方图（Histogram）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-箱线图"><span class="toc-text">4.2.箱线图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-箱线图一些概念"><span class="toc-text">4.2.1.箱线图一些概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-箱线图的画法"><span class="toc-text">4.2.1.箱线图的画法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-茎叶图"><span class="toc-text">4.3.茎叶图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-线图"><span class="toc-text">4.4.线图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-柱形图（bar-chart）"><span class="toc-text">4.5.柱形图（bar chart）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-饼图"><span class="toc-text">4.6.饼图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-延伸"><span class="toc-text">5.延伸</span></a></li></ol>
     </div>
   </section>
 
